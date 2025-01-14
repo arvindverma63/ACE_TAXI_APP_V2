@@ -11,24 +11,23 @@
     <item
         android:id="@+id/nav_future"
         android:icon="@drawable/ic_future"
-        android:title="Future"/>
+        android:title="Future" />
     <item
         android:id="@+id/nav_history"
         android:icon="@drawable/ic_history"
-        android:title="History"/>
+        android:title="History" />
     <item
         android:id="@+id/nav_earning"
         android:icon="@drawable/ic_earning"
-        android:title="Earnings"/>
-
+        android:title="Earnings" />
     <item
         android:id="@+id/nav_statements"
         android:icon="@drawable/ic_statements"
-        android:title="Statements"/>
+        android:title="Statements" />
     <item
         android:id="@+id/nav_ava"
         android:icon="@drawable/ic_ava"
-        android:title="Availability"/>
+        android:title="Availability" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"
@@ -36,9 +35,9 @@
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"
-        android:title="Settings"/>
+        android:title="Settings" />
     <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_logout"
-        android:title="Logout"/>
+        android:title="Logout" />
 </menu>
