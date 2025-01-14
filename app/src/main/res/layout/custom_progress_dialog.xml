@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:padding="24dp"
+    android:background="@drawable/rounded_dialog_background"
+    android:gravity="center">
+
+    <!-- Progress Spinner -->
+    <ProgressBar
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:indeterminateDrawable="@drawable/circular_progress"
+        android:indeterminate="true" />
+
+    <!-- Processing Text -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Processing..."
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+</LinearLayout>
