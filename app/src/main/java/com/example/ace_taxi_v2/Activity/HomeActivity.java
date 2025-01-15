@@ -1,70 +1,166 @@
 package com.example.ace_taxi_v2.Activity;
 
+import android.content.ContextWrapper;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.example.ace_taxi_v2.Fragments.HomeFragment;
 import com.example.ace_taxi_v2.R;
+import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity {
 
-    ImageView navIcon;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
+    private ImageView ham_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        navIcon = findViewById(R.id.menu_icon); // Your menu icon (ImageView)
+        // Set up the Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
 
-        navIcon.setOnClickListener(new View.OnClickListener() {
+        // Initialize DrawerLayout and NavigationView
+        ham_menu = findViewById(R.id.ham_menu);
+        ham_menu.setOnClickListener(view -> {
+            showHamMenu(view);
+        });
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+
+        // Set up ActionBarDrawerToggle
+        toggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar, // Pass the toolbar here
+                R.string.navigation_open,
+                R.string.navigation_close
+        );
+
+        // Attach toggle to DrawerLayout
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Set default fragment (HomeFragment)
+        if (savedInstanceState == null) {
+            loadFragment(new HomeFragment());
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
+
+        // Handle NavigationView item clicks
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                // Create a PopupMenu
-                PopupMenu popupMenu = new PopupMenu(HomeActivity.this, navIcon);
-                popupMenu.getMenuInflater().inflate(R.menu.toolbar_menu, popupMenu.getMenu());
-
-                // Handle menu item clicks using if-else
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int itemId = item.getItemId();
-
-                        if (itemId == R.id.nav_home) {
-                            Toast.makeText(HomeActivity.this, "Home clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_activity) {
-                            Toast.makeText(HomeActivity.this, "Today clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_future) {
-                            Toast.makeText(HomeActivity.this, "Future clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_history) {
-                            Toast.makeText(HomeActivity.this, "History clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_earning) {
-                            Toast.makeText(HomeActivity.this, "Earnings clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_statements) {
-                            Toast.makeText(HomeActivity.this, "Statements clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_ava) {
-                            Toast.makeText(HomeActivity.this, "Availability clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_profile) {
-                            Toast.makeText(HomeActivity.this, "Profile clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_settings) {
-                            Toast.makeText(HomeActivity.this, "Settings clicked", Toast.LENGTH_SHORT).show();
-                        } else if (itemId == R.id.nav_logout) {
-                            Toast.makeText(HomeActivity.this, "Logout clicked", Toast.LENGTH_SHORT).show();
-                        } else {
-                            return false; // If no match, do nothing
-                        }
-                        return true; // Indicate the event was handled
-                    }
-                });
-
-                // Show the popup menu
-                popupMenu.show();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                handleMenuClick(item);
+                return true;
             }
         });
     }
+
+    private void handleMenuClick(MenuItem item) {
+        int id = item.getItemId();
+
+        // Load fragments based on menu item selection
+        Fragment selectedFragment = null;
+
+        if (id == R.id.nav_home) {
+            selectedFragment = new HomeFragment();
+        } else if (id == R.id.nav_activity) {
+            // Replace this with your "Today" fragment
+            showToast("Today selected");
+        } else if (id == R.id.nav_future) {
+            // Replace this with your "Future" fragment
+            showToast("Future selected");
+        } else if (id == R.id.nav_history) {
+            // Replace this with your "History" fragment
+            showToast("History selected");
+        } else if (id == R.id.nav_earning) {
+            // Replace this with your "Earnings" fragment
+            showToast("Earnings selected");
+        } else if (id == R.id.nav_settings) {
+            // Replace this with your "Settings" fragment
+            showToast("Settings selected");
+        } else if (id == R.id.nav_logout) {
+            showToast("Logout selected");
+        }
+
+        // Load the selected fragment
+        if (selectedFragment != null) {
+            loadFragment(selectedFragment);
+        }
+
+        // Close the drawer after item selection
+        drawerLayout.closeDrawers();
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    public void showHamMenu(View view) {
+        // Create the PopupMenu and inflate the menu
+        ContextThemeWrapper themeWrapper = new ContextThemeWrapper(this,R.style.CustomPopupMenu);
+        PopupMenu popupMenu = new PopupMenu(themeWrapper, view);
+        MenuInflater menuInflater = popupMenu.getMenuInflater();
+        menuInflater.inflate(R.menu.toolbar_menu, popupMenu.getMenu());
+
+        // Set the listener for menu item clicks
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                // Ensure only one item is checked at a time
+                for (int i = 0; i < popupMenu.getMenu().size(); i++) {
+                    popupMenu.getMenu().getItem(i).setChecked(false);
+                }
+
+                // Check the selected item
+                menuItem.setChecked(true);
+
+                // Perform actions based on the selected item
+                if (menuItem.getItemId() == R.id.start_shift) {
+                    Toast.makeText(getApplicationContext(), "Start Shift selected", Toast.LENGTH_SHORT).show();
+                } else if (menuItem.getItemId() == R.id.finish_shift) {
+                    Toast.makeText(getApplicationContext(), "Finish Shift selected", Toast.LENGTH_SHORT).show();
+                } else if (menuItem.getItemId() == R.id.on_break) {
+                    Toast.makeText(getApplicationContext(), "On Break selected", Toast.LENGTH_SHORT).show();
+                } else if (menuItem.getItemId() == R.id.finish_break) {
+                    Toast.makeText(getApplicationContext(), "Finish Break selected", Toast.LENGTH_SHORT).show();
+                } else if (menuItem.getItemId() == R.id.rank_pickup) {
+                    Toast.makeText(getApplicationContext(), "Rank Pickup selected", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });
+
+        // Show the popup menu
+        popupMenu.show();
+    }
+
+
 }

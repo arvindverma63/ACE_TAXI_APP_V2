@@ -1,43 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home"
-        android:title="Home" />
-    <item
-        android:id="@+id/nav_activity"
-        android:icon="@drawable/ic_activity"
-        android:title="Today" />
-    <item
-        android:id="@+id/nav_future"
-        android:icon="@drawable/ic_future"
-        android:title="Future" />
-    <item
-        android:id="@+id/nav_history"
-        android:icon="@drawable/ic_history"
-        android:title="History" />
-    <item
-        android:id="@+id/nav_earning"
-        android:icon="@drawable/ic_earning"
-        android:title="Earnings" />
-    <item
-        android:id="@+id/nav_statements"
-        android:icon="@drawable/ic_statements"
-        android:title="Statements" />
-    <item
-        android:id="@+id/nav_ava"
-        android:icon="@drawable/ic_ava"
-        android:title="Availability" />
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="Profile" />
-    <item
-        android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings" />
-    <item
-        android:id="@+id/nav_logout"
-        android:icon="@drawable/ic_logout"
-        android:title="Logout" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/start_shift"
+            android:title="Start Shift"
+            android:checkable="true" />
+        <item
+            android:id="@+id/finish_shift"
+            android:title="Finish Shift"
+            android:checkable="true" />
+        <item
+            android:id="@+id/on_break"
+            android:title="On Break"
+            android:checkable="true" />
+        <item
+            android:id="@+id/finish_break"
+            android:title="Finish Break"
+            android:checkable="true" />
+        <item
+            android:id="@+id/rank_pickup"
+            android:title="Rank Pickup"
+            android:checkable="true" />
+    </group>
 </menu>

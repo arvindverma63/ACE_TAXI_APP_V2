@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ACE_TAXI_V2</string>
+    <string name="navigation_open">OPEN</string>
+    <string name="navigation_close">CLOSE</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
