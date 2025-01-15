@@ -137,6 +137,7 @@ public class HomeActivity extends AppCompatActivity {
                 // Ensure only one item is checked at a time
                 for (int i = 0; i < popupMenu.getMenu().size(); i++) {
                     popupMenu.getMenu().getItem(i).setChecked(false);
+                    break;
                 }
 
                 // Check the selected item
