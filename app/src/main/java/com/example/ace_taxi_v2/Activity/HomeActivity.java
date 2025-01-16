@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.ace_taxi_v2.Fragments.AvailabilityFragment;
 import com.example.ace_taxi_v2.Fragments.HomeFragment;
 import com.example.ace_taxi_v2.Fragments.JobFragment;
 import com.example.ace_taxi_v2.R;
@@ -91,8 +92,7 @@ public class HomeActivity extends AppCompatActivity {
         } else if (id == R.id.nav_job) {
            selectedFragment = new JobFragment();
         } else if (id == R.id.nav_availability) {
-            // Replace this with your "Future" fragment
-            showToast("Future selected");
+            selectedFragment = new AvailabilityFragment();
         } else if (id == R.id.nav_report) {
             // Replace this with your "History" fragment
             showToast("History selected");

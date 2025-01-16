@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:padding="8dp">
+
+        <!-- Date Range Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/date_range_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Select Date Range"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"
+            app:cornerRadius="12dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center" />
+
+        <!-- Spacer -->
+        <View
+            android:layout_width="8dp"
+            android:layout_height="0dp" />
+
+        <!-- Unavailable All Day Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/unavailable_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UNAVAILABLE ALL DAY"
+            android:backgroundTint="@color/red"
+            android:textColor="@android:color/white"
+            app:cornerRadius="12dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <!-- School Options Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/am_school_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            android:text="AM SCHOOL ONLY"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pm_school_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PM SCHOOL ONLY"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/am_pm_school_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AM/PM SCHOOL ONLY"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/custom_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@color/white"
+            android:text="CUSTOM"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+
+
+    <!-- Content Box -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/content_card"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:cardCornerRadius="16dp"
+        android:backgroundTint="@color/white"
+        app:cardElevation="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <!-- Tabs for ME and ALL -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_gray"
+            app:tabIndicatorColor="@color/primaryColor"
+            app:tabSelectedTextColor="@color/primaryColor"
+            app:tabTextColor="@color/gray">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ME" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ALL" />
+        </com.google.android.material.tabs.TabLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:text="No Data"/>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

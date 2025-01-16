@@ -15,7 +15,16 @@
     <style name="CustomPopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:backgroundTint">#FFFFFF</item>
     </style>
+    <!-- Custom Theme for Material DatePicker -->
+    <style name="CustomDatePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- Background color for the calendar dialog -->
+        <item name="materialCalendarStyle">@style/CustomMaterialCalendarStyle</item>
+    </style>
 
+    <!-- Custom Style for MaterialCalendar -->
+    <style name="CustomMaterialCalendarStyle" parent="Widget.MaterialComponents.MaterialCalendar">
+        <item name="android:background">@color/white</item>
+    </style>
 
 
 </resources>
