@@ -1,5 +1,6 @@
 package com.example.ace_taxi_v2.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.ace_taxi_v2.Fragments.HomeFragment;
+import com.example.ace_taxi_v2.Fragments.JobFragment;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -29,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private ImageView ham_menu;
+    private Toolbar toolbar_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,16 +88,15 @@ public class HomeActivity extends AppCompatActivity {
 
         if (id == R.id.nav_home) {
             selectedFragment = new HomeFragment();
-        } else if (id == R.id.nav_activity) {
-            // Replace this with your "Today" fragment
-            showToast("Today selected");
-        } else if (id == R.id.nav_future) {
+        } else if (id == R.id.nav_job) {
+           selectedFragment = new JobFragment();
+        } else if (id == R.id.nav_availability) {
             // Replace this with your "Future" fragment
             showToast("Future selected");
-        } else if (id == R.id.nav_history) {
+        } else if (id == R.id.nav_report) {
             // Replace this with your "History" fragment
             showToast("History selected");
-        } else if (id == R.id.nav_earning) {
+        } else if (id == R.id.nav_profile) {
             // Replace this with your "Earnings" fragment
             showToast("Earnings selected");
         } else if (id == R.id.nav_settings) {
@@ -123,45 +125,52 @@ public class HomeActivity extends AppCompatActivity {
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+    @SuppressLint("ResourceType")
     public void showHamMenu(View view) {
         // Create the PopupMenu and inflate the menu
-        ContextThemeWrapper themeWrapper = new ContextThemeWrapper(this,R.style.CustomPopupMenu);
+        ContextThemeWrapper themeWrapper = new ContextThemeWrapper(this, R.style.CustomPopupMenu);
         PopupMenu popupMenu = new PopupMenu(themeWrapper, view);
         MenuInflater menuInflater = popupMenu.getMenuInflater();
+
+        // Inflate the menu resource
         menuInflater.inflate(R.menu.toolbar_menu, popupMenu.getMenu());
 
         // Set the listener for menu item clicks
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                // Ensure only one item is checked at a time
-                for (int i = 0; i < popupMenu.getMenu().size(); i++) {
-                    popupMenu.getMenu().getItem(i).setChecked(false);
-                    break;
-                }
-
-                // Check the selected item
-                menuItem.setChecked(true);
-
-                // Perform actions based on the selected item
-                if (menuItem.getItemId() == R.id.start_shift) {
-                    Toast.makeText(getApplicationContext(), "Start Shift selected", Toast.LENGTH_SHORT).show();
-                } else if (menuItem.getItemId() == R.id.finish_shift) {
-                    Toast.makeText(getApplicationContext(), "Finish Shift selected", Toast.LENGTH_SHORT).show();
-                } else if (menuItem.getItemId() == R.id.on_break) {
-                    Toast.makeText(getApplicationContext(), "On Break selected", Toast.LENGTH_SHORT).show();
-                } else if (menuItem.getItemId() == R.id.finish_break) {
-                    Toast.makeText(getApplicationContext(), "Finish Break selected", Toast.LENGTH_SHORT).show();
-                } else if (menuItem.getItemId() == R.id.rank_pickup) {
-                    Toast.makeText(getApplicationContext(), "Rank Pickup selected", Toast.LENGTH_SHORT).show();
-                }
-                return true;
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            // Uncheck all items and reset icons to unchecked state
+            for (int i = 0; i < popupMenu.getMenu().size(); i++) {
+                MenuItem item = popupMenu.getMenu().getItem(i);
+                item.setChecked(false); // Uncheck all items
+                item.setIcon(R.drawable.ic_radio_button_unchecked); // Default unchecked icon
             }
+
+            // Check the selected item and set its icon
+            menuItem.setChecked(true);
+            menuItem.setIcon(R.drawable.ic_radio_button_checked); // Checked icon
+
+            // Perform actions based on the selected item
+            if (menuItem.getItemId() == R.id.start_shift) {
+                Toast.makeText(getApplicationContext(), "Start Shift selected", Toast.LENGTH_SHORT).show();
+            } else if (menuItem.getItemId() == R.id.finish_shift) {
+                Toast.makeText(getApplicationContext(), "Finish Shift selected", Toast.LENGTH_SHORT).show();
+            } else if (menuItem.getItemId() == R.id.on_break) {
+                Toast.makeText(getApplicationContext(), "On Break selected", Toast.LENGTH_SHORT).show();
+            } else if (menuItem.getItemId() == R.id.finish_break) {
+                Toast.makeText(getApplicationContext(), "Finish Break selected", Toast.LENGTH_SHORT).show();
+            } else if (menuItem.getItemId() == R.id.rank_pickup) {
+                Toast.makeText(getApplicationContext(), "Rank Pickup selected", Toast.LENGTH_SHORT).show();
+            }
+
+            return true;
         });
 
         // Show the popup menu
         popupMenu.show();
     }
+
+
+
+
 
 
 }

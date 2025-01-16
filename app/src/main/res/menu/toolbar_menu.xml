@@ -4,22 +4,22 @@
         <item
             android:id="@+id/start_shift"
             android:title="Start Shift"
-            android:checkable="true" />
+            android:icon="@drawable/ic_radio_button_unchecked" />
         <item
             android:id="@+id/finish_shift"
             android:title="Finish Shift"
-            android:checkable="true" />
+            android:icon="@drawable/ic_radio_button_unchecked" />
         <item
             android:id="@+id/on_break"
             android:title="On Break"
-            android:checkable="true" />
+            android:icon="@drawable/ic_radio_button_unchecked" />
         <item
             android:id="@+id/finish_break"
             android:title="Finish Break"
-            android:checkable="true" />
+            android:icon="@drawable/ic_radio_button_unchecked" />
         <item
             android:id="@+id/rank_pickup"
             android:title="Rank Pickup"
-            android:checkable="true" />
+            android:icon="@drawable/ic_radio_button_unchecked" />
     </group>
 </menu>
