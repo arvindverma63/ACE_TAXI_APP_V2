@@ -121,34 +121,47 @@
             android:gravity="start|center_vertical" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Tab Layout -->
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/primaryColor"
-        app:tabIndicatorColor="@color/white"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@android:color/white"
-        app:tabIndicatorHeight="4dp">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ME" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ALL" />
-    </com.google.android.material.tabs.TabLayout>
-
-    <!-- Content Area -->
+    <!-- Content Box -->
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/content_card"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:cardCornerRadius="16dp"
-        android:backgroundTint="@color/light_gray"
-        app:cardElevation="4dp" />
+        android:backgroundTint="@color/white"
+        app:cardElevation="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <!-- Tabs for ME and ALL -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_gray"
+            app:tabIndicatorColor="@color/primaryColor"
+            app:tabSelectedTextColor="@color/primaryColor"
+            app:tabTextColor="@color/gray">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ME" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ALL" />
+        </com.google.android.material.tabs.TabLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:text="No Data"/>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

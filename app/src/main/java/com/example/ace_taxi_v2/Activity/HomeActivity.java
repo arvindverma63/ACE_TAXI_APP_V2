@@ -19,10 +19,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ace_taxi_v2.Fragments.AvailabilityFragment;
 import com.example.ace_taxi_v2.Fragments.HomeFragment;
 import com.example.ace_taxi_v2.Fragments.JobFragment;
+import com.example.ace_taxi_v2.Fragments.ProfileFragment;
+import com.example.ace_taxi_v2.Fragments.ReportFragment;
+import com.example.ace_taxi_v2.Fragments.ReportPageFragment;
+import com.example.ace_taxi_v2.Fragments.SettingFragment;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -79,6 +84,8 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
     }
 
     private void handleMenuClick(MenuItem item) {
@@ -94,14 +101,11 @@ public class HomeActivity extends AppCompatActivity {
         } else if (id == R.id.nav_availability) {
             selectedFragment = new AvailabilityFragment();
         } else if (id == R.id.nav_report) {
-            // Replace this with your "History" fragment
-            showToast("History selected");
+            selectedFragment = new ReportPageFragment();
         } else if (id == R.id.nav_profile) {
-            // Replace this with your "Earnings" fragment
-            showToast("Earnings selected");
+           selectedFragment = new ProfileFragment();
         } else if (id == R.id.nav_settings) {
-            // Replace this with your "Settings" fragment
-            showToast("Settings selected");
+            selectedFragment = new SettingFragment();
         } else if (id == R.id.nav_logout) {
             showToast("Logout selected");
         }

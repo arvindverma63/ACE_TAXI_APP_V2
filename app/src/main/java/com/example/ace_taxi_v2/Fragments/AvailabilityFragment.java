@@ -30,6 +30,8 @@ public class AvailabilityFragment extends Fragment {
     private MaterialButton dateRangeButton;
     private Button custom_button;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
