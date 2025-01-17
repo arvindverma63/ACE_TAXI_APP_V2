@@ -4,4 +4,21 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+
+    <style name="Theme.ACE_TAXI_V2" parent="Base.Theme.ACE_TAXI_V2"/>
+
+    <style name="MainBG">
+        <item name="android:background">@color/primaryDark</item>
+    </style>
+    <style name="CardBG">
+        <item name="android:backgroundTint">@color/darkCard</item>
+    </style>
+    <style name="TextBG">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ActionBar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextColor">@color/white</item>
+        <item name="navigationIconTint">@color/white</item>
+    </style>
 </resources>

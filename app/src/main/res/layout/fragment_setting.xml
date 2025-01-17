@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryGray"
+    style="@style/MainBG"
     android:padding="16dp">
 
     <LinearLayout
@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             app:title="Settings"
             app:titleCentered="true"
-            app:titleTextColor="@color/black"
+            android:id="@+id/toolbar_header"
+            style="@style/ActionBar"
             android:backgroundTint="#005f75"
             app:navigationIcon="@drawable/ic_back_arrow" />
 
@@ -30,7 +31,7 @@
             app:cardCornerRadius="12dp"
             
             android:layout_marginTop="16dp"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
 
@@ -45,14 +46,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Theme"
+                    style="@style/TextBG"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                     />
 
                 <Switch
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textOff="Light"
-                    android:id="@+id/theme_switch"
+                    android:id="@+id/switch_dark_mode"
                     android:textOn="Dark"
                     android:checked="false"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -64,8 +66,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            
-            android:backgroundTint="@color/white"
+
+            style="@style/CardBG"
             android:layout_marginTop="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
@@ -82,7 +84,8 @@
                     android:layout_weight="1"
                     android:text="Push Notifications"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                    style="@style/TextBG"
+                     />
 
                 <Switch
                     android:layout_width="wrap_content"
@@ -99,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             
             android:layout_marginTop="16dp"
             android:foreground="?attr/selectableItemBackground"
@@ -116,8 +119,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="GPS"
+                    style="@style/TextBG"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                     />
 
                 <Switch
                     android:layout_width="wrap_content"
@@ -138,7 +142,7 @@
             app:cardCornerRadius="12dp"
             
             android:layout_marginTop="16dp"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
 
@@ -154,7 +158,8 @@
                     android:layout_weight="1"
                     android:text="SMS"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                    style="@style/TextBG"
+                     />
 
                 <Switch
                     android:layout_width="wrap_content"
@@ -173,8 +178,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            
-            android:backgroundTint="@color/white"
+
+            style="@style/CardBG"
             android:layout_marginTop="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
@@ -191,7 +196,8 @@
                     android:layout_weight="1"
                     android:text="URL"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                    style="@style/TextBG"
+                     />
 
                 <Button
                     android:layout_width="wrap_content"
@@ -208,8 +214,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            
-            android:backgroundTint="@color/white"
+
+            style="@style/CardBG"
             android:layout_marginTop="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
@@ -225,8 +231,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Keep Alive"
+                    style="@style/TextBG"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                     />
 
                 <Switch
                     android:layout_width="wrap_content"

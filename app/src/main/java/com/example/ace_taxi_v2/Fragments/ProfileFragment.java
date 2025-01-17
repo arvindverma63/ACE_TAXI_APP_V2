@@ -12,9 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ace_taxi_v2.Activity.HomeActivity;
-import com.example.ace_taxi_v2.Activity.ProfileActivity;
-import com.example.ace_taxi_v2.Activity.UploadDocumentActivity;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -52,12 +49,18 @@ public class ProfileFragment extends Fragment {
     }
 
     private void openProfileActivity() {
-        Intent intent = new Intent(getContext(), ProfileActivity.class);
-        startActivity(intent);
+        Fragment selectedFragment = new UserProfileFragment();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container,selectedFragment);
+        fragmentTransaction.commit();
     }
 
     private void openUploadDocumentActivity() {
-        Intent intent = new Intent(getContext(), UploadDocumentActivity.class);
-        startActivity(intent);
+        Fragment selectedFragment = new UploadDocumentFragment();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container,selectedFragment);
+        fragmentTransaction.commit();
     }
 }

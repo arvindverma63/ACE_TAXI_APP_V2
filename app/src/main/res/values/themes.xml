@@ -6,4 +6,16 @@
     </style>
 
     <style name="Theme.ACE_TAXI_V2" parent="Base.Theme.ACE_TAXI_V2" />
+
+
+    <style name="MainBG">
+        <item name="android:background">@color/primaryGray</item>
+    </style>
+    <style name="CardBG">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+    <style name="TextBG">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

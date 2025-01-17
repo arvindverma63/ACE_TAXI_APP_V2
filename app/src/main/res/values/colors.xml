@@ -9,9 +9,10 @@
     <color name="nav_text_color">#000000</color> <!-- Black -->
     <color name="nav_icon_color">#66BB6A</color> <!-- Green -->
     <color name="primaryGray">#F4F4F4</color>
-
+    <color name="primaryDark">#181a20</color>
     <color name="green">#4CAF50</color>
     <color name="blue">#2196F3</color>
     <color name="red">#AF0000</color>
 
+    <color name="darkCard">#1F222A</color>
 </resources>
