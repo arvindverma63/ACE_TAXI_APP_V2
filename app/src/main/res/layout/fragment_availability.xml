@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
+    style="@style/MainBG">
 
 
     <LinearLayout
@@ -105,7 +105,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         app:cardCornerRadius="16dp"
-        android:backgroundTint="@color/white"
+        style="@style/CardBG"
         app:cardElevation="4dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp">

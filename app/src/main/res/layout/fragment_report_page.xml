@@ -4,19 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryGray">
+    style="@style/MainBG">
 
     <!-- Header Section -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/header_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
+        style="@style/ActionBar"
         app:title="Reports"
         app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:navigationIcon="@drawable/ic_back_arrow"
-        app:navigationContentDescription="Back Button"
-        app:titleTextColor="@color/black" />
+        app:navigationContentDescription="Back Button" />
 
     <!-- Options List -->
     <LinearLayout
@@ -34,7 +33,7 @@
             android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
             android:id="@+id/earning_report"
-            android:backgroundTint="@color/white">
+            style="@style/CardBG">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,7 +47,7 @@
                     android:layout_weight="1"
                     android:text="Earning Report"
                     android:textSize="16sp"
-                    android:textColor="#000" />
+                    style="@style/TextBG"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -70,7 +69,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             android:id="@+id/statement_report"
             app:cardCornerRadius="12dp">
 
@@ -86,7 +85,7 @@
                     android:layout_weight="1"
                     android:text="Statement Report"
                     android:textSize="16sp"
-                    android:textColor="#000" />
+                    style="@style/TextBG"/>
 
                 <TextView
                     android:layout_width="wrap_content"

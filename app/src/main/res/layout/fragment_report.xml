@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryGray">
+    style="@style/MainBG">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             android:layout_marginBottom="16dp"
             android:padding="24dp">
 
@@ -51,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:text="3 Jobs"
                         android:textSize="18sp"
-                        android:textColor="#000"
+                        style="@style/TextBG"
                         android:textStyle="bold" />
 
                     <TextView
@@ -76,7 +76,7 @@
                 android:id="@+id/google_pie_chart"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:background="#FFFFFF" />
+                style="@style/CardBG"/>
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Table Section -->
@@ -95,130 +95,114 @@
 
                 <!-- Header Row -->
                 <TableRow
-                    android:background="#EEEEEE"
+                    style="@style/TableTheme"
                     android:padding="8dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="DAY"
                         android:textStyle="bold"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="JOBS"
                         android:textStyle="bold"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CASH"
                         android:textStyle="bold"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ePAYMENT"
                         android:textStyle="bold"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                 </TableRow>
 
                 <!-- Data Row 1 -->
                 <TableRow
-                    android:background="#FFFFFF"
+                    style="@style/MainBG"
                     android:padding="8dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="27 Sep"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£0.00"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£0.00"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£0.00"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                 </TableRow>
 
                 <!-- Data Row 2 -->
                 <TableRow
-                    android:background="#F9F9F9"
+                    style="@style/MainBG"
                     android:padding="8dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="28 Sep"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£0.03"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£10.50"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£0.00"
-                        android:padding="8dp"
-                        android:textColor="#000" />
+                        android:padding="8dp"/>
                 </TableRow>
 
                 <!-- Total Row -->
                 <TableRow
-                    android:background="#EEEEEE"
+                    style="@style/MainBG"
                     android:padding="8dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total"
                         android:padding="8dp"
-                        android:textStyle="bold"
-                        android:textColor="#000" />
+                        android:textStyle="bold" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£0.03"
                         android:padding="8dp"
-                        android:textStyle="bold"
-                        android:textColor="#000" />
+                        android:textStyle="bold"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£10.50"
                         android:padding="8dp"
-                        android:textStyle="bold"
-                        android:textColor="#000" />
+                        android:textStyle="bold"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£0.00"
                         android:padding="8dp"
-                        android:textStyle="bold"
-                        android:textColor="#000" />
+                        android:textStyle="bold"/>
                 </TableRow>
             </TableLayout>
         </com.google.android.material.card.MaterialCardView>

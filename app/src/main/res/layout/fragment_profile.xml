@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryGray">
+    style="@style/MainBG">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,9 +17,8 @@
             android:layout_height="wrap_content"
             app:title="User Profile"
             app:titleCentered="true"
+            style="@style/ActionBar"
             android:id="@+id/toolbar_header"
-            app:titleTextColor="#000000"
-            android:backgroundTint="#FFFFFF"
             app:navigationIcon="@drawable/ic_back_arrow"
             app:navigationContentDescription="Back" />
 
@@ -33,7 +32,7 @@
             android:id="@+id/profile_activity"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="0dp"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
 
@@ -49,7 +48,7 @@
                     android:layout_weight="1"
                     android:text="User Profile"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                    style="@style/TextBG"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -69,7 +68,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="0dp"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
 
@@ -85,7 +84,7 @@
                     android:layout_weight="1"
                     android:text="Uesr Documents"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                    style="@style/TextBG"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -101,7 +100,7 @@
             android:layout_height="wrap_content"
             app:cardElevation="2dp"
             app:cardCornerRadius="8dp"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="0dp"
@@ -120,7 +119,7 @@
                     android:layout_weight="1"
                     android:text="Document Expiry"
                     android:textSize="16sp"
-                    android:textColor="#000000" />
+                    style="@style/TextBG"/>
 
                 <ImageView
                     android:layout_width="24dp"

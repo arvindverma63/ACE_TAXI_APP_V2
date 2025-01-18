@@ -17,5 +17,28 @@
     <style name="TextBG">
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="background">@color/primaryDark</item>
+        <item name="tabBackground">@drawable/tab_background</item>
+    </style>
 
+    <style name="TableTheme">
+        <item name="android:background">@color/primaryGray</item>
+    </style>
+
+    <style name="IconTint">
+        <item name="tint">@color/black</item>
+    </style>
+
+    <style name="Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="background">@color/white</item>
+    </style>
+
+    <style name="Appbar" parent="Widget.Material3.AppBarLayout">
+        <item name="android:background">@color/primaryGray</item>
+    </style>
+
+    <style name="DrawerNavigation">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
 </resources>

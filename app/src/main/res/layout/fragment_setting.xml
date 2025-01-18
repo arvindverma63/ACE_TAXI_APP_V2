@@ -45,7 +45,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Theme"
+                    android:id="@+id/theme_switch_text"
+                    android:text="Light Mode"
                     style="@style/TextBG"
                     android:textSize="16sp"
                      />

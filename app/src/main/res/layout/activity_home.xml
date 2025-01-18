@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white">
+        style="@style/MainBG">
 
         <!-- AppBar with Toolbar -->
         <com.google.android.material.appbar.AppBarLayout
@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
+                style="@style/ActionBar"
                 android:contentInsetStartWithNavigation="0dp">
 
                 <!-- Navigation Icon -->
@@ -36,6 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
                     android:padding="8dp"
+                    style="@style/IconTint"
                     android:src="@drawable/ic_taxi" />
 
                 <!-- Centered Title -->
@@ -45,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="ACE TAXI"
-                    android:textColor="@android:color/black"
+                    style="@style/TextBG"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -55,6 +56,7 @@
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
                     android:padding="8dp"
+                    style="@style/IconTint"
                     android:id="@+id/ham_menu"
                     android:src="@drawable/ic_ham" />
                 <!-- Phone Icon -->
@@ -64,6 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
+                    style="@style/IconTint"
                     android:contentDescription="phone_icon"
                     android:padding="8dp"
                     android:src="@drawable/ic_mobile" />
@@ -77,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
+                    style="@style/IconTint"
                     android:contentDescription="message_icon"
                     android:padding="8dp"
                     android:src="@drawable/ic_message" />
@@ -101,6 +105,7 @@
         android:layout_gravity="start"
         android:background="@color/white"
         app:menu="@menu/navigation_menu"
+        style="@style/DrawerNavigation"
         app:headerLayout="@layout/navigation_header" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
