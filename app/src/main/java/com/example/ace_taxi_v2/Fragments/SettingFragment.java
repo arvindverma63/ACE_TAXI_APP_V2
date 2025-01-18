@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class SettingFragment extends Fragment {
     private static final String PREF_NAME = "app_preferences";
     private static final String KEY_DARK_MODE = "dark_mode";
     private TextView theme_switch_text;
+    private Switch switch_dark_mode,notification_swtich,gps_switch,sms_switch,keep_alive_switch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +38,38 @@ public class SettingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
         theme_switch_text = view.findViewById(R.id.theme_switch_text);
+        switch_dark_mode = view.findViewById(R.id.switch_dark_mode);
+        notification_swtich = view.findViewById(R.id.notification_swtich);
+        gps_switch = view.findViewById(R.id.gps_switch);
+        sms_switch = view.findViewById(R.id.sms_switch);
+        keep_alive_switch = view.findViewById(R.id.keep_alive_switch);
+
+        notification_swtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                notificationSwitch(b);
+            }
+        });
+        gps_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                gpsSwitch(b);
+            }
+        });
+        sms_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                smsSwitch(b);
+            }
+        });
+        keep_alive_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                keepAliveSwitch(b);
+            }
+        });
+
+
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
         toolbar.setNavigationOnClickListener(v -> {
@@ -88,12 +122,53 @@ public class SettingFragment extends Fragment {
             Drawable darkModeIcon = getResources().getDrawable(R.drawable.ic_night_mode, null);
             theme_switch_text.setCompoundDrawablesWithIntrinsicBounds(darkModeIcon, null, null, null);
             theme_switch_text.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.white, null)));
+            switch_dark_mode.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            switch_dark_mode.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
         } else {
             theme_switch_text.setText("Light Mode");
             Drawable lightModeIcon = getResources().getDrawable(R.drawable.ic_light_mode, null);
             theme_switch_text.setCompoundDrawablesWithIntrinsicBounds(lightModeIcon, null, null, null);
             theme_switch_text.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.black, null)));
+            switch_dark_mode.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            switch_dark_mode.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
         }
 
+    }
+
+    private void notificationSwitch(boolean isOn){
+        if(isOn){
+            notification_swtich.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            notification_swtich.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+        }else{
+            notification_swtich.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            notification_swtich.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+        }
+    }
+    private void gpsSwitch(boolean isOn){
+        if(isOn){
+            gps_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            gps_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+        }else{
+            gps_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            gps_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+        }
+    }
+    private void smsSwitch(boolean isOn){
+        if(isOn){
+            sms_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            sms_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+        }else{
+            sms_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            sms_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+        }
+    }
+    private void keepAliveSwitch(boolean isOn){
+        if(isOn){
+            keep_alive_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            keep_alive_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+        }else{
+            keep_alive_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            keep_alive_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+        }
     }
 }

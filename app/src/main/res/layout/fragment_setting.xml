@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:textOff="Off"
                     android:textOn="Enabled"
-                    android:checked="true"
+                    android:id="@+id/notification_swtich"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -129,9 +129,9 @@
                     android:layout_height="wrap_content"
                     android:textOff="Off"
                     android:textOn="Always"
-                    android:checked="true"
                     app:thumbTint="@color/gray"
                     app:trackTint="@color/gray"
+                    android:id="@+id/gps_switch"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -167,8 +167,8 @@
                     android:layout_height="wrap_content"
                     android:textOff="Off"
                     android:textOn="Enabled"
-                    android:checked="true"
                     app:thumbTint="@color/primaryColor"
+                    android:id="@+id/sms_switch"
                     app:trackTint="@color/primaryColor"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
@@ -241,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:textOff="Off"
                     android:textOn="On"
-                    android:checked="true"
+                    android:id="@+id/keep_alive_switch"
                     app:thumbTint="@color/gray"
                     app:trackTint="@color/gray"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />

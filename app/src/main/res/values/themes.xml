@@ -21,11 +21,9 @@
         <item name="background">@color/primaryDark</item>
         <item name="tabBackground">@drawable/tab_background</item>
     </style>
-
     <style name="TableTheme">
         <item name="android:background">@color/primaryGray</item>
     </style>
-
     <style name="IconTint">
         <item name="tint">@color/black</item>
     </style>

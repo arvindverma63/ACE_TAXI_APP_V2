@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment {
                 } else {
                     location_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
                     location_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+
                     online_status_label.setText("You Are Offline");
                 }
             }

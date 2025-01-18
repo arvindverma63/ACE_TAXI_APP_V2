@@ -37,13 +37,10 @@ public class AvailabilityFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_availability, container, false);
-
         // Initialize the MaterialButton
         dateRangeButton = rootView.findViewById(R.id.date_range_button);
-
         // Set click listener to show Date Picker
         dateRangeButton.setOnClickListener(v -> showDateRangePicker());
-
         custom_button = rootView.findViewById(R.id.custom_button);
         custom_button.setOnClickListener(view -> {
             // Create an instance of the fragment you want to navigate to
