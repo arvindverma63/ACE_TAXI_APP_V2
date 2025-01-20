@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.example.ace_taxi_v2.Components.CustomDialog;
 import com.example.ace_taxi_v2.R;
+import com.example.ace_taxi_v2.SettingsPermission.CheckPermission;
+import com.example.ace_taxi_v2.SettingsPermission.Permission;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class SettingFragment extends Fragment {
@@ -31,6 +33,7 @@ public class SettingFragment extends Fragment {
     private static final String KEY_DARK_MODE = "dark_mode";
     private TextView theme_switch_text,gps_switch_text,notification_switch_text,url_text,keep_alive_switch_text;
     private Switch switch_dark_mode,notification_swtich,gps_switch,sms_switch,keep_alive_switch;
+    Permission permission;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,12 +47,16 @@ public class SettingFragment extends Fragment {
         gps_switch = view.findViewById(R.id.gps_switch);
         sms_switch = view.findViewById(R.id.sms_switch);
         keep_alive_switch = view.findViewById(R.id.keep_alive_switch);
-
+        permission = new Permission(getContext());
 
         notification_switch_text = view.findViewById(R.id.notification_switch_text);
         gps_switch_text = view.findViewById(R.id.gps_switch_text);
         keep_alive_switch_text = view.findViewById(R.id.keep_alive_switch_text);
         url_text = view.findViewById(R.id.url_text);
+
+        CheckPermission checkPermission = new CheckPermission(getContext());
+        checkPermission.notificationPermission(notification_swtich);
+        checkPermission.gpsPermission(gps_switch);
 
 
         notification_swtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -155,27 +162,34 @@ public class SettingFragment extends Fragment {
         if(isOn){
             notification_swtich.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
             notification_swtich.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            permission.notificationPermission(true);
+
         }else{
             notification_swtich.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
             notification_swtich.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            permission.notificationPermission(false);
         }
     }
     private void gpsSwitch(boolean isOn){
         if(isOn){
             gps_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
             gps_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            permission.locationPermission(true);
         }else{
             gps_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
             gps_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            permission.locationPermission(false);
         }
     }
     private void smsSwitch(boolean isOn){
         if(isOn){
             sms_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
             sms_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            permission.smsPermission(true);
         }else{
             sms_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
             sms_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            permission.smsPermission(false);
         }
     }
     private void keepAliveSwitch(boolean isOn){
