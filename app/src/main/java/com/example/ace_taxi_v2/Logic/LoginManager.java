@@ -27,8 +27,8 @@ public class LoginManager {
     }
 
     public void login(String username, String password) {
-        CustomDialog customDialog = new CustomDialog();
-        customDialog.showProgressDialog(context);
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.show();
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
         LoginRequest loginRequest = new LoginRequest(username, password);
 
@@ -41,10 +41,10 @@ public class LoginManager {
                     String username = response.body().getUsername();
 
                     SessionManager sessionManager = new SessionManager(context);
-                    sessionManager.saveSession(token,userId,username);
+                    sessionManager.saveSession(token, userId, username);
 
                     Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show();
-                    customDialog.dismissProgressDialog();
+                    progressDialog.hide();
 
 //                    UpdateFCMApi updateFCMApi = new UpdateFCMApi(context);
 //                    updateFCMApi.updateFcm();
@@ -54,15 +54,15 @@ public class LoginManager {
                     context.startActivity(intent);
                 } else {
                     Toast.makeText(context, "Incorrect Username Or Password: " + response.message(), Toast.LENGTH_SHORT).show();
-                    customDialog.dismissProgressDialog();
+                    progressDialog.hide();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("error",""+t.getMessage());
-                customDialog.dismissProgressDialog();
+                Log.e("error", "" + t.getMessage());
+                progressDialog.hide();
             }
         });
     }
@@ -73,7 +73,7 @@ public class LoginManager {
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
 
-        try{
+        try {
             apiService.userProfile(sessionManager.getUsername(), "Bearer " + jwtToken)
                     .enqueue(new Callback<UserProfileResponse>() {
                         @Override
@@ -98,6 +98,7 @@ public class LoginManager {
 
     public interface ProfileCallback {
         void onSuccess(UserProfileResponse userProfileResponse);
+
         void onFailure(String errorMessage);
     }
 }

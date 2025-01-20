@@ -43,7 +43,6 @@ public class SendLocation {
             return;
         }
 
-        // Log debug information
         Log.d("SendLocation", "Preparing to send GPS data");
 
         // Prepare the API call
@@ -56,7 +55,16 @@ public class SendLocation {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("SendLocation", "GPS updated successfully: " + response.body());
                 } else {
-                    Log.e("SendLocation", "Failed to update GPS: " + response.message());
+                    // Log error response
+                    Log.e("SendLocation", "Failed to update GPS");
+                    Log.e("SendLocation", "HTTP Response Code: " + response.code());
+                    try {
+                        if (response.errorBody() != null) {
+                            Log.e("SendLocation", "Error Body: " + response.errorBody().string());
+                        }
+                    } catch (Exception e) {
+                        Log.e("SendLocation", "Error parsing error body: " + e.getMessage());
+                    }
                 }
             }
 
