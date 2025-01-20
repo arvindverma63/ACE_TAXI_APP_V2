@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ace_taxi_v2.Activity.LoginActivity;
+import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -25,6 +27,11 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        SessionManager sessionManager = new SessionManager(getContext());
+        if(!sessionManager.isLoggedIn()){
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
 
         // Initialize CardViews
         profileActivityCard = view.findViewById(R.id.profile_activity);

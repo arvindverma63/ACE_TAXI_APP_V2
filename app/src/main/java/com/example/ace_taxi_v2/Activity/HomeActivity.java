@@ -1,7 +1,9 @@
 package com.example.ace_taxi_v2.Activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
@@ -30,6 +32,7 @@ import com.example.ace_taxi_v2.Fragments.ProfileFragment;
 import com.example.ace_taxi_v2.Fragments.ReportFragment;
 import com.example.ace_taxi_v2.Fragments.ReportPageFragment;
 import com.example.ace_taxi_v2.Fragments.SettingFragment;
+import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -45,6 +48,11 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        SessionManager sessionManager = new SessionManager(this);
+        if(!sessionManager.isLoggedIn()){
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
         // Load dark mode preference
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
@@ -68,13 +76,7 @@ public class HomeActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigation_view);
 
         // Set up ActionBarDrawerToggle
-        toggle = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                toolbar, // Pass the toolbar here
-                R.string.navigation_open,
-                R.string.navigation_close
-        );
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close);
 
         // Attach toggle to DrawerLayout
         drawerLayout.addDrawerListener(toggle);
@@ -94,6 +96,8 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
 
 
     }
@@ -117,7 +121,10 @@ public class HomeActivity extends AppCompatActivity {
         } else if (id == R.id.nav_settings) {
             selectedFragment = new SettingFragment();
         } else if (id == R.id.nav_logout) {
-            showToast("Logout selected");
+            SessionManager sessionManager = new SessionManager(this);
+            sessionManager.clearSession();
+            Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+            startActivity(intent);
         }
 
         // Load the selected fragment

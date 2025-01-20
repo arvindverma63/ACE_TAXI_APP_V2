@@ -1,5 +1,6 @@
 package com.example.ace_taxi_v2.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.ace_taxi_v2.Activity.LoginActivity;
 import com.example.ace_taxi_v2.Components.CustomDialog;
+import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
 
 public class ReportFragment extends Fragment {
@@ -30,7 +33,11 @@ public class ReportFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        SessionManager sessionManager = new SessionManager(getContext());
+        if(!sessionManager.isLoggedIn()){
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
         webView = view.findViewById(R.id.google_pie_chart);
         CustomDialog customDialog = new CustomDialog();
         // Configure WebView settings

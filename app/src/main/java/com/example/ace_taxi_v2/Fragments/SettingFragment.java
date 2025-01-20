@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,7 @@ public class SettingFragment extends Fragment {
 
     private static final String PREF_NAME = "app_preferences";
     private static final String KEY_DARK_MODE = "dark_mode";
-    private TextView theme_switch_text;
+    private TextView theme_switch_text,gps_switch_text,notification_switch_text,url_text,keep_alive_switch_text;
     private Switch switch_dark_mode,notification_swtich,gps_switch,sms_switch,keep_alive_switch;
 
     @Override
@@ -43,6 +44,13 @@ public class SettingFragment extends Fragment {
         gps_switch = view.findViewById(R.id.gps_switch);
         sms_switch = view.findViewById(R.id.sms_switch);
         keep_alive_switch = view.findViewById(R.id.keep_alive_switch);
+
+
+        notification_switch_text = view.findViewById(R.id.notification_switch_text);
+        gps_switch_text = view.findViewById(R.id.gps_switch_text);
+        keep_alive_switch_text = view.findViewById(R.id.keep_alive_switch_text);
+        url_text = view.findViewById(R.id.url_text);
+
 
         notification_swtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -120,20 +128,28 @@ public class SettingFragment extends Fragment {
         if (isDarkMode) {
             theme_switch_text.setText("Dark Mode");
             Drawable darkModeIcon = getResources().getDrawable(R.drawable.ic_night_mode, null);
-            theme_switch_text.setCompoundDrawablesWithIntrinsicBounds(darkModeIcon, null, null, null);
+            Drawable wrappedDarkModeIcon = addDrawableMargin(darkModeIcon, 16); // 16px margin
+            theme_switch_text.setCompoundDrawablesWithIntrinsicBounds(wrappedDarkModeIcon, null, null, null);
             theme_switch_text.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.white, null)));
             switch_dark_mode.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
             switch_dark_mode.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
         } else {
             theme_switch_text.setText("Light Mode");
             Drawable lightModeIcon = getResources().getDrawable(R.drawable.ic_light_mode, null);
-            theme_switch_text.setCompoundDrawablesWithIntrinsicBounds(lightModeIcon, null, null, null);
+            Drawable wrappedLightModeIcon = addDrawableMargin(lightModeIcon, 16); // 16px margin
+            theme_switch_text.setCompoundDrawablesWithIntrinsicBounds(wrappedLightModeIcon, null, null, null);
             theme_switch_text.setCompoundDrawableTintList(ColorStateList.valueOf(getResources().getColor(R.color.black, null)));
             switch_dark_mode.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
             switch_dark_mode.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
         }
-
     }
+
+    // Helper method to add margin to the drawable
+    private Drawable addDrawableMargin(Drawable drawable, int marginInPx) {
+        InsetDrawable insetDrawable = new InsetDrawable(drawable, 0, 0, marginInPx, 0);
+        return insetDrawable;
+    }
+
 
     private void notificationSwitch(boolean isOn){
         if(isOn){

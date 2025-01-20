@@ -1,5 +1,6 @@
 package com.example.ace_taxi_v2.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ace_taxi_v2.Activity.LoginActivity;
 import com.example.ace_taxi_v2.Fragments.Adapters.ViewPagerAdapterJob;
+import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -32,6 +35,11 @@ public class JobFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SessionManager sessionManager = new SessionManager(getContext());
+        if(!sessionManager.isLoggedIn()){
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
 
         tabLayout = view.findViewById(R.id.job_tab_layout);
         viewPager2 = view.findViewById(R.id.pageView);

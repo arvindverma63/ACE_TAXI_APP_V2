@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ace_taxi_v2.Activity.HomeActivity;
+import com.example.ace_taxi_v2.Activity.LoginActivity;
+import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -26,6 +28,11 @@ public class ReportPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_page, container, false);
+        SessionManager sessionManager = new SessionManager(getContext());
+        if(!sessionManager.isLoggedIn()){
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
 
         earning_report = view.findViewById(R.id.earning_report);
         earning_report.setOnClickListener(view1 -> {
