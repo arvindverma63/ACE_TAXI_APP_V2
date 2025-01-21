@@ -45,9 +45,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Full Name">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/fullname"
                 android:text="Peter Farrell" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,6 +61,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/phoneNumber"
                 android:text="+123 456 789" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,6 +73,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/email"
                 android:text="peter.farrell@example.com" />
         </com.google.android.material.textfield.TextInputLayout>
 

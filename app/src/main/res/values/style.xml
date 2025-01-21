@@ -37,5 +37,9 @@
             <item name="cornerSize">8dp</item>
         </style>
 
+    <style name="DialogBg">
+        <item name="android:background">@color/trans</item>
+    </style>
+
 
 </resources>

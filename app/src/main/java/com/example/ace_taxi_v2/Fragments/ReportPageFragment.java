@@ -51,8 +51,6 @@ public class ReportPageFragment extends Fragment {
             Intent intent = new Intent(getContext(), HomeActivity.class);
             startActivity(intent);
         });
-
-
         return view;
     }
 

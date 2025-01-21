@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.ace_taxi_v2" />
+                  <option name="mobileSdkAppId" value="1:498604695616:android:fab54ae4348c8fc621bfa5" />
+                  <option name="projectId" value="joyride-cba49" />
+                  <option name="projectNumber" value="498604695616" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

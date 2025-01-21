@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ace_taxi_v2.Fragments.Adapters.JobAdapters.HistoryAdapter;
+import com.example.ace_taxi_v2.JobModals.JobModal;
 import com.example.ace_taxi_v2.Models.Jobs.HistoryJob;
 import com.example.ace_taxi_v2.R;
 
@@ -41,8 +42,8 @@ public class HistoryFragment extends Fragment {
         adapter = new HistoryAdapter(historyJobs, new HistoryAdapter.OnItemClickListener() {
             @Override
             public void onViewClick(HistoryJob job) {
-                // Handle View button click
-                // Example: Navigate to a detail view
+                JobModal jobModal = new JobModal(getContext());
+                jobModal.viewJob();
             }
 
             @Override

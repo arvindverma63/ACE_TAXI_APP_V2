@@ -9,17 +9,28 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.ace_taxi_v2.Logic.LoginManager;
+import com.example.ace_taxi_v2.Models.UserProfileResponse;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class UserProfileFragment extends Fragment {
 
+    public TextInputEditText fullname,email,phoneNumber;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        fullname = view.findViewById(R.id.fullname);
+        email = view.findViewById(R.id.email);
+        phoneNumber = view.findViewById(R.id.phoneNumber);
+        setDetails();
+
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,5 +44,22 @@ public class UserProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void setDetails(){
+        LoginManager loginManager = new LoginManager(getContext());
+        loginManager.getProfile(new LoginManager.ProfileCallback() {
+            @Override
+            public void onSuccess(UserProfileResponse userProfileResponse) {
+                fullname.setText(userProfileResponse.getFullName());
+                email.setText(userProfileResponse.getEmail());
+                phoneNumber.setText(userProfileResponse.getPhoneNumber());
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+
+            }
+        });
     }
 }

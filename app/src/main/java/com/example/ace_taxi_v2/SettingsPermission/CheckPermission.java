@@ -55,4 +55,5 @@ public class CheckPermission {
             Log.d("PermissionCheck", "GPS permission is not enabled");
         }
     }
+
 }

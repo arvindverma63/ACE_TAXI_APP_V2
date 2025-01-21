@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
+import com.example.ace_taxi_v2.JobModals.JobModal;
 import com.example.ace_taxi_v2.Models.Jobs.JobItem;
 import com.example.ace_taxi_v2.R;
 
@@ -43,8 +44,9 @@ public class TodayFragment extends Fragment {
         adapter = new TodayJobAdapter(jobList, new TodayJobAdapter.OnItemClickListener() {
             @Override
             public void onViewClick(JobItem job) {
-                // Handle View button click
-                // Add your logic here, e.g., navigate to details
+                JobModal jobModal = new JobModal(getContext());
+                jobModal.jobDetails();
+
             }
 
             @Override
