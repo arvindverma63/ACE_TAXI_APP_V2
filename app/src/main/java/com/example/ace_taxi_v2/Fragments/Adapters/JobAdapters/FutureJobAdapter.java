@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ace_taxi_v2.Models.Jobs.FutureJob;
+import com.example.ace_taxi_v2.Models.Jobs.Booking;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 
@@ -17,12 +17,12 @@ import java.util.List;
 
 public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.ViewHolder> {
 
-    private final List<FutureJob> futureJobList;
+    private final List<Booking> bookingList;
     private final OnItemClickListener listener;
 
     // Constructor
-    public FutureJobAdapter(List<FutureJob> futureJobList, OnItemClickListener listener) {
-        this.futureJobList = futureJobList;
+    public FutureJobAdapter(List<Booking> bookingList, OnItemClickListener listener) {
+        this.bookingList = bookingList;
         this.listener = listener;
     }
 
@@ -38,13 +38,13 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Bind data to the ViewHolder
-        FutureJob futureJob = futureJobList.get(position);
-        holder.bind(futureJob, listener);
+        Booking booking = bookingList.get(position);
+        holder.bind(booking, listener);
     }
 
     @Override
     public int getItemCount() {
-        return futureJobList.size();
+        return bookingList.size();
     }
 
     // ViewHolder Class
@@ -72,22 +72,22 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
             personIcon = itemView.findViewById(R.id.person);
         }
 
-        public void bind(FutureJob futureJob, OnItemClickListener listener) {
-            // Bind FutureJob data to views
-            timeTextView.setText(futureJob.getTime());
-            customerCountTextView.setText(String.valueOf(futureJob.getCustomerCount()));
-            mainAddressTextView.setText(futureJob.getMainAddress());
-            subAddressTextView.setText(futureJob.getSubAddress());
+        public void bind(Booking booking, OnItemClickListener listener) {
+            // Bind Booking data to views
+            timeTextView.setText(booking.getPickupDateTime());
+            customerCountTextView.setText(String.valueOf(booking.getPassengers()));
+            mainAddressTextView.setText(booking.getPickupAddress());
+            subAddressTextView.setText(booking.getDestinationAddress());
 
             // Set button click listeners
-            viewButton.setOnClickListener(v -> listener.onViewClick(futureJob));
-            startButton.setOnClickListener(v -> listener.onStartClick(futureJob));
+            viewButton.setOnClickListener(v -> listener.onViewClick(booking));
+            startButton.setOnClickListener(v -> listener.onStartClick(booking));
         }
     }
 
     // Listener Interface for button clicks
     public interface OnItemClickListener {
-        void onViewClick(FutureJob job);
-        void onStartClick(FutureJob job);
+        void onViewClick(Booking booking);
+        void onStartClick(Booking booking);
     }
 }

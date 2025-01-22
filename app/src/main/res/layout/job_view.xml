@@ -56,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="£23.00"
+                android:id="@+id/price"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@color/red"
@@ -91,6 +92,7 @@
                 android:text="PETER FARRELL"
                 android:textStyle="bold"
                 android:textSize="16sp"
+                android:id="@+id/passenger_name"
                 android:gravity="start"
                 android:layout_marginBottom="8dp" />
 
@@ -99,6 +101,7 @@
                 android:layout_height="wrap_content"
                 android:text="14/01/2025\n10:20AM (ASAP)"
                 android:textSize="14sp"
+                android:id="@+id/pickup_date"
                 android:gravity="start" />
 
             <!-- Stop Information -->
@@ -126,6 +129,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:id="@+id/pickup_address"
                         android:layout_marginStart="8dp"
                         android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
                         android:textSize="14sp" />
@@ -173,6 +177,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
+                        android:id="@+id/destination_address"
                         android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
                         android:textSize="14sp" />
                 </LinearLayout>

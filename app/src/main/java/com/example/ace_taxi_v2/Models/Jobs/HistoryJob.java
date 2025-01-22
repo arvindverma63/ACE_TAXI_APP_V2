@@ -1,31 +1,31 @@
 package com.example.ace_taxi_v2.Models.Jobs;
 
 public class HistoryJob {
-    private final String time;
-    private final int customerCount;
-    private final String mainAddress;
-    private final String subAddress;
+    private final String pickupDateTime;
+    private final int passengers;
+    private final String pickupAddress;
+    private final String destinationAddress;
 
-    public HistoryJob(String time, int customerCount, String mainAddress, String subAddress) {
-        this.time = time;
-        this.customerCount = customerCount;
-        this.mainAddress = mainAddress;
-        this.subAddress = subAddress;
+    public HistoryJob(String pickupDateTime, int passengers, String pickupAddress, String destinationAddress) {
+        this.pickupDateTime = pickupDateTime;
+        this.passengers = passengers;
+        this.pickupAddress = pickupAddress;
+        this.destinationAddress = destinationAddress;
     }
 
-    public String getTime() {
-        return time;
+    public String getPickupDateTime() {
+        return pickupDateTime;
     }
 
-    public int getCustomerCount() {
-        return customerCount;
+    public int getPassengers() {
+        return passengers;
     }
 
-    public String getMainAddress() {
-        return mainAddress;
+    public String getPickupAddress() {
+        return pickupAddress;
     }
 
-    public String getSubAddress() {
-        return subAddress;
+    public String getDestinationAddress() {
+        return destinationAddress;
     }
 }

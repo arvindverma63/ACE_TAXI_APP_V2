@@ -5,6 +5,8 @@ import com.example.ace_taxi_v2.Models.FcmRequest;
 import com.example.ace_taxi_v2.Models.FcmResponse;
 import com.example.ace_taxi_v2.Models.GPSRequest;
 import com.example.ace_taxi_v2.Models.GPSResponse;
+import com.example.ace_taxi_v2.Models.Jobs.Booking;
+import com.example.ace_taxi_v2.Models.Jobs.FutureJobResponse;
 import com.example.ace_taxi_v2.Models.LoginRequest;
 import com.example.ace_taxi_v2.Models.LoginResponse;
 import com.example.ace_taxi_v2.Models.UserProfileResponse;
@@ -14,7 +16,6 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -36,5 +37,12 @@ public interface ApiService {
     @GET("/api/UserProfile/GetUser")
     Call<UserProfileResponse> userProfile(@Query("username")String username,
                                           @Header("Authorization") String token);
+
+    @GET("/api/DriverApp/FutureJobs")
+    Call<FutureJobResponse> futureJobs(@Header("Authorization") String token);
+
+    @GET("/api/Bookings/FindById")
+    Call<Booking> getBookingById(@Header("Authorization") String token,
+                                 @Query("bookingId") int bookingId);
 
 }

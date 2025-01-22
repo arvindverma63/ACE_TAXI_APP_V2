@@ -71,10 +71,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         public void bind(HistoryJob job, OnItemClickListener listener) {
             // Bind HistoryJob data to views
-            timeTextView.setText(job.getTime());
-            customerTextView.setText(String.valueOf(job.getCustomerCount()));
-            mainAddressTextView.setText(job.getMainAddress());
-            subAddressTextView.setText(job.getSubAddress());
+            timeTextView.setText(job.getPickupDateTime());
+            customerTextView.setText(String.valueOf(job.getPassengers()));
+            mainAddressTextView.setText(job.getPickupAddress());
+            subAddressTextView.setText(job.getDestinationAddress());
 
             // Set button click listeners
             viewButton.setOnClickListener(v -> listener.onViewClick(job));

@@ -68,10 +68,10 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
         }
 
         public void bind(JobItem job, OnItemClickListener listener) {
-            timeTextView.setText(job.getTime());
-            customerTextView.setText(String.valueOf(job.getCustomerCount()));
-            mainAddressTextView.setText(job.getMainAddress());
-            subAddressTextView.setText(job.getSubAddress());
+            timeTextView.setText(job.getPickupDateTime());
+            customerTextView.setText(String.valueOf(job.getPassengers()));
+            mainAddressTextView.setText(job.getPickupAddress());
+            subAddressTextView.setText(job.getDestinationAddress());
 
             viewButton.setOnClickListener(v -> listener.onViewClick(job));
             startButton.setOnClickListener(v -> listener.onStartClick(job));
