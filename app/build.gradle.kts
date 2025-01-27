@@ -48,6 +48,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.25")
 
 
 }

@@ -3,12 +3,10 @@ package com.example.ace_taxi_v2.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.ace_taxi_v2.R;
 
@@ -19,11 +17,31 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash_screen);
-        // Delay for 3 seconds and navigate to MainActivity
+
+        Intent intent = getIntent();
+        String title = intent.getStringExtra("title");
+        if (title != null) {
+            Intent notificationIntent = new Intent(this, NotificationModalActivity.class);
+            notificationIntent.putExtra("title", title);
+            startActivity(notificationIntent);
+        }
+        Intent incomingIntent = getIntent();
+        Log.d("SplashScreenActivity", "Intent Extras: " + incomingIntent.getExtras());
+
+        Log.d("SplashScreenActivity", "Title from notification: " + title);
+
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
-            startActivity(intent);
+            if (title != null) {
+                Intent notificationIntent = new Intent(SplashScreenActivity.this, NotificationModalActivity.class);
+                notificationIntent.putExtra("title", title);
+                startActivity(notificationIntent);
+            } else {
+                Intent homeIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                startActivity(homeIntent);
+            }
             finish();
-        }, 3000); // 3000 ms = 3 seconds
+        }, 3000);
     }
+
+
 }

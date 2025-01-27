@@ -39,12 +39,12 @@
                 android:id="@+id/status_icon"
                 android:layout_width="48dp"
                 style="@style/IconTint"
-                android:layout_height="48dp"
+                android:layout_height="28dp"
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/ic_status" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/date_time"
+                android:id="@+id/pickup_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="14/01/2025\n10:20AM (ASAP)"
@@ -71,7 +71,7 @@
 
                 <ImageView
                     android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_pickup"
                     android:contentDescription="Stop A" />
 
@@ -82,6 +82,7 @@
                     android:layout_marginStart="8dp"
                     android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
                     style="@style/TextBG"
+                    android:id="@+id/pickup_address"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -95,17 +96,17 @@
 
                 <ImageView
                     android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_height="28dp"
                     style="@style/IconTint"
                     android:contentDescription="Stop V"
-                    android:src="@drawable/ic_taxi" />
+                    android:src="@drawable/ic_waya" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
+                    android:text=""
                     style="@style/TextBG"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -119,7 +120,7 @@
 
                 <ImageView
                     android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_destination"
                     android:contentDescription="Stop B" />
 
@@ -130,6 +131,30 @@
                     android:layout_marginStart="8dp"
                     android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
                     style="@style/TextBG"
+                    android:id="@+id/destination_address"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_profile"
+                    android:contentDescription="Stop B" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Peter Farrel"
+                    style="@style/TextBG"
+                    android:id="@+id/passenger_name"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
@@ -162,6 +187,7 @@
                 android:padding="16dp"
                 android:text="£23.00"
                 android:textColor="@color/white"
+                android:id="@+id/price"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>

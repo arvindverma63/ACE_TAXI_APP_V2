@@ -1,7 +1,6 @@
 package com.example.ace_taxi_v2.Logic.JobApi;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.ace_taxi_v2.ApiService.ApiService;
 import com.example.ace_taxi_v2.Components.CustomDialog;
@@ -32,11 +31,12 @@ public class GetBookingById {
                 CustomDialog customDialog = new CustomDialog();
                 customDialog.showProgressDialog(context);
                 JobModal jobModal = new JobModal(context);
-                jobModal.futureJobView(response.body().getPickupAddress(),
+                jobModal.jobOfferModal(response.body().getPickupAddress(),
                         response.body().getDestinationAddress(),
                         response.body().getPrice(),
                         response.body().getPickupDateTime(),
-                        response.body().getPassengerName());
+                        response.body().getPassengerName(),
+                        response.body().getBookingId());
                 customDialog.dismissProgressDialog();
             }
 
@@ -45,6 +45,5 @@ public class GetBookingById {
 
             }
         });
-
     }
 }

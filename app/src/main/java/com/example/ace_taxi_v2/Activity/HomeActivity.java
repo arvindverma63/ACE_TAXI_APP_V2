@@ -57,6 +57,8 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
 
+
+
         // Force the app to follow the user's preference
         AppCompatDelegate.setDefaultNightMode(isDarkMode
                 ? AppCompatDelegate.MODE_NIGHT_YES

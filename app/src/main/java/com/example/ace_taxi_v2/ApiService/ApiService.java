@@ -5,6 +5,7 @@ import com.example.ace_taxi_v2.Models.FcmRequest;
 import com.example.ace_taxi_v2.Models.FcmResponse;
 import com.example.ace_taxi_v2.Models.GPSRequest;
 import com.example.ace_taxi_v2.Models.GPSResponse;
+import com.example.ace_taxi_v2.Models.JobResponse;
 import com.example.ace_taxi_v2.Models.Jobs.Booking;
 import com.example.ace_taxi_v2.Models.Jobs.FutureJobResponse;
 import com.example.ace_taxi_v2.Models.LoginRequest;
@@ -44,6 +45,11 @@ public interface ApiService {
     @GET("/api/Bookings/FindById")
     Call<Booking> getBookingById(@Header("Authorization") String token,
                                  @Query("bookingId") int bookingId);
+
+    @GET("/api/DriverApp/JobOfferReply")
+    Call<JobResponse> sendJobResponse(@Header("Authorization") String token,
+                                      @Query("jobno") int jobId,
+                                      @Query("response") int response);
 
 
 }
