@@ -27,8 +27,8 @@ public class LoginManager {
     }
 
     public void login(String username, String password) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.show();
+        CustomDialog progressDialog = new CustomDialog();
+        progressDialog.showProgressDialog(context);
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
         LoginRequest loginRequest = new LoginRequest(username, password);
 
@@ -44,17 +44,17 @@ public class LoginManager {
                     sessionManager.saveSession(token, userId, username);
 
                     Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show();
-                    progressDialog.hide();
+                    progressDialog.dismissProgressDialog();
 
-//                    UpdateFCMApi updateFCMApi = new UpdateFCMApi(context);
-//                    updateFCMApi.updateFcm();
+                    UpdateFCMApi updateFCMApi = new UpdateFCMApi(context);
+                    updateFCMApi.updateFcm();
 
                     Intent intent = new Intent(context, HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(intent);
                 } else {
                     Toast.makeText(context, "Incorrect Username Or Password: " + response.message(), Toast.LENGTH_SHORT).show();
-                    progressDialog.hide();
+                    progressDialog.dismissProgressDialog();
                 }
             }
 
@@ -62,7 +62,7 @@ public class LoginManager {
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("error", "" + t.getMessage());
-                progressDialog.hide();
+                progressDialog.dismissProgressDialog();
             }
         });
     }

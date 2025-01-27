@@ -47,13 +47,16 @@ public class LocationService extends Service {
                 if (locationResult != null && locationResult.getLocations() != null) {
                     Log.d(TAG, "LocationCallback triggered with " + locationResult.getLocations().size() + " location(s).");
                     for (android.location.Location location : locationResult.getLocations()) {
-                        Log.d(TAG, "Location received: " + location.getLatitude() + ", " + location.getLongitude());
+
+                        float speed = location.hasSpeed() ? location.getSpeed() : 0.0f; // Speed in meters/second
+                        float heading = location.hasBearing() ? location.getBearing() : 0.0f; // Heading in degrees
+                        Log.d(TAG, "Location received: " + location.getLatitude() + ", " + location.getLongitude()+",speed: "+speed+" Heading: "+heading);
                         // Process location data
                         SendLocation sendLocation = new SendLocation(
                                 getApplicationContext(),
                                 location.getLatitude(),
                                 location.getLongitude(),
-                                0, 0
+                                speed, heading  //speed and heading
                         );
                         sendLocation.sendLocation();
                     }
