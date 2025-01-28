@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,9 +34,20 @@ import com.example.ace_taxi_v2.Fragments.ProfileFragment;
 import com.example.ace_taxi_v2.Fragments.ReportFragment;
 import com.example.ace_taxi_v2.Fragments.ReportPageFragment;
 import com.example.ace_taxi_v2.Fragments.SettingFragment;
+import com.example.ace_taxi_v2.JobModals.JobModal;
+import com.example.ace_taxi_v2.Logic.JobApi.GetBookingById;
+import com.example.ace_taxi_v2.Logic.LoginManager;
+import com.example.ace_taxi_v2.Logic.NotificationSessionManager;
 import com.example.ace_taxi_v2.Logic.SessionManager;
+import com.example.ace_taxi_v2.Models.NotificationModel;
+import com.example.ace_taxi_v2.Models.UserProfileResponse;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.navigation.NavigationView;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -48,6 +61,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         SessionManager sessionManager = new SessionManager(this);
         if(!sessionManager.isLoggedIn()){
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -99,9 +113,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-
-
+        navigationHeader();
     }
 
     private void handleMenuClick(MenuItem item) {
@@ -191,6 +203,26 @@ public class HomeActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
+    public void navigationHeader(){
+        View headerView = navigationView.getHeaderView(0);
+        TextView username = headerView.findViewById(R.id.user_name);
+        TextView useremail = headerView.findViewById(R.id.user_email);
+
+        LoginManager loginManager = new LoginManager(this);
+        loginManager.getProfile(new LoginManager.ProfileCallback() {
+            @Override
+            public void onSuccess(UserProfileResponse userProfileResponse) {
+                username.setText(userProfileResponse.getFullname());
+                useremail.setText(userProfileResponse.getEmail());
+                Toast.makeText(HomeActivity.this,"userprofile getting successfullly",Toast.LENGTH_LONG);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(HomeActivity.this,"An error accur while fetching profile",Toast.LENGTH_LONG);
+            }
+        });
+    }
 
 
 

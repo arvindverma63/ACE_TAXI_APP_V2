@@ -35,7 +35,7 @@ public interface ApiService {
             @Body FcmRequest fcmRequest
     );
 
-    @GET("/api/UserProfile/GetUser")
+    @GET("/api/DriverApp/GetProfile")
     Call<UserProfileResponse> userProfile(@Query("username")String username,
                                           @Header("Authorization") String token);
 

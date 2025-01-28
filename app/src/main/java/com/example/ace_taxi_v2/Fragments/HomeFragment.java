@@ -24,7 +24,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.core.app.ActivityCompat;
 
+import com.example.ace_taxi_v2.Activity.HomeActivity;
 import com.example.ace_taxi_v2.Activity.LoginActivity;
+import com.example.ace_taxi_v2.JobModals.JobModal;
+import com.example.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.example.ace_taxi_v2.Logic.Service.LocationService;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
@@ -42,7 +45,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Session Check
+
+
         SessionManager sessionManager = new SessionManager(getContext());
         if (!sessionManager.isLoggedIn()) {
             Intent intent = new Intent(getContext(), LoginActivity.class);

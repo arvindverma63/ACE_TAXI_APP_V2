@@ -15,4 +15,8 @@
     <color name="red">#AF0000</color>
     <color name="darkCard">#1F222A</color>
     <color name="trans">#00FFFFFF</color>
+    <color name="dark_blue">#0D5C83</color>
+    <color name="orange">#C76D29</color>
+    <color name="dark_green">#2E7D32</color>
+
 </resources>

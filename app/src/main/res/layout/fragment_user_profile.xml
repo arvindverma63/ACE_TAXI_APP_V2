@@ -61,7 +61,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/phoneNumber"
+                android:id="@+id/telephone"
                 android:text="+123 456 789" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,6 +85,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/vehicle_model"
                 android:text="Mercedes Benz – E220" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -103,6 +104,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/vehicle_reg"
                     android:text="V21 PTR" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,6 +117,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/vehicle_color"
                     android:text="Black" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -127,6 +130,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/fcm"
                 android:text="123255454568" />
         </com.google.android.material.textfield.TextInputLayout>
 
