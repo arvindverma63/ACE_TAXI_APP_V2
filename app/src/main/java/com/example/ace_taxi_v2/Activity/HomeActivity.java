@@ -38,6 +38,7 @@ import com.example.ace_taxi_v2.JobModals.JobModal;
 import com.example.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.example.ace_taxi_v2.Logic.LoginManager;
 import com.example.ace_taxi_v2.Logic.NotificationSessionManager;
+import com.example.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.Models.NotificationModel;
 import com.example.ace_taxi_v2.Models.UserProfileResponse;
@@ -56,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
     private ActionBarDrawerToggle toggle;
     private ImageView ham_menu;
     private Toolbar toolbar_menu;
+    public ImageView notificationIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class HomeActivity extends AppCompatActivity {
         });
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
+        notificationIcon = findViewById(R.id.notificationIcon);
 
         // Set up ActionBarDrawerToggle
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close);
@@ -114,6 +117,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         navigationHeader();
+        notificationIcon();
     }
 
     private void handleMenuClick(MenuItem item) {
@@ -223,6 +227,57 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    public void notificationIcon() {
+        // Initialize NotificationModalSession
+        NotificationModalSession notificationModalSession = new NotificationModalSession(this);
+
+        // Retrieve notification data
+        String navid = notificationModalSession.getNavId();
+        String jobid = notificationModalSession.getJobId();
+
+        // Log retrieved values for debugging
+        Log.d("NotificationIcon", "Nav ID: " + navid);
+        Log.d("NotificationIcon", "Job ID: " + jobid);
+
+        // Get references to notification icon and badge
+        ImageView notificationIcon = findViewById(R.id.notificationIcon);
+        TextView notificationCount = findViewById(R.id.notificationCount);
+
+        // Retrieve notification count
+        int count = notificationModalSession.getNotificationCount();
+
+        // Update badge visibility and count
+        if (count > 0) {
+            notificationCount.setText(String.valueOf(count));
+            notificationCount.setVisibility(View.VISIBLE); // Show badge
+        } else {
+            notificationCount.setVisibility(View.GONE); // Hide badge
+        }
+
+        // Set click listener for notification icon
+        notificationIcon.setOnClickListener(view -> {
+            // Validate navId and jobId before navigation
+            if (navid == null || jobid == null) {
+                Log.w("NotificationIcon", "Nav ID or Job ID is null. Navigation skipped.");
+                return;
+            }
+
+            // Create intent for NotificationModalActivity
+            Intent intent = new Intent(this, NotificationModalActivity.class);
+            intent.putExtra("navId", navid);
+            intent.putExtra("jobid", jobid);
+
+            // Clear notification count and hide badge
+            notificationModalSession.clearNotificationCount();
+            notificationCount.setVisibility(View.GONE);
+
+            // Start NotificationModalActivity
+            startActivity(intent);
+        });
+    }
+
 
 
 

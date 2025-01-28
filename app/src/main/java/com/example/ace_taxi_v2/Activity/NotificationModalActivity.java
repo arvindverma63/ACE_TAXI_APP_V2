@@ -8,6 +8,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ace_taxi_v2.JobModals.JobModal;
 import com.example.ace_taxi_v2.Logic.JobApi.GetBookingById;
+import com.example.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.example.ace_taxi_v2.R;
 
 public class NotificationModalActivity extends AppCompatActivity {
@@ -26,10 +27,19 @@ public class NotificationModalActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize SharedPreferences session for notification data
+        NotificationModalSession notificationSession = new NotificationModalSession(this);
+
         // Retrieve Intent Data
         Intent intent = getIntent();
         String jobId = intent.getStringExtra("jobid");
         String navId = intent.getStringExtra("navId");
+
+        // If intent data is missing, retrieve it from SharedPreferences
+        if (jobId == null || navId == null) {
+            jobId = notificationSession.getJobId();
+            navId = notificationSession.getNavId();
+        }
 
         Log.e("NotificationActivity", "Job ID: " + jobId);
         Log.d("NotificationActivity", "Nav ID: " + navId);
@@ -82,6 +92,9 @@ public class NotificationModalActivity extends AppCompatActivity {
                 redirectToHome(); // Redirect if navId doesn't match any case
                 break;
         }
+
+        // Clear stored notification data after processing
+        notificationSession.clearNotificationData();
     }
 
     private void redirectToHome() {
