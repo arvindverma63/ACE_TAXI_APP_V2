@@ -19,27 +19,15 @@ public class NotificationModalActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_notification_modal);
 
-        // Handle back button press to redirect to HomeActivity
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                redirectToHome(); // Ensure redirection to HomeActivity
-            }
-        });
 
-        // Initialize SharedPreferences session for notification data
-        NotificationModalSession notificationSession = new NotificationModalSession(this);
+        NotificationModalSession notificationModalSession = new NotificationModalSession(this);
+        notificationModalSession.clearNotificationData();
 
         // Retrieve Intent Data
         Intent intent = getIntent();
         String jobId = intent.getStringExtra("jobid");
         String navId = intent.getStringExtra("navId");
 
-        // If intent data is missing, retrieve it from SharedPreferences
-        if (jobId == null || navId == null) {
-            jobId = notificationSession.getJobId();
-            navId = notificationSession.getNavId();
-        }
 
         Log.e("NotificationActivity", "Job ID: " + jobId);
         Log.d("NotificationActivity", "Nav ID: " + navId);
@@ -93,8 +81,7 @@ public class NotificationModalActivity extends AppCompatActivity {
                 break;
         }
 
-        // Clear stored notification data after processing
-        notificationSession.clearNotificationData();
+
     }
 
     private void redirectToHome() {

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/MainBG"
+    android:padding="16dp">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_header"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="View Expenses"
+        app:titleCentered="true"
+        style="@style/ActionBar"
+        app:navigationIcon="@drawable/ic_back_arrow"
+        app:navigationContentDescription="Back" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dateRangeInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="custom">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dateRangeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Select Date Range"
+                android:focusable="false"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    <!-- Expense Table Header -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        style="@style/CardBG"
+        android:layout_marginTop="16dp"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DATE | CATEGORY | DESCRIPTION | AMOUNT"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="8dp"
+            style="@style/TextBG"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Expense List using RecyclerView inside MaterialCardView -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:cardCornerRadius="12dp"
+        style="@style/CardBG"
+        android:layout_marginTop="16dp"
+        android:padding="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expenseRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/CardBG"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Total Amount Display inside MaterialCardView -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        android:layout_marginTop="16dp"
+        style="@style/CardBG"
+        android:padding="16dp"
+        android:backgroundTint="@color/dark_blue">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/totalLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TOTAL FOR PERIOD"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/totalAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="£200.45"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:gravity="center"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="CANCEL"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/red"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/recordButton"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="RECORD"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/green"/>
+        </LinearLayout>
+
+
+</LinearLayout>

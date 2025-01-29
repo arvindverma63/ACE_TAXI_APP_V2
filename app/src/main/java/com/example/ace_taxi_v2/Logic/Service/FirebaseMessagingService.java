@@ -55,7 +55,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         super.onMessageReceived(remoteMessage);
 
         Log.d(TAG, "Message received: " + remoteMessage.getMessageId());
-        Log.d(TAG,"Notification Payload: "+remoteMessage.getNotification());
+
+        notificationSessionManager = new NotificationSessionManager(this);
+        NotificationModalSession notificationModalSession = new NotificationModalSession(this);
 
         String title = null;
         String body = null;
@@ -73,15 +75,16 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             jobId = remoteMessage.getData().get("jobid");
             navId = remoteMessage.getData().get("NavId");
 
-            Log.d(TAG,"DATA json: "+remoteMessage.getData());
-
+            Log.d(TAG, "Data Payload: " + remoteMessage.getData());
         }
 
         if (title != null && body != null) {
             notificationSessionManager.saveNotification(title, body, System.currentTimeMillis());
-            showNotification(title, body, jobId,navId);
+            notificationModalSession.saveNotificationData(jobId, navId, title);
+            showNotification(title, body, jobId, navId);
         }
     }
+
 
     private void saveTokenToPreferences(String token) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
@@ -95,7 +98,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Log.d(TAG, "Fcm Token sent to server: " + token);
     }
 
-    private void showNotification(String title, String message, String jobId,String navId) {
+    private void showNotification(String title, String message, String jobId, String navId) {
         String channelId = "default_channel_id";
         String channelName = "Default Channel";
 
@@ -106,27 +109,24 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             notificationManager.createNotificationChannel(channel);
         }
 
+        // ✅ Ensure the correct Intent is used
         Intent intent = new Intent(this, NotificationModalActivity.class);
         intent.putExtra("title", title);
-        if (jobId != null) {
-            intent.putExtra("jobid", jobId);
-        }
-        intent.putExtra("navId",navId);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("jobid", jobId);
+        intent.putExtra("navId", navId);
+
+        // ✅ Ensure proper flags for launching when app is killed
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        int requestCode = jobId != null ? jobId.hashCode() : (int) System.currentTimeMillis();
 
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
-                0,
+                requestCode,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        if(navId!=null){
-            switch (navId){
-
-            }
-        }
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle(title)
                 .setContentText(message)
@@ -144,7 +144,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             }
         }
 
-        int notificationId = jobId != null ? jobId.hashCode() : (int) System.currentTimeMillis();
+        int notificationId = requestCode;
         notificationManagerCompat.notify(notificationId, notificationBuilder.build());
+
+        Log.d("NotificationDebug", "Notification sent with ID: " + notificationId);
     }
+
+
 }

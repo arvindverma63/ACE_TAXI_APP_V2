@@ -29,32 +29,40 @@
                 style="@style/ActionBar"
                 android:contentInsetStartWithNavigation="0dp">
 
-                <RelativeLayout
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <!-- Notification Icon -->
                     <ImageView
                         android:id="@+id/notificationIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_notification"
                         android:contentDescription="Notification Icon" />
 
                     <!-- Notification Count Badge -->
                     <TextView
                         android:id="@+id/notificationCount"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:background="@drawable/circular_badge"
                         android:gravity="center"
-                        android:text="0"
+                        android:text="1"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
-                        android:visibility="gone" />
-                </RelativeLayout>
+                        android:textStyle="bold"
+                        android:minWidth="16dp"
+                        android:minHeight="16dp"
+                        android:padding="2dp"
+                        android:layout_gravity="end|top"
+                        android:translationX="0dp"
+                        android:translationY="0dp"/>
+                </FrameLayout>
+
+
+
+
 
 
                 <!-- Centered Title -->
