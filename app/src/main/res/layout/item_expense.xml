@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="12dp"
@@ -20,25 +21,27 @@
         <!-- Expense Date (Clickable & Blue) -->
         <TextView
             android:id="@+id/expenseDate"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
             android:text="01 Jan"
+            android:textColor="@color/blue"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/blue"
-            android:clickable="true"
-            android:focusable="true"/>
+            tools:ignore="TouchTargetSizeCheck" />
 
         <!-- Expense Category (Grey) -->
         <TextView
             android:id="@+id/expenseCategory"
-            android:layout_width="80dp"
+            android:layout_width="54dp"
             android:layout_height="wrap_content"
+            android:paddingStart="8dp"
             android:text="Food"
-            android:textSize="14sp"
-            android:textStyle="bold"
             android:textColor="@color/gray"
-            android:paddingStart="8dp"/>
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <!-- Expense Description (Truncated for long text) -->
         <TextView
@@ -56,28 +59,28 @@
         <!-- Expense Amount (Bold & Green) -->
         <TextView
             android:id="@+id/expenseAmount"
-            android:layout_width="80dp"
+            android:layout_width="68dp"
             android:layout_height="wrap_content"
-            android:text="£15.50"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/green"
             android:gravity="end"
-            android:paddingEnd="8dp"/>
+            android:paddingEnd="8dp"
+            android:text="£15.50"
+            android:textColor="@color/green"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <!-- Delete Button (Red) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/deleteButton"
             style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
             android:backgroundTint="@color/red"
             android:text="Delete"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:cornerRadius="8dp"
-            android:layout_marginStart="8dp"/>
+            app:cornerRadius="8dp" />
 
     </LinearLayout>
 

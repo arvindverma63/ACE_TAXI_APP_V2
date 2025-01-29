@@ -1,12 +1,20 @@
 package com.example.ace_taxi_v2.Activity;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -50,6 +58,10 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -60,6 +72,9 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar_menu;
     public ImageView notificationIcon;
     public TextView notificationCount;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final int INTERVAL = 5000; // 5 seconds
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +136,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         navigationHeader();
-        notificationIcon();
+        batteryOptimization();
     }
 
     private void handleMenuClick(MenuItem item) {
@@ -231,7 +246,25 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+    private final Runnable notificationRunnable = new Runnable() {
+        @Override
+        public void run() {
+            runOnUiThread(() -> notificationIcon()); // Ensure UI updates on Main Thread
+            handler.postDelayed(this, INTERVAL); // Repeat every 5 seconds
+        }
+    };
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        handler.post(notificationRunnable); // Start when fragment is visible
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        handler.removeCallbacks(notificationRunnable); // Stop when fragment is not visible
+    }
 
     public void notificationIcon() {
         NotificationModalSession notificationModalSession = new NotificationModalSession(this);
@@ -241,14 +274,17 @@ public class HomeActivity extends AppCompatActivity {
         Log.d("NotificationIcon", "Nav ID: " + navid);
         Log.d("NotificationIcon", "Job ID: " + jobid);
 
-
         int count = notificationModalSession.getNotificationCount();
-        if (count > 0) {
-            notificationCount.setText(String.valueOf(count));
-            notificationCount.setVisibility(View.VISIBLE);
-        } else {
-            notificationCount.setVisibility(View.GONE);
-        }
+
+        // Ensure UI updates on the main thread
+        runOnUiThread(() -> {
+            if (count > 0) {
+                notificationCount.setText(String.valueOf(count));
+                notificationCount.setVisibility(View.VISIBLE);
+            } else {
+                notificationCount.setVisibility(View.GONE);
+            }
+        });
 
         notificationIcon.setOnClickListener(view -> {
             if (navid == null || jobid == null) {
@@ -267,9 +303,15 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-
+    public void batteryOptimization(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            if (!pm.isIgnoringBatteryOptimizations(getPackageName())) {
+                Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            }
+        }
+    }
 
 }

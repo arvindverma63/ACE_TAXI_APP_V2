@@ -7,35 +7,29 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.ace_taxi_v2.Activity.NotificationModalActivity;
-import com.example.ace_taxi_v2.Activity.SplashScreenActivity;
-import com.example.ace_taxi_v2.Logic.NotificationSessionManager;
 import com.example.ace_taxi_v2.R;
 import com.google.firebase.messaging.RemoteMessage;
-
-import java.util.Map;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
     private static final String TAG = "FCM_Service";
     private static final String SHARED_PREF_NAME = "fcm_preferences";
     private static final String FCM_TOKEN_KEY = "fcm_token";
-    private NotificationSessionManager notificationSessionManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         // Initialize NotificationSessionManager
-        notificationSessionManager = new NotificationSessionManager(this);
     }
 
     @Override
@@ -54,10 +48,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Log.d(TAG, "Message received: " + remoteMessage.getMessageId());
-
-        notificationSessionManager = new NotificationSessionManager(this);
-        NotificationModalSession notificationModalSession = new NotificationModalSession(this);
+        Log.d(TAG, "Message received: " + (remoteMessage.getMessageId() != null ? remoteMessage.getMessageId() : "Unknown"));
 
         String title = null;
         String body = null;
@@ -79,12 +70,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }
 
         if (title != null && body != null) {
-            notificationSessionManager.saveNotification(title, body, System.currentTimeMillis());
-            notificationModalSession.saveNotificationData(jobId, navId, title);
+
+            // Show the notification
+            NotificationModalSession notificationModalSession = new NotificationModalSession(this);
+            notificationModalSession.saveNotificationData(jobId,navId,title);
             showNotification(title, body, jobId, navId);
         }
     }
-
 
     private void saveTokenToPreferences(String token) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
@@ -149,6 +141,4 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         Log.d("NotificationDebug", "Notification sent with ID: " + notificationId);
     }
-
-
 }
