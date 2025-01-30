@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ace_taxi_v2.Models.Jobs.HistoryJob;
+import com.example.ace_taxi_v2.Models.Jobs.HistoryBooking;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 
@@ -17,10 +17,10 @@ import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    private final List<HistoryJob> jobList;
+    private final List<HistoryBooking> jobList;
     private final OnItemClickListener listener;
 
-    public HistoryAdapter(List<HistoryJob> jobList, OnItemClickListener listener) {
+    public HistoryAdapter(List<HistoryBooking> jobList, OnItemClickListener listener) {
         this.jobList = jobList;
         this.listener = listener;
     }
@@ -35,7 +35,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HistoryJob job = jobList.get(position);
+        HistoryBooking job = jobList.get(position);
         holder.bind(job, listener);
     }
 
@@ -69,7 +69,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             personIcon = itemView.findViewById(R.id.person);
         }
 
-        public void bind(HistoryJob job, OnItemClickListener listener) {
+        public void bind(HistoryBooking job, OnItemClickListener listener) {
             // Bind HistoryJob data to views
             timeTextView.setText(job.getPickupDateTime());
             customerTextView.setText(String.valueOf(job.getPassengers()));
@@ -83,7 +83,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     }
 
     public interface OnItemClickListener {
-        void onViewClick(HistoryJob job);
-        void onStartClick(HistoryJob job);
+        void onViewClick(HistoryBooking job);
+        void onStartClick(HistoryBooking job);
     }
 }

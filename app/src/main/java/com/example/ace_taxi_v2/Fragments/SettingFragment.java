@@ -17,10 +17,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.ace_taxi_v2.Components.ConfigModal;
 import com.example.ace_taxi_v2.Components.CustomDialog;
 import com.example.ace_taxi_v2.R;
 import com.example.ace_taxi_v2.SettingsPermission.CheckPermission;
@@ -33,6 +35,7 @@ public class SettingFragment extends Fragment {
     private static final String KEY_DARK_MODE = "dark_mode";
     private TextView theme_switch_text,gps_switch_text,notification_switch_text,url_text,keep_alive_switch_text;
     private Switch switch_dark_mode,notification_swtich,gps_switch,sms_switch,keep_alive_switch;
+    public Button config;
     Permission permission;
 
     @Override
@@ -47,6 +50,7 @@ public class SettingFragment extends Fragment {
         gps_switch = view.findViewById(R.id.gps_switch);
         sms_switch = view.findViewById(R.id.sms_switch);
         keep_alive_switch = view.findViewById(R.id.keep_alive_switch);
+        config = view.findViewById(R.id.config);
         permission = new Permission(getContext());
 
         notification_switch_text = view.findViewById(R.id.notification_switch_text);
@@ -123,6 +127,7 @@ public class SettingFragment extends Fragment {
                     .apply();
         });
 
+        configBtn();
         return view;
     }
 
@@ -200,5 +205,11 @@ public class SettingFragment extends Fragment {
             keep_alive_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
             keep_alive_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
         }
+    }
+    private void configBtn(){
+        config.setOnClickListener(v->{
+            ConfigModal configModal = new ConfigModal(getContext());
+            configModal.openConfigModal();
+        });
     }
 }

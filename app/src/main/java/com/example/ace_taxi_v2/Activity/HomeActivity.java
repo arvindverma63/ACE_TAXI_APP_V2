@@ -47,6 +47,7 @@ import com.example.ace_taxi_v2.JobModals.JobModal;
 import com.example.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.example.ace_taxi_v2.Logic.LoginManager;
 import com.example.ace_taxi_v2.Logic.NotificationSessionManager;
+import com.example.ace_taxi_v2.Logic.Service.ConfigSessionManager;
 import com.example.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.Models.NotificationModel;
@@ -70,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
     private ActionBarDrawerToggle toggle;
     private ImageView ham_menu;
     private Toolbar toolbar_menu;
-    public ImageView notificationIcon;
+    public ImageView notificationIcon,phone_icon,message_icon;
     public TextView notificationCount;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final int INTERVAL = 5000; // 5 seconds
@@ -81,7 +82,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
+        phone_icon = findViewById(R.id.phone_icon);
+        message_icon = findViewById(R.id.message_icon);
         SessionManager sessionManager = new SessionManager(this);
         if(!sessionManager.isLoggedIn()){
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
@@ -137,6 +139,8 @@ public class HomeActivity extends AppCompatActivity {
 
         navigationHeader();
         batteryOptimization();
+        phoneBtn();
+        messageBtn();
     }
 
     private void handleMenuClick(MenuItem item) {
@@ -312,6 +316,40 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
+    }
+
+    public void phoneBtn() {
+        phone_icon.setOnClickListener(v -> {
+            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
+            String phoneNumber = configSessionManager.getPhoneNumber();
+
+            if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+                v.getContext().startActivity(intent);
+            } else {
+                Toast.makeText(v.getContext(), "Phone number not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void messageBtn() {
+        message_icon.setOnClickListener(v -> {
+            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
+            String whatsappNumber = configSessionManager.getWhatsAppNumber();
+
+            if (whatsappNumber != null && !whatsappNumber.isEmpty()) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("https://wa.me/" + whatsappNumber));
+                    v.getContext().startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(v.getContext(), "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(v.getContext(), "WhatsApp number not found", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

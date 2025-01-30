@@ -12,9 +12,6 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import com.example.ace_taxi_v2.Activity.NotificationModalActivity;
 import com.example.ace_taxi_v2.R;
@@ -25,18 +22,18 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     private static final String TAG = "FCM_Service";
     private static final String SHARED_PREF_NAME = "fcm_preferences";
     private static final String FCM_TOKEN_KEY = "fcm_token";
-
+    public NotificationModalSession notificationModalSession;
     @Override
     public void onCreate() {
         super.onCreate();
-        // Initialize NotificationSessionManager
+        notificationModalSession = new NotificationModalSession(this);
+
     }
 
     @Override
     public void onNewToken(String token) {
         super.onNewToken(token);
         Log.d(TAG, "New FCM Token: " + token);
-
         // Save token locally
         saveTokenToPreferences(token);
 

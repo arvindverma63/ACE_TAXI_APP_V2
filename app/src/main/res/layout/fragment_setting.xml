@@ -262,5 +262,44 @@
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- Keep Alive Setting -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+
+            style="@style/CardBG"
+            android:layout_marginTop="16dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Change Config Details"
+                    style="@style/SettingText"
+                    android:drawableLeft="@drawable/ic_mobile"
+                    android:drawablePadding="10dp"
+                    android:textSize="16sp"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Config"
+                    android:textAllCaps="false"
+                    android:id="@+id/config"
+                    android:backgroundTint="@color/primaryColor"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </ScrollView>

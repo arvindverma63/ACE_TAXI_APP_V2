@@ -8,7 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.ace_taxi_v2.Models.Jobs.JobItem;
+
+import com.example.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 
@@ -16,10 +17,10 @@ import java.util.List;
 
 public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHolder> {
 
-    private final List<JobItem> jobList;
+    private final List<TodayBooking> jobList;
     private final OnItemClickListener listener;
 
-    public TodayJobAdapter(List<JobItem> jobList, OnItemClickListener listener) {
+    public TodayJobAdapter(List<TodayBooking> jobList, OnItemClickListener listener) {
         this.jobList = jobList;
         this.listener = listener;
     }
@@ -34,7 +35,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        JobItem job = jobList.get(position);
+        TodayBooking job = jobList.get(position);
         holder.bind(job, listener);
     }
 
@@ -67,7 +68,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
             personIcon = itemView.findViewById(R.id.person);
         }
 
-        public void bind(JobItem job, OnItemClickListener listener) {
+        public void bind(TodayBooking job, OnItemClickListener listener) {
             timeTextView.setText(job.getPickupDateTime());
             customerTextView.setText(String.valueOf(job.getPassengers()));
             mainAddressTextView.setText(job.getPickupAddress());
@@ -79,8 +80,8 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
     }
 
     public interface OnItemClickListener {
-        void onViewClick(JobItem job);
+        void onViewClick(TodayBooking job);
 
-        void onStartClick(JobItem job);
+        void onStartClick(TodayBooking job);
     }
 }

@@ -8,6 +8,8 @@ import com.example.ace_taxi_v2.Models.GPSResponse;
 import com.example.ace_taxi_v2.Models.JobResponse;
 import com.example.ace_taxi_v2.Models.Jobs.Booking;
 import com.example.ace_taxi_v2.Models.Jobs.FutureJobResponse;
+import com.example.ace_taxi_v2.Models.Jobs.HistoryJobResponse;
+import com.example.ace_taxi_v2.Models.Jobs.TodayJobResponse;
 import com.example.ace_taxi_v2.Models.LoginRequest;
 import com.example.ace_taxi_v2.Models.LoginResponse;
 import com.example.ace_taxi_v2.Models.UserProfileResponse;
@@ -41,6 +43,12 @@ public interface ApiService {
 
     @GET("/api/DriverApp/FutureJobs")
     Call<FutureJobResponse> futureJobs(@Header("Authorization") String token);
+
+    @GET("/api/DriverApp/TodaysJobs")
+    Call<TodayJobResponse> todayJobs(@Header("Authorization") String token);
+
+    @GET("/api/DriverApp/CompletedJobs")
+    Call<HistoryJobResponse> historyJobs(@Header("Authorization") String token);
 
     @GET("/api/Bookings/FindById")
     Call<Booking> getBookingById(@Header("Authorization") String token,

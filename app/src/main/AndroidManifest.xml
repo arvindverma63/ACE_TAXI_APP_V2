@@ -28,8 +28,6 @@
             android:name=".Activity.NotificationModalActivity"
             android:exported="false" />
 
-
-
         <service
             android:name=".Logic.Service.LocationService"
             android:enabled="true"
