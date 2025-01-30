@@ -5,39 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
+    style="@style/MainBG">
 
-    <!-- Toolbar -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:backgroundTint="@color/blue"
-        app:title="Book Your Ride"
-        app:titleCentered="true"
-        app:navigationIcon="@drawable/ic_back_arrow" />
-
-    <!-- Google Map Fragment -->
-    <FrameLayout
+    <fragment
         android:id="@+id/mapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"/>
 
-    <!-- Pickup & Destination Inputs -->
+    <!-- Toggle Input Section Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/toggleInputSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Pickup And Destination"
+        android:textSize="16sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        app:cornerRadius="0dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/blue"
+        android:textColor="@color/white"/>
+
+    <!-- Pickup & Destination Inputs (Initially Hidden) -->
     <LinearLayout
+        android:id="@+id/inputSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="10dp"
+        android:visibility="gone">
 
         <!-- Pickup -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            style="@style/CardBG"
-            android:padding="8dp">
+            android:padding="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="5dp"
+            app:strokeColor="@color/gray"
+            app:strokeWidth="1dp"
+            style="@style/CardBG">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,9 +56,10 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_pickup"/>
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_pickup"
+                    android:padding="4dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
@@ -61,15 +72,9 @@
                         android:id="@+id/pickupLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Pickup..."
-                        android:padding="8dp"
+                        android:hint="Enter Pickup Location..."
                         android:textSize="16sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
-<!--                <ImageButton-->
-<!--                    android:layout_width="40dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:background="@android:color/transparent"/>-->
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -77,10 +82,13 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            style="@style/CardBG"
-            android:padding="8dp"
-            android:layout_marginTop="8dp">
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="5dp"
+            app:strokeColor="@color/gray"
+            app:strokeWidth="1dp"
+            style="@style/CardBG">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,9 +97,10 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_destination"/>
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_destination"
+                    android:padding="4dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="0dp"
@@ -104,34 +113,41 @@
                         android:id="@+id/destinationLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Destination..."
-                        android:padding="8dp"
+                        android:hint="Enter Destination..."
                         android:textSize="16sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
-<!--                <ImageButton-->
-<!--                    android:layout_width="40dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:src="@drawable/ic_more"-->
-<!--                    android:background="@android:color/transparent"/>-->
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- Update Map Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/updateMapButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Map"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/blue"
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 
-    <!-- Passenger Details & Booking -->
+    <!-- Passenger Details -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
-        style="@style/CardBG"
         android:padding="12dp"
-        android:layout_margin="8dp">
+        android:layout_marginHorizontal="10dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="5dp"
+        app:strokeColor="@color/gray"
+        app:strokeWidth="1dp"
+        style="@style/CardBG">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:gravity="center">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
@@ -151,7 +167,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Telephone"
+                android:hint="Phone Number"
                 app:boxBackgroundMode="none"
                 app:endIconMode="clear_text">
 
@@ -168,7 +184,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/price"
@@ -178,6 +194,7 @@
             android:text="£23.00"
             android:textSize="18sp"
             android:backgroundTint="@color/green"
+            app:cornerRadius="0dp"
             android:textColor="@android:color/white"/>
 
         <com.google.android.material.button.MaterialButton
@@ -185,7 +202,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="BOOK"
+            android:text="BOOK NOW"
+            app:cornerRadius="0dp"
             android:textSize="18sp"
             android:backgroundTint="@color/blue"
             android:textColor="@android:color/white"/>

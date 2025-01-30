@@ -1,6 +1,7 @@
 package com.example.ace_taxi_v2.ApiService;
 
 
+import com.example.ace_taxi_v2.Models.DriverShiftResponse;
 import com.example.ace_taxi_v2.Models.FcmRequest;
 import com.example.ace_taxi_v2.Models.FcmResponse;
 import com.example.ace_taxi_v2.Models.GPSRequest;
@@ -58,6 +59,11 @@ public interface ApiService {
     Call<JobResponse> sendJobResponse(@Header("Authorization") String token,
                                       @Query("jobno") int jobId,
                                       @Query("response") int response);
+
+    @GET("/api/DriverApp/DriverShift")
+    Call<DriverShiftResponse> driverShift(@Header("Authorization") String token,
+                                          @Query("userid") int userid,
+                                          @Query("status") int status);
 
 
 }

@@ -36,7 +36,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.ace_taxi_v2.ApiService.ApiService;
 import com.example.ace_taxi_v2.Fragments.AvailabilityFragment;
+import com.example.ace_taxi_v2.Fragments.BookingFragment;
 import com.example.ace_taxi_v2.Fragments.HomeFragment;
 import com.example.ace_taxi_v2.Fragments.JobFragment;
 import com.example.ace_taxi_v2.Fragments.ProfileFragment;
@@ -50,6 +52,7 @@ import com.example.ace_taxi_v2.Logic.NotificationSessionManager;
 import com.example.ace_taxi_v2.Logic.Service.ConfigSessionManager;
 import com.example.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.example.ace_taxi_v2.Logic.SessionManager;
+import com.example.ace_taxi_v2.Logic.UpdateDriverShiftApi;
 import com.example.ace_taxi_v2.Models.NotificationModel;
 import com.example.ace_taxi_v2.Models.UserProfileResponse;
 import com.example.ace_taxi_v2.R;
@@ -210,17 +213,22 @@ public class HomeActivity extends AppCompatActivity {
             menuItem.setChecked(true);
             menuItem.setIcon(R.drawable.ic_radio_button_checked); // Checked icon
 
+            UpdateDriverShiftApi updateDriverShiftApi = new UpdateDriverShiftApi(this);
             // Perform actions based on the selected item
             if (menuItem.getItemId() == R.id.start_shift) {
-                Toast.makeText(getApplicationContext(), "Start Shift selected", Toast.LENGTH_SHORT).show();
+                updateDriverShiftApi.updateStatus(1000);
             } else if (menuItem.getItemId() == R.id.finish_shift) {
-                Toast.makeText(getApplicationContext(), "Finish Shift selected", Toast.LENGTH_SHORT).show();
+                updateDriverShiftApi.updateStatus(1001);
             } else if (menuItem.getItemId() == R.id.on_break) {
-                Toast.makeText(getApplicationContext(), "On Break selected", Toast.LENGTH_SHORT).show();
+                updateDriverShiftApi.updateStatus(1002);
             } else if (menuItem.getItemId() == R.id.finish_break) {
-                Toast.makeText(getApplicationContext(), "Finish Break selected", Toast.LENGTH_SHORT).show();
+                updateDriverShiftApi.updateStatus(1003);
             } else if (menuItem.getItemId() == R.id.rank_pickup) {
-                Toast.makeText(getApplicationContext(), "Rank Pickup selected", Toast.LENGTH_SHORT).show();
+                Fragment selectedFragment = new BookingFragment();
+                FragmentManager fragmentManager = this.getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container,selectedFragment);
+                fragmentTransaction.commit();
             }
 
             return true;
