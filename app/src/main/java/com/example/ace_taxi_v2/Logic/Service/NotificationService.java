@@ -15,9 +15,11 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.ace_taxi_v2.Activity.NotificationModalActivity;
 import com.example.ace_taxi_v2.R;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
+public class NotificationService extends FirebaseMessagingService {
 
     private static final String TAG = "FCM_Service";
     private static final String SHARED_PREF_NAME = "fcm_preferences";
@@ -98,20 +100,20 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             notificationManager.createNotificationChannel(channel);
         }
 
-        // ✅ Ensure the correct Intent is used
-        Intent intent = new Intent(this, NotificationModalActivity.class);
+        // ✅ Create an Intent to open `NotificationModalActivity` when clicked
+        Intent intent = new Intent(getApplicationContext(), NotificationModalActivity.class);
         intent.putExtra("title", title);
+        intent.putExtra("message", message);
         intent.putExtra("jobid", jobId);
         intent.putExtra("navId", navId);
 
         // ✅ Ensure proper flags for launching when app is killed
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        int requestCode = jobId != null ? jobId.hashCode() : (int) System.currentTimeMillis();
-
+        // ✅ Create a PendingIntent that will open the activity with the data
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
-                requestCode,
+                jobId != null ? jobId.hashCode() : (int) System.currentTimeMillis(),
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -121,8 +123,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_logo_ace)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent);
+                .setAutoCancel(true) // Removes the notification when clicked
+                .setContentIntent(pendingIntent); // Open activity on click
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
 
@@ -133,9 +135,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             }
         }
 
-        int notificationId = requestCode;
+        int notificationId = jobId != null ? jobId.hashCode() : (int) System.currentTimeMillis();
         notificationManagerCompat.notify(notificationId, notificationBuilder.build());
 
         Log.d("NotificationDebug", "Notification sent with ID: " + notificationId);
     }
+
 }

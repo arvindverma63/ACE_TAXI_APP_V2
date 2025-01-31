@@ -1,11 +1,7 @@
 package com.example.ace_taxi_v2.Activity;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -17,7 +13,6 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,36 +31,29 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.ace_taxi_v2.ApiService.ApiService;
+import com.example.ace_taxi_v2.Components.ShiftChangeModal;
 import com.example.ace_taxi_v2.Fragments.AvailabilityFragment;
 import com.example.ace_taxi_v2.Fragments.BookingFragment;
 import com.example.ace_taxi_v2.Fragments.HomeFragment;
 import com.example.ace_taxi_v2.Fragments.JobFragment;
 import com.example.ace_taxi_v2.Fragments.ProfileFragment;
-import com.example.ace_taxi_v2.Fragments.ReportFragment;
 import com.example.ace_taxi_v2.Fragments.ReportPageFragment;
 import com.example.ace_taxi_v2.Fragments.SettingFragment;
-import com.example.ace_taxi_v2.JobModals.JobModal;
-import com.example.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.example.ace_taxi_v2.Logic.LoginManager;
-import com.example.ace_taxi_v2.Logic.NotificationSessionManager;
 import com.example.ace_taxi_v2.Logic.Service.ConfigSessionManager;
 import com.example.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.Logic.UpdateDriverShiftApi;
-import com.example.ace_taxi_v2.Models.NotificationModel;
 import com.example.ace_taxi_v2.Models.UserProfileResponse;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.navigation.NavigationView;
 
-import org.w3c.dom.Text;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -140,6 +128,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
+        // Show the popup menu
         navigationHeader();
         batteryOptimization();
         phoneBtn();
@@ -192,50 +182,8 @@ public class HomeActivity extends AppCompatActivity {
     }
     @SuppressLint("ResourceType")
     public void showHamMenu(View view) {
-        // Create the PopupMenu and inflate the menu
-        ContextThemeWrapper themeWrapper = new ContextThemeWrapper(this, R.style.CustomPopupMenu);
-        PopupMenu popupMenu = new PopupMenu(themeWrapper, view);
-        MenuInflater menuInflater = popupMenu.getMenuInflater();
-
-        // Inflate the menu resource
-        menuInflater.inflate(R.menu.toolbar_menu, popupMenu.getMenu());
-
-        // Set the listener for menu item clicks
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
-            // Uncheck all items and reset icons to unchecked state
-            for (int i = 0; i < popupMenu.getMenu().size(); i++) {
-                MenuItem item = popupMenu.getMenu().getItem(i);
-                item.setChecked(false); // Uncheck all items
-                item.setIcon(R.drawable.ic_radio_button_unchecked); // Default unchecked icon
-            }
-
-            // Check the selected item and set its icon
-            menuItem.setChecked(true);
-            menuItem.setIcon(R.drawable.ic_radio_button_checked); // Checked icon
-
-            UpdateDriverShiftApi updateDriverShiftApi = new UpdateDriverShiftApi(this);
-            // Perform actions based on the selected item
-            if (menuItem.getItemId() == R.id.start_shift) {
-                updateDriverShiftApi.updateStatus(1000);
-            } else if (menuItem.getItemId() == R.id.finish_shift) {
-                updateDriverShiftApi.updateStatus(1001);
-            } else if (menuItem.getItemId() == R.id.on_break) {
-                updateDriverShiftApi.updateStatus(1002);
-            } else if (menuItem.getItemId() == R.id.finish_break) {
-                updateDriverShiftApi.updateStatus(1003);
-            } else if (menuItem.getItemId() == R.id.rank_pickup) {
-                Fragment selectedFragment = new BookingFragment();
-                FragmentManager fragmentManager = this.getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container,selectedFragment);
-                fragmentTransaction.commit();
-            }
-
-            return true;
-        });
-
-        // Show the popup menu
-        popupMenu.show();
+        ShiftChangeModal changeModal = new ShiftChangeModal(this,getSupportFragmentManager());
+        changeModal.openModal();
     }
 
     public void navigationHeader(){

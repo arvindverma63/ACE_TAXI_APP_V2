@@ -26,8 +26,8 @@ public class ConfigModal {
         View parent = inflater.inflate(R.layout.config_modal, null);
 
         // Default numbers
-        String defaultNumber = "+916306354467";
-        String defaultWhatsapp = "+916306354467";
+        String defaultNumber = "+0000000000";
+        String defaultWhatsapp = "+0000000000";
 
         // Initialize session manager
         ConfigSessionManager configSessionManager = new ConfigSessionManager(context);

@@ -33,7 +33,7 @@ public class TodayFragment extends Fragment {
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclar_view);
 
-        TodayJobManager todayJobManager = new TodayJobManager(getContext());
+        TodayJobManager todayJobManager = new TodayJobManager(getContext(), getActivity().getSupportFragmentManager());
         todayJobManager.getTodayJobs(view,recyclerView);
 
 

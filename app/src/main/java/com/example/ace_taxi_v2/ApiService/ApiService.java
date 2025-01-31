@@ -2,6 +2,8 @@ package com.example.ace_taxi_v2.ApiService;
 
 
 import com.example.ace_taxi_v2.Models.DriverShiftResponse;
+import com.example.ace_taxi_v2.Models.ExpensesRequest;
+import com.example.ace_taxi_v2.Models.ExpensesResponse;
 import com.example.ace_taxi_v2.Models.FcmRequest;
 import com.example.ace_taxi_v2.Models.FcmResponse;
 import com.example.ace_taxi_v2.Models.GPSRequest;
@@ -65,5 +67,8 @@ public interface ApiService {
                                           @Query("userid") int userid,
                                           @Query("status") int status);
 
+    @POST("/api/DriverApp/AddExpense")
+    Call<ExpensesResponse> expenses(@Header("Authorization") String token,
+                                    @Body ExpensesRequest expensesRequest);
 
 }

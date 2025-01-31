@@ -228,11 +228,4 @@ public class JobModal {
 
         alertDialog.show();
     }
-    public void successModal(){
-
-    }
-
-    public void errorModal(){
-
-    }
 }

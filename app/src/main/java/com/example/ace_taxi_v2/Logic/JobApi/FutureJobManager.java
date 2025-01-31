@@ -53,8 +53,7 @@ public class FutureJobManager {
                     recyclerView.setAdapter(new FutureJobAdapter(bookingList, new FutureJobAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(Booking booking) {
-                            GetBookingById getBookingById = new GetBookingById(context);
-                            getBookingById.getBookingDetails(booking.getBookingId());
+
                         }
 
                         @Override

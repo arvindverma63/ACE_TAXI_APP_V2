@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ace_taxi_v2.ApiService.ApiService;
+import com.example.ace_taxi_v2.Components.JobStatusModal;
 import com.example.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.example.ace_taxi_v2.Instance.RetrofitClient;
 import com.example.ace_taxi_v2.Logic.SessionManager;
@@ -22,9 +24,11 @@ import retrofit2.Response;
 
 public class TodayJobManager {
     private final Context context;
+    private FragmentManager fragmentManager;
 
-    public TodayJobManager(Context context) {
+    public TodayJobManager(Context context,FragmentManager fragmentManager) {
         this.context = context;
+        this.fragmentManager = fragmentManager;
     }
 
     public void getTodayJobs(View view, RecyclerView recyclerView) {
@@ -53,12 +57,13 @@ public class TodayJobManager {
                     recyclerView.setAdapter(new TodayJobAdapter(bookingList, new TodayJobAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(TodayBooking booking) {
-                            new GetBookingById(context).getBookingDetails(booking.getBookingId());
+                            Toast.makeText(context, "View job: " + booking.getBookingId(), Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onStartClick(TodayBooking booking) {
-                            Toast.makeText(context, "Starting job: " + booking.getBookingId(), Toast.LENGTH_SHORT).show();
+                            JobStatusModal jobStatusModal = new JobStatusModal(context,fragmentManager);
+                            jobStatusModal.openModal();
                         }
                     }));
                 } else {
