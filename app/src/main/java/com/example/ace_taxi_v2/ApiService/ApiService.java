@@ -1,6 +1,7 @@
 package com.example.ace_taxi_v2.ApiService;
 
 
+import com.example.ace_taxi_v2.Components.JobStatusModal;
 import com.example.ace_taxi_v2.Models.DriverShiftResponse;
 import com.example.ace_taxi_v2.Models.ExpensesRequest;
 import com.example.ace_taxi_v2.Models.ExpensesResponse;
@@ -9,8 +10,11 @@ import com.example.ace_taxi_v2.Models.FcmResponse;
 import com.example.ace_taxi_v2.Models.GPSRequest;
 import com.example.ace_taxi_v2.Models.GPSResponse;
 import com.example.ace_taxi_v2.Models.JobResponse;
+import com.example.ace_taxi_v2.Models.JobStatusModel;
+import com.example.ace_taxi_v2.Models.Jobs.ArrivedResponse;
 import com.example.ace_taxi_v2.Models.Jobs.Booking;
 import com.example.ace_taxi_v2.Models.Jobs.FutureJobResponse;
+import com.example.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.example.ace_taxi_v2.Models.Jobs.HistoryJobResponse;
 import com.example.ace_taxi_v2.Models.Jobs.TodayJobResponse;
 import com.example.ace_taxi_v2.Models.LoginRequest;
@@ -70,5 +74,18 @@ public interface ApiService {
     @POST("/api/DriverApp/AddExpense")
     Call<ExpensesResponse> expenses(@Header("Authorization") String token,
                                     @Body ExpensesRequest expensesRequest);
+
+    @GET("/api/DriverApp/JobStatusReply")
+    Call<JobStatusModel> jobStatus(@Header("Authorization") String token,
+                                   @Query("jobno") int jobno,
+                                   @Query("status") int status);
+
+    @GET("/api/DriverApp/Arrived")
+    Call<ArrivedResponse> arrivedStatusUpdate(@Header("Authorization") String token,
+                                              @Query("bookingId") int bookingId);
+
+    @GET("/api/Bookings/FindById")
+    Call<GetBookingInfo> bookingInfo(@Header("Authorization") String token,
+                                     @Query("bookingId") int bookingId);
 
 }

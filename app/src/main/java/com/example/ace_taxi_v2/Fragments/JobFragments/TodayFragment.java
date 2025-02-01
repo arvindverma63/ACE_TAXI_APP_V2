@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 
 import com.example.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.example.ace_taxi_v2.JobModals.JobModal;
+import com.example.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.example.ace_taxi_v2.Logic.JobApi.TodayJobManager;
+import com.example.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.example.ace_taxi_v2.Models.Jobs.JobItem;
 import com.example.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.example.ace_taxi_v2.R;

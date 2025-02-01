@@ -1,6 +1,7 @@
 package com.example.ace_taxi_v2.Logic.JobApi;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -10,9 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ace_taxi_v2.ApiService.ApiService;
 import com.example.ace_taxi_v2.Components.JobStatusModal;
+import com.example.ace_taxi_v2.Components.UpdateButtonText;
 import com.example.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.example.ace_taxi_v2.Instance.RetrofitClient;
+import com.example.ace_taxi_v2.JobModals.JobModal;
+import com.example.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.example.ace_taxi_v2.Logic.SessionManager;
+import com.example.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.example.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.example.ace_taxi_v2.Models.Jobs.TodayJobResponse;
 
@@ -57,13 +62,52 @@ public class TodayJobManager {
                     recyclerView.setAdapter(new TodayJobAdapter(bookingList, new TodayJobAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(TodayBooking booking) {
-                            Toast.makeText(context, "View job: " + booking.getBookingId(), Toast.LENGTH_SHORT).show();
+                            GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+                            getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {
+                                @Override
+                                public void onSuccess(GetBookingInfo bookingInfo) {
+                                    JobModal jobModal = new JobModal(context);
+                                    if(bookingInfo.getStatus() == null){
+                                        jobModal.notJobStartedYetModal();
+                                    }
+                                    else{
+                                        jobModal.JobViewForTodayJob(bookingInfo.getPickupAddress(),bookingInfo.getDestinationAddress()
+                                                ,bookingInfo.getPickupDateTime(),bookingInfo.getPassengerName(),bookingInfo.getBookingId(),bookingInfo.getStatus(),bookingInfo.getPrice());
+                                    }
+                                }
+
+                                @Override
+                                public void onfailer(String error) {
+                                    Toast.makeText(context,"Server error",Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
 
                         @Override
                         public void onStartClick(TodayBooking booking) {
                             JobStatusModal jobStatusModal = new JobStatusModal(context,fragmentManager);
-                            jobStatusModal.openModal();
+                            GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+                            getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {
+                                @Override
+                                public void onSuccess(GetBookingInfo bookingInfo) {
+                                    UpdateButtonText updateButtonText = new UpdateButtonText(context);
+                                    updateButtonText.todayJobButtonStatus(bookingInfo.getStatus());
+                                    Log.e("booking status : ",""+bookingInfo.getStatus());
+                                    if(bookingInfo.getStatus() == null){
+                                        JobModal jobModal = new JobModal(context);
+                                        jobModal.jobOfferModalForTodayJob(bookingInfo.getPickupAddress(),bookingInfo.getDestinationAddress(),bookingInfo.getPrice(),
+                                                bookingInfo.getPickupDateTime(),bookingInfo.getPassengerName(),bookingInfo.getBookingId());
+                                    }
+                                    else{
+                                        jobStatusModal.openModal(booking.getBookingId());
+                                    }
+                                }
+
+                                @Override
+                                public void onfailer(String error) {
+
+                                }
+                            });
                         }
                     }));
                 } else {

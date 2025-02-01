@@ -1,206 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    app:cardCornerRadius="16dp"
-    style="@style/CardBG">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CardBG"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/trans"
-        android:padding="16dp">
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@color/trans"
-            android:padding="8dp">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="JOB VIEW"
-                android:textSize="18sp"
-                style="@style/TextBG"
-                android:textStyle="bold"
-                android:gravity="start" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="X"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/red" />
-        </LinearLayout>
-
-        <!-- Price and Account -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="£23.00"
-                android:id="@+id/price"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/red"
-                android:gravity="start" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ACCOUNT"
-                android:padding="8dp"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray"
-            android:layout_marginTop="8dp" />
-
-        <!-- Job Details -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="8dp">
+            android:padding="16dp">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PETER FARRELL"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:id="@+id/passenger_name"
-                android:gravity="start"
-                android:layout_marginBottom="8dp" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="14/01/2025\n10:20AM (ASAP)"
-                android:textSize="14sp"
-                android:id="@+id/pickup_date"
-                android:gravity="start" />
-
-            <!-- Stop Information -->
+            <!-- Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-                <!-- Stop A -->
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextBG"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="JOB VIEW"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/close_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X"
+                    android:textColor="@color/red"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Price and Account -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="£23.00"
+                    android:textColor="@color/red"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="ACCOUNT"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/gray" />
+
+            <!-- Job Details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/passenger_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="start"
+                    android:text="PETER FARRELL"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pickup_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="14/01/2025\n10:20AM (ASAP)"
+                    android:textSize="14sp" />
+
+                <!-- Stop Information -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_pickup"
-                        android:contentDescription="Stop A" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="0dp"
+                    <!-- Stop A -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:id="@+id/pickup_address"
-                        android:layout_marginStart="8dp"
-                        android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                        android:layout_marginBottom="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                <!-- Stop V -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:contentDescription="Stop A"
+                            android:src="@drawable/ic_pickup" />
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_taxi"
-                        style="@style/IconTint"
-                        android:contentDescription="Stop V" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/pickup_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="0dp"
+                    <!-- Stop V -->
+                    <!--                <LinearLayout-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    android:orientation="horizontal"-->
+                    <!--                    android:gravity="center_vertical"-->
+                    <!--                    android:layout_marginBottom="8dp">-->
+
+                    <!--                    <ImageView-->
+                    <!--                        android:layout_width="40dp"-->
+                    <!--                        android:layout_height="40dp"-->
+                    <!--                        android:src="@drawable/ic_taxi"-->
+                    <!--                        style="@style/IconTint"-->
+                    <!--                        android:contentDescription="Stop V" />-->
+
+                    <!--                    <com.google.android.material.textview.MaterialTextView-->
+                    <!--                        android:layout_width="0dp"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_weight="1"-->
+                    <!--                        android:layout_marginStart="8dp"-->
+                    <!--                        android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"-->
+                    <!--                        android:textSize="14sp" />-->
+                    <!--                </LinearLayout>-->
+
+                    <!-- Stop B -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                <!-- Stop B -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:contentDescription="Stop B"
+                            android:src="@drawable/ic_destination" />
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_destination"
-                        android:contentDescription="Stop B" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:id="@+id/destination_address"
-                        android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
-                        android:textSize="14sp" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/destination_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
+                            android:textSize="14sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <!-- Notes -->
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="NOTES\nTHESE ARE THE NOTES"
+                android:textSize="14sp" />
+
+            <!-- Complete Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/complete_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/primaryColor"
+                android:text="COMPLETE"
+                android:textColor="@color/white" />
+
         </LinearLayout>
-
-        <!-- Notes -->
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NOTES\nTHESE ARE THE NOTES"
-            android:textSize="14sp"
-            android:layout_marginTop="16dp" />
-
-        <!-- Complete Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/complete_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="COMPLETE"
-            android:backgroundTint="@color/primaryColor"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>
