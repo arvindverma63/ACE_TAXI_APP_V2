@@ -2,6 +2,8 @@ package com.example.ace_taxi_v2.ApiService;
 
 
 import com.example.ace_taxi_v2.Components.JobStatusModal;
+import com.example.ace_taxi_v2.Models.AvailabilityRequest;
+import com.example.ace_taxi_v2.Models.AvailabilityResponse;
 import com.example.ace_taxi_v2.Models.DriverShiftResponse;
 import com.example.ace_taxi_v2.Models.Expense;
 import com.example.ace_taxi_v2.Models.ExpensesRequest;
@@ -100,5 +102,10 @@ public interface ApiService {
 
     @GET("/api/DriverApp/Statements")
     Call<List<StatementItem>> getStatements(@Header("Authorization") String token);
+
+    @GET("/api/DriverApp/SetAvailability")
+    Call<List<AvailabilityResponse>> addAvailability(@Header("Authorization") String token,
+                                                     @Body AvailabilityRequest availabilityRequest);
+
 
 }

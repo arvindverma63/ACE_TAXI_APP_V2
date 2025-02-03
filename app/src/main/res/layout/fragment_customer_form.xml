@@ -50,7 +50,17 @@
         android:layout_height="1dp"
         android:background="@color/gray"
         android:layout_marginBottom="16dp" />
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_info"
+        style="@style/SettingText"
+        android:layout_margin="10dp"
+        android:textStyle="italic"
+        android:textSize="15sp"
+        android:drawablePadding="10dp"
 
+        android:text="Double tap to select time picker"/>
     <!-- FROM Time Picker -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

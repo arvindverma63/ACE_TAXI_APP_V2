@@ -34,6 +34,17 @@
                 android:focusable="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_info"
+        style="@style/SettingText"
+        android:layout_margin="10dp"
+        android:textStyle="italic"
+        android:textSize="15sp"
+        android:drawablePadding="10dp"
+
+        android:text="first select start and end date from here"/>
 
     <!-- Expense Table Header -->
     <com.google.android.material.card.MaterialCardView

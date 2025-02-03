@@ -90,4 +90,6 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
         void onViewClick(Booking booking);
         void onStartClick(Booking booking);
     }
+
+
 }
