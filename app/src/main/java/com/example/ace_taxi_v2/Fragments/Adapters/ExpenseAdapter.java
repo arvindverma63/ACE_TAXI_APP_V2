@@ -4,31 +4,25 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.ace_taxi_v2.Models.Expense;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
-
 import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder> {
     private List<Expense> expenseList;
     private Context context;
-    private OnExpenseChangeListener listener;
 
     public interface OnExpenseChangeListener {
         void onExpenseUpdated();
     }
 
-    public ExpenseAdapter(Context context, List<Expense> expenseList, OnExpenseChangeListener listener) {
+    public ExpenseAdapter(Context context, List<Expense> expenses) {
         this.context = context;
-        this.expenseList = expenseList;
-        this.listener = listener;
+        this.expenseList = expenses;
     }
 
     @NonNull
@@ -41,17 +35,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Expense expense = expenseList.get(position);
+
         holder.date.setText(expense.getDate());
-        holder.category.setText(expense.getCategory());
+        holder.category.setText(checkCategory(expense.getCategory())); // ✅ Fixed: Convert category ID to text
         holder.description.setText(expense.getDescription());
         holder.amount.setText("£" + String.format("%.2f", expense.getAmount()));
-
-        // Handle Delete Button Click
-        holder.deleteButton.setOnClickListener(v -> {
-            expenseList.remove(position);
-            notifyItemRemoved(position);
-            listener.onExpenseUpdated(); // Update total amount
-        });
     }
 
     @Override
@@ -61,7 +49,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView date, category, description, amount;
-        MaterialButton deleteButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -69,9 +56,22 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             category = itemView.findViewById(R.id.expenseCategory);
             description = itemView.findViewById(R.id.expenseDescription);
             amount = itemView.findViewById(R.id.expenseAmount);
-            deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }
 
-
+    // ✅ Fixed: Removed unnecessary `break` statements and changed `null` to "Unknown"
+    public String checkCategory(int id) {
+        switch (id) {
+            case 0: return "Fuel";
+            case 1: return "Part";
+            case 2: return "Insurance";
+            case 3: return "Mot";
+            case 4: return "DBS";
+            case 5: return "Vehicle Badge"; // ✅ Fixed Spelling
+            case 6: return "Maintenance";
+            case 7: return "Certification";
+            case 8: return "Others";
+            default: return "Unknown"; // ✅ Fixed: No null return
+        }
+    }
 }

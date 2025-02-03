@@ -17,7 +17,15 @@ public class TodayBooking {
     private double price;
     private String passengerName;
     private String pickupDateTime;
+    private String status;
 
+    public String getStatus(){
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
     public int getPassengers() {
         return passengers;
     }

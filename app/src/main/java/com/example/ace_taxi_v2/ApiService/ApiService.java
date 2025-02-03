@@ -3,6 +3,7 @@ package com.example.ace_taxi_v2.ApiService;
 
 import com.example.ace_taxi_v2.Components.JobStatusModal;
 import com.example.ace_taxi_v2.Models.DriverShiftResponse;
+import com.example.ace_taxi_v2.Models.Expense;
 import com.example.ace_taxi_v2.Models.ExpensesRequest;
 import com.example.ace_taxi_v2.Models.ExpensesResponse;
 import com.example.ace_taxi_v2.Models.FcmRequest;
@@ -20,6 +21,8 @@ import com.example.ace_taxi_v2.Models.Jobs.TodayJobResponse;
 import com.example.ace_taxi_v2.Models.LoginRequest;
 import com.example.ace_taxi_v2.Models.LoginResponse;
 import com.example.ace_taxi_v2.Models.UserProfileResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -87,5 +90,10 @@ public interface ApiService {
     @GET("/api/Bookings/FindById")
     Call<GetBookingInfo> bookingInfo(@Header("Authorization") String token,
                                      @Query("bookingId") int bookingId);
+    @GET("/api/DriverApp/GetExpenses")
+    Call<List<Expense>> getExpenses(@Header("Authorization") String token,
+                           @Query("UserId") int UserId,
+                           @Query("From") String From,
+                           @Query("To") String To);
 
 }

@@ -30,6 +30,7 @@
             android:textColor="@color/blue"
             android:textSize="14sp"
             android:textStyle="bold"
+            android:maxLength="11"
             tools:ignore="TouchTargetSizeCheck" />
 
         <!-- Expense Category (Grey) -->
@@ -69,18 +70,6 @@
             android:textStyle="bold" />
 
         <!-- Delete Button (Red) -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/deleteButton"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="@color/red"
-            android:text="Delete"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:cornerRadius="8dp" />
 
     </LinearLayout>
 

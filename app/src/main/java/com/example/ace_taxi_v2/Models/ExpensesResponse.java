@@ -1,5 +1,15 @@
 package com.example.ace_taxi_v2.Models;
 
-public class ExpensesResponse {
+import java.util.List;
 
+public class ExpensesResponse {
+    private List<Expense> expenses; // Store list of expenses
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
+    }
 }

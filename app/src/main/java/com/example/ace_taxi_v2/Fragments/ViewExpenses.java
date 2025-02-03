@@ -2,7 +2,6 @@ package com.example.ace_taxi_v2.Fragments;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -10,32 +9,28 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.ace_taxi_v2.Fragments.Adapters.ExpenseAdapter;
+import com.example.ace_taxi_v2.Logic.ExpensesResponseApi;
 import com.example.ace_taxi_v2.Models.Expense;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ViewExpenses extends Fragment {
+public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseChangeListener {
 
     private TextInputEditText dateRangeEditText;
     private RecyclerView expenseRecyclerView;
     private TextView totalAmountTextView;
-    private MaterialButton cancelButton, recordButton;
-
     private ExpenseAdapter expenseAdapter;
-    private List<Expense> expenseList;
+    private List<Expense> expenseList; // ✅ Fixed: Use List<Expense>
     private double totalExpense = 0.00;
 
     public ViewExpenses() {
@@ -43,9 +38,7 @@ public class ViewExpenses extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_view_expenses, container, false);
     }
 
@@ -57,40 +50,31 @@ public class ViewExpenses extends Fragment {
         dateRangeEditText = view.findViewById(R.id.dateRangeEditText);
         expenseRecyclerView = view.findViewById(R.id.expenseRecyclerView);
         totalAmountTextView = view.findViewById(R.id.totalAmount);
-        cancelButton = view.findViewById(R.id.cancelButton);
-        recordButton = view.findViewById(R.id.recordButton);
 
-        // Set up RecyclerView
+        // Toolbar Navigation
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
+        toolbar.setNavigationOnClickListener(v -> navigateToProfile());
+
+        // Setup RecyclerView
         expenseList = new ArrayList<>();
-        loadDummyExpenses();  // Load sample expenses
-        expenseAdapter = new ExpenseAdapter(requireContext(), expenseList, this::updateTotalAmount);
-        expenseRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        expenseAdapter = new ExpenseAdapter(getContext(), expenseList);
+        expenseRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         expenseRecyclerView.setAdapter(expenseAdapter);
 
-        MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment selectedFragment = new ProfileFragment();
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container,selectedFragment);
-                fragmentTransaction.commit();
-            }
-        });
         // Date Range Picker
         dateRangeEditText.setOnClickListener(v -> showDateRangePicker());
 
-        // Cancel Button
-        cancelButton.setOnClickListener(v -> requireActivity().onBackPressed());
 
-        // Record Button (Handle Saving or Next Action)
-        recordButton.setOnClickListener(v -> {
-            // Implement Save or Navigation logic here
-        });
 
-        // Update Total
         updateTotalAmount();
+    }
+
+    private void navigateToProfile() {
+        Fragment selectedFragment = new ProfileFragment();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, selectedFragment);
+        fragmentTransaction.commit();
     }
 
     private void showDateRangePicker() {
@@ -106,6 +90,9 @@ public class ViewExpenses extends Fragment {
                             (endView, endYear, endMonth, endDay) -> {
                                 String endDate = endDay + "/" + (endMonth + 1) + "/" + endYear;
                                 dateRangeEditText.setText(startDate + " – " + endDate);
+
+                                // Fetch expenses after selecting date range
+                                fetchExpenses(startDate, endDate);
                             },
                             calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
                     );
@@ -116,25 +103,33 @@ public class ViewExpenses extends Fragment {
         startDatePicker.show();
     }
 
-    private void loadDummyExpenses() {
-        expenseList.add(new Expense("20/01/25", "FUEL", "For School Run", 23.00));
-        expenseList.add(new Expense("22/01/25", "MOT", "6 Monthly", 23.00));
-        expenseList.add(new Expense("23/01/25", "MISC", "For School Run", 23.00));
-        expenseList.add(new Expense("24/01/25", "TYRE", "For School Run", 23.00));
+    private void fetchExpenses(String startDate, String endDate) {
+        ExpensesResponseApi api = new ExpensesResponseApi(requireContext());
 
-        // Notify Adapter
-        if (expenseAdapter != null) {
-            expenseAdapter.notifyDataSetChanged();
-        }
-
-        updateTotalAmount();
+        api.getExpenses(startDate, endDate, expenseRecyclerView,new ExpensesResponseApi.OnExpensesFetchedListener() {
+            @Override
+            public void onExpensesFetched(List<Expense> expenses) {
+                if (expenses != null) {
+                    expenseList.clear(); // ✅ Clear old data
+                    expenseList.addAll(expenses); // ✅ Update with new data
+                    expenseAdapter.notifyDataSetChanged(); // ✅ Notify adapter of changes
+                    updateTotalAmount(); // ✅ Update total amount after setting the data
+                }
+            }
+        });
     }
 
-    private void updateTotalAmount() {
+
+    public void updateTotalAmount() {
         totalExpense = 0.00;
-        for (Expense expense : expenseList) {
+        for (Expense expense : expenseList) { // ✅ Fixed: Loop through List<Expense>
             totalExpense += expense.getAmount();
         }
         totalAmountTextView.setText("£" + String.format("%.2f", totalExpense));
+    }
+
+    @Override
+    public void onExpenseUpdated() {
+        updateTotalAmount();
     }
 }
