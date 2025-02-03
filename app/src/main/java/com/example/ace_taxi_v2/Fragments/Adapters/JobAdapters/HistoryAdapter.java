@@ -75,6 +75,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             customerTextView.setText(String.valueOf(job.getPassengers()));
             mainAddressTextView.setText(job.getPickupAddress());
             subAddressTextView.setText(job.getDestinationAddress());
+            viewButton.setText("£"+job.getPrice());
 
             // Set button click listeners
             viewButton.setOnClickListener(v -> listener.onViewClick(job));

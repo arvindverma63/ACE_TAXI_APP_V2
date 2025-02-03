@@ -15,7 +15,6 @@ import com.example.ace_taxi_v2.Fragments.Adapters.JobAdapters.HistoryAdapter;
 import com.example.ace_taxi_v2.Instance.RetrofitClient;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.Models.Jobs.HistoryBooking;
-import com.example.ace_taxi_v2.Models.Jobs.HistoryJobResponse;
 
 import java.util.List;
 
@@ -40,13 +39,13 @@ public class HistoryBookingManager {
         }
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.historyJobs(token).enqueue(new Callback<HistoryJobResponse>() {
+        apiService.historyJobs(token).enqueue(new Callback<List<HistoryBooking>>() {
             @Override
-            public void onResponse(Call<HistoryJobResponse> call, Response<HistoryJobResponse> response) {
+            public void onResponse(Call<List<HistoryBooking>> call, Response<List<HistoryBooking>> response) {
                 Log.d(TAG, "Response: " + response);
 
                 if (response.isSuccessful() && response.body() != null) {
-                    List<HistoryBooking> bookingList = response.body().getBookings();
+                    List<HistoryBooking> bookingList = response.body();
 
                     if (bookingList == null || bookingList.isEmpty()) {
                         Toast.makeText(context, "No past bookings available", Toast.LENGTH_SHORT).show();
@@ -58,7 +57,7 @@ public class HistoryBookingManager {
                     recyclerView.setAdapter(new HistoryAdapter(bookingList, new HistoryAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(HistoryBooking booking) {
-                            new GetBookingById(context).getBookingDetails(booking.getBookingId());
+                            Toast.makeText(context,"job id is : "+booking.getBookingId(),Toast.LENGTH_LONG).show();;
                         }
 
                         @Override
@@ -72,7 +71,7 @@ public class HistoryBookingManager {
             }
 
             @Override
-            public void onFailure(Call<HistoryJobResponse> call, Throwable t) {
+            public void onFailure(Call<List<HistoryBooking>> call, Throwable t) {
                 Toast.makeText(context, "Failed to fetch jobs: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Error: " + t);
             }

@@ -9,7 +9,7 @@ public class HistoryBooking {
     private String regNo;
     private String backgroundColorRGB;
     private String fullname;
-    private int bookingId;
+    private int id;
     private String cellText;
     private String endTime;
     private String pickupAddress;
@@ -83,11 +83,11 @@ public class HistoryBooking {
     }
 
     public int getBookingId() {
-        return bookingId;
+        return id;
     }
 
-    public void setBookingId(int bookingId) {
-        this.bookingId = bookingId;
+    public void setBookingId(int id) {
+        this.id = id;
     }
 
     public String getCellText() {

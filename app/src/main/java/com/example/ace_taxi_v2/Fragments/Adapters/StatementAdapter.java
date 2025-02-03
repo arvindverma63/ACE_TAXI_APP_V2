@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ace_taxi_v2.Components.StatementDialog;
 import com.example.ace_taxi_v2.Models.Reports.StatementItem;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
@@ -35,17 +36,30 @@ public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.Stat
 
     @Override
     public void onBindViewHolder(@NonNull StatementViewHolder holder, int position) {
+        if (statementList == null || statementList.isEmpty()) return;
+
         StatementItem item = statementList.get(position);
 
-        holder.statementNumber.setText(item.getStatementNumber());
-        holder.date.setText(item.getDate());
-        holder.amount.setText(item.getAmount());
+        // ✅ Fix: Convert int to String to avoid NotFoundException
+        holder.statementNumber.setText(String.valueOf(item.getStatementId()));
 
+        // Format date safely
+        if (item.getDateCreated() != null) {
+            holder.date.setText(item.getDateCreated());
+        } else {
+            holder.date.setText("N/A");
+        }
+
+        // Format earnings safely
+        holder.amount.setText(String.format("£%.2f", item.getTotalEarned()));
+
+        // Handle button click
         holder.viewButton.setOnClickListener(v -> {
-            // Handle the "VIEW" button click here
-            // For example, trigger PDF download
+            StatementDialog statementDialog = new StatementDialog();
+            statementDialog.showStatementDialog(context,item);
         });
     }
+
 
     @Override
     public int getItemCount() {

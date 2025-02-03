@@ -16,10 +16,12 @@ import com.example.ace_taxi_v2.Models.Jobs.ArrivedResponse;
 import com.example.ace_taxi_v2.Models.Jobs.Booking;
 import com.example.ace_taxi_v2.Models.Jobs.FutureJobResponse;
 import com.example.ace_taxi_v2.Models.Jobs.GetBookingInfo;
+import com.example.ace_taxi_v2.Models.Jobs.HistoryBooking;
 import com.example.ace_taxi_v2.Models.Jobs.HistoryJobResponse;
 import com.example.ace_taxi_v2.Models.Jobs.TodayJobResponse;
 import com.example.ace_taxi_v2.Models.LoginRequest;
 import com.example.ace_taxi_v2.Models.LoginResponse;
+import com.example.ace_taxi_v2.Models.Reports.StatementItem;
 import com.example.ace_taxi_v2.Models.UserProfileResponse;
 
 import java.util.List;
@@ -58,7 +60,7 @@ public interface ApiService {
     Call<TodayJobResponse> todayJobs(@Header("Authorization") String token);
 
     @GET("/api/DriverApp/CompletedJobs")
-    Call<HistoryJobResponse> historyJobs(@Header("Authorization") String token);
+    Call<List<HistoryBooking>> historyJobs(@Header("Authorization") String token);
 
     @GET("/api/Bookings/FindById")
     Call<Booking> getBookingById(@Header("Authorization") String token,
@@ -95,5 +97,8 @@ public interface ApiService {
                            @Query("UserId") int UserId,
                            @Query("From") String From,
                            @Query("To") String To);
+
+    @GET("/api/DriverApp/Statements")
+    Call<List<StatementItem>> getStatements(@Header("Authorization") String token);
 
 }

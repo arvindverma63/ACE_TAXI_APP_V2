@@ -46,6 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="09:56"
+                    android:maxLength="11"
                     style="@style/TextBG"
                     android:textSize="10sp"
                     android:textStyle="bold" />

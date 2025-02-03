@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_statement_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Statement Details"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        android:textColor="@color/black"/>
+
+    <TextView android:id="@+id/tv_accountJobsTotalCount"
+        style="@style/DetailTextStyle" android:text="Account Jobs: "/>
+
+    <TextView android:id="@+id/tv_cashJobsTotalCount"
+        style="@style/DetailTextStyle" android:text="Cash Jobs: "/>
+
+    <TextView android:id="@+id/tv_commissionDue"
+        style="@style/DetailTextStyle" android:text="Commission Due: "/>
+
+    <TextView android:id="@+id/tv_dateCreated"
+        style="@style/DetailTextStyle" android:text="Date Created: "/>
+
+    <TextView android:id="@+id/tv_earningsAccount"
+        style="@style/DetailTextStyle" android:text="Earnings Account: "/>
+
+    <TextView android:id="@+id/tv_earningsCash"
+        style="@style/DetailTextStyle" android:text="Earnings Cash: "/>
+
+    <TextView android:id="@+id/tv_paymentDue"
+        style="@style/DetailTextStyle" android:text="Payment Due: "/>
+
+    <TextView android:id="@+id/tv_totalEarned"
+        style="@style/DetailTextStyle" android:text="Total Earned: "/>
+
+    <TextView android:id="@+id/tv_totalJobCount"
+        style="@style/DetailTextStyle" android:text="Total Jobs: "/>
+
+    <Button
+        android:id="@+id/btn_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:backgroundTint="@color/primaryColor"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
