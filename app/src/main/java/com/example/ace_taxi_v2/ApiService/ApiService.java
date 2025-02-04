@@ -16,6 +16,9 @@ import com.example.ace_taxi_v2.Models.JobResponse;
 import com.example.ace_taxi_v2.Models.JobStatusModel;
 import com.example.ace_taxi_v2.Models.Jobs.ArrivedResponse;
 import com.example.ace_taxi_v2.Models.Jobs.Booking;
+import com.example.ace_taxi_v2.Models.Jobs.DateRangeList;
+import com.example.ace_taxi_v2.Models.Jobs.DateRangeRequest;
+import com.example.ace_taxi_v2.Models.Jobs.DateRangeResponse;
 import com.example.ace_taxi_v2.Models.Jobs.FutureJobResponse;
 import com.example.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.example.ace_taxi_v2.Models.Jobs.HistoryBooking;
@@ -107,5 +110,9 @@ public interface ApiService {
     Call<List<AvailabilityResponse>> addAvailability(@Header("Authorization") String token,
                                                      @Body AvailabilityRequest availabilityRequest);
 
+
+    @POST("/api/DriverApp/DateRange")
+    Call<DateRangeList> dateRangeResponse(@Header("Authorization") String token,
+                                                @Body DateRangeRequest dateRangeRequest);
 
 }

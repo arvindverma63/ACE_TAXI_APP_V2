@@ -1,5 +1,6 @@
 package com.example.ace_taxi_v2.Fragments;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.cardview.widget.CardView;
@@ -9,14 +10,22 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 import com.example.ace_taxi_v2.Activity.LoginActivity;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class ProfileFragment extends Fragment {
 
     private CardView profileActivityCard, uploadDocumentCard, newExpenses, viewExpenses;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +44,7 @@ public class ProfileFragment extends Fragment {
         newExpenses = view.findViewById(R.id.new_expenses);
         viewExpenses = view.findViewById(R.id.view_expenses);
 
+
         profileActivityCard.setOnClickListener(v -> replaceFragment(new UserProfileFragment()));
         uploadDocumentCard.setOnClickListener(v -> replaceFragment(new UploadDocumentFragment()));
         newExpenses.setOnClickListener(v -> replaceFragment(new NewExpense()));
@@ -44,6 +54,7 @@ public class ProfileFragment extends Fragment {
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(view1 -> replaceFragment(new ReportPageFragment()));
         }
+
 
         return view;
     }
@@ -55,4 +66,6 @@ public class ProfileFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+
 }

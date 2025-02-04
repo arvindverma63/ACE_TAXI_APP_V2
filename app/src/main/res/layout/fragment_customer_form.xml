@@ -129,6 +129,13 @@
             android:gravity="start|center_vertical" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Available"
+        android:backgroundTint="@color/primaryColor"
+        android:id="@+id/add_ava"/>
+
     <!-- Content Box -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/content_card"

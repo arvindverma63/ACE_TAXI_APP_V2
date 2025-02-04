@@ -84,4 +84,8 @@ public class CustomerForm extends Fragment {
         String formattedDateRange = dateFormat.format(fromDate.getTime()) + " – " + dateFormat.format(toDate.getTime());
         dateRangeButton.setText(formattedDateRange);
     }
+
+    public void addAvailiblity(){
+        String startDate = String.valueOf(fromTimeEditText.getText());
+    }
 }

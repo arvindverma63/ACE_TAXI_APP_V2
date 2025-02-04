@@ -7,26 +7,41 @@
         google.charts.load('current', { packages: ['corechart'] });
         google.charts.setOnLoadCallback(drawChart);
 
+        var chart;
+        var data;
+
         function drawChart() {
-            var data = google.visualization.arrayToDataTable([
+            data = google.visualization.arrayToDataTable([
                 ['Category', 'Value'],
-                ['Category A', 40],
-                ['Category B', 30],
-                ['Category C', 20],
-                ['Category D', 10]
+                ['ePayments', 60],
+                ['Accounts', 25],
+                ['Cash', 10]
             ]);
 
             var options = {
                 title: 'Job Distribution',
-                pieHole: 0.4, // Donut chart effect
+                pieHole: 0.4,
                 width: '100%',
                 height: '100%',
                 colors: ['#FF5733', '#33FF57', '#3357FF', '#FFC300'],
                 legend: { position: 'bottom' }
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart = new google.visualization.PieChart(document.getElementById('piechart'));
             chart.draw(data, options);
+        }
+
+        function updateChart(jsonData) {
+            console.log("Updating chart with data:", jsonData);
+            var newData = JSON.parse(jsonData);
+            var formattedData = [['Category', 'Value']];
+
+            newData.forEach(function(item) {
+                formattedData.push([item[0], item[1]]);
+            });
+
+            data = google.visualization.arrayToDataTable(formattedData);
+            chart.draw(data, { title: 'Updated Job Distribution', pieHole: 0.4, legend: { position: 'bottom' } });
         }
     </script>
     <style>

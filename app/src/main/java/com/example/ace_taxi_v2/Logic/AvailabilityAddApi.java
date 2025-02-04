@@ -41,7 +41,6 @@ public class AvailabilityAddApi {
                 Toast.makeText(context,"Added Successfully",Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
 }
