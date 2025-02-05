@@ -17,11 +17,12 @@
 
         <!-- Date Range Button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/date_range_button"
+            android:id="@+id/date_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="14/01/2025 – 18/05/2025"
+            android:maxLength="10"
+            android:text="14/01/2025"
             android:backgroundTint="@color/primaryColor"
             android:textColor="@android:color/white"
             app:cornerRadius="12dp"
@@ -78,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="FROM: 08:00"
-            android:textColor="@color/black"
+            style="@style/TextBG"
             android:textColorHint="@color/gray"
             android:gravity="center" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -100,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="TO: 08:00"
-            android:textColor="@color/black"
+            style="@style/TextBG"
             android:textColorHint="@color/gray"
             android:gravity="center" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -124,17 +125,45 @@
             android:hint="Add a note"
             android:inputType="text"
             android:text="DOCTORS AT 4PM"
-            android:textColor="@color/black"
+            style="@style/TextBG"
             android:textColorHint="@color/gray"
             android:gravity="start|center_vertical" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Available"
-        android:backgroundTint="@color/primaryColor"
-        android:id="@+id/add_ava"/>
+        android:text="Give or Take (+/-)"
+        android:id="@+id/give_or_take"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Add Available"
+            android:backgroundTint="@color/green"
+            android:id="@+id/add_ava"/>
+        <!-- Spacer -->
+        <View
+            android:layout_width="8dp"
+            android:layout_height="0dp" /> <!-- Spacer -->
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Unavailable"
+            android:backgroundTint="@color/primaryColor"
+            android:id="@+id/add_un"/>
+    </LinearLayout>
+
+
 
     <!-- Content Box -->
     <com.google.android.material.card.MaterialCardView

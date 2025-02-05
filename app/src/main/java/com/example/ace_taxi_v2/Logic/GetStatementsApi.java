@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ace_taxi_v2.ApiService.ApiService;
+import com.example.ace_taxi_v2.Components.CustomDialog;
 import com.example.ace_taxi_v2.Fragments.Adapters.StatementAdapter;
 import com.example.ace_taxi_v2.Instance.RetrofitClient;
 import com.example.ace_taxi_v2.Models.Reports.StatementItem;
@@ -31,6 +32,8 @@ public class GetStatementsApi {
         String token = sessionManager.getToken();
 
 
+        CustomDialog customDialog = new CustomDialog();
+        customDialog.showProgressDialog(context);
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
         apiService.getStatements(token).enqueue(new Callback<List<StatementItem>>() {
             @Override
@@ -43,6 +46,8 @@ public class GetStatementsApi {
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setAdapter(new StatementAdapter(context, response.body()));
                     listener.onSuccess(response.body());
+
+                    customDialog.dismissProgressDialog();
                 } else {
                     Toast.makeText(context, "Error: " + response.message(), Toast.LENGTH_LONG).show();
                     Log.e("GetStatementsApi", "API Response Error: " + response.message());
@@ -53,6 +58,8 @@ public class GetStatementsApi {
             public void onFailure(Call<List<StatementItem>> call, Throwable t) {
                 // Hide progress bar (if used)
                 // progressBar.setVisibility(View.GONE);
+
+                customDialog.dismissProgressDialog();
 
                 Toast.makeText(context, "Failed to load statements. Check your internet connection.", Toast.LENGTH_LONG).show();
                 Log.e("GetStatementsApi", "API Request Failed", t);

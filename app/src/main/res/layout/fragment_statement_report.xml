@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/totalAmount"
-                android:text="£1222.00"
+                android:text="£0.00"
                 android:textColor="#FF0000"
                 android:textStyle="bold"
                 android:textSize="24sp" />

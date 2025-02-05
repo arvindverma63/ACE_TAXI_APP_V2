@@ -7,12 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.ace_taxi_v2.Logic.AvailabilityAddApi;
+import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -22,10 +27,13 @@ import java.util.Locale;
 public class CustomerForm extends Fragment {
 
     private TextInputEditText fromTimeEditText, toTimeEditText;
-    private Button dateRangeButton;
-    private Calendar fromDate = Calendar.getInstance();
-    private Calendar toDate = Calendar.getInstance();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    private Button dateButton;
+    private Calendar selectedDate = Calendar.getInstance();
+    private SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+    public SessionManager sessionManager;
+    public TextInputEditText note_edit_text;
+    public Button add_ava, add_un;
+    public MaterialCheckBox give_or_take;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,17 +47,25 @@ public class CustomerForm extends Fragment {
 
         fromTimeEditText = view.findViewById(R.id.from_time_edit_text);
         toTimeEditText = view.findViewById(R.id.to_time_edit_text);
-        dateRangeButton = view.findViewById(R.id.date_range_button);
+        dateButton = view.findViewById(R.id.date_button);
+        sessionManager = new SessionManager(getContext());
+        note_edit_text = view.findViewById(R.id.note_edit_text);
+        add_ava = view.findViewById(R.id.add_ava);
+        add_un = view.findViewById(R.id.add_un);
+        give_or_take = view.findViewById(R.id.give_or_take);
 
-        // Initialize Date Range Button Text
-        updateDateRangeButtonText();
+        add_ava.setOnClickListener(v -> addAvailability());
+        add_un.setOnClickListener(v -> unAvailability());
+
+        // Initialize Date Button Text
+        updateDateButtonText();
 
         // Set Click Listeners for Time Pickers
         fromTimeEditText.setOnClickListener(v -> showTimePicker(fromTimeEditText));
         toTimeEditText.setOnClickListener(v -> showTimePicker(toTimeEditText));
 
         // Set Click Listener for Date Picker
-        dateRangeButton.setOnClickListener(v -> showDateRangePicker());
+        dateButton.setOnClickListener(v -> showDatePicker());
     }
 
     private void showTimePicker(final TextInputEditText timeEditText) {
@@ -66,26 +82,47 @@ public class CustomerForm extends Fragment {
         timePickerDialog.show();
     }
 
-    private void showDateRangePicker() {
-        // Open FROM Date Picker
+    private void showDatePicker() {
         new DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
-            fromDate.set(year, month, dayOfMonth);
-
-            // Open TO Date Picker after FROM is selected
-            new DatePickerDialog(requireContext(), (view1, year1, month1, dayOfMonth1) -> {
-                toDate.set(year1, month1, dayOfMonth1);
-                updateDateRangeButtonText();
-            }, toDate.get(Calendar.YEAR), toDate.get(Calendar.MONTH), toDate.get(Calendar.DAY_OF_MONTH)).show();
-
-        }, fromDate.get(Calendar.YEAR), fromDate.get(Calendar.MONTH), fromDate.get(Calendar.DAY_OF_MONTH)).show();
+            selectedDate.set(year, month, dayOfMonth, 0, 0, 0);
+            updateDateButtonText();
+        }, selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void updateDateRangeButtonText() {
-        String formattedDateRange = dateFormat.format(fromDate.getTime()) + " – " + dateFormat.format(toDate.getTime());
-        dateRangeButton.setText(formattedDateRange);
+    private void updateDateButtonText() {
+        String formattedDate = isoDateFormat.format(selectedDate.getTime());
+        dateButton.setText(formattedDate);
     }
 
-    public void addAvailiblity(){
-        String startDate = String.valueOf(fromTimeEditText.getText());
+    public void addAvailability() {
+        String startDate = dateButton.getText().toString();
+        String from = fromTimeEditText.getText().toString();
+        String to = toTimeEditText.getText().toString();
+        String note = note_edit_text.getText().toString();
+        boolean giveOrTake = give_or_take.isChecked();
+
+        if (startDate.isEmpty() || from.isEmpty() || to.isEmpty()) {
+            Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_LONG).show();
+        } else {
+            int userId = sessionManager.getUserId();
+            AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+            availabilityAddApi.addAvailability(userId, startDate, from, to, giveOrTake, 1, note);
+        }
+    }
+
+    public void unAvailability() {
+        String startDate = dateButton.getText().toString();
+        String from = fromTimeEditText.getText().toString();
+        String to = toTimeEditText.getText().toString();
+        String note = note_edit_text.getText().toString();
+        boolean giveOrTake = give_or_take.isChecked();
+
+        if (startDate.isEmpty() || from.isEmpty() || to.isEmpty()) {
+            Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_LONG).show();
+        } else {
+            int userId = sessionManager.getUserId();
+            AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+            availabilityAddApi.addAvailability(userId, startDate, from, to, giveOrTake, 2, note);
+        }
     }
 }

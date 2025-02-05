@@ -7,20 +7,24 @@
         google.charts.load('current', { packages: ['corechart'] });
         google.charts.setOnLoadCallback(drawChart);
 
-        var chart;
-        var data;
+        var chart; // Global chart variable
+        var data; // Global data variable
 
-        function drawChart() {
-            data = google.visualization.arrayToDataTable([
-                ['Category', 'Value'],
-                ['ePayments', 60],
-                ['Accounts', 25],
-                ['Cash', 10]
-            ]);
+        function drawChart(initialData) {
+            if (!initialData) {
+                initialData = [
+                    ['Category', 'Value'],
+                    ['Category A', 40],
+                    ['Category B', 30],
+                    ['Category C', 20]
+                ];
+            }
+
+            data = google.visualization.arrayToDataTable(initialData);
 
             var options = {
                 title: 'Job Distribution',
-                pieHole: 0.4,
+                pieHole: 0.4, // Donut chart effect
                 width: '100%',
                 height: '100%',
                 colors: ['#FF5733', '#33FF57', '#3357FF', '#FFC300'],
@@ -32,16 +36,17 @@
         }
 
         function updateChart(jsonData) {
-            console.log("Updating chart with data:", jsonData);
-            var newData = JSON.parse(jsonData);
-            var formattedData = [['Category', 'Value']];
-
-            newData.forEach(function(item) {
-                formattedData.push([item[0], item[1]]);
-            });
-
-            data = google.visualization.arrayToDataTable(formattedData);
-            chart.draw(data, { title: 'Updated Job Distribution', pieHole: 0.4, legend: { position: 'bottom' } });
+            try {
+                var parsedData = JSON.parse(jsonData);
+                if (parsedData && Array.isArray(parsedData) && parsedData.length > 0) {
+                    data = google.visualization.arrayToDataTable(parsedData);
+                    chart.draw(data, { title: 'Updated Job Distribution', pieHole: 0.4, legend: { position: 'bottom' } });
+                } else {
+                    console.error('Invalid data format received:', parsedData);
+                }
+            } catch (error) {
+                console.error('Error parsing JSON data:', error);
+            }
         }
     </script>
     <style>

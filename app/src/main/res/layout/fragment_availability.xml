@@ -18,7 +18,7 @@
 
         <!-- Date Range Button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/date_range_button"
+            android:id="@+id/date_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

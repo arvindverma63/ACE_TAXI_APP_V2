@@ -5,6 +5,7 @@ import com.example.ace_taxi_v2.Components.JobStatusModal;
 import com.example.ace_taxi_v2.Models.AvailabilityRequest;
 import com.example.ace_taxi_v2.Models.AvailabilityResponse;
 import com.example.ace_taxi_v2.Models.DriverShiftResponse;
+import com.example.ace_taxi_v2.Models.EarningResponse;
 import com.example.ace_taxi_v2.Models.Expense;
 import com.example.ace_taxi_v2.Models.ExpensesRequest;
 import com.example.ace_taxi_v2.Models.ExpensesResponse;
@@ -114,5 +115,9 @@ public interface ApiService {
     @POST("/api/DriverApp/DateRange")
     Call<DateRangeList> dateRangeResponse(@Header("Authorization") String token,
                                                 @Body DateRangeRequest dateRangeRequest);
+    @GET("/api/DriverApp/Earnings")
+    Call<List<EarningResponse>> getEarningResponse(@Header("Authorization") String token,
+                                                   @Query("from") String from,
+                                                   @Query("to") String to);
 
 }
