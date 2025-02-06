@@ -11,7 +11,6 @@ public class AvailabilityRequest {
     private int type;
     private String note;
 
-    // Constructor
     public AvailabilityRequest(int userId, String date, String from, String to, boolean giveOrTake, int type, String note) {
         this.userId = userId;
         this.date = date;
@@ -22,7 +21,6 @@ public class AvailabilityRequest {
         this.note = note;
     }
 
-    // Getters and Setters
     public int getUserId() {
         return userId;
     }
@@ -77,22 +75,5 @@ public class AvailabilityRequest {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    // Nested Class for Ticks
-    public static class TimeTicks {
-        private long ticks;
-
-        public TimeTicks(long ticks) {
-            this.ticks = ticks;
-        }
-
-        public long getTicks() {
-            return ticks;
-        }
-
-        public void setTicks(long ticks) {
-            this.ticks = ticks;
-        }
     }
 }

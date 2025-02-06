@@ -53,6 +53,7 @@ public class NotificationService extends FirebaseMessagingService {
         String body = null;
         String jobId = null;
         String navId = null;
+        String message = null;
 
         if (remoteMessage.getNotification() != null) {
             title = remoteMessage.getNotification().getTitle();
@@ -64,15 +65,17 @@ public class NotificationService extends FirebaseMessagingService {
             body = remoteMessage.getData().get("customMessage") != null ? remoteMessage.getData().get("customMessage") : body;
             jobId = remoteMessage.getData().get("jobid");
             navId = remoteMessage.getData().get("NavId");
+            message = remoteMessage.getData().get("message");
+
 
             Log.d(TAG, "Data Payload: " + remoteMessage.getData());
         }
-
         if (title != null && body != null) {
 
+            Log.d("notification message","message: "+message);
             // Show the notification
             NotificationModalSession notificationModalSession = new NotificationModalSession(this);
-            notificationModalSession.saveNotificationData(jobId,navId,title);
+            notificationModalSession.saveNotificationData(jobId,navId,title,message);
             showNotification(title, body, jobId, navId);
         }
     }

@@ -1,16 +1,10 @@
 package com.example.ace_taxi_v2.Logic.Service;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.example.ace_taxi_v2.Activity.NotificationModalActivity;
-
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class NotificationModalSession {
@@ -27,9 +21,9 @@ public class NotificationModalSession {
     }
 
     // Save Notification Data
-    public void saveNotificationData(String jobId, String navId, String title) {
-        Set<String> notifications = sharedPreferences.getStringSet(KEY_NOTIFICATIONS, new HashSet<>());
-        notifications.add(jobId + "|" + navId + "|" + title);
+    public void saveNotificationData(String jobId, String navId, String title, String message) {
+        Set<String> notifications = new HashSet<>(sharedPreferences.getStringSet(KEY_NOTIFICATIONS, new HashSet<>()));
+        notifications.add(jobId + "|" + navId + "|" + title + "|" + message);
         editor.putStringSet(KEY_NOTIFICATIONS, notifications);
         incrementNotificationCount();
         editor.apply();
@@ -46,7 +40,15 @@ public class NotificationModalSession {
         if (notifications.isEmpty()) {
             return null;
         }
-        return notifications.iterator().next().split("\\|");
+
+        List<String> notificationList = new ArrayList<>(notifications);
+        return notificationList.get(notificationList.size() - 1).split("\\|"); // Fetch the last added notification
+    }
+
+    // Get Latest Notification Message
+    public String getMessage() {
+        String[] details = getLatestNotification();
+        return (details != null && details.length > 3) ? details[3] : null;
     }
 
     // Get Job ID of Latest Notification
@@ -91,6 +93,4 @@ public class NotificationModalSession {
         editor.remove(KEY_NOTIFICATION_COUNT);
         editor.apply();
     }
-
-
 }

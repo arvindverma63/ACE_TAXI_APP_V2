@@ -107,7 +107,7 @@ public interface ApiService {
     @GET("/api/DriverApp/Statements")
     Call<List<StatementItem>> getStatements(@Header("Authorization") String token);
 
-    @GET("/api/DriverApp/SetAvailability")
+    @POST("/api/DriverApp/SetAvailability")
     Call<List<AvailabilityResponse>> addAvailability(@Header("Authorization") String token,
                                                      @Body AvailabilityRequest availabilityRequest);
 

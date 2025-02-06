@@ -40,9 +40,9 @@ public class NotificationModalActivity extends AppCompatActivity {
             if (navId != null && !navId.isEmpty()) {
                 navid = Integer.parseInt(navId);
             }
-            if (jobId != null && !jobId.isEmpty()) {
-                jobid = Integer.parseInt(jobId);
-            }
+//            if (jobId != null && !jobId.isEmpty()) {
+//                jobid = Integer.parseInt(jobId);
+//            }
         } catch (NumberFormatException e) {
             Log.e("NotificationActivity", "Invalid navId or jobId format", e);
             redirectToHome(); // Redirect to HomeActivity if navId is invalid
@@ -68,13 +68,19 @@ public class NotificationModalActivity extends AppCompatActivity {
                 jobModal.jobCancel();
                 break;
             case 4:
-                jobModal.JobRead();
+                jobModal.JobRead(); //will be navId 7
                 break;
             case 5:
                 jobModal.jobComplete();
                 break;
             case 6:
                 jobModal.jobUnallocated();
+                break;
+            case 7:
+                jobModal.JobRead();
+                break;
+            case 8:
+                jobModal.JobRead(); // for globel message
                 break;
             default:
                 redirectToHome(); // Redirect if navId doesn't match any case

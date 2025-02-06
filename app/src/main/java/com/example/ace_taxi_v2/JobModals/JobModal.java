@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import com.example.ace_taxi_v2.Activity.HomeActivity;
 import com.example.ace_taxi_v2.Logic.ArrivedJobApi;
 import com.example.ace_taxi_v2.Logic.JobResponseApi;
+import com.example.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.example.ace_taxi_v2.R;
 
 import org.w3c.dom.Text;
@@ -221,6 +222,11 @@ public class JobModal {
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.read_message,null);
         Button closeBtn = dialogView.findViewById(R.id.btnRead);
+        NotificationModalSession notificationModalSession = new NotificationModalSession(context);
+        String notificationMessage = notificationModalSession.getMessage();
+
+        TextView message = dialogView.findViewById(R.id.tvMessage);
+        message.setText(notificationMessage);
         closeBtn.setOnClickListener(view -> {
             Intent intent = new Intent(context, HomeActivity.class);
             context.startActivity(intent);

@@ -4,9 +4,9 @@ import java.time.Instant;
 
 public class AvailabilityResponse {
     private int userId;
-    private Instant date;
-    private AvailabilityRequest.TimeTicks from;
-    private AvailabilityRequest.TimeTicks to;
+    private String date;
+    private String from;
+    private String to;
     private boolean giveOrTake;
     private int type;
     private String note;
@@ -19,27 +19,27 @@ public class AvailabilityResponse {
         this.userId = userId;
     }
 
-    public Instant getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Instant date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public AvailabilityRequest.TimeTicks getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(AvailabilityRequest.TimeTicks from) {
+    public void setFrom(String from) {
         this.from = from;
     }
 
-    public AvailabilityRequest.TimeTicks getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(AvailabilityRequest.TimeTicks to) {
+    public void setTo(String to) {
         this.to = to;
     }
 
