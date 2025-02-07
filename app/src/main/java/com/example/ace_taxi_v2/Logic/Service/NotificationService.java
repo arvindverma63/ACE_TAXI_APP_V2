@@ -49,38 +49,35 @@ public class NotificationService extends FirebaseMessagingService {
 
         Log.d(TAG, "Message received: " + (remoteMessage.getMessageId() != null ? remoteMessage.getMessageId() : "Unknown"));
 
-        String title = "New Notification"; // Default title if not provided
-        String body = "You have a new message"; // Default body if not provided
-        String sentBy = null;
+        String title = null;
+        String body = null;
+        String jobId = null;
         String navId = null;
         String message = null;
-        String datetime = null;
 
         if (remoteMessage.getNotification() != null) {
-            title = remoteMessage.getNotification().getTitle() != null ? remoteMessage.getNotification().getTitle() : title;
-            body = remoteMessage.getNotification().getBody() != null ? remoteMessage.getNotification().getBody() : body;
+            title = remoteMessage.getNotification().getTitle();
+            body = remoteMessage.getNotification().getBody();
         }
 
         if (remoteMessage.getData().size() > 0) {
-            sentBy = remoteMessage.getData().get("sentBy");
+            title = remoteMessage.getData().get("customTitle") != null ? remoteMessage.getData().get("customTitle") : title;
+            body = remoteMessage.getData().get("customMessage") != null ? remoteMessage.getData().get("customMessage") : body;
+            jobId = remoteMessage.getData().get("jobid");
             navId = remoteMessage.getData().get("NavId");
             message = remoteMessage.getData().get("message");
-            datetime = remoteMessage.getData().get("datetime");
 
             Log.d(TAG, "Data Payload: " + remoteMessage.getData());
         }
 
-        if (title != null && message != null) {
-            Log.d(TAG, "Notification Details: SentBy=" + sentBy + ", NavId=" + navId + ", Message=" + message + ", DateTime=" + datetime);
-
-            // Save notification data to session storage
-            notificationModalSession.saveNotificationData(sentBy, navId, title, message);
+        if (title != null && body != null) {
 
             // Show the notification
-            showNotification(title, message, sentBy, navId);
+            NotificationModalSession notificationModalSession = new NotificationModalSession(this);
+            notificationModalSession.saveNotificationData(jobId,navId,title,message);
+            showNotification(title, body, jobId, navId);
         }
     }
-
 
     private void saveTokenToPreferences(String token) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
@@ -94,32 +91,33 @@ public class NotificationService extends FirebaseMessagingService {
         Log.d(TAG, "Fcm Token sent to server: " + token);
     }
 
-    private void showNotification(String title, String message, String sentBy, String navId) {
+    private void showNotification(String title, String message, String jobId, String navId) {
         String channelId = "default_channel_id";
+        String channelName = "Default Channel";
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, "Default Channel", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
         }
 
+        // ✅ Create an Intent to open `NotificationModalActivity` when clicked
         Intent intent = new Intent(getApplicationContext(), NotificationModalActivity.class);
-        intent.putExtra("sentBy", sentBy);
+        intent.putExtra("title", title);
         intent.putExtra("message", message);
+        intent.putExtra("jobid", jobId);
         intent.putExtra("navId", navId);
 
+        // ✅ Ensure proper flags for launching when app is killed
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        int pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            pendingIntentFlags |= PendingIntent.FLAG_IMMUTABLE;
-        }
-
+        // ✅ Create a PendingIntent that will open the activity with the data
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
-                sentBy != null ? sentBy.hashCode() : (int) System.currentTimeMillis(),
+                jobId != null ? jobId.hashCode() : (int) System.currentTimeMillis(),
                 intent,
-                pendingIntentFlags
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
@@ -127,8 +125,8 @@ public class NotificationService extends FirebaseMessagingService {
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_logo_ace)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent);
+                .setAutoCancel(true) // Removes the notification when clicked
+                .setContentIntent(pendingIntent); // Open activity on click
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
 
@@ -139,11 +137,10 @@ public class NotificationService extends FirebaseMessagingService {
             }
         }
 
-        int notificationId = sentBy != null ? sentBy.hashCode() : (int) System.currentTimeMillis();
+        int notificationId = jobId != null ? jobId.hashCode() : (int) System.currentTimeMillis();
         notificationManagerCompat.notify(notificationId, notificationBuilder.build());
 
-        Log.d(TAG, "Notification sent with ID: " + notificationId);
+        Log.d("NotificationDebug", "Notification sent with ID: " + notificationId);
     }
-
 
 }

@@ -40,9 +40,14 @@ public class NotificationModalActivity extends AppCompatActivity {
             if (navId != null && !navId.isEmpty()) {
                 navid = Integer.parseInt(navId);
             }
-//            if (jobId != null && !jobId.isEmpty()) {
-//                jobid = Integer.parseInt(jobId);
-//            }
+            try {
+                if (jobId != null && !jobId.isEmpty()) {
+                    jobid = Integer.parseInt(jobId);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         } catch (NumberFormatException e) {
             Log.e("NotificationActivity", "Invalid navId or jobId format", e);
             redirectToHome(); // Redirect to HomeActivity if navId is invalid
@@ -59,7 +64,7 @@ public class NotificationModalActivity extends AppCompatActivity {
         JobModal jobModal = new JobModal(this);
         switch (navid) {
             case 1:
-                new GetBookingById(this).getBookingDetails(jobid);
+                new GetBookingById(this).getBookingDetails(jobid); //job offer
                 break;
             case 2:
                 jobModal.jobAmenedment();
