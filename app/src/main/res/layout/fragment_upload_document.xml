@@ -42,6 +42,11 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:layout_margin="4dp">
+                <ImageView
+                    android:id="@+id/licence_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -65,23 +70,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-                            style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_upload"
-                            android:contentDescription="Upload"
-                            android:layout_marginEnd="16dp" />
-
-                        <ImageView
-                            style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_delete"
-                            android:contentDescription="Delete" />
-                    </LinearLayout>
+                        android:layout_marginTop="8dp"/>
 
                     <!-- Camera Icon -->
                     <LinearLayout
@@ -92,6 +81,7 @@
                         <ImageView
                             style="@style/IconTint"
                             android:layout_width="48dp"
+                            android:id="@+id/select_lisence_img"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_camera"
                             android:contentDescription="Camera" />
@@ -110,6 +100,11 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:layout_margin="4dp">
+                <ImageView
+                    android:id="@+id/insurance_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -133,23 +128,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_upload"
-                            android:contentDescription="Upload"
-                            android:layout_marginEnd="16dp" />
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_delete"
-                            android:contentDescription="Delete" />
-                    </LinearLayout>
+                        android:layout_marginTop="8dp"/>
 
                     <!-- Camera Icon -->
                     <LinearLayout
@@ -159,6 +138,7 @@
 
                         <ImageView
        style="@style/IconTint"
+                            android:id="@+id/insurance_image"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_camera"
@@ -178,6 +158,11 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:layout_margin="4dp">
+                <ImageView
+                    android:id="@+id/dbs_cert_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -201,23 +186,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_upload"
-                            android:contentDescription="Upload"
-                            android:layout_marginEnd="16dp" />
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_delete"
-                            android:contentDescription="Delete" />
-                    </LinearLayout>
+                        android:layout_marginTop="8dp"/>
 
                     <!-- Camera Icon -->
                     <LinearLayout
@@ -226,9 +195,10 @@
                         android:gravity="center">
 
                         <ImageView
-       style="@style/IconTint"
+                            style="@style/IconTint"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
+                            android:id="@+id/dbs_cert_image"
                             android:src="@drawable/ic_camera"
                             android:contentDescription="Camera" />
                     </LinearLayout>
@@ -246,6 +216,11 @@
                 android:clickable="true"
                 android:layout_margin="4dp">
 
+                <ImageView
+                    android:id="@+id/vehicle_licence_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -268,23 +243,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_upload"
-                            android:contentDescription="Upload"
-                            android:layout_marginEnd="16dp" />
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_delete"
-                            android:contentDescription="Delete" />
-                    </LinearLayout>
+                        android:layout_marginTop="8dp"/>
 
                     <!-- Camera Icon -->
                     <LinearLayout
@@ -293,8 +252,9 @@
                         android:gravity="center">
 
                         <ImageView
-       style="@style/IconTint"
+                            style="@style/IconTint"
                             android:layout_width="48dp"
+                            android:id="@+id/vehicle_licence_image"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_camera"
                             android:contentDescription="Camera" />
@@ -312,6 +272,12 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:layout_margin="4dp">
+
+                <ImageView
+                    android:id="@+id/drivers_licence_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -335,23 +301,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_upload"
-                            android:contentDescription="Upload"
-                            android:layout_marginEnd="16dp" />
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_delete"
-                            android:contentDescription="Delete" />
-                    </LinearLayout>
+                        android:layout_marginTop="8dp"/>
 
                     <!-- Camera Icon -->
                     <LinearLayout
@@ -361,6 +311,7 @@
 
                         <ImageView
        style="@style/IconTint"
+                            android:id="@+id/drivers_licence_image"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_camera"
@@ -379,6 +330,12 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:layout_margin="4dp">
+
+                <ImageView
+                    android:id="@+id/safe_guarding_cert_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -402,23 +359,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_upload"
-                            android:contentDescription="Upload"
-                            android:layout_marginEnd="16dp" />
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_delete"
-                            android:contentDescription="Delete" />
-                    </LinearLayout>
+                        android:layout_marginTop="8dp"/>
 
                     <!-- Camera Icon -->
                     <LinearLayout
@@ -430,6 +371,7 @@
        style="@style/IconTint"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
+                            android:id="@+id/safe_guarding_cert_image"
                             android:src="@drawable/ic_camera"
                             android:contentDescription="Camera" />
                     </LinearLayout>
@@ -447,6 +389,11 @@
                 android:clickable="true"
                 android:layout_margin="4dp">
 
+                <ImageView
+                    android:id="@+id/first_aid_cert_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -469,23 +416,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_upload"
-                            android:contentDescription="Upload"
-                            android:layout_marginEnd="16dp" />
-
-                        <ImageView
-       style="@style/IconTint"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_delete"
-                            android:contentDescription="Delete" />
-                    </LinearLayout>
+                        android:layout_marginTop="8dp"/>
 
                     <!-- Camera Icon -->
                     <LinearLayout
@@ -497,6 +428,7 @@
        style="@style/IconTint"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
+                            android:id="@+id/first_aid_cert_image"
                             android:src="@drawable/ic_camera"
                             android:contentDescription="Camera" />
                     </LinearLayout>

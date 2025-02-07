@@ -218,34 +218,45 @@ public class JobModal {
     }
 
 
-    public void JobRead(){
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.read_message,null);
-        Button closeBtn = dialogView.findViewById(R.id.btnRead);
-        NotificationModalSession notificationModalSession = new NotificationModalSession(context);
-        String notificationMessage = notificationModalSession.getMessage();
+    public void JobRead() {
 
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.read_message, null);
+
+        Button closeBtn = dialogView.findViewById(R.id.btnRead);
         TextView message = dialogView.findViewById(R.id.tvMessage);
+
+        NotificationModalSession notificationModalSession = new NotificationModalSession(context);
+        String notificationMessage = notificationModalSession.getLatestMessage(); // No need for String.valueOf()
+
+        // Ensure notificationMessage is not null or empty
+        if (notificationMessage == null || notificationMessage.isEmpty()) {
+            notificationMessage = "No new notifications.";
+        }
+
         message.setText(notificationMessage);
+        Log.d("NotificationDebug", "Read Message: " + notificationMessage);
+
         closeBtn.setOnClickListener(view -> {
             Intent intent = new Intent(context, HomeActivity.class);
             context.startActivity(intent);
         });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
-
         builder.setCancelable(false);
+
         AlertDialog alertDialog = builder.create();
-        // Set transparent background for the dialog window
+
         if (alertDialog.getWindow() != null) {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         }
 
-        // Apply rounded background programmatically
         dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
 
         alertDialog.show();
     }
+
 
 
     public void jobComplete(){

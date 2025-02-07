@@ -13,7 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ace_taxi_v2.Logic.AvailabilitiesApi;
 import com.example.ace_taxi_v2.Logic.AvailabilityAddApi;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
@@ -34,6 +36,7 @@ public class CustomerForm extends Fragment {
     public TextInputEditText note_edit_text;
     public Button add_ava, add_un;
     public MaterialCheckBox give_or_take;
+    public RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +59,10 @@ public class CustomerForm extends Fragment {
 
         add_ava.setOnClickListener(v -> addAvailability());
         add_un.setOnClickListener(v -> unAvailability());
+
+        recyclerView = view.findViewById(R.id.recyclar_view);
+        AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
+        availabilitiesApi.getAvailablities(recyclerView);
 
         // Initialize Date Button Text
         updateDateButtonText();

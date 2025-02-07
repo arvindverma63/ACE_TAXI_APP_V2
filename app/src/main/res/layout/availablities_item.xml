@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    style="@style/CardBG"
+    android:padding="12dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/trans"
+        android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Driver Name -->
+        <TextView
+            android:id="@+id/tv_driver_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Driver Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            style="@style/TextBG"/>
+
+        <!-- Time Ago -->
+        <TextView
+            android:id="@+id/tv_time_ago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15m"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"/>
+    </LinearLayout>
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/tv_availability_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Availability Type"
+        android:textSize="14sp"
+        style="@style/TextBG"
+        android:paddingTop="2dp"/>
+
+    <!-- Availability Details -->
+    <TextView
+        android:id="@+id/tv_availability_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Available Hours: 00:00 - 00:00"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:paddingTop="2dp"/>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

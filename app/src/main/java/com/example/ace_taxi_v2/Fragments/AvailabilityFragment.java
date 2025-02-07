@@ -14,7 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ace_taxi_v2.Logic.AvailabilitiesApi;
 import com.example.ace_taxi_v2.Logic.AvailabilityAddApi;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
@@ -32,6 +34,7 @@ public class AvailabilityFragment extends Fragment {
     private Button custom_button;
     private Calendar selectedDate = Calendar.getInstance();
     private SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+    public RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +43,10 @@ public class AvailabilityFragment extends Fragment {
         dateButton = rootView.findViewById(R.id.date_button);
         dateButton.setOnClickListener(v -> showDatePicker());
         custom_button = rootView.findViewById(R.id.custom_button);
+        recyclerView = rootView.findViewById(R.id.recyclar_view);
+        AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
+        availabilitiesApi.getAvailablities(recyclerView);
+
 
         custom_button.setOnClickListener(view -> {
             Fragment selected = new CustomerForm();

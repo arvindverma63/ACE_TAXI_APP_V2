@@ -179,33 +179,26 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp">
 
-        <!-- Tabs for ME and ALL -->
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/light_gray"
-            app:tabIndicatorColor="@color/primaryColor"
-            app:tabSelectedTextColor="@color/primaryColor"
-            app:tabTextColor="@color/gray">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_me"
+            android:backgroundTint="@color/light_gray"
+            app:cardCornerRadius="0dp"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ME" />
+                android:layout_gravity="center"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:text="Your Availablities"
+                android:padding="15dp"/>
+        </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ALL" />
-        </com.google.android.material.tabs.TabLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:text="No Data"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_marginTop="50dp"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclar_view"/>
+
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

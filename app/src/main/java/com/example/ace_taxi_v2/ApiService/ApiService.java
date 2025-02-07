@@ -13,6 +13,7 @@ import com.example.ace_taxi_v2.Models.FcmRequest;
 import com.example.ace_taxi_v2.Models.FcmResponse;
 import com.example.ace_taxi_v2.Models.GPSRequest;
 import com.example.ace_taxi_v2.Models.GPSResponse;
+import com.example.ace_taxi_v2.Models.ImageUploadResponse;
 import com.example.ace_taxi_v2.Models.JobResponse;
 import com.example.ace_taxi_v2.Models.JobStatusModel;
 import com.example.ace_taxi_v2.Models.Jobs.ArrivedResponse;
@@ -32,11 +33,14 @@ import com.example.ace_taxi_v2.Models.UserProfileResponse;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -119,5 +123,13 @@ public interface ApiService {
     Call<List<EarningResponse>> getEarningResponse(@Header("Authorization") String token,
                                                    @Query("from") String from,
                                                    @Query("to") String to);
+    @Multipart
+    @POST("/api/DriverApp/UploadDocument")
+    Call<ImageUploadResponse> uploadDoc(@Header("Authorization") String token,
+                                        @Query("type") int type,
+                                        @Part MultipartBody.Part file);
+
+    @GET("/api/DriverApp/Availabilities")
+    Call<AvailabilityResponse> getAva(@Header("Authorization") String token);
 
 }
