@@ -4,6 +4,8 @@ package com.example.ace_taxi_v2.ApiService;
 import com.example.ace_taxi_v2.Components.JobStatusModal;
 import com.example.ace_taxi_v2.Models.AvailabilityRequest;
 import com.example.ace_taxi_v2.Models.AvailabilityResponse;
+import com.example.ace_taxi_v2.Models.BookingRequest.BookingCompleteRequest;
+import com.example.ace_taxi_v2.Models.BookingRequest.BookingCompleteResponse;
 import com.example.ace_taxi_v2.Models.DriverShiftResponse;
 import com.example.ace_taxi_v2.Models.EarningResponse;
 import com.example.ace_taxi_v2.Models.Expense;
@@ -28,6 +30,8 @@ import com.example.ace_taxi_v2.Models.Jobs.HistoryJobResponse;
 import com.example.ace_taxi_v2.Models.Jobs.TodayJobResponse;
 import com.example.ace_taxi_v2.Models.LoginRequest;
 import com.example.ace_taxi_v2.Models.LoginResponse;
+import com.example.ace_taxi_v2.Models.POI.LocalPOIRequest;
+import com.example.ace_taxi_v2.Models.POI.LocalPOIResponse;
 import com.example.ace_taxi_v2.Models.Reports.StatementItem;
 import com.example.ace_taxi_v2.Models.UserProfileResponse;
 
@@ -131,5 +135,13 @@ public interface ApiService {
 
     @GET("/api/DriverApp/Availabilities")
     Call<AvailabilityResponse> getAva(@Header("Authorization") String token);
+
+    @POST("/api/Bookings/Complete")
+    Call<BookingCompleteResponse> completeBooking(@Header("Authorization") String token,
+                                                  @Body BookingCompleteRequest completeRequest);
+
+    @POST("/api/LocalPOI/GetPOI")
+    Call<List<LocalPOIResponse>> autoComplete(@Header("Authorization") String token,
+                                        @Body LocalPOIRequest localPOIRequest);
 
 }

@@ -68,11 +68,12 @@
                     app:boxBackgroundMode="none"
                     app:endIconMode="clear_text">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/pickupLocation"
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompletePickup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Enter Pickup Location..."
+                        android:inputType="text"
                         android:textSize="16sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -109,11 +110,12 @@
                     app:boxBackgroundMode="none"
                     app:endIconMode="clear_text">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/destinationLocation"
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteDestination"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Enter Destination..."
+                        android:inputType="text"
                         android:textSize="16sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>

@@ -35,7 +35,7 @@
 
         <!-- Unavailable All Day Button -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/unavailable_button"
+            android:id="@+id/unavailable_all_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="UNAVAILABLE ALL DAY"
@@ -171,8 +171,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         app:cardCornerRadius="16dp"
         style="@style/CardBG"
         app:cardElevation="4dp"

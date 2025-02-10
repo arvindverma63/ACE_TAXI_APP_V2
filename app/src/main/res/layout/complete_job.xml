@@ -16,7 +16,6 @@
         app:cardElevation="4dp"
         android:layout_margin="16dp"
         app:cardBackgroundColor="@android:color/white"
-        app:strokeColor="@color/dark_green"
         android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:background="@color/dark_blue"
+                android:background="@color/primaryColor"
                 android:text="COMPLETE JOB"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
@@ -96,7 +95,7 @@
                     android:id="@+id/etParking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="5.50"
+                    android:text="5"
                     android:textSize="16sp"
                     android:gravity="center"
                     android:inputType="numberDecimal"/>
@@ -133,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:text="SUBMIT"
                 app:cornerRadius="8dp"
-                android:backgroundTint="@color/dark_blue"
+                android:backgroundTint="@color/primaryColor"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"/>
         </LinearLayout>

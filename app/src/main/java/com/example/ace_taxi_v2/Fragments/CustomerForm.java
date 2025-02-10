@@ -34,7 +34,7 @@ public class CustomerForm extends Fragment {
     private SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
     public SessionManager sessionManager;
     public TextInputEditText note_edit_text;
-    public Button add_ava, add_un;
+    public Button add_ava, add_un,unavailable_all_day;
     public MaterialCheckBox give_or_take;
     public RecyclerView recyclerView;
 
@@ -56,13 +56,14 @@ public class CustomerForm extends Fragment {
         add_ava = view.findViewById(R.id.add_ava);
         add_un = view.findViewById(R.id.add_un);
         give_or_take = view.findViewById(R.id.give_or_take);
+        unavailable_all_day = view.findViewById(R.id.unavailable_all_day);
 
         add_ava.setOnClickListener(v -> addAvailability());
         add_un.setOnClickListener(v -> unAvailability());
+        unavailable_all_day.setOnClickListener(v -> unavailableAllDay());
 
         recyclerView = view.findViewById(R.id.recyclar_view);
-        AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
-        availabilitiesApi.getAvailablities(recyclerView);
+        renderList();
 
         // Initialize Date Button Text
         updateDateButtonText();
@@ -73,6 +74,11 @@ public class CustomerForm extends Fragment {
 
         // Set Click Listener for Date Picker
         dateButton.setOnClickListener(v -> showDatePicker());
+    }
+
+    public void renderList(){
+        AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
+        availabilitiesApi.getAvailablities(recyclerView);
     }
 
     private void showTimePicker(final TextInputEditText timeEditText) {
@@ -115,6 +121,13 @@ public class CustomerForm extends Fragment {
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
             availabilityAddApi.addAvailability(userId, startDate, from, to, giveOrTake, 1, note);
         }
+        try {
+            Thread.sleep(2000);
+            renderList();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void unAvailability() {
@@ -130,6 +143,25 @@ public class CustomerForm extends Fragment {
             int userId = sessionManager.getUserId();
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
             availabilityAddApi.addAvailability(userId, startDate, from, to, giveOrTake, 2, note);
+        }
+        try {
+            Thread.sleep(2000);
+            renderList();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void unavailableAllDay(){
+        int userId = sessionManager.getUserId();
+        String startDate = dateButton.getText().toString();
+        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+        availabilityAddApi.addAvailability(userId, startDate, "00:00", "23:59", true, 2, "unavailable All Day");
+        try {
+            Thread.sleep(2000);
+            renderList();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }

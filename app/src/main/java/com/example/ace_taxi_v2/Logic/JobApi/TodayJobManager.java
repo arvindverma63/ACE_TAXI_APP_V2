@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ace_taxi_v2.ApiService.ApiService;
 import com.example.ace_taxi_v2.Components.JobStatusModal;
-import com.example.ace_taxi_v2.Components.UpdateButtonText;
 import com.example.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.example.ace_taxi_v2.Instance.RetrofitClient;
 import com.example.ace_taxi_v2.JobModals.JobModal;
@@ -29,9 +28,9 @@ import retrofit2.Response;
 
 public class TodayJobManager {
     private final Context context;
-    private FragmentManager fragmentManager;
+    private final FragmentManager fragmentManager;
 
-    public TodayJobManager(Context context,FragmentManager fragmentManager) {
+    public TodayJobManager(Context context, FragmentManager fragmentManager) {
         this.context = context;
         this.fragmentManager = fragmentManager;
     }
@@ -59,57 +58,18 @@ public class TodayJobManager {
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
-                    recyclerView.setAdapter(new TodayJobAdapter(bookingList, new TodayJobAdapter.OnItemClickListener() {
+                    recyclerView.setAdapter(new TodayJobAdapter(context, bookingList, new TodayJobAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(TodayBooking booking) {
-                            GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
-                            getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {
-                                @Override
-                                public void onSuccess(GetBookingInfo bookingInfo) {
-                                    JobModal jobModal = new JobModal(context);
-                                    if(bookingInfo.getStatus() == null){
-                                        jobModal.notJobStartedYetModal();
-                                    }
-                                    else{
-                                        jobModal.JobViewForTodayJob(bookingInfo.getPickupAddress(),bookingInfo.getDestinationAddress()
-                                                ,bookingInfo.getPickupDateTime(),bookingInfo.getPassengerName(),bookingInfo.getBookingId(),bookingInfo.getStatus(),bookingInfo.getPrice());
-                                    }
-                                }
-
-                                @Override
-                                public void onfailer(String error) {
-                                    Toast.makeText(context,"Server error",Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            fetchBookingDetails(String.valueOf(booking.getBookingId()));
                         }
 
                         @Override
                         public void onStartClick(TodayBooking booking) {
-                            JobStatusModal jobStatusModal = new JobStatusModal(context,fragmentManager);
-                            GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
-                            getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {
-                                @Override
-                                public void onSuccess(GetBookingInfo bookingInfo) {
-                                    UpdateButtonText updateButtonText = new UpdateButtonText(context);
-                                    updateButtonText.todayJobButtonStatus(bookingInfo.getStatus());
-                                    Log.e("booking status : ",""+bookingInfo.getStatus());
-                                    if(bookingInfo.getStatus() == null){
-                                        JobModal jobModal = new JobModal(context);
-                                        jobModal.jobOfferModalForTodayJob(bookingInfo.getPickupAddress(),bookingInfo.getDestinationAddress(),bookingInfo.getPrice(),
-                                                bookingInfo.getPickupDateTime(),bookingInfo.getPassengerName(),bookingInfo.getBookingId());
-                                    }
-                                    else{
-                                        jobStatusModal.openModal(booking.getBookingId());
-                                    }
-                                }
-
-                                @Override
-                                public void onfailer(String error) {
-
-                                }
-                            });
+                            handleJobStart(booking);
                         }
                     }));
+
                 } else {
                     Toast.makeText(context, "Error fetching jobs: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
@@ -118,6 +78,67 @@ public class TodayJobManager {
             @Override
             public void onFailure(Call<TodayJobResponse> call, Throwable t) {
                 Toast.makeText(context, "Failed to fetch jobs. Check internet connection.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchBookingDetails(String bookingId) {
+        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+        getBookingInfoApi.getInfo(Integer.parseInt(bookingId), new GetBookingInfoApi.BookingCallback() {
+            @Override
+            public void onSuccess(GetBookingInfo bookingInfo) {
+                JobModal jobModal = new JobModal(context);
+                if (bookingInfo.getStatus() == null) {
+                    jobModal.notJobStartedYetModal();
+                } else {
+                    jobModal.JobViewForTodayJob(
+                            bookingInfo.getPickupAddress(),
+                            bookingInfo.getDestinationAddress(),
+                            bookingInfo.getPickupDateTime(),
+                            bookingInfo.getPassengerName(),
+                            bookingInfo.getBookingId(),
+                            bookingInfo.getStatus(),
+                            bookingInfo.getPrice()
+                    );
+                }
+            }
+
+            @Override
+            public void onfailer(String error) {
+                Toast.makeText(context, "Server error", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void handleJobStart(TodayBooking booking) {
+        JobStatusModal jobStatusModal = new JobStatusModal(context, fragmentManager);
+        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+
+        getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {
+            @Override
+            public void onSuccess(GetBookingInfo bookingInfo) {
+                Log.e("Booking Status", "Status: " + bookingInfo.getStatus());
+
+                if (bookingInfo.getStatus() == null) {
+                    JobModal jobModal = new JobModal(context);
+                    jobModal.jobOfferModalForTodayJob(
+                            bookingInfo.getPickupAddress(),
+                            bookingInfo.getDestinationAddress(),
+                            bookingInfo.getPrice(),
+                            bookingInfo.getPickupDateTime(),
+                            bookingInfo.getPassengerName(),
+                            bookingInfo.getBookingId()
+                    );
+                } else if ("3".equals(bookingInfo.getStatus())) {
+                    Toast.makeText(context, "Job already completed", Toast.LENGTH_SHORT).show();
+                } else {
+                    jobStatusModal.openModal(booking.getBookingId());
+                }
+            }
+
+            @Override
+            public void onfailer(String error) {
+                Toast.makeText(context, "Failed to update job status.", Toast.LENGTH_SHORT).show();
             }
         });
     }

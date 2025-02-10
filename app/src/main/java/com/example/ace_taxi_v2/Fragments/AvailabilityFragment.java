@@ -3,6 +3,8 @@ package com.example.ace_taxi_v2.Fragments;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.net.Uri;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +23,6 @@ import com.example.ace_taxi_v2.Logic.AvailabilityAddApi;
 import com.example.ace_taxi_v2.Logic.SessionManager;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,43 +33,140 @@ public class AvailabilityFragment extends Fragment {
     private MaterialButton dateButton;
     private Button custom_button;
     private Calendar selectedDate = Calendar.getInstance();
-    private SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+    private SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+    private SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.getDefault());
+    private String selectedDateStringForAPI; // Stores formatted date for API
     public RecyclerView recyclerView;
+    public SessionManager sessionManager;
+    public Button am_school_button,pm_school_button,am_pm_school_button,unavailable_button;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_availability, container, false);
+
+        // Initialize UI Elements
         dateButton = rootView.findViewById(R.id.date_button);
         dateButton.setOnClickListener(v -> showDatePicker());
         custom_button = rootView.findViewById(R.id.custom_button);
         recyclerView = rootView.findViewById(R.id.recyclar_view);
-        AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
-        availabilitiesApi.getAvailablities(recyclerView);
+        am_school_button = rootView.findViewById(R.id.am_school_button);
+        unavailable_button = rootView.findViewById(R.id.unavailable_button);
+        pm_school_button = rootView.findViewById(R.id.pm_school_button);
 
+        pm_school_button.setOnClickListener(v -> pmSchoolOnly());
+        am_school_button.setOnClickListener(v -> amSchoolOnly());
+        unavailable_button.setOnClickListener(v -> setUnavailable());
 
+        sessionManager = new SessionManager(getContext());
+
+       renderList();
+
+        // Navigate to Customer Form
         custom_button.setOnClickListener(view -> {
             Fragment selected = new CustomerForm();
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, selected);
             fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            fragmentTransaction.commitAllowingStateLoss();
         });
 
-        updateDateButtonText();
+        updateDateButtonText(); // Set default date on button
         return rootView;
     }
 
+    public void renderList(){
+        AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
+        availabilitiesApi.getAvailablities(recyclerView);
+    }
+
+    // Show Date Picker and then Time Picker
     private void showDatePicker() {
         new DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
-            selectedDate.set(year, month, dayOfMonth, 0, 0, 0);
-            updateDateButtonText();
+            selectedDate.set(year, month, dayOfMonth);
+            showTimePicker(); // After selecting date, open time picker
         }, selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void updateDateButtonText() {
-        String formattedDate = isoDateFormat.format(selectedDate.getTime());
-        dateButton.setText(formattedDate);
+    // Show Time Picker
+    private void showTimePicker() {
+        new TimePickerDialog(requireContext(), (view, hourOfDay, minute) -> {
+            selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            selectedDate.set(Calendar.MINUTE, minute);
+            selectedDate.set(Calendar.SECOND, 0);
+            selectedDate.set(Calendar.MILLISECOND, 0);
+
+            updateDateButtonText(); // Update button with formatted date
+        }, selectedDate.get(Calendar.HOUR_OF_DAY), selectedDate.get(Calendar.MINUTE), true).show();
     }
+
+    // Update button text (Readable format) and store API-formatted date
+    private void updateDateButtonText() {
+        selectedDateStringForAPI = apiDateFormat.format(selectedDate.getTime()); // API Format
+        dateButton.setText(displayDateFormat.format(selectedDate.getTime())); // Display Format
+    }
+
+    // Send formatted date to API
+    public void amSchoolOnly() {
+        int userId = sessionManager.getUserId();
+
+        if (selectedDateStringForAPI == null) {
+            Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 1, "Am only");
+
+        Toast.makeText(getContext(), "Availability added successfully!", Toast.LENGTH_SHORT).show();
+        try {
+            Thread.sleep(2000);
+            renderList();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void pmSchoolOnly(){
+        int userId = sessionManager.getUserId();
+
+        if (selectedDateStringForAPI == null) {
+            Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 1, "PM only");
+
+        Toast.makeText(getContext(), "Availability added successfully!", Toast.LENGTH_SHORT).show();
+        try {
+            Thread.sleep(2000);
+            renderList();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setUnavailable(){
+        int userId = sessionManager.getUserId();
+
+        if (selectedDateStringForAPI == null) {
+            Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "00:00", "23:59", true, 1, "Unavailable All Day");
+
+        Toast.makeText(getContext(), "added successfully!", Toast.LENGTH_SHORT).show();
+        try {
+            Thread.sleep(2000);
+            renderList();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
+

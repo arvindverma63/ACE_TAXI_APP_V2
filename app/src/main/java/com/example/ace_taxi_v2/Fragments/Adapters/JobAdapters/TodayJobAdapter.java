@@ -1,5 +1,6 @@
 package com.example.ace_taxi_v2.Fragments.Adapters.JobAdapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.example.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.example.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
@@ -19,8 +22,10 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
     private final List<TodayBooking> jobList;
     private final OnItemClickListener listener;
+    private final Context context;
 
-    public TodayJobAdapter(List<TodayBooking> jobList, OnItemClickListener listener) {
+    public TodayJobAdapter(Context context, List<TodayBooking> jobList, OnItemClickListener listener) {
+        this.context = context;
         this.jobList = jobList;
         this.listener = listener;
     }
@@ -44,7 +49,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
         return jobList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView timeTextView;
         private final TextView customerTextView;
@@ -74,8 +79,57 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
             mainAddressTextView.setText(job.getPickupAddress());
             subAddressTextView.setText(job.getDestinationAddress());
 
+            // Check job status on load and update button accordingly
+            GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+            getBookingInfoApi.getInfo(job.getBookingId(), new GetBookingInfoApi.BookingCallback() {
+                @Override
+                public void onSuccess(com.example.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
+                    if ("3".equals(bookingInfo.getStatus())) {
+                        startButton.setText("Completed");
+                        startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
+                        startButton.setEnabled(false); // Disable button after completion
+                    }
+                    if ("2".equals(bookingInfo.getStatus())) {
+                        startButton.setText("Rejected");
+                        startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
+                        startButton.setEnabled(false); // Disable button after completion
+                    }
+
+                }
+
+                @Override
+                public void onfailer(String error) {
+                    // Handle failure (optional logging or error message)
+                }
+            });
+
             viewButton.setOnClickListener(v -> listener.onViewClick(job));
-            startButton.setOnClickListener(v -> listener.onStartClick(job));
+
+            startButton.setOnClickListener(v -> {
+                listener.onStartClick(job);
+
+                // Update button dynamically when job is completed
+                getBookingInfoApi.getInfo(job.getBookingId(), new GetBookingInfoApi.BookingCallback() {
+                    @Override
+                    public void onSuccess(com.example.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
+                        if ("3".equals(bookingInfo.getStatus())) {
+                            startButton.setText("Completed");
+                            startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
+                            startButton.setEnabled(false);
+                        }
+                        if ("2".equals(bookingInfo.getStatus())) {
+                            startButton.setText("Rejected");
+                            startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
+                            startButton.setEnabled(false); // Disable button after completion
+                        }
+                    }
+
+                    @Override
+                    public void onfailer(String error) {
+                        // Handle failure scenario
+                    }
+                });
+            });
         }
     }
 

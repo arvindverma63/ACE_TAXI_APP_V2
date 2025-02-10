@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ace_taxi_v2.Activity.HomeActivity;
 import com.example.ace_taxi_v2.Logic.ArrivedJobApi;
+import com.example.ace_taxi_v2.Logic.BookingCompleteApi;
 import com.example.ace_taxi_v2.Logic.JobResponseApi;
 import com.example.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.example.ace_taxi_v2.R;
@@ -378,4 +379,56 @@ public class JobModal {
             alertDialog.dismiss();
         });
     }
+
+    public void jobCompleteBooking(int bookingId) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.complete_job, null);
+
+        // Initialize views
+        Button closeBtn = dialogView.findViewById(R.id.btnSubmit);
+        TextView etWaitingTime = dialogView.findViewById(R.id.etWaitingTime);
+        TextView etParking = dialogView.findViewById(R.id.etParking);
+        TextView etPrice = dialogView.findViewById(R.id.etPrice);
+        TextView tvJobId = dialogView.findViewById(R.id.tvJobId);
+
+        tvJobId.setText(""+bookingId);
+
+        // Show the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView);
+        builder.setCancelable(true);
+        AlertDialog alertDialog = builder.create();
+
+        // Set transparent background for the dialog window
+        if (alertDialog.getWindow() != null) {
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        // Apply rounded background programmatically
+        dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
+
+        alertDialog.show();
+
+        // Handle submit button click
+        closeBtn.setOnClickListener(view -> {
+            // Extract user inputs
+            String waitingTimeStr = etWaitingTime.getText().toString().trim();
+            String parkingStr = etParking.getText().toString().trim();
+            String priceStr = etPrice.getText().toString().trim();
+
+            // Convert to numeric values (handle empty input safely)
+            double waitingTime = waitingTimeStr.isEmpty() ? 0 : Double.parseDouble(waitingTimeStr);
+            double parking = parkingStr.isEmpty() ? 0 : Double.parseDouble(parkingStr);
+            double price = priceStr.isEmpty() ? 0 : Double.parseDouble(priceStr);
+
+            // Call API with correct data types
+            BookingCompleteApi bookingCompleteApi = new BookingCompleteApi(context);
+            bookingCompleteApi.complete(bookingId, (int) waitingTime, (int) parking, price, 0);
+
+            // Dismiss dialog and navigate to HomeActivity
+            alertDialog.dismiss();
+
+        });
+    }
+
 }
