@@ -26,14 +26,12 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="2dp"
             app:cardCornerRadius="8dp"
             android:layout_marginLeft="8dp"
             android:id="@+id/profile_activity"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="10dp"
             style="@style/CardBG"
-            android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
 
             <LinearLayout
@@ -62,14 +60,12 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="2dp"
             android:id="@+id/upload_document"
             app:cardCornerRadius="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="10dp"
             style="@style/CardBG"
-            android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
 
             <LinearLayout
@@ -98,13 +94,11 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="2dp"
             app:cardCornerRadius="8dp"
             style="@style/CardBG"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="0dp"
-            android:foreground="?attr/selectableItemBackground"
+            android:layout_marginBottom="10dp"
             android:clickable="true">
 
             <LinearLayout
@@ -132,14 +126,12 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="2dp"
             app:cardCornerRadius="8dp"
             style="@style/CardBG"
             android:id="@+id/new_expenses"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="0dp"
-            android:foreground="?attr/selectableItemBackground"
+            android:layout_marginBottom="10dp"
             android:clickable="true">
 
             <LinearLayout
@@ -168,14 +160,12 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="2dp"
             app:cardCornerRadius="8dp"
             style="@style/CardBG"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="10dp"
             android:id="@+id/view_expenses"
-            android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
 
             <LinearLayout
