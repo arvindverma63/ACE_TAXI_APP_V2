@@ -60,7 +60,7 @@
             app:icon="@drawable/ic_view"
             android:textColor="@color/white"
             android:textSize="14sp"
-            app:cornerRadius="12dp"
+            app:cornerRadius="20dp"
             app:iconGravity="textStart"
             app:iconPadding="4dp"
             app:iconTint="@color/white"

@@ -63,7 +63,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1"
-                android:textSize="12sp"
                 style="@style/TextBG"/>
         </LinearLayout>
 
@@ -118,7 +117,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="price"
-                android:textSize="12sp"
                 style="@style/TextBG"/>
         </LinearLayout>
 
@@ -145,7 +143,7 @@
                 android:textAllCaps="true"
                 app:backgroundTint="@color/green"
                 android:textColor="@color/white"
-                app:cornerRadius="12dp"
+                app:cornerRadius="20dp"
                 app:elevation="3dp"
                 android:layout_marginEnd="6dp"/>
 
@@ -157,7 +155,7 @@
                 android:textAllCaps="true"
                 app:backgroundTint="@color/blue"
                 android:textColor="@color/white"
-                app:cornerRadius="12dp"
+                app:cornerRadius="20dp"
                 app:elevation="3dp"/>
         </LinearLayout>
     </LinearLayout>

@@ -1,0 +1,72 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="@color/white"
+    android:gravity="center_vertical">
+
+    <!-- Left Logo -->
+    <ImageView
+        android:id="@+id/companyLogo"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_logo_ace"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="8dp"/>
+
+    <!-- Job Details -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Job Title & Company -->
+        <TextView
+            android:id="@+id/jobTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WordPress Developer at "
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WapVenture"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <!-- Additional Recommendations -->
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="and 7 other recommendations for you."
+            android:textSize="12sp"
+            android:textColor="@color/gray"/>
+    </LinearLayout>
+
+    <!-- View Jobs Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/viewJobsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View jobs"
+        app:cornerRadius="50dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/blue"
+        app:backgroundTint="@android:color/white"
+        android:textColor="@color/blue"
+        android:textSize="12sp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:layout_marginStart="12dp"/>
+
+</LinearLayout>

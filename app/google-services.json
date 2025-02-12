@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:498604695616:android:fab54ae4348c8fc621bfa5",
         "android_client_info": {
-          "package_name": "com.example.ace_taxi_v2"
+          "package_name": "com.app.ace_taxi_v2"
         }
       },
       "oauth_client": [
@@ -38,7 +38,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:498604695616:android:91fea8bea8c5a50421bfa5",
         "android_client_info": {
-          "package_name": "com.example.joyride"
+          "package_name": "com.app.joyride"
         }
       },
       "oauth_client": [

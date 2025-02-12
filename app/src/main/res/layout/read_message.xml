@@ -44,25 +44,7 @@
                 android:padding="8dp"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Customer Name -->
-            <TextView
-                android:id="@+id/tvCustomerName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="LEE CHRISTOPHER"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
 
-            <!-- Date and Time -->
-            <TextView
-                android:id="@+id/tvDateTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="23/01/2025 – 13:00"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
 
             <!-- Message -->
             <TextView
@@ -81,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="OK"
-                app:cornerRadius="8dp"
+                app:cornerRadius="20dp"
                 android:backgroundTint="@color/dark_blue"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"/>
