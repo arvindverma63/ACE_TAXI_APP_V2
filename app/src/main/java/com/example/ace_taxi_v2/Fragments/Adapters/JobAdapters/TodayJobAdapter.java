@@ -51,7 +51,6 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView timeTextView;
         private final TextView customerTextView;
         private final TextView mainAddressTextView;
         private final TextView subAddressTextView;
@@ -59,11 +58,12 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
         private final MaterialButton startButton;
         private final ImageView clockIcon;
         private final ImageView personIcon;
+        private final TextView price;
+        private final TextView pickupAddress,destinationAddress;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            timeTextView = itemView.findViewById(R.id.timeTextView);
             customerTextView = itemView.findViewById(R.id.customer);
             mainAddressTextView = itemView.findViewById(R.id.mainAddressTextView);
             subAddressTextView = itemView.findViewById(R.id.subAddressTextView);
@@ -71,13 +71,30 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
             startButton = itemView.findViewById(R.id.startButton);
             clockIcon = itemView.findViewById(R.id.clockIcon);
             personIcon = itemView.findViewById(R.id.person);
+            price = itemView.findViewById(R.id.price);
+            pickupAddress = itemView.findViewById(R.id.pickupAddress);
+            destinationAddress = itemView.findViewById(R.id.destinationAddress);
         }
 
         public void bind(TodayBooking job, OnItemClickListener listener) {
-            timeTextView.setText(job.getPickupDateTime());
+            String pickup = job.getPickupAddress();
+            String[] pickupParts = pickup.split(",");
+            String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
+            String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() : "";
+
+            String destination = job.getDestinationAddress();
+            String[] destinationParts = destination.split(",");
+            String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
+            String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() : "";
+
             customerTextView.setText(String.valueOf(job.getPassengers()));
-            mainAddressTextView.setText(job.getPickupAddress());
-            subAddressTextView.setText(job.getDestinationAddress());
+            mainAddressTextView.setText(firstPickup);
+            subAddressTextView.setText(firstDestination);
+            price.setText("£" + job.getPrice());
+
+            pickupAddress.setText(lastPickup);
+            destinationAddress.setText(lastDestination);
+
 
             // Check job status on load and update button accordingly
             GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);

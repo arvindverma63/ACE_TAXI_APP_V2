@@ -1,6 +1,7 @@
 package com.example.ace_taxi_v2.Logic;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.ace_taxi_v2.ApiService.ApiService;
@@ -30,14 +31,15 @@ public class JobStatusReply {
         apiService.jobStatus(token,jobno,status).enqueue(new Callback<JobStatusModel>() {
             @Override
             public void onResponse(Call<JobStatusModel> call, Response<JobStatusModel> response) {
+                Log.e("job stauts modal status ","response : "+response);
                 if(response.isSuccessful()){
                     Toast.makeText(context, "Job Updated Successfully", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<JobStatusModel> call, Throwable t) {
                 Toast.makeText(context, "Nothing get from server", Toast.LENGTH_SHORT).show();
+                Log.e("exception from server","error"+t);
             }
         });
         customDialog.dismissProgressDialog();

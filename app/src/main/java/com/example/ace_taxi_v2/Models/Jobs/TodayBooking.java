@@ -107,6 +107,28 @@ public class TodayBooking {
     }
 
     public String getEndTime() {
+        try {
+            // Parse the ISO 8601 datetime string
+            LocalDateTime dateTime = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                dateTime = LocalDateTime.parse(endTime);
+            }
+
+            // Define the desired output format
+            DateTimeFormatter formatter = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a");
+            }
+
+            // Format the parsed datetime and return
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return dateTime.format(formatter);
+            }
+        } catch (Exception e) {
+            // Handle parsing errors gracefully
+            e.printStackTrace();
+            return pickupDateTime; // Return the original if formatting fails
+        }
         return endTime;
     }
 
@@ -145,6 +167,5 @@ public class TodayBooking {
     public void setPassengerName(String passengerName) {
         this.passengerName = passengerName;
     }
-
 
 }

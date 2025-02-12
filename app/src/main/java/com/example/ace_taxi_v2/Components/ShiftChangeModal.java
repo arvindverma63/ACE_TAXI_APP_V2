@@ -1,21 +1,26 @@
 package com.example.ace_taxi_v2.Components;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.example.ace_taxi_v2.Fragments.BookingFragment;
 import com.example.ace_taxi_v2.Logic.UpdateDriverShiftApi;
 import com.example.ace_taxi_v2.R;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 
 public class ShiftChangeModal {
     private final Context context;
     private final FragmentManager fragmentManager; // Pass FragmentManager to avoid errors
-    private BottomSheetDialog bottomSheetDialog;
+    private Dialog topSheetDialog;
 
     public ShiftChangeModal(Context context, FragmentManager fragmentManager) {
         this.context = context;
@@ -23,19 +28,34 @@ public class ShiftChangeModal {
     }
 
     public void openModal() {
-        // Initialize BottomSheetDialog
-        bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = LayoutInflater.from(context).inflate(R.layout.update_shift_status, null);
-        bottomSheetDialog.setContentView(bottomSheetView);
+        // Initialize Dialog (Instead of BottomSheetDialog)
+        topSheetDialog = new Dialog(context, R.style.TopSheetDialogTheme);
+        View topSheetView = LayoutInflater.from(context).inflate(R.layout.update_shift_status, null);
+        topSheetDialog.setContentView(topSheetView);
+
+        // Set window properties
+        Window window = topSheetDialog.getWindow();
+        if (window != null) {
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setGravity(Gravity.TOP);
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+            window.setDimAmount(0.5f); // Slight dim effect behind the dialog
+            window.setWindowAnimations(R.style.TopSheetDialogAnimation); // Apply custom animation
+
+            // Ensure it appears at the very top
+            WindowManager.LayoutParams layoutParams = window.getAttributes();
+            layoutParams.y = 0; // Set Y position to ensure it's at the top
+            window.setAttributes(layoutParams);
+        }
 
         UpdateDriverShiftApi updateDriverShiftApi = new UpdateDriverShiftApi(context);
 
         // Get button references
-        MaterialButton startShift = bottomSheetView.findViewById(R.id.btn_start_shift);
-        MaterialButton finishShift = bottomSheetView.findViewById(R.id.btn_finish);
-        MaterialButton startBreak = bottomSheetView.findViewById(R.id.btn_on_break);
-        MaterialButton finishBreak = bottomSheetView.findViewById(R.id.btn_finish_break);
-        MaterialButton rankMap = bottomSheetView.findViewById(R.id.btn_rank_up);
+        MaterialButton startShift = topSheetView.findViewById(R.id.btn_start_shift);
+        MaterialButton finishShift = topSheetView.findViewById(R.id.btn_finish);
+        MaterialButton startBreak = topSheetView.findViewById(R.id.btn_on_break);
+        MaterialButton finishBreak = topSheetView.findViewById(R.id.btn_finish_break);
+        MaterialButton rankMap = topSheetView.findViewById(R.id.btn_rank_up);
 
         // Button Click Listeners
         startShift.setOnClickListener(v -> {
@@ -63,7 +83,7 @@ public class ShiftChangeModal {
             dismissModal();
         });
 
-        bottomSheetDialog.show();
+        topSheetDialog.show();
     }
 
     // Open BookingFragment safely
@@ -76,8 +96,8 @@ public class ShiftChangeModal {
 
     // Dismiss modal safely to avoid memory leaks
     private void dismissModal() {
-        if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
-            bottomSheetDialog.dismiss();
+        if (topSheetDialog != null && topSheetDialog.isShowing()) {
+            topSheetDialog.dismiss();
         }
     }
 }

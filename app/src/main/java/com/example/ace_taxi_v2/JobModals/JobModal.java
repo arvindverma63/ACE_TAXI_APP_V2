@@ -18,6 +18,7 @@ import com.example.ace_taxi_v2.Logic.BookingCompleteApi;
 import com.example.ace_taxi_v2.Logic.JobResponseApi;
 import com.example.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.example.ace_taxi_v2.R;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.w3c.dom.Text;
 
@@ -120,51 +121,35 @@ public class JobModal {
     }
 
 
-    public void jobOfferModalForTodayJob(String pickupAddress, String destinationAddress, double price, String pickupDate, String passengerName,int bookingId){
+    public void jobOfferModalForTodayJob(String pickupAddress, String destinationAddress, double price, String pickupDate, String passengerName, int bookingId) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.job_offer,null);
+        View dialogView = inflater.inflate(R.layout.job_status_reply, null);
 
-        TextView pickup_address = dialogView.findViewById(R.id.pickup_address);
-        TextView destination_address = dialogView.findViewById(R.id.destination_address);
-        TextView fairy_price = dialogView.findViewById(R.id.price);
-        TextView pickupDateAndTime = dialogView.findViewById(R.id.pickup_date);
-        TextView passenger_name = dialogView.findViewById(R.id.passenger_name);
+
         Button acceptButton = dialogView.findViewById(R.id.accept_button);
+        Button rejectBooking = dialogView.findViewById(R.id.reject_button);
+
         JobResponseApi jobResponseApi = new JobResponseApi(context);
 
 
-        Button rejectBooking = dialogView.findViewById(R.id.reject_button);
+        // Initialize BottomSheetDialog
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog.setContentView(dialogView);
 
-
-        pickup_address.setText(""+pickupAddress);
-        destination_address.setText(""+destinationAddress);
-        fairy_price.setText("£"+price);
-        pickupDateAndTime.setText(""+pickupDate);
-        passenger_name.setText(""+passengerName);
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(dialogView);
-
-        AlertDialog alertDialog = builder.create();
-        // Set transparent background for the dialog window
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        // Apply rounded background programmatically
+        // Set transparent background & apply rounded background
         dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
 
-        alertDialog.show();
+        bottomSheetDialog.show();
+
         acceptButton.setOnClickListener(view -> {
             jobResponseApi.acceptResponse(bookingId);
-            Log.d("Accept Job Button clicked",""+bookingId);
-            alertDialog.dismiss();
-
+            Log.d("Accept Job Button clicked", "" + bookingId);
+            bottomSheetDialog.dismiss();
         });
+
         rejectBooking.setOnClickListener(view -> {
             jobResponseApi.rejectBooking(bookingId);
-            alertDialog.dismiss();
+            bottomSheetDialog.dismiss();
         });
     }
 

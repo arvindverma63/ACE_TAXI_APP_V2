@@ -48,6 +48,17 @@
             <item name="android:paddingBottom">4dp</item>
         </style>
 
+    <style name="TopSheetDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/style_top_sheet_dialog</item>
+    </style>
+    <style name="TopSheetDialogTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+
 
 
 </resources>

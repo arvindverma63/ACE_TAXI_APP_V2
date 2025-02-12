@@ -32,13 +32,9 @@ public class TodayFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_today, container, false);
 
-        // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclar_view);
-
         TodayJobManager todayJobManager = new TodayJobManager(getContext(), getActivity().getSupportFragmentManager());
         todayJobManager.getTodayJobs(view,recyclerView);
-
-
         return view;
     }
 

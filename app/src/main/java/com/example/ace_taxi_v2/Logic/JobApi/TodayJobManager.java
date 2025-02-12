@@ -127,7 +127,7 @@ public class TodayJobManager {
                             bookingInfo.getPrice(),
                             bookingInfo.getPickupDateTime(),
                             bookingInfo.getPassengerName(),
-                            bookingInfo.getBookingId()
+                            booking.getBookingId()
                     );
                 } else if ("3".equals(bookingInfo.getStatus())) {
                     Toast.makeText(context, "Job already completed", Toast.LENGTH_SHORT).show();

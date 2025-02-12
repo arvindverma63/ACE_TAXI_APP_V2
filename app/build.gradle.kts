@@ -8,7 +8,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.ace_taxi_v2"
+        applicationId = "com.exanple.ace_taxi_v2"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
