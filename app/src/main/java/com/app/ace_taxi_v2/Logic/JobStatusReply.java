@@ -32,7 +32,7 @@ public class JobStatusReply {
             @Override
             public void onResponse(Call<JobStatusModel> call, Response<JobStatusModel> response) {
                 Log.e("job stauts modal status ","response : "+response);
-                if(response.isSuccessful()){
+                if(response.code() == 200){
                     Toast.makeText(context, "Job Updated Successfully", Toast.LENGTH_SHORT).show();
                 }
             }

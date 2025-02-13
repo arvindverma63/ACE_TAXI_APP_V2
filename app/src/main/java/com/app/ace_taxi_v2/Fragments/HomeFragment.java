@@ -6,16 +6,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
+import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
+import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
+import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.R;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -24,10 +31,21 @@ public class HomeFragment extends Fragment {
     private Switch locationSwitch;
     private TextView onlineStatusLabel;
     private LocationPermissions locationPermissions;  // LocationPermissions instance
+    public TextView pickup_address,destination_address,pickup_subaddress,destination_subaddress,date,price,passenger_count,passenger_name;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        pickup_address = view.findViewById(R.id.pickup_address);
+        destination_address = view.findViewById(R.id.destination_address);
+        pickup_subaddress = view.findViewById(R.id.pickup_subaddress);
+        destination_subaddress = view.findViewById(R.id.destination_subaddress);
+        date = view.findViewById(R.id.current_date);
+        price = view.findViewById(R.id.current_price);
+        passenger_count = view.findViewById(R.id.current_passenger_count);
+        passenger_name = view.findViewById(R.id.passenger_name);
+
 
         // Check user session
         if (getActivity() == null) return view;
@@ -38,6 +56,7 @@ public class HomeFragment extends Fragment {
             getActivity().finish();
             return view;
         }
+        getCurrentBooking();
 
         // Initialize UI components
         locationSwitch = view.findViewById(R.id.online_toggle);
@@ -72,4 +91,64 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+
+    public void getCurrentBooking(){
+        CurrentBooking currentBooking = new CurrentBooking(getContext());
+        currentBooking.getCurrentBooking(new CurrentBooking.CurrentJobCallback() {
+            @Override
+            public void onSuccess(List<TodayBooking> list) {
+                for(int i = 0;i<list.size();i++){
+                    if (list.get(i).getStatus().equals("1")) {  // Correct way to compare strings
+                        String pickup = list.get(i).getPickupAddress();
+                        String[] pickupParts = pickup.split(",");
+                        String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
+                        String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim()+list.get(i).getPickupPostCode() : list.get(i).getPickupPostCode();
+
+                        String destination = list.get(i).getDestinationAddress();
+                        String[] destinationParts = destination.split(",");
+                        String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
+                        String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim()+list.get(i).getDestinationPostCode() : list.get(i).getDestinationPostCode();
+
+                        pickup_address.setText(firstPickup);
+                        pickup_subaddress.setText(lastPickup);
+                        destination_address.setText(firstDestination);
+                        destination_subaddress.setText(lastDestination);
+                        price.setText("£"+list.get(i).getPrice());
+                        date.setText(list.get(i).getPickupDateTime());
+                        passenger_count.setText(""+list.get(i).getPassengers());
+                        passenger_name.setText(list.get(i).getPassengerName());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+//    public void updateStatus() {
+//        CurrentShiftStatus currentShiftStatus = new CurrentShiftStatus(getContext());
+//        String current_status = currentShiftStatus.getStatus();
+//
+//        if (current_status != null) {
+//            if (current_status.equals("onShift")) {
+//                driver_shift.setText("On Shift");
+//                driver_shift.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.green));
+//            } else if (current_status.equals("onBreak")) {
+//                driver_shift.setText("On Break");
+//                driver_shift.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.red));
+//            } else if (current_status.equals("onFinish")) {
+//                driver_shift.setText("On Finish");
+//                driver_shift.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.blue));
+//            } else if (current_status.equals("onFinishBreak")) {
+//                driver_shift.setText("Break Finish");
+//                driver_shift.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.orange));
+//            } else {
+//                driver_shift.setText("No Shift");
+//                driver_shift.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.darkCard));
+//            }
+//        }
+//    }
+
 }

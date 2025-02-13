@@ -33,7 +33,7 @@ public class UploadDocumentApi {
         apiService.uploadDoc(token, type, body).enqueue(new Callback<ImageUploadResponse>() {
             @Override
             public void onResponse(Call<ImageUploadResponse> call, Response<ImageUploadResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.code() == 200) {
                     Toast.makeText(context, "Upload Successful!", Toast.LENGTH_SHORT).show();
                     Log.d("UploadDocumentApi", "Upload successful: " + response.body());
                 } else {

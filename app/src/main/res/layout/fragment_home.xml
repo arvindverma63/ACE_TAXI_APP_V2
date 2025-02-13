@@ -54,15 +54,17 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Bobst Library"
+                        android:id="@+id/pickup_address"
+                        android:text="---- -----"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         style="@style/TextBG"/>
 
                     <TextView
                         android:layout_width="match_parent"
+                        android:id="@+id/pickup_subaddress"
                         android:layout_height="wrap_content"
-                        android:text="70 Washington Square S, NY 10012, USA"
+                        android:text="------------ -------"
                         android:textSize="14sp"
                         android:textColor="@color/gray" />
                 </LinearLayout>
@@ -70,7 +72,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10:00 AM"
+                    android:text="-----"
+                    android:id="@+id/current_price"
                     android:textSize="14sp"
                     style="@style/TextBG"/>
             </LinearLayout>
@@ -101,9 +104,10 @@
                     android:layout_weight="1">
 
                     <TextView
+                        android:id="@+id/destination_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Larchmont Hotel"
+                        android:text="--- -------"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         style="@style/TextBG"/>
@@ -111,7 +115,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="27 W Main St, NY 10538, USA"
+                        android:id="@+id/destination_subaddress"
+                        android:text="--------, --------"
                         android:textSize="14sp"
                         android:textColor="@color/gray" />
                 </LinearLayout>
@@ -119,7 +124,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10:08 AM"
+                    android:text="------"
+                    android:id="@+id/current_passenger_count"
                     android:textSize="14sp"
                     style="@style/TextBG"/>
             </LinearLayout>
@@ -134,14 +140,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Today, Dec 22, 2024"
+                    android:text="----"
+                    android:id="@+id/current_date"
                     android:textSize="14sp"
                     style="@style/TextBG"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8 mins (estimated)"
+                    android:text="-----------"
+                    android:id="@+id/passenger_name"
                     android:textSize="14sp"
                     android:layout_marginLeft="20dp"
                     android:textColor="@color/gray" />

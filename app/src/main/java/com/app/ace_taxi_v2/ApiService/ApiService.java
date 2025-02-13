@@ -86,7 +86,7 @@ public interface ApiService {
                                       @Query("response") int response);
 
     @GET("/api/DriverApp/DriverShift")
-    Call<DriverShiftResponse> driverShift(@Header("Authorization") String token,
+    Call<Void> driverShift(@Header("Authorization") String token,
                                           @Query("userid") int userid,
                                           @Query("status") int status);
 
@@ -143,5 +143,6 @@ public interface ApiService {
     @POST("/api/LocalPOI/GetPOI")
     Call<List<LocalPOIResponse>> autoComplete(@Header("Authorization") String token,
                                         @Body LocalPOIRequest localPOIRequest);
+
 
 }

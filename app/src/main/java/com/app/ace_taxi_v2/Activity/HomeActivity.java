@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.ContextThemeWrapper;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -42,6 +45,7 @@ import com.app.ace_taxi_v2.Fragments.ReportPageFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Logic.Service.ConfigSessionManager;
+import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.UpdateDriverShiftApi;
@@ -178,9 +182,7 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
+
     @SuppressLint("ResourceType")
     public void showHamMenu(View view) {
         ShiftChangeModal changeModal = new ShiftChangeModal(this,getSupportFragmentManager());
@@ -237,8 +239,9 @@ public class HomeActivity extends AppCompatActivity {
 
         int count = notificationModalSession.getNotificationCount();
 
-        // Ensure UI updates on the main thread
+
         runOnUiThread(() -> {
+
             if (count > 0) {
                 notificationCount.setText(String.valueOf(count));
                 notificationCount.setVisibility(View.VISIBLE);
@@ -311,5 +314,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }

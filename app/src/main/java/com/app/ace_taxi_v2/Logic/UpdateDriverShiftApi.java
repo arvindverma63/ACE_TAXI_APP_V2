@@ -5,7 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
-import com.app.ace_taxi_v2.Models.DriverShiftResponse;
+import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,28 +22,64 @@ public class UpdateDriverShiftApi {
         String token = sessionManager.getToken();
         int userId = sessionManager.getUserId();
 
+        if (token == null || token.isEmpty()) {
+            Log.e("DriverShiftAPI", "Token is null or empty!");
+            Toast.makeText(context, "Authentication failed. Please log in again.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.driverShift(token, userId, status).enqueue(new Callback<DriverShiftResponse>() {
+        apiService.driverShift(token, userId, status).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<DriverShiftResponse> call, Response<DriverShiftResponse> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.d("DriverShiftAPI", "Response Code: " + response.code());
 
+                if (response.code() == 204) { // No content
+                    Log.d("DriverShiftAPI", "No content received but request succeeded");
+                    Toast.makeText(context, "Status updated successfully", Toast.LENGTH_LONG).show();
+                    updateCurrentStatus(status);
+                    return;
+                }
+
                 if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        Toast.makeText(context, "Status updated successfully", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(context, "Status updated, but no response body", Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(context, "Status updated successfully", Toast.LENGTH_LONG).show();
+                    updateCurrentStatus(status);
                 } else {
-                    Toast.makeText(context, "API Error: " + response.code(), Toast.LENGTH_LONG).show();
+                    try {
+                        Log.e("DriverShiftAPI", "API Error Response: " + response.errorBody().string());
+                    } catch (Exception e) {
+                        Log.e("DriverShiftAPI", "Error reading errorBody", e);
+                    }
+                    Toast.makeText(context, "Error: " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<DriverShiftResponse> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.e("DriverShiftAPI", "API Call Failed: " + t.getMessage());
-                Toast.makeText(context, "Network Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Network error. Please try again.", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void updateCurrentStatus(int status) {
+        CurrentShiftStatus currentShiftStatus = new CurrentShiftStatus(context);
+        switch (status) {
+            case 1000:
+                currentShiftStatus.saveStatus("onShift");
+                break;
+            case 1001:
+                currentShiftStatus.saveStatus("onFinish");
+                break;
+            case 1002:
+                currentShiftStatus.saveStatus("onBreak");
+                break;
+            case 1003:
+                currentShiftStatus.saveStatus("onBreakFinish");
+                break;
+            default:
+                Log.w("DriverShiftAPI", "Unknown status received: " + status);
+                break;
+        }
     }
 }

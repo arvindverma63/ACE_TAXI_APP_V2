@@ -1,194 +1,322 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Message Box -->
-<com.google.android.material.card.MaterialCardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+<com.google.android.material.card.MaterialCardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp"
+    android:backgroundTint="@color/white"
+    android:layout_margin="5dp"
+    app:strokeColor="@color/gray"
     app:strokeWidth="1dp"
+    android:elevation="12dp"
     android:layout_marginBottom="16dp">
+
+
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:orientation="vertical"
-    style="@style/MainBG"
+    android:background="@color/light_gray"
     android:elevation="8dp">
-
-    <!-- Message Box -->
-    <com.google.android.material.card.MaterialCardView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        app:cardCornerRadius="16dp"
-        app:strokeWidth="1dp"
-        android:layout_marginBottom="16dp"
-        style="@style/CardBG">
-
-        <TextView
-            android:id="@+id/tv_message"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text=" .. You Can Change Your Shift Status from Here"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            style="@style/TextBG" />
-    </com.google.android.material.card.MaterialCardView>
-
-
+        android:layout_height="wrap_content"
+        android:text="Shift Options"
+        style="@style/TextBG"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"/>
 
     <!-- Buttons Row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:weightSum="5">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            app:cardCornerRadius="8dp"
+            android:id="@+id/start_shift_card"
+            android:layout_marginBottom="10dp"
+            app:strokeWidth="1dp"
+            style="@style/CardBG">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_start_shift"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_start"
-                app:cornerRadius="0dp"
-                app:iconGravity="end|start"
-                app:backgroundTint="@color/primaryColor"
-                app:iconTint="@color/white"
-                android:elevation="4dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start Shift"
-                android:textSize="12sp"
-                style="@style/TextBG"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center" />
-        </LinearLayout>
+                <!-- Button with Primary Color Background -->
+                <LinearLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_start_shift"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_start"
+                        android:backgroundTint="@color/primaryColor"
+                        app:backgroundTint="@android:color/transparent"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/white"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        style="@style/Widget.MaterialComponents.Button.Icon"/>
+                </LinearLayout>
+
+                <!-- Text beside button -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="Start Shift"
+                    style="@style/TextBG"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            app:cardCornerRadius="8dp"
+            android:id="@+id/finish_shift_card"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="10dp"
+            style="@style/CardBG">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_finish"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_finish"
-                app:cornerRadius="0dp"
-                android:backgroundTint="@color/blue"
-                app:iconGravity="end|start"
-                app:iconTint="@color/white"
-                android:elevation="4dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Finish"
-                android:textSize="12sp"
-                style="@style/TextBG"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center" />
-        </LinearLayout>
+                <!-- Button with Background -->
+                <LinearLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_finish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:icon="@drawable/ic_finish"
+                        app:backgroundTint="@android:color/transparent"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/white"
+                        android:backgroundTint="@color/blue"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        style="@style/Widget.MaterialComponents.Button.Icon"/>
+                </LinearLayout>
+
+                <!-- Text beside button -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="Finish"
+                    style="@style/TextBG"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            app:cardCornerRadius="8dp"
+            android:id="@+id/on_break_card"
+            android:layout_marginBottom="10dp"
+            app:strokeWidth="1dp"
+            style="@style/CardBG">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_on_break"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_break"
-                app:iconGravity="end|start"
-                app:cornerRadius="0dp"
-                app:backgroundTint="@color/green"
-                app:iconTint="@color/white"
-                android:elevation="4dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="On Break"
-                android:textSize="12sp"
-                style="@style/TextBG"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center" />
-        </LinearLayout>
+                <!-- Button with Green Background -->
+                <LinearLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_on_break"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_break"
+                        app:backgroundTint="@android:color/transparent"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/white"
+                        android:backgroundTint="@color/green"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        style="@style/Widget.MaterialComponents.Button.Icon"/>
+                </LinearLayout>
+
+                <!-- Text beside button -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="On Break"
+                    style="@style/TextBG"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            app:cardCornerRadius="8dp"
+            android:id="@+id/finish_break_card"
+            android:layout_marginBottom="10dp"
+            app:strokeWidth="1dp"
+            style="@style/CardBG">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_finish_break"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="4dp"
-                app:backgroundTint="@color/orange"
-                app:icon="@drawable/ic_finish_break"
-                app:iconGravity="end|start"
-                app:cornerRadius="0dp"
-                app:iconTint="@color/white"
-                tools:ignore="SpeakableTextPresentCheck" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Finish Break"
-                android:textSize="12sp"
-                style="@style/TextBG"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center" />
-        </LinearLayout>
+                <!-- Button with Orange Background -->
+                <LinearLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_finish_break"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/orange"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        app:backgroundTint="@android:color/transparent"
+                        app:icon="@drawable/ic_finish_break"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/white"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </LinearLayout>
+
+                <!-- Text beside button -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="Finish Break"
+                    style="@style/TextBG"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            app:cardCornerRadius="8dp"
+            android:id="@+id/rank_pickup_card"
+            app:strokeWidth="1dp"
+            style="@style/CardBG">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_rank_up"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_keep_alive"
-                app:iconGravity="end|start"
-                android:backgroundTint="@color/black"
-                app:cornerRadius="0dp"
-                app:iconTint="@color/white"
-                android:elevation="4dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rank UP"
-                android:textSize="12sp"
-                style="@style/TextBG"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center" />
-        </LinearLayout>
+                <!-- Button with Black Background -->
+                <LinearLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:layout_marginEnd="8dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_rank_up"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_keep_alive"
+                        app:backgroundTint="@android:color/transparent"
+                        app:iconGravity="textStart"
+                        android:backgroundTint="@color/black"
+                        app:iconTint="@color/white"
+                        android:insetLeft="0dp"
+                        android:insetRight="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        style="@style/Widget.MaterialComponents.Button.Icon"/>
+                </LinearLayout>
+
+                <!-- Text beside button -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="Rank UP"
+                    style="@style/TextBG"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X"
+        android:layout_gravity="center"
+        style="@style/TextBG"
+        android:layout_marginTop="10dp"
+        android:id="@+id/close_shift_dialog"/>
 </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

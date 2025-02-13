@@ -24,9 +24,9 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
+                style="@style/ActionBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                style="@style/ActionBar"
                 android:contentInsetStartWithNavigation="0dp">
 
                 <FrameLayout
@@ -36,78 +36,74 @@
                     <!-- Notification Icon -->
                     <ImageView
                         android:id="@+id/notificationIcon"
+                        style="@style/IconTint"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:src="@drawable/ic_notification"
-                        style="@style/IconTint"
-                        android:contentDescription="Notification Icon" />
+                        android:contentDescription="Notification Icon"
+                        android:src="@drawable/ic_notification" />
 
                     <!-- Notification Count Badge -->
                     <TextView
                         android:id="@+id/notificationCount"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
+                        android:layout_gravity="end|top"
                         android:background="@drawable/circular_badge"
                         android:gravity="center"
+                        android:minWidth="16dp"
+                        android:minHeight="16dp"
+                        android:padding="2dp"
                         android:text="1"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:textStyle="bold"
-                        android:minWidth="16dp"
-                        android:minHeight="16dp"
-                        android:padding="2dp"
-                        android:layout_gravity="end|top"
                         android:translationX="0dp"
-                        android:translationY="0dp"/>
+                        android:translationY="0dp" />
                 </FrameLayout>
-
-
-
 
 
 
                 <!-- Centered Title -->
                 <TextView
                     android:id="@+id/toolbar_title"
+                    style="@style/TextBG"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="ACE TAXI"
-                    style="@style/TextBG"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
+                    android:id="@+id/ham_menu"
+                    style="@style/IconTint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
                     android:padding="8dp"
-                    style="@style/IconTint"
-                    android:id="@+id/ham_menu"
                     android:src="@drawable/ic_ham" />
                 <!-- Phone Icon -->
                 <ImageView
                     android:id="@+id/phone_icon"
+                    style="@style/IconTint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
-                    style="@style/IconTint"
                     android:contentDescription="phone_icon"
                     android:padding="8dp"
                     android:src="@drawable/ic_mobile" />
 
 
-
                 <!-- Message Icon -->
                 <ImageView
                     android:id="@+id/message_icon"
+                    style="@style/IconTint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
-                    style="@style/IconTint"
                     android:contentDescription="message_icon"
                     android:padding="8dp"
                     android:src="@drawable/ic_message" />
