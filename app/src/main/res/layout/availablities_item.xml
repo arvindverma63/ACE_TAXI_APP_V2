@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    app:cardCornerRadius="0dp"
     style="@style/CardBG"
     android:padding="12dp">
     <LinearLayout
@@ -33,13 +34,13 @@
             style="@style/TextBG"/>
 
         <!-- Time Ago -->
-        <TextView
-            android:id="@+id/tv_time_ago"
+        <ImageView
+            android:id="@+id/deleteIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15m"
+            android:src="@drawable/ic_delete"
             android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"/>
+            app:tint="@color/red" />
     </LinearLayout>
 
     <!-- Description -->

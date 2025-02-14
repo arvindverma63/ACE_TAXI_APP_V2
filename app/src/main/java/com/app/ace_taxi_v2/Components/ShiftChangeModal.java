@@ -1,9 +1,8 @@
 package com.app.ace_taxi_v2.Components;
 
-import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -20,11 +19,12 @@ import com.app.ace_taxi_v2.Logic.UpdateDriverShiftApi;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ShiftChangeModal {
     private final Context context;
     private final FragmentManager fragmentManager;
-    private AlertDialog alertDialog;
+    private androidx.appcompat.app.AlertDialog alertDialog;
     public MaterialButton startShift, finishShift, startBreak, finishBreak, rankMap;
     public MaterialCardView start_shift_card, finish_shift_card, on_break_card, finish_break_card, rank_pickup_card;
 
@@ -34,25 +34,17 @@ public class ShiftChangeModal {
     }
 
     public void openModal() {
-        // Initialize AlertDialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.RightSlideDialog);
+        // Initialize Material AlertDialog
         View dialogView = LayoutInflater.from(context).inflate(R.layout.update_shift_status, null);
-        builder.setView(dialogView);
-        alertDialog = builder.create();
+        alertDialog = new MaterialAlertDialogBuilder(context, R.style.CustomMaterialAlertDialog)
+                .setView(dialogView)
+                .setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT))
+                .create();
 
-        // Set window properties
-        if (alertDialog.getWindow() != null) {
-            Window window = alertDialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.MATCH_PARENT);
-            window.setGravity(Gravity.END); // Opens from the right
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-            window.setDimAmount(0.5f);
-            window.setWindowAnimations(R.style.RightSlideDialogAnimation); // Apply flip animation
-        }
+        alertDialog.show();
 
         UpdateDriverShiftApi updateDriverShiftApi = new UpdateDriverShiftApi(context);
 
-        // Get button references
         startShift = dialogView.findViewById(R.id.btn_start_shift);
         finishShift = dialogView.findViewById(R.id.btn_finish);
         startBreak = dialogView.findViewById(R.id.btn_on_break);
@@ -63,34 +55,35 @@ public class ShiftChangeModal {
         on_break_card = dialogView.findViewById(R.id.on_break_card);
         finish_break_card = dialogView.findViewById(R.id.finish_break_card);
         rank_pickup_card = dialogView.findViewById(R.id.rank_pickup_card);
-        TextView closeBtn = dialogView.findViewById(R.id.close_shift_dialog);
+
+        alertDialog.setCancelable(true);
 
         // Attach click listeners
-        startShift.setOnClickListener(v -> {
+        start_shift_card.setOnClickListener(v -> {
             updateDriverShiftApi.updateStatus(1000);
             updateStatus();
             dismissModal();
         });
 
-        finishShift.setOnClickListener(v -> {
+        finish_shift_card.setOnClickListener(v -> {
             updateDriverShiftApi.updateStatus(1001);
             updateStatus();
             dismissModal();
         });
 
-        startBreak.setOnClickListener(v -> {
+        on_break_card.setOnClickListener(v -> {
             updateDriverShiftApi.updateStatus(1002);
             updateStatus();
             dismissModal();
         });
 
-        finishBreak.setOnClickListener(v -> {
+        finish_break_card.setOnClickListener(v -> {
             updateDriverShiftApi.updateStatus(1003);
             updateStatus();
             dismissModal();
         });
 
-        rankMap.setOnClickListener(v -> {
+        rank_pickup_card.setOnClickListener(v -> {
             openBookingFragment();
             dismissModal();
         });
@@ -98,11 +91,6 @@ public class ShiftChangeModal {
         // Ensure UI reflects current status
         updateStatus();
 
-        alertDialog.show();
-
-        closeBtn.setOnClickListener(v -> {
-            dismissModal();
-        });
     }
 
     // Open BookingFragment safely
@@ -137,19 +125,24 @@ public class ShiftChangeModal {
         switch (current_status) {
             case "onShift":
                 start_shift_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.red));
+                start_shift_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_red));
                 break;
             case "onBreak":
                 on_break_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.green));
+                on_break_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.green_light));
                 break;
             case "onFinish":
                 finish_shift_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.blue));
+                finish_shift_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_blue));
                 break;
             case "onBreakFinish":
                 finish_break_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.orange));
+                finish_break_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_orange));
                 break;
             default:
                 rank_pickup_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.darkCard));
                 break;
         }
+
     }
 }

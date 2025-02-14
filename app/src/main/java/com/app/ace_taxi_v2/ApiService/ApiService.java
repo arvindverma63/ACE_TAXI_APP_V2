@@ -144,5 +144,9 @@ public interface ApiService {
     Call<List<LocalPOIResponse>> autoComplete(@Header("Authorization") String token,
                                         @Body LocalPOIRequest localPOIRequest);
 
+    @GET("/api/DriverApp/DeleteAvailability")
+    Call<Void> deleteAvailablities(@Header("Authorization") String token,
+                                   @Query("id") int id);
+
 
 }

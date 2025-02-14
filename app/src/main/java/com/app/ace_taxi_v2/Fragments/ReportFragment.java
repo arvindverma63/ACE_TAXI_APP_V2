@@ -33,6 +33,8 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -63,11 +65,9 @@ public class ReportFragment extends Fragment {
         date_range_button = view.findViewById(R.id.date_range_button);
 
         webView = view.findViewById(R.id.google_pie_chart);
-        updateData = view.findViewById(R.id.updateData);
         recyclarView = view.findViewById(R.id.recycler_view);
 
         date_range_button.setOnClickListener(v -> showDateRangePicker());
-        updateData.setOnClickListener(v -> updateData(startDate, endDate));
 
 
 
@@ -77,20 +77,30 @@ public class ReportFragment extends Fragment {
     private void setDefaultDateRange() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -2);
+
         startDate = isoDateFormat.format(calendar.getTime());
         endDate = isoDateFormat.format(Calendar.getInstance().getTime());
-        date_range_button.setText(startDate + " - " + endDate);
-        Log.e("start and end date: ", "" + startDate + " end date: " + endDate);
+
+        // Convert to readable format for display
+        SimpleDateFormat displayFormat = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
+
+        String displayStartDate = displayFormat.format(calendar.getTime());
+        String displayEndDate = displayFormat.format(Calendar.getInstance().getTime());
+
+        date_range_button.setText(displayStartDate + " - " + displayEndDate);
+
+        Log.e("start and end date: ", startDate + " end date: " + endDate);
         updateData(startDate, endDate);
     }
 
     private void showDateRangePicker() {
         MaterialDatePicker.Builder<androidx.core.util.Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
         builder.setTitleText("Select Date Range");
+
         CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
         builder.setCalendarConstraints(constraintsBuilder.build());
-        MaterialDatePicker<androidx.core.util.Pair<Long, Long>> datePicker = builder.build();
 
+        MaterialDatePicker<androidx.core.util.Pair<Long, Long>> datePicker = builder.build();
         datePicker.show(getParentFragmentManager(), "DATE_PICKER");
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
@@ -98,11 +108,20 @@ public class ReportFragment extends Fragment {
             if (dateRange != null) {
                 startDate = isoDateFormat.format(dateRange.first);
                 endDate = isoDateFormat.format(dateRange.second);
-                date_range_button.setText(startDate + " - " + endDate);
+
+                // Convert to readable format
+                SimpleDateFormat displayFormat = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
+
+                String displayStartDate = displayFormat.format(dateRange.first);
+                String displayEndDate = displayFormat.format(dateRange.second);
+
+                date_range_button.setText(displayStartDate + " - " + displayEndDate);
+
                 updateData(startDate, endDate);
             }
         });
     }
+
 
     public void updateData(String from, String to) {
         Log.e("start and end date: ", "" + from + " end date: " + to);

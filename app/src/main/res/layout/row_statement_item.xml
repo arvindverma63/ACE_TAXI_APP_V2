@@ -53,17 +53,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_view"
-            android:layout_width="0dp"
+            android:layout_width="10dp"
             android:layout_height="40dp"
             android:layout_weight="2"
             android:backgroundTint="@color/primaryColor"
-            app:icon="@drawable/ic_view"
+            android:text="View"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="10sp"
             app:cornerRadius="20dp"
-            app:iconGravity="textStart"
-            app:iconPadding="4dp"
-            app:iconTint="@color/white"
             android:gravity="center" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

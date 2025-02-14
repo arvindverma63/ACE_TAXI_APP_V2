@@ -13,6 +13,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.Activity.NotificationModalActivity;
 import com.app.ace_taxi_v2.Models.NotificationModel;
 import com.app.ace_taxi_v2.R;
@@ -110,7 +111,7 @@ public class NotificationService extends FirebaseMessagingService {
         }
 
         // ✅ Create an Intent to open `NotificationModalActivity` when clicked
-        Intent intent = new Intent(getApplicationContext(), NotificationModalActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("message", message);
         intent.putExtra("jobid", jobId);

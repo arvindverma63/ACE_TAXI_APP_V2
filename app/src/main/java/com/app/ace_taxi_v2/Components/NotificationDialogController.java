@@ -23,32 +23,32 @@ public class NotificationDialogController {
         Log.d("NotificationDialogController", "Processing Notification - navId: " + navid + ", jobId: " + jobid);
 
         switch (navid) {
-            case 1:
+            case 0:
                 Log.d("NotificationDialogController", "Fetching booking details...");
-                new GetBookingById(context).getBookingDetails(jobid); // Job Offer
+
+                break;
+            case 1:
+                Log.d("NotificationDialogController", "Processing job amendment...");
+                new GetBookingById(context).getBookingDetails(jobid);
                 break;
             case 2:
-                Log.d("NotificationDialogController", "Processing job amendment...");
-                jobModal.jobAmenedment();
-                break;
-            case 3:
                 Log.d("NotificationDialogController", "Processing job cancellation...");
-                jobModal.jobCancel();
-                break;
-            case 4:
-            case 7:
-            case 8:
-                Log.d("NotificationDialogController", "Processing job read...");
-                jobModal.JobRead(); // Handles general/global messages
-                break;
-            case 5:
-                Log.d("NotificationDialogController", "Processing job completion...");
-                jobModal.jobComplete();
-                break;
-            case 6:
-                Log.d("NotificationDialogController", "Processing unallocated job...");
                 jobModal.jobUnallocated();
                 break;
+            case 3:
+                Log.d("NotificationDialogController", "Processing job read...");
+                jobModal.jobAmenedment(); // Handles general/global messages
+                break;
+            case 4:
+                Log.d("NotificationDialogController", "Processing job completion...");
+                jobModal.jobCancel();
+                break;
+            case 5:
+                Log.d("NotificationDialogController", "Processing unallocated job...");
+                jobModal.JobRead();
+                break;
+            case 6:
+                jobModal.JobRead();
             default:
                 Log.w("NotificationDialogController", "Unknown navId: " + navid);
                 break;

@@ -57,6 +57,11 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
+    <style name="CustomMaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MaterialComponents.MediumComponent</item>
+    </style>
 
     <style name="TabItemStyle">
         <item name="android:layout_margin">8dp</item>
@@ -69,7 +74,6 @@
         <item name="android:windowEnterAnimation">@anim/flip_in</item>
         <item name="android:windowExitAnimation">@anim/flip_out</item>
     </style>
-
 
 
 

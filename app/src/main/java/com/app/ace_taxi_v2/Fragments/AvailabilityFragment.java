@@ -52,10 +52,13 @@ public class AvailabilityFragment extends Fragment {
         am_school_button = rootView.findViewById(R.id.am_school_button);
         unavailable_button = rootView.findViewById(R.id.unavailable_button);
         pm_school_button = rootView.findViewById(R.id.pm_school_button);
+        am_pm_school_button = rootView.findViewById(R.id.am_pm_school_button);
 
         pm_school_button.setOnClickListener(v -> pmSchoolOnly());
         am_school_button.setOnClickListener(v -> amSchoolOnly());
         unavailable_button.setOnClickListener(v -> setUnavailable());
+        am_pm_school_button.setOnClickListener(v -> bothOnly());
+
 
         sessionManager = new SessionManager(getContext());
 
@@ -126,6 +129,27 @@ public class AvailabilityFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void bothOnly(){
+        int userId = sessionManager.getUserId();
+
+        if (selectedDateStringForAPI == null) {
+            Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 1, "PM only");
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 1, "Am only");
+
+        Toast.makeText(getContext(), "Availability added successfully!", Toast.LENGTH_SHORT).show();
+        try {
+            Thread.sleep(2000);
+            renderList();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void pmSchoolOnly(){

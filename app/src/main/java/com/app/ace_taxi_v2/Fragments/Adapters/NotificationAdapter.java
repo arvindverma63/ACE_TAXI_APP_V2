@@ -1,6 +1,7 @@
 package com.app.ace_taxi_v2.Fragments.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             // Handle button click to open the modal
             holder.viewJobsButton.setOnClickListener(v -> {
+                Log.i("Notification clicked data : ","data: "+notification.getJobId()+" "+notification.getNavId());
                 NotificationDialogController notificationDialogController = new NotificationDialogController(context);
                 notificationDialogController.openModal(notification.getNavId(), notification.getJobId());
             });

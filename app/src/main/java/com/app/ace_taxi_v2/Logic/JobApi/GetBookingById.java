@@ -36,7 +36,7 @@ public class GetBookingById {
                         response.body().getPrice(),
                         response.body().getPickupDateTime(),
                         response.body().getPassengerName(),
-                        response.body().getBookingId());
+                        bookingId);
                 customDialog.dismissProgressDialog();
             }
 

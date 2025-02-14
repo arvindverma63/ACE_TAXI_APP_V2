@@ -122,11 +122,6 @@ public class TodayJobManager {
                 if (bookingInfo.getStatus() == null) {
                     JobModal jobModal = new JobModal(context);
                     jobModal.jobOfferModalForTodayJob(
-                            bookingInfo.getPickupAddress(),
-                            bookingInfo.getDestinationAddress(),
-                            bookingInfo.getPrice(),
-                            bookingInfo.getPickupDateTime(),
-                            bookingInfo.getPassengerName(),
                             booking.getBookingId()
                     );
                 } else if ("3".equals(bookingInfo.getStatus())) {

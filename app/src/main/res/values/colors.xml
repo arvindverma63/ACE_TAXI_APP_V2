@@ -19,4 +19,9 @@
     <color name="orange">#C76D29</color>
     <color name="dark_green">#2E7D32</color>
 
+    <color name="light_red">#B8FF5858</color>
+    <color name="light_blue">#CD71BBFF</color>
+    <color name="green_light">#EB9BFF9F</color> <!-- Green -->
+    <color name="light_orange">#EAFFA363</color>
+
 </resources>

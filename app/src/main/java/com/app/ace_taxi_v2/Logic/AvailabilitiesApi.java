@@ -36,7 +36,7 @@ public class AvailabilitiesApi {
                 if(response.isSuccessful()){
                     List<AvailabilityResponse.Driver> list = response.body().getDrivers();
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    recyclerView.setAdapter(new AvailablitiesAdapter(list));
+                    recyclerView.setAdapter(new AvailablitiesAdapter(list,context));
                 }
             }
 

@@ -131,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SUBMIT"
-                app:cornerRadius="8dp"
+                app:cornerRadius="20dp"
                 android:backgroundTint="@color/primaryColor"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"/>

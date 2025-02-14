@@ -121,7 +121,7 @@ public class JobModal {
     }
 
 
-    public void jobOfferModalForTodayJob(String pickupAddress, String destinationAddress, double price, String pickupDate, String passengerName, int bookingId) {
+    public void jobOfferModalForTodayJob(int bookingId) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.job_status_reply, null);
 

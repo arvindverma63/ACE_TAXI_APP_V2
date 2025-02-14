@@ -31,7 +31,6 @@ public class UserProfileFragment extends Fragment {
         vehicle_model = view.findViewById(R.id.vehicle_model);
         vehicle_reg = view.findViewById(R.id.vehicle_reg);
         vehicle_color = view.findViewById(R.id.vehicle_color);
-        fcm = view.findViewById(R.id.fcm);
         setDetails();
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);

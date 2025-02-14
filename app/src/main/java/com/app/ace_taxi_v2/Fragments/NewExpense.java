@@ -38,8 +38,9 @@ public class NewExpense extends Fragment {
     private EditText dateEditText;
     private EditText descriptionEditText;
     private EditText amout;
-    private Button recordButton;
+    private Button recordButton,view_button;
     private AutoCompleteTextView categoryDropdown;
+
 
     @Nullable
     @Override
@@ -59,6 +60,15 @@ public class NewExpense extends Fragment {
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
         toolbar.setNavigationOnClickListener(v -> {
             Fragment selectedFragment = new ProfileFragment();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, selectedFragment);
+            fragmentTransaction.commit();
+        });
+
+        view_button = view.findViewById(R.id.view_button);
+        view_button.setOnClickListener(v -> {
+            Fragment selectedFragment = new ViewExpenses();
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, selectedFragment);

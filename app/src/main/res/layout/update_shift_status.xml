@@ -5,33 +5,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
+    android:background="@color/trans"
     android:layout_width="match_parent">
 <com.google.android.material.card.MaterialCardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/white"
     android:layout_margin="5dp"
-    app:strokeColor="@color/gray"
+    style="@style/CardBG"
     app:strokeWidth="1dp"
-    android:elevation="12dp"
+    android:elevation="20dp"
     android:layout_marginBottom="16dp">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:orientation="vertical"
-    android:background="@color/light_gray"
+    style="@style/MainBG"
     android:elevation="8dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="40dp"
+        app:cardElevation="4dp"
+        app:strokeWidth="2dp"
+        android:layout_marginBottom="10dp"
+        app:strokeColor="@color/black"
+        android:backgroundTint="@android:color/white">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_driver"/>
+    </com.google.android.material.card.MaterialCardView>
+
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Shift Options"
+        android:text="Change Shift"
         style="@style/TextBG"
-        android:gravity="center"
-        android:layout_marginBottom="10dp"/>
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"/>
+
 
     <!-- Buttons Row -->
     <LinearLayout
@@ -65,10 +89,11 @@
                         android:id="@+id/btn_start_shift"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:icon="@drawable/ic_start"
+                        app:icon="@drawable/ic_start_shift"
                         android:backgroundTint="@color/primaryColor"
                         app:backgroundTint="@android:color/transparent"
-                        app:iconGravity="textStart"
+                        app:iconGravity="start"
+                        app:iconSize="25dp"
                         app:iconTint="@color/white"
                         android:insetLeft="0dp"
                         android:insetRight="0dp"
@@ -119,9 +144,9 @@
                         android:id="@+id/btn_finish"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        app:icon="@drawable/ic_finish"
+                        app:icon="@drawable/ic_finish_shift"
                         app:backgroundTint="@android:color/transparent"
-                        app:iconGravity="textStart"
+                        app:iconGravity="end"
                         app:iconTint="@color/white"
                         android:backgroundTint="@color/blue"
                         android:insetLeft="0dp"
@@ -172,9 +197,9 @@
                         android:id="@+id/btn_on_break"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:icon="@drawable/ic_break"
+                        app:icon="@drawable/ic_break_shift"
                         app:backgroundTint="@android:color/transparent"
-                        app:iconGravity="textStart"
+                        app:iconGravity="end"
                         app:iconTint="@color/white"
                         android:backgroundTint="@color/green"
                         android:insetLeft="0dp"
@@ -233,8 +258,8 @@
                         android:insetRight="0dp"
                         android:insetBottom="0dp"
                         app:backgroundTint="@android:color/transparent"
-                        app:icon="@drawable/ic_finish_break"
-                        app:iconGravity="textStart"
+                        app:icon="@drawable/ic_break_end"
+                        app:iconGravity="end"
                         app:iconTint="@color/white"
                         tools:ignore="SpeakableTextPresentCheck" />
                 </LinearLayout>
@@ -280,9 +305,9 @@
                         android:id="@+id/btn_rank_up"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:icon="@drawable/ic_keep_alive"
+                        app:icon="@drawable/ic_rank_up"
                         app:backgroundTint="@android:color/transparent"
-                        app:iconGravity="textStart"
+                        app:iconGravity="end"
                         android:backgroundTint="@color/black"
                         app:iconTint="@color/white"
                         android:insetLeft="0dp"
@@ -308,15 +333,7 @@
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="X"
-        android:layout_gravity="center"
-        style="@style/TextBG"
-        android:layout_marginTop="10dp"
-        android:id="@+id/close_shift_dialog"/>
 </LinearLayout>
+    </ScrollView>
 </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
