@@ -71,6 +71,11 @@ public class HomeActivity extends AppCompatActivity {
     public TextView notificationCount;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final int INTERVAL = 5000; // 5 seconds
+    private int tapCount = 0;
+    private static final int TAP_THRESHOLD = 3; // Number of taps required to exit
+    private static final int TIMEOUT = 2000; // 2 seconds timeout to reset count
+    private Handler handlerBack = new Handler();
+
 
 
     @Override
@@ -140,6 +145,33 @@ public class HomeActivity extends AppCompatActivity {
         phoneBtn();
         messageBtn();
     }
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        if (!isTaskRoot()) {
+            // If not at the root of the task, navigate back
+            super.onBackPressed();
+            return;
+        }
+
+        tapCount++;
+
+        if (tapCount == 1) {
+            // Open HomeActivity if it's not already open
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        } else if (tapCount == 2) {
+            // Close the app on the second tap
+            finishAffinity();
+        }
+
+        // Show toast for exit confirmation
+        Toast.makeText(this, "Tap again to exit", Toast.LENGTH_SHORT).show();
+
+        // Reset tap count after a timeout (2 seconds)
+        handlerBack.postDelayed(() -> tapCount = 0, TIMEOUT);
+    }
+
 
     private void handleMenuClick(MenuItem item) {
         int id = item.getItemId();

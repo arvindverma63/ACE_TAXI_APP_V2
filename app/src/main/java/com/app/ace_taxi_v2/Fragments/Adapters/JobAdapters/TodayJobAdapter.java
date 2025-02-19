@@ -1,18 +1,23 @@
 package com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Components.ShiftChangeModal;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
+import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
@@ -138,6 +143,13 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
             viewButton.setOnClickListener(v -> listener.onViewClick(job));
 
             startButton.setOnClickListener(v -> {
+
+                CurrentShiftStatus currentShiftStatus = new CurrentShiftStatus(context);
+                if(!currentShiftStatus.getStatus().equals("onShift")){
+                    Toast.makeText(context,"Start Your Shift",Toast.LENGTH_LONG).show();
+                    Log.d("Current Driver shift: "," "+currentShiftStatus.getStatus());
+                    return;
+                }
 
                 listener.onStartClick(job);
 

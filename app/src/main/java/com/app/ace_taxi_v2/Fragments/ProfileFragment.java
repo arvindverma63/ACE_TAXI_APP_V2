@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
         if (toolbar != null) {
-            toolbar.setNavigationOnClickListener(view1 -> replaceFragment(new ReportPageFragment()));
+            toolbar.setNavigationOnClickListener(view1 -> replaceFragment(new HomeFragment()));
         }
 
 
