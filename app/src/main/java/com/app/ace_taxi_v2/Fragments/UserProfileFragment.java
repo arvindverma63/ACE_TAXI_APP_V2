@@ -19,7 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class UserProfileFragment extends Fragment {
 
-    public TextInputEditText fullname,email,phoneNumber,vehicle_model,vehicle_reg,vehicle_color,fcm;
+    public TextInputEditText fullname,email,phoneNumber,vehicle_model,vehicle_reg,vehicle_color;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,7 +59,6 @@ public class UserProfileFragment extends Fragment {
                 vehicle_model.setText(userProfileResponse.getVehicleModel());
                 vehicle_reg.setText(userProfileResponse.getVehicleReg());
                 vehicle_color.setText(userProfileResponse.getColorCode());
-                fcm.setText(userProfileResponse.getFcm());
             }
 
             @Override

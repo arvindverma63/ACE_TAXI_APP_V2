@@ -8,6 +8,7 @@ import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
+import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Models.JobStatusModel;
 
 import retrofit2.Call;
@@ -28,17 +29,19 @@ public class JobStatusReply {
         customDialog.showProgressDialog(context);
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.jobStatus(token,jobno,status).enqueue(new Callback<JobStatusModel>() {
+        apiService.jobStatus(token,jobno,status).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<JobStatusModel> call, Response<JobStatusModel> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.e("job stauts modal status ","response : "+response);
                 if(response.code() == 200){
                     Toast.makeText(context, "Job Updated Successfully", Toast.LENGTH_SHORT).show();
+                    CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
+                    currentBookingSession.saveBookingId(jobno);
+                    currentBookingSession.saveBookingShift(String.valueOf(status));
                 }
             }
             @Override
-            public void onFailure(Call<JobStatusModel> call, Throwable t) {
-                Toast.makeText(context, "Nothing get from server", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.e("exception from server","error"+t);
             }
         });

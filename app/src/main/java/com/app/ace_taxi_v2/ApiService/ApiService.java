@@ -95,7 +95,7 @@ public interface ApiService {
                                     @Body ExpensesRequest expensesRequest);
 
     @GET("/api/DriverApp/JobStatusReply")
-    Call<JobStatusModel> jobStatus(@Header("Authorization") String token,
+    Call<Void> jobStatus(@Header("Authorization") String token,
                                    @Query("jobno") int jobno,
                                    @Query("status") int status);
 

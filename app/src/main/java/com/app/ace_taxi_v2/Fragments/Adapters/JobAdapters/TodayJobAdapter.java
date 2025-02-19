@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
+import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
@@ -101,6 +102,20 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
             getBookingInfoApi.getInfo(job.getBookingId(), new GetBookingInfoApi.BookingCallback() {
                 @Override
                 public void onSuccess(com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
+                    CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
+                    String id;
+                    int bookingId = 1;
+                    try{
+                         id = currentBookingSession.getBookingId();
+                         bookingId = Integer.parseInt(id);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    if(job.getBookingId() == bookingId){
+                        startButton.setText("Started");
+                        startButton.setBackgroundColor(ContextCompat.getColor(context,R.color.dark_green));
+                    }
                     if ("3".equals(bookingInfo.getStatus())) {
                         startButton.setText("Completed");
                         startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
@@ -123,6 +138,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
             viewButton.setOnClickListener(v -> listener.onViewClick(job));
 
             startButton.setOnClickListener(v -> {
+
                 listener.onStartClick(job);
 
                 // Update button dynamically when job is completed

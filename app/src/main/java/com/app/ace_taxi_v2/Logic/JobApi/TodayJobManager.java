@@ -111,7 +111,7 @@ public class TodayJobManager {
     }
 
     private void handleJobStart(TodayBooking booking) {
-        JobStatusModal jobStatusModal = new JobStatusModal(context, fragmentManager);
+        JobStatusModal jobStatusModal = new JobStatusModal(context);
         GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
 
         getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {

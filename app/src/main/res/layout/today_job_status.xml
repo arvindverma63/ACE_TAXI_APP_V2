@@ -1,222 +1,392 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Message Box -->
-<com.google.android.material.card.MaterialCardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp"
-    app:strokeWidth="1dp"
-    android:layout_marginBottom="16dp">
-
-    <LinearLayout
+    android:background="@color/trans"
+    android:layout_width="match_parent">
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="vertical"
-        style="@style/MainBG"
-        android:elevation="8dp">
+        android:backgroundTint="@color/white"
+        android:layout_margin="5dp"
+        style="@style/CardBG"
+        app:strokeWidth="1dp"
+        android:elevation="20dp"
+        android:layout_marginBottom="16dp">
 
-        <!-- Message Box -->
-        <com.google.android.material.card.MaterialCardView
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            app:cardCornerRadius="16dp"
-            app:strokeWidth="1dp"
-            android:layout_marginBottom="16dp"
-            style="@style/CardBG">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tv_message"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text=" .. You Can Change Your Job Status from Here"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                style="@style/TextBG" />
-        </com.google.android.material.card.MaterialCardView>
-
-
-
-        <!-- Buttons Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:weightSum="6">
-
-            <LinearLayout
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:padding="16dp"
                 android:orientation="vertical"
-                android:gravity="center">
+                style="@style/MainBG"
+                android:elevation="8dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_on_route"
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="40dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="2dp"
+                    android:layout_marginBottom="10dp"
+                    app:strokeColor="@color/black"
+                    android:backgroundTint="@android:color/white">
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_ride_status"/>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_pickup"
-                    app:cornerRadius="0dp"
-                    app:iconGravity="end|start"
-                    app:backgroundTint="@color/primaryColor"
-                    app:iconTint="@color/white"
-                    android:elevation="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="On Route"
-                    android:textSize="12sp"
+                    android:text="Ride Status"
                     style="@style/TextBG"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center" />
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"/>
+
+
+                <!-- Buttons Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:id="@+id/btn_on_route"
+                        android:layout_marginBottom="10dp"
+                        app:strokeWidth="1dp"
+                        style="@style/CardBG">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Button with Primary Color Background -->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:gravity="center"
+                                android:layout_marginEnd="8dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_start_shift"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:icon="@drawable/ic_on_route"
+                                    android:backgroundTint="@color/primaryColor"
+                                    app:backgroundTint="@android:color/transparent"
+                                    app:iconGravity="start"
+                                    app:iconSize="25dp"
+                                    app:iconTint="@color/white"
+                                    android:insetLeft="0dp"
+                                    android:insetRight="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
+                                    style="@style/Widget.MaterialComponents.Button.Icon"/>
+                            </LinearLayout>
+
+                            <!-- Text beside button -->
+                            <TextView
+                                style="@style/TextBG"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                android:text="On Route"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:id="@+id/btn_pick_up"
+                        app:strokeWidth="1dp"
+                        android:layout_marginBottom="10dp"
+                        style="@style/CardBG">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Button with Background -->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:gravity="center"
+                                android:layout_marginEnd="8dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_finish"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    app:icon="@drawable/ic_pickup"
+                                    app:backgroundTint="@android:color/transparent"
+                                    app:iconGravity="end"
+                                    app:iconTint="@color/white"
+                                    android:backgroundTint="@color/blue"
+                                    android:insetLeft="0dp"
+                                    android:insetRight="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
+                                    style="@style/Widget.MaterialComponents.Button.Icon"/>
+                            </LinearLayout>
+
+                            <!-- Text beside button -->
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:text="Pickup"
+                                style="@style/TextBG"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:singleLine="true"
+                                android:ellipsize="end"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:id="@+id/btn_pob"
+                        android:layout_marginBottom="10dp"
+                        app:strokeWidth="1dp"
+                        style="@style/CardBG">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Button with Green Background -->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:gravity="center"
+                                android:layout_marginEnd="8dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_on_break"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:icon="@drawable/ic_break_shift"
+                                    app:backgroundTint="@android:color/transparent"
+                                    app:iconGravity="end"
+                                    app:iconTint="@color/white"
+                                    android:backgroundTint="@color/dark_green"
+                                    android:insetLeft="0dp"
+                                    android:insetRight="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
+                                    style="@style/Widget.MaterialComponents.Button.Icon"/>
+                            </LinearLayout>
+
+                            <!-- Text beside button -->
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:text="POB"
+                                style="@style/TextBG"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:singleLine="true"
+                                android:ellipsize="end"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:id="@+id/btn_stc"
+                        android:layout_marginBottom="10dp"
+                        app:strokeWidth="1dp"
+                        style="@style/CardBG">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Button with Orange Background -->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:gravity="center"
+                                android:layout_marginEnd="8dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_finish_break"
+                                    style="@style/Widget.MaterialComponents.Button.Icon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@color/orange"
+                                    android:insetLeft="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetRight="0dp"
+                                    android:insetBottom="0dp"
+                                    app:backgroundTint="@android:color/transparent"
+                                    app:icon="@drawable/ic_break_end"
+                                    app:iconGravity="end"
+                                    app:iconTint="@color/white"
+                                    tools:ignore="SpeakableTextPresentCheck" />
+                            </LinearLayout>
+
+                            <!-- Text beside button -->
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:text="STC"
+                                style="@style/TextBG"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:singleLine="true"
+                                android:ellipsize="end"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:id="@+id/btn_clear"
+                        android:layout_marginBottom="10dp"
+                        app:strokeWidth="1dp"
+                        style="@style/CardBG">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Button with Orange Background -->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:gravity="center"
+                                android:layout_marginEnd="8dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_clear_icon"
+                                    style="@style/Widget.MaterialComponents.Button.Icon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@color/green"
+                                    android:insetLeft="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetRight="0dp"
+                                    android:insetBottom="0dp"
+                                    app:backgroundTint="@android:color/transparent"
+                                    app:icon="@drawable/ic_close"
+                                    app:iconGravity="end"
+                                    app:iconTint="@color/white"
+                                    tools:ignore="SpeakableTextPresentCheck" />
+                            </LinearLayout>
+
+                            <!-- Text beside button -->
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:text="Clear"
+                                style="@style/TextBG"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:singleLine="true"
+                                android:ellipsize="end"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:id="@+id/btn_reset"
+                        app:strokeWidth="1dp"
+                        style="@style/CardBG">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Button with Black Background -->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:gravity="center"
+                                android:layout_marginEnd="8dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_rank_up"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:icon="@drawable/ic_rank_up"
+                                    app:backgroundTint="@android:color/transparent"
+                                    app:iconGravity="end"
+                                    android:backgroundTint="@color/black"
+                                    app:iconTint="@color/white"
+                                    android:insetLeft="0dp"
+                                    android:insetRight="0dp"
+                                    android:insetTop="0dp"
+                                    android:insetBottom="0dp"
+                                    style="@style/Widget.MaterialComponents.Button.Icon"/>
+                            </LinearLayout>
+
+                            <!-- Text beside button -->
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:text="No Job"
+                                style="@style/TextBG"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:singleLine="true"
+                                android:ellipsize="end"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_pick_up"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_keep_alive"
-                    app:cornerRadius="0dp"
-                    android:backgroundTint="@color/green"
-                    app:iconGravity="end|start"
-                    app:iconTint="@color/white"
-                    android:elevation="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="At Pickup"
-                    android:textSize="12sp"
-                    style="@style/TextBG"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_pob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_taxi"
-                    app:iconGravity="end|start"
-                    app:cornerRadius="0dp"
-                    app:backgroundTint="@color/blue"
-                    app:iconTint="@color/white"
-                    android:elevation="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="POB"
-                    android:textSize="12sp"
-                    style="@style/TextBG"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_stc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:elevation="4dp"
-                    app:backgroundTint="@color/orange"
-                    app:icon="@drawable/ic_finish_break"
-                    app:iconGravity="end|start"
-                    app:cornerRadius="0dp"
-                    app:iconTint="@color/white"
-                    tools:ignore="SpeakableTextPresentCheck" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="STC"
-                    android:textSize="12sp"
-                    style="@style/TextBG"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_clear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_status"
-                    app:iconGravity="end|start"
-                    android:backgroundTint="@color/black"
-                    app:cornerRadius="0dp"
-                    app:iconTint="@color/white"
-                    android:elevation="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Clear"
-                    android:textSize="12sp"
-                    style="@style/TextBG"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_reset"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_profile"
-                    app:iconGravity="end|start"
-                    android:backgroundTint="@color/gray"
-                    app:cornerRadius="0dp"
-                    app:iconTint="@color/white"
-                    android:elevation="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No Job"
-                    android:textSize="12sp"
-                    style="@style/TextBG"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+        </ScrollView>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>
