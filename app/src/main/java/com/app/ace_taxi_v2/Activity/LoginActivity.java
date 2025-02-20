@@ -2,6 +2,8 @@ package com.app.ace_taxi_v2.Activity;
 
 import static android.content.ContentValues.TAG;
 
+import static com.app.ace_taxi_v2.R.layout.activity_login;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -13,9 +15,6 @@ import android.widget.EditText;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.app.ace_taxi_v2.Logic.FCMTokenManager;
 import com.app.ace_taxi_v2.Logic.LoginManager;
@@ -32,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
+        setContentView(activity_login);
 
 
         edit_username = (EditText) findViewById(R.id.edit_username);

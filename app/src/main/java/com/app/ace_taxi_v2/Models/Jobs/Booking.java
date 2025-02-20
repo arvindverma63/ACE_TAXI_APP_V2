@@ -138,6 +138,4 @@ public class Booking {
         this.passengerName = passengerName;
     }
 
-
-
 }
