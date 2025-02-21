@@ -1,6 +1,5 @@
 package com.app.ace_taxi_v2.Fragments;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +17,17 @@ import com.app.ace_taxi_v2.Logic.ExpensesResponseApi;
 import com.app.ace_taxi_v2.Models.Expense;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
+import androidx.core.util.Pair;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseChangeListener {
 
@@ -30,7 +35,7 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
     private RecyclerView expenseRecyclerView;
     private TextView totalAmountTextView;
     private ExpenseAdapter expenseAdapter;
-    private List<Expense> expenseList; // ✅ Fixed: Use List<Expense>
+    private List<Expense> expenseList;
     private double totalExpense = 0.00;
 
     public ViewExpenses() {
@@ -64,8 +69,6 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
         // Date Range Picker
         dateRangeEditText.setOnClickListener(v -> showDateRangePicker());
 
-
-
         updateTotalAmount();
     }
 
@@ -78,51 +81,62 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
     }
 
     private void showDateRangePicker() {
-        Calendar calendar = Calendar.getInstance();
+        // Build MaterialDatePicker for date range selection
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        builder.setTitleText("Select Date Range");
 
-        // Start Date Picker
-        DatePickerDialog startDatePicker = new DatePickerDialog(requireContext(),
-                (view, year, month, dayOfMonth) -> {
-                    String startDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+        // Restrict dates to today and past only
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();
+        constraintsBuilder.setValidator(DateValidatorPointBackward.now());
 
-                    // End Date Picker
-                    DatePickerDialog endDatePicker = new DatePickerDialog(requireContext(),
-                            (endView, endYear, endMonth, endDay) -> {
-                                String endDate = endDay + "/" + (endMonth + 1) + "/" + endYear;
-                                dateRangeEditText.setText(startDate + " – " + endDate);
+        builder.setCalendarConstraints(constraintsBuilder.build());
 
-                                // Fetch expenses after selecting date range
-                                fetchExpenses(startDate, endDate);
-                            },
-                            calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
-                    );
-                    endDatePicker.show();
-                },
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
-        );
-        startDatePicker.show();
+        MaterialDatePicker<Pair<Long, Long>> datePicker = builder.build();
+
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            if (selection.first != null && selection.second != null) {
+                // Define date formats
+                SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+                apiDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                // Convert timestamps to formatted dates
+                String startDateInternal = apiDateFormat.format(selection.first);
+                String endDateInternal = apiDateFormat.format(selection.second);
+                String startDateDisplay = displayDateFormat.format(selection.first);
+                String endDateDisplay = displayDateFormat.format(selection.second);
+
+                // Show formatted date range in the EditText
+                dateRangeEditText.setText(startDateDisplay + " – " + endDateDisplay);
+
+                // Fetch expenses using API formatted dates
+                fetchExpenses(startDateInternal, endDateInternal);
+            }
+        });
+
+        datePicker.show(getParentFragmentManager(), "DATE_PICKER");
     }
 
     private void fetchExpenses(String startDate, String endDate) {
         ExpensesResponseApi api = new ExpensesResponseApi(requireContext());
 
-        api.getExpenses(startDate, endDate, expenseRecyclerView,new ExpensesResponseApi.OnExpensesFetchedListener() {
+        api.getExpenses(startDate, endDate, expenseRecyclerView, new ExpensesResponseApi.OnExpensesFetchedListener() {
             @Override
             public void onExpensesFetched(List<Expense> expenses) {
                 if (expenses != null) {
-                    expenseList.clear(); // ✅ Clear old data
-                    expenseList.addAll(expenses); // ✅ Update with new data
-                    expenseAdapter.notifyDataSetChanged(); // ✅ Notify adapter of changes
-                    updateTotalAmount(); // ✅ Update total amount after setting the data
+                    expenseList.clear();
+                    expenseList.addAll(expenses);
+                    expenseAdapter.notifyDataSetChanged();
+                    updateTotalAmount();
                 }
             }
         });
     }
 
-
     public void updateTotalAmount() {
         totalExpense = 0.00;
-        for (Expense expense : expenseList) { // ✅ Fixed: Loop through List<Expense>
+        for (Expense expense : expenseList) {
             totalExpense += expense.getAmount();
         }
         totalAmountTextView.setText("£" + String.format("%.2f", totalExpense));

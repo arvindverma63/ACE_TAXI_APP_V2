@@ -137,7 +137,7 @@ public interface ApiService {
     Call<AvailabilityResponse> getAva(@Header("Authorization") String token);
 
     @POST("/api/Bookings/Complete")
-    Call<BookingCompleteResponse> completeBooking(@Header("Authorization") String token,
+    Call<Void> completeBooking(@Header("Authorization") String token,
                                                   @Body BookingCompleteRequest completeRequest);
 
     @POST("/api/LocalPOI/GetPOI")

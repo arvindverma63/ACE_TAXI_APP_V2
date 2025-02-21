@@ -7,7 +7,6 @@ import android.widget.Toast;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.BookingRequest.BookingCompleteRequest;
-import com.app.ace_taxi_v2.Models.BookingRequest.BookingCompleteResponse;
 
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
@@ -36,12 +35,11 @@ public class BookingCompleteApi {
         BookingCompleteRequest bookingCompleteRequest = new BookingCompleteRequest(bookingId, bookingTime, parking, drivePrice, accountPrice);
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
 
-        apiService.completeBooking(token, bookingCompleteRequest).enqueue(new Callback<BookingCompleteResponse>() {
+        apiService.completeBooking(token, bookingCompleteRequest).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<BookingCompleteResponse> call, Response<BookingCompleteResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 200) {
                     Toast.makeText(context, "Booking Completed", Toast.LENGTH_LONG).show();
-                    Log.i(TAG, "Booking completed successfully: " + response.body().toString());
                 } else {
                     String errorMessage = "BookingCompleteApi Error: HTTP " + response.code() + " - " + response.message();
                     Log.e(TAG, errorMessage);
@@ -51,7 +49,7 @@ public class BookingCompleteApi {
             }
 
             @Override
-            public void onFailure(Call<BookingCompleteResponse> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 String failureMessage = "BookingComplete API Call Failed: " + t.getMessage();
                 Log.e(TAG, failureMessage, t);
                 Sentry.captureException(t);
