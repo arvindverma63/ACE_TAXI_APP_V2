@@ -70,7 +70,7 @@ public class NotificationService extends FirebaseMessagingService {
 
             title = remoteMessage.getData().getOrDefault("customTitle", title);
             body = remoteMessage.getData().getOrDefault("customMessage", body);
-            jobId = remoteMessage.getData().getOrDefault("jobid", jobId);
+            jobId = remoteMessage.getData().getOrDefault("bookingId", jobId);
             navId = remoteMessage.getData().getOrDefault("NavId", navId);
             message = remoteMessage.getData().getOrDefault("message", message);
         }

@@ -17,11 +17,14 @@ import com.app.ace_taxi_v2.Models.EarningResponse;
 
 import java.util.List;
 
+import io.sentry.Sentry;
+import io.sentry.protocol.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EarningResponseApi {
+    private static final String TAG = "EarningResponseApi";
     private final Context context;
     private final WebView webView;
 
@@ -34,24 +37,32 @@ public class EarningResponseApi {
     public void getResponse(String from, String to, RecyclerView recyclerView) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
+        int userId = sessionManager.getUserId(); // Assuming session manager provides the user ID
 
         if (token == null || token.isEmpty()) {
             Toast.makeText(context, "Authentication token missing", Toast.LENGTH_SHORT).show();
+            Sentry.captureMessage("EarningResponseApi Error: Missing authentication token for user ID: " + userId);
             return;
         }
 
+        // Attach user details to Sentry
+        User sentryUser = new User();
+        sentryUser.setId(String.valueOf(userId));
+        Sentry.setUser(sentryUser);
+
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        Log.d("Request from and to date", from + " to: " + to);
+        Log.d(TAG, "Request from: " + from + " to: " + to);
 
         apiService.getEarningResponse(token, from, to).enqueue(new Callback<List<EarningResponse>>() {
             @Override
             public void onResponse(Call<List<EarningResponse>> call, Response<List<EarningResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<EarningResponse> earningsList = response.body();
-                    Log.d("Earnings Report", "Response: " + earningsList);
+                    Log.d(TAG, "Earnings Report Response: " + earningsList);
 
                     if (earningsList.isEmpty()) {
                         Toast.makeText(context, "No earnings data available for the selected period.", Toast.LENGTH_SHORT).show();
+                        Sentry.captureMessage("EarningResponseApi: No earnings data available for user ID: " + userId);
                     } else {
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
                         recyclerView.setAdapter(new EarningsAdapter(earningsList));
@@ -68,14 +79,18 @@ public class EarningResponseApi {
                     }
                 } else {
                     int statusCode = response.code();
-                    Log.e("Earnings API Error", "HTTP Status Code: " + statusCode);
+                    String errorMessage = "Earnings API Error: HTTP " + statusCode + " - " + response.message();
+                    Log.e(TAG, errorMessage);
+                    Sentry.captureMessage(errorMessage);
                     Toast.makeText(context, "Error fetching data. Status Code: " + statusCode, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<EarningResponse>> call, Throwable t) {
-                Log.e("Earnings API Failure", "Error: " + t.getMessage(), t);
+                String failureMessage = "EarningResponse API Call Failed: " + t.getMessage();
+                Log.e(TAG, failureMessage, t);
+                Sentry.captureException(t);
                 Toast.makeText(context, "Failed to fetch data. Please check your internet connection.", Toast.LENGTH_LONG).show();
             }
         });
@@ -91,11 +106,12 @@ public class EarningResponseApi {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    Log.d("WebView", "Google Pie Chart loaded successfully.");
+                    Log.d(TAG, "Google Pie Chart loaded successfully.");
                 }
             });
         } else {
-            Log.e("WebView Error", "WebView is null. Cannot load chart.");
+            Log.e(TAG, "WebView is null. Cannot load chart.");
+            Sentry.captureMessage("WebView is null. Cannot load chart.");
         }
     }
 
@@ -107,24 +123,26 @@ public class EarningResponseApi {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    Log.d("WebView", "Google Pie Chart loaded successfully.");
+                    Log.d(TAG, "Google Pie Chart loaded successfully.");
 
                     String jsonData = "[['Category', 'Value'], ['Cash', " + cash + "], ['E-Payments', " + epayments + "], ['Account', " + account + "]]";
                     updateChart(jsonData);
                 }
             });
         } else {
-            Log.e("WebView Error", "WebView is null. Cannot update chart.");
+            Log.e(TAG, "WebView is null. Cannot update chart.");
+            Sentry.captureMessage("WebView is null. Cannot update chart.");
         }
     }
 
     private void updateChart(String jsonData) {
         if (webView != null) {
             webView.evaluateJavascript("javascript:updateChart(" + jsonData + ")", value ->
-                    Log.d("WebView JS Response", "Chart updated: " + value)
+                    Log.d(TAG, "Chart updated: " + value)
             );
         } else {
-            Log.e("WebView Error", "WebView is null. Cannot execute JavaScript.");
+            Log.e(TAG, "WebView is null. Cannot execute JavaScript.");
+            Sentry.captureMessage("WebView is null. Cannot execute JavaScript.");
         }
     }
 }

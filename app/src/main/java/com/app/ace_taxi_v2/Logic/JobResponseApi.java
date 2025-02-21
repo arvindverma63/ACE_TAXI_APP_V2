@@ -7,6 +7,8 @@ import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.JobResponse;
 
+import io.sentry.Sentry;
+import io.sentry.protocol.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -15,40 +17,67 @@ public class JobResponseApi {
     public Context context;
     public SessionManager sessionManager;
 
-    public JobResponseApi(Context context){
+    public JobResponseApi(Context context) {
         this.context = context;
         sessionManager = new SessionManager(context);
     }
 
-    public void acceptResponse(int bookingId){
+    public void acceptResponse(int bookingId) {
         String token = sessionManager.getToken();
+        int userId = sessionManager.getUserId(); // Get user ID from session
+
+        // Attach user details to Sentry
+        User sentryUser = new User();
+        sentryUser.setId(String.valueOf(userId));
+        Sentry.setUser(sentryUser);
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.sendJobResponse(token,bookingId,2000).enqueue(new Callback<JobResponse>() {
+        apiService.sendJobResponse(token, bookingId, 2000).enqueue(new Callback<JobResponse>() {
             @Override
             public void onResponse(Call<JobResponse> call, Response<JobResponse> response) {
-                Toast.makeText(context,"Job Accept Successfully",Toast.LENGTH_LONG);
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Job Accept Successfully", Toast.LENGTH_LONG).show();
+                } else {
+                    String errorMessage = "JobResponseApi Accept Error: HTTP " + response.code() + " - " + response.message();
+                    Sentry.captureMessage(errorMessage);
+                    Toast.makeText(context, "Failed to accept job", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(Call<JobResponse> call, Throwable t) {
-                Toast.makeText(context,"Job Accept failed",Toast.LENGTH_LONG);
+                Sentry.captureException(t);
+                Toast.makeText(context, "Job Accept failed", Toast.LENGTH_LONG).show();
             }
         });
     }
-    public void rejectBooking(int bookingId){
+
+    public void rejectBooking(int bookingId) {
         String token = sessionManager.getToken();
+        int userId = sessionManager.getUserId(); // Get user ID from session
+
+        // Attach user details to Sentry
+        User sentryUser = new User();
+        sentryUser.setId(String.valueOf(userId));
+        Sentry.setUser(sentryUser);
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.sendJobResponse(token,bookingId,2001).enqueue(new Callback<JobResponse>() {
+        apiService.sendJobResponse(token, bookingId, 2001).enqueue(new Callback<JobResponse>() {
             @Override
             public void onResponse(Call<JobResponse> call, Response<JobResponse> response) {
-                Toast.makeText(context,"Job Accept Successfully",Toast.LENGTH_LONG);
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Job Reject Successfully", Toast.LENGTH_LONG).show();
+                } else {
+                    String errorMessage = "JobResponseApi Reject Error: HTTP " + response.code() + " - " + response.message();
+                    Sentry.captureMessage(errorMessage);
+                    Toast.makeText(context, "Failed to reject job", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
             public void onFailure(Call<JobResponse> call, Throwable t) {
-                Toast.makeText(context,"Job Accept failed",Toast.LENGTH_LONG);
+                Sentry.captureException(t);
+                Toast.makeText(context, "Job Reject failed", Toast.LENGTH_LONG).show();
             }
         });
     }

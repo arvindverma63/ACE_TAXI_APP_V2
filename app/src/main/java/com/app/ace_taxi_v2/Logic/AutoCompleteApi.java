@@ -2,11 +2,16 @@ package com.app.ace_taxi_v2.Logic;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIRequest;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIResponse;
+
 import java.util.List;
+
+import io.sentry.Sentry;
+import io.sentry.protocol.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,9 +28,16 @@ public class AutoCompleteApi {
     public void autoCompleteSearch(String query, AutoCompleteCallback callback) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
+        int userId = sessionManager.getUserId(); // Assuming you can retrieve the user ID
+
+        // Attach user details to Sentry
+        User sentryUser = new User();
+        sentryUser.setId(String.valueOf(userId));
+        Sentry.setUser(sentryUser);
 
         if (token == null || token.isEmpty()) {
             Log.e(TAG, "Token is missing");
+            Sentry.captureMessage("AutoCompleteApi Error: Authentication token missing for user ID: " + userId);
             callback.onFail("Authentication token missing");
             return;
         }
@@ -39,15 +51,19 @@ public class AutoCompleteApi {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body());
                 } else {
-                    Log.e(TAG, "API Response Failed: " + response.message());
-                    callback.onFail("Failed to retrieve suggestions: " + response.message());
+                    String errorMessage = "Failed to retrieve suggestions: HTTP " + response.code() + " - " + response.message();
+                    Log.e(TAG, errorMessage);
+                    Sentry.captureMessage("AutoCompleteApi Error: " + errorMessage);
+                    callback.onFail(errorMessage);
                 }
             }
 
             @Override
             public void onFailure(Call<List<LocalPOIResponse>> call, Throwable t) {
-                Log.e(TAG, "API Call Failed", t);
-                callback.onFail("Error: " + t.getMessage());
+                String failureMessage = "AutoComplete API Call Failed: " + t.getMessage();
+                Log.e(TAG, failureMessage, t);
+                Sentry.captureException(t);
+                callback.onFail(failureMessage);
             }
         });
     }

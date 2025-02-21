@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.FcmRequest;
@@ -12,6 +11,8 @@ import com.app.ace_taxi_v2.Models.FcmResponse;
 
 import java.io.IOException;
 
+import io.sentry.Sentry;
+import io.sentry.protocol.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,17 +28,24 @@ public class UpdateFCMApi {
     public void updateFcm() {
         SessionManager sessionManager = new SessionManager(context);
         String jwtToken = sessionManager.getToken();
+        int userId = sessionManager.getUserId(); // Get user ID for tracking
 
         FCMTokenManager tokenManager = new FCMTokenManager(context);
         String fcm = tokenManager.getToken();
 
-        Log.e(TAG,"FCM Token : "+fcm);
+        Log.e(TAG, "FCM Token : " + fcm);
 
         if (jwtToken == null || jwtToken.isEmpty() || fcm == null || fcm.isEmpty()) {
             Log.e(TAG, "JWT token or FCM token is null/empty");
+            Sentry.captureMessage("UpdateFCMApi Error: JWT token or FCM token is null/empty for user ID: " + userId);
             Toast.makeText(context, "Token error. Please try again.", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // Attach user details to Sentry
+        User sentryUser = new User();
+        sentryUser.setId(String.valueOf(userId));
+        Sentry.setUser(sentryUser);
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
         FcmRequest request = new FcmRequest(fcm);
@@ -53,8 +61,10 @@ public class UpdateFCMApi {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error details";
                         Log.e(TAG, "Failed to update FCM: " + response.code() + " - " + errorBody);
+                        Sentry.captureMessage("UpdateFCMApi Error: HTTP " + response.code() + " - " + errorBody);
                     } catch (IOException e) {
                         Log.e(TAG, "Error reading error body", e);
+                        Sentry.captureException(e);
                     }
                     Toast.makeText(context, "Failed to update FCM. Please try again.", Toast.LENGTH_SHORT).show();
                 }
@@ -63,6 +73,7 @@ public class UpdateFCMApi {
             @Override
             public void onFailure(Call<FcmResponse> call, Throwable t) {
                 Log.e(TAG, "Error updating FCM: " + t.getMessage());
+                Sentry.captureException(t);
                 Toast.makeText(context, "Network error. Please check your connection.", Toast.LENGTH_SHORT).show();
             }
         });

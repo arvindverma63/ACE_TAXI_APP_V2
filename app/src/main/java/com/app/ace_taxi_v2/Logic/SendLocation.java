@@ -1,19 +1,18 @@
 package com.app.ace_taxi_v2.Logic;
 
-
 import android.content.Context;
 import android.util.Log;
-
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.GPSRequest;
 import com.app.ace_taxi_v2.Models.GPSResponse;
 
+import io.sentry.Sentry;
+import io.sentry.protocol.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 public class SendLocation {
     private double latitude;
@@ -40,10 +39,16 @@ public class SendLocation {
 
         if (token == null || userId == -1) {
             Log.e("SendLocation", "User is not logged in or token is invalid");
+            Sentry.captureMessage("SendLocation Error: User is not logged in or token is invalid.");
             return;
         }
 
         Log.d("SendLocation", "Preparing to send GPS data");
+
+        // Attach user details to Sentry
+        User sentryUser = new User();
+        sentryUser.setId(String.valueOf(userId));
+        Sentry.setUser(sentryUser);
 
         // Prepare the API call
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
@@ -55,15 +60,17 @@ public class SendLocation {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("SendLocation", "GPS updated successfully: " + response.body());
                 } else {
-                    // Log error response
                     Log.e("SendLocation", "Failed to update GPS");
                     Log.e("SendLocation", "HTTP Response Code: " + response.code());
                     try {
                         if (response.errorBody() != null) {
-                            Log.e("SendLocation", "Error Body: " + response.errorBody().string());
+                            String errorBody = response.errorBody().string();
+                            Log.e("SendLocation", "Error Body: " + errorBody);
+                            Sentry.captureMessage("SendLocation API Error: " + errorBody);
                         }
                     } catch (Exception e) {
                         Log.e("SendLocation", "Error parsing error body: " + e.getMessage());
+                        Sentry.captureException(e);
                     }
                 }
             }
@@ -71,9 +78,8 @@ public class SendLocation {
             @Override
             public void onFailure(Call<GPSResponse> call, Throwable t) {
                 Log.e("SendLocation", "Error updating GPS: " + t.getMessage());
+                Sentry.captureException(t);
             }
         });
     }
 }
-
-

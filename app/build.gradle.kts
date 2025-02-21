@@ -11,8 +11,8 @@ android {
         applicationId = "com.app.ace_taxi_v2"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +55,7 @@ dependencies {
     implementation ("com.google.maps.android:android-maps-utils:3.4.0")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.gms:google-services:4.4.2")
+    implementation("io.sentry:sentry-android:8.2.0")
 
 
 }

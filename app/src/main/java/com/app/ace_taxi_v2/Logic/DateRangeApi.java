@@ -12,11 +12,14 @@ import com.app.ace_taxi_v2.Models.Jobs.DateRangeResponse;
 
 import java.util.List;
 
+import io.sentry.Sentry;
+import io.sentry.protocol.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DateRangeApi {
+    private static final String TAG = "DateRangeApi";
     private final Context context;
 
     public DateRangeApi(Context context) {
@@ -26,6 +29,12 @@ public class DateRangeApi {
     public void getData(String from, String to, BookingCallback callback) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
+        int userId = sessionManager.getUserId(); // Assuming session manager provides the user ID
+
+        // Attach user details to Sentry
+        User sentryUser = new User();
+        sentryUser.setId(String.valueOf(userId));
+        Sentry.setUser(sentryUser);
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
         DateRangeRequest dateRangeRequest = new DateRangeRequest(from, to);
@@ -38,20 +47,25 @@ public class DateRangeApi {
 
                     if (list != null && !list.isEmpty()) {
                         callback.onSuccess(list);
-                        Log.e("Date range response : ",""+list);
-
+                        Log.d(TAG, "Date range response received: " + list);
                     } else {
-                        callback.onFail("No bookings found for the selected date range.");
+                        String noBookingsMessage = "No bookings found for the selected date range.";
+                        callback.onFail(noBookingsMessage);
+                        Sentry.captureMessage("DateRangeApi: " + noBookingsMessage);
                     }
                 } else {
-                    callback.onFail("Server error: " + response.message());
-                    Log.e("DateRangeApi", "API response error: " + response.message());
+                    String errorMessage = "Server error: HTTP " + response.code() + " - " + response.message();
+                    callback.onFail(errorMessage);
+                    Log.e(TAG, "API response error: " + response.message());
+                    Sentry.captureMessage("DateRangeApi Error: " + errorMessage);
                 }
             }
 
             @Override
             public void onFailure(Call<DateRangeList> call, Throwable t) {
-                Log.e("DateRangeApi", "API call failed", t);
+                String failureMessage = "DateRange API Call Failed: " + t.getMessage();
+                Log.e(TAG, failureMessage, t);
+                Sentry.captureException(t);
                 callback.onFail("Network error: " + t.getMessage());
                 Toast.makeText(context, "Failed to fetch data. Please check your connection.", Toast.LENGTH_SHORT).show();
             }

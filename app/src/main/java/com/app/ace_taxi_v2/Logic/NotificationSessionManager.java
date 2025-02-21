@@ -1,6 +1,5 @@
 package com.app.ace_taxi_v2.Logic;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -13,6 +12,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.sentry.Sentry;
 
 public class NotificationSessionManager {
 
@@ -52,6 +53,7 @@ public class NotificationSessionManager {
             Log.d(TAG, "Notification saved: " + notificationObject.toString());
         } catch (JSONException e) {
             Log.e(TAG, "Error saving notification", e);
+            Sentry.captureException(e); // Capturing exception in Sentry
         }
     }
 
@@ -76,6 +78,7 @@ public class NotificationSessionManager {
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error retrieving notifications", e);
+            Sentry.captureException(e); // Capturing exception in Sentry
         }
 
         return notificationsList;

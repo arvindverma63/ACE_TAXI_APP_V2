@@ -60,6 +60,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.sentry.SentryLevel;
+import io.sentry.android.core.SentryAndroid;
+
 public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -90,6 +93,18 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
         }
+
+        SentryAndroid.init(this, options -> {
+            options.setDsn("https://aa346bb12052028e902fac3576466b52@o4508856621858816.ingest.us.sentry.io/4508856623038464");
+            // Add a callback that will be used before the event is sent to Sentry.
+            // With this callback, you can modify the event or, when returning null, also discard the event.
+            options.setBeforeSend((event, hint) -> {
+                if (SentryLevel.DEBUG.equals(event.getLevel()))
+                    return null;
+                else
+                    return event;
+            });
+        });
         // Load dark mode preference
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
