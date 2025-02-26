@@ -27,19 +27,31 @@ public class NotificationModalSession {
         gson = new Gson();
     }
 
-    // ✅ Save Notification Data using JSON storage
     public void saveNotification(NotificationModel notification) {
         List<NotificationModel> notifications = getAllNotifications();
+
+        // Find the highest serial number in existing notifications
+        int maxSerialNumber = 0;
+        for (NotificationModel model : notifications) {
+            if (model.getSerialNumber() > maxSerialNumber) {
+                maxSerialNumber = model.getSerialNumber();
+            }
+        }
+
+        // Assign the next serial number
+        notification.setSerialNumber(maxSerialNumber + 1);
+
         notifications.add(notification);
 
-        // Convert list to JSON string
+        // Convert list to JSON and save it
         String jsonNotifications = gson.toJson(notifications);
         editor.putString(KEY_NOTIFICATIONS, jsonNotifications);
         incrementNotificationCount();
-        editor.commit(); // Ensures data is saved immediately
+        editor.commit();
 
         Log.d("NotificationDebug", "Saved Notification: " + notification.toString());
     }
+
 
     // ✅ Retrieve All Notifications as List<NotificationModel>
     public List<NotificationModel> getAllNotifications() {
@@ -115,4 +127,45 @@ public class NotificationModalSession {
         editor.apply();
         Log.d("NotificationDebug", "All notifications cleared.");
     }
+    public void deleteNotificationBySerial(int serialNumber) {
+        List<NotificationModel> notifications = getAllNotifications();
+        boolean deleted = false;
+
+        for (int i = 0; i < notifications.size(); i++) {
+            if (notifications.get(i).getSerialNumber() == serialNumber) {
+                notifications.remove(i);
+                deleted = true;
+                break; // Stop after deleting the first match
+            }
+        }
+
+        if (deleted) {
+            // Convert the updated list to JSON and save it back
+            String jsonNotifications = gson.toJson(notifications);
+            editor.putString(KEY_NOTIFICATIONS, jsonNotifications);
+            editor.apply();
+            Log.d("NotificationDebug", "Deleted Notification with Serial Number: " + serialNumber);
+        } else {
+            Log.d("NotificationDebug", "No matching notification found for Serial Number: " + serialNumber);
+        }
+    }
+    public int getSerialNumberByJobId(String jobId) {
+        if (jobId == null) {
+            Log.d("NotificationDebug", "Job ID is null. Cannot retrieve serial number.");
+            return -1; // Return -1 to indicate not found
+        }
+
+        List<NotificationModel> notifications = getAllNotifications();
+
+        for (NotificationModel model : notifications) {
+            if (jobId.equals(model.getJobId())) { // Avoid null comparison error
+                return model.getSerialNumber();
+            }
+        }
+
+        Log.d("NotificationDebug", "No notification found with Job ID: " + jobId);
+        return -1; // Return -1 if not found
+    }
+
+
 }

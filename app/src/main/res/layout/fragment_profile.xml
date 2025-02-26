@@ -52,6 +52,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_forward"
+                    style="@style/IconTint"
                     android:contentDescription="Arrow" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -84,6 +85,7 @@
 
                 <ImageView
                     android:layout_width="24dp"
+                    style="@style/IconTint"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_forward"
                     android:contentDescription="Arrow" />
@@ -152,6 +154,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_forward"
+                    style="@style/IconTint"
                     android:contentDescription="Arrow" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -184,6 +187,7 @@
 
                 <ImageView
                     android:layout_width="24dp"
+                    style="@style/IconTint"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_forward"
                     android:contentDescription="Arrow" />

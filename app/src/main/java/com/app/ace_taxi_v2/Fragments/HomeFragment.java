@@ -1,21 +1,21 @@
 package com.app.ace_taxi_v2.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
-import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
@@ -27,16 +27,19 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
+    private static final String PREFS_NAME = "AppPrefs";
+    private static final String SWITCH_STATE_KEY = "switch_state";
 
     private Switch locationSwitch;
     private TextView onlineStatusLabel;
-    private LocationPermissions locationPermissions;  // LocationPermissions instance
-    public TextView pickup_address,destination_address,pickup_subaddress,destination_subaddress,date,price,passenger_count,passenger_name;
+    private LocationPermissions locationPermissions;
+    private TextView pickup_address, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Initialize UI components
         pickup_address = view.findViewById(R.id.pickup_address);
         destination_address = view.findViewById(R.id.destination_address);
         pickup_subaddress = view.findViewById(R.id.pickup_subaddress);
@@ -45,7 +48,6 @@ public class HomeFragment extends Fragment {
         price = view.findViewById(R.id.current_price);
         passenger_count = view.findViewById(R.id.current_passenger_count);
         passenger_name = view.findViewById(R.id.passenger_name);
-
 
         // Check user session
         if (getActivity() == null) return view;
@@ -56,43 +58,80 @@ public class HomeFragment extends Fragment {
             getActivity().finish();
             return view;
         }
-        getCurrentBooking();
 
-        // Initialize UI components
+
+        getCurrentBooking(); // Load booking details
+
+        // Initialize Switch and TextView
         locationSwitch = view.findViewById(R.id.online_toggle);
         onlineStatusLabel = view.findViewById(R.id.online_status_label);
 
         // Initialize LocationPermissions instance
         locationPermissions = new LocationPermissions(getActivity(), locationSwitch, onlineStatusLabel);
 
+        // Retrieve switch state from SharedPreferences, default to true
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        boolean switchState = sharedPreferences.getBoolean(SWITCH_STATE_KEY, true); // Default is true
+        locationSwitch.setChecked(switchState);
+        updateStatusLabel(switchState);
+
+        // If switch is enabled by default, start location service
+        if (switchState) {
+            locationPermissions.startLocationService();
+        }
+
         // Set up the Switch listener
         locationSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-            if (isChecked) {
-                if (locationPermissions.isLocationEnabled()) {
-                    if (locationPermissions.checkLocationPermissions() && locationPermissions.checkBatteryOptimizations()) {
-                        locationPermissions.startLocationService();
-                        locationPermissions.setSwitchState(true);
-                        onlineStatusLabel.setText("You Are Online");
-                    } else {
-                        locationPermissions.requestLocationPermissions();
-                        locationPermissions.setSwitchState(false);
-                    }
-                } else {
-                    Log.e(TAG, "Location services (GPS) are disabled.");
-                    locationPermissions.promptEnableGPS();
-                    locationPermissions.setSwitchState(false);
-                }
-            } else {
-                locationPermissions.setSwitchState(false);
-                locationPermissions.stopLocationService();
-                onlineStatusLabel.setText("You Are Offline");
-            }
+            saveSwitchState(isChecked);
+            handleSwitchToggle(isChecked);
         });
 
         return view;
     }
 
-    public void getCurrentBooking(){
+    private void saveSwitchState(boolean state) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SWITCH_STATE_KEY, state);
+        editor.apply();
+    }
+
+    private void handleSwitchToggle(boolean isChecked) {
+        if (isChecked) {
+            if (locationPermissions.isLocationEnabled()) {
+                if (locationPermissions.checkLocationPermissions() && locationPermissions.checkBatteryOptimizations()) {
+                    locationPermissions.startLocationService();
+                    locationPermissions.setSwitchState(true);
+                    updateStatusLabel(true);
+                } else {
+                    locationPermissions.requestLocationPermissions();
+                    locationPermissions.setSwitchState(false);
+                }
+            } else {
+                Log.e(TAG, "Location services (GPS) are disabled.");
+                locationPermissions.promptEnableGPS();
+                locationPermissions.setSwitchState(false);
+            }
+        } else {
+            locationPermissions.setSwitchState(false);
+            locationPermissions.stopLocationService();
+            updateStatusLabel(false);
+        }
+    }
+
+    private void updateStatusLabel(boolean isOnline) {
+        onlineStatusLabel.setText(isOnline ? "You Are Online" : "You Are Offline");
+
+        if (isOnline) {
+            locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+        } else {
+            locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray))); // Change to your OFF color
+            locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+        }
+    }
+
+    public void getCurrentBooking() {
         CurrentBooking currentBooking = new CurrentBooking(getContext());
         currentBooking.getCurrentBooking(new CurrentBooking.CurrentJobCallback() {
             @Override
@@ -128,7 +167,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
-
 
 }

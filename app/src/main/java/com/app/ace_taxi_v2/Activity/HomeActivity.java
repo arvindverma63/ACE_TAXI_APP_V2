@@ -44,6 +44,8 @@ import com.app.ace_taxi_v2.Fragments.ProfileFragment;
 import com.app.ace_taxi_v2.Fragments.ReportPageFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
 import com.app.ace_taxi_v2.Logic.LoginManager;
+import com.app.ace_taxi_v2.Logic.Service.BackgroundPermissionHelper;
+import com.app.ace_taxi_v2.Logic.Service.BatteryOptimizationHelper;
 import com.app.ace_taxi_v2.Logic.Service.ConfigSessionManager;
 import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
@@ -78,7 +80,8 @@ public class HomeActivity extends AppCompatActivity {
     private static final int TAP_THRESHOLD = 3; // Number of taps required to exit
     private static final int TIMEOUT = 2000; // 2 seconds timeout to reset count
     private Handler handlerBack = new Handler();
-
+    public BackgroundPermissionHelper permissionHelper;
+    public BatteryOptimizationHelper batteryHelper;
 
 
     @Override
@@ -93,7 +96,10 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
         }
-
+        permissionHelper = new BackgroundPermissionHelper(this);
+        permissionHelper.requestLocationPermissions();
+        batteryHelper = new BatteryOptimizationHelper(this);
+        batteryHelper.showBatteryOptimizationDialog();
         SentryAndroid.init(this, options -> {
             options.setDsn("https://aa346bb12052028e902fac3576466b52@o4508856621858816.ingest.us.sentry.io/4508856623038464");
             // Add a callback that will be used before the event is sent to Sentry.
@@ -326,6 +332,11 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionHelper.handlePermissionsResult(requestCode, permissions, grantResults);
     }
 
     public void phoneBtn() {

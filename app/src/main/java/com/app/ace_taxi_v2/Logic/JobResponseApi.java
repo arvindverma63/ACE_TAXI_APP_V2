@@ -47,7 +47,6 @@ public class JobResponseApi {
             @Override
             public void onFailure(Call<JobResponse> call, Throwable t) {
                 Sentry.captureException(t);
-                Toast.makeText(context, "Job Accept failed", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -14,7 +14,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:paddingBottom="10dp"
-        android:textColor="@color/black"/>
+        style="@style/TextBG"/>
 
     <TextView android:id="@+id/tv_accountJobsTotalCount"
         style="@style/DetailTextStyle" android:text="Account Jobs: "/>

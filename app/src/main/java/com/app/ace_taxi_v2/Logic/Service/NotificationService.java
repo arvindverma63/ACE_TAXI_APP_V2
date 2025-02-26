@@ -15,6 +15,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.Activity.NotificationModalActivity;
+import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.app.ace_taxi_v2.Models.NotificationModel;
 import com.app.ace_taxi_v2.R;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -81,9 +82,16 @@ public class NotificationService extends FirebaseMessagingService {
         NotificationModalSession notificationModalSession = new NotificationModalSession(this);
         NotificationModel notificationModel = new NotificationModel(jobId, navId, title, message);
         notificationModalSession.saveNotification(notificationModel);
-
         // Show the notification
         showNotification(title, body, jobId, navId);
+
+        if (jobId != null) {
+            int bookingId = Integer.parseInt(jobId);
+            GetBookingById getBookingById = new GetBookingById(this);
+            getBookingById.getBookingDetails(bookingId);
+        }
+
+
     }
 
 

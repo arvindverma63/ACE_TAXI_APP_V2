@@ -8,7 +8,6 @@
     style="@style/MainBG"
     android:padding="16dp">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_header"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
         style="@style/ActionBar"
         app:navigationIcon="@drawable/ic_back_arrow"
         app:navigationContentDescription="Back" />
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/dateRangeInputLayout"
@@ -118,9 +116,5 @@
                 android:gravity="center"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
-
-
-
 
 </LinearLayout>

@@ -5,12 +5,15 @@ import android.util.Log;
 
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
+import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
 
 public class NotificationDialogController {
     private Context context;
+    public NotificationModalSession notificationModalSession;
 
     public NotificationDialogController(Context context) {
         this.context = context;
+        notificationModalSession = new NotificationModalSession(context);
     }
 
     public void openModal(String navId, String jobId) {
@@ -30,6 +33,8 @@ public class NotificationDialogController {
             case 1:
                 Log.d("NotificationDialogController", "Processing job amendment...");
                 new GetBookingById(context).getBookingDetails(jobid);
+                int bookingId = Integer.parseInt(notificationModalSession.getLatestJobId());
+                notificationModalSession.deleteNotificationBySerial(bookingId);
                 break;
             case 2:
                 Log.d("NotificationDialogController", "Processing job cancellation...");

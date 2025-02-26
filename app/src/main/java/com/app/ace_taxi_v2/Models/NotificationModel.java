@@ -1,12 +1,13 @@
 package com.app.ace_taxi_v2.Models;
 
 public class NotificationModel {
+    private int serialNumber; // Auto-generated Serial Number
     private String jobId;
     private String navId;
     private String title;
     private String message;
 
-    // Constructor
+    // Constructor (without serial number)
     public NotificationModel(String jobId, String navId, String title, String message) {
         this.jobId = jobId != null ? jobId : "N/A";
         this.navId = navId != null ? navId : "N/A";
@@ -15,6 +16,9 @@ public class NotificationModel {
     }
 
     // Getters & Setters
+    public int getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(int serialNumber) { this.serialNumber = serialNumber; }
+
     public String getJobId() { return jobId; }
     public void setJobId(String jobId) { this.jobId = jobId; }
 
@@ -30,7 +34,8 @@ public class NotificationModel {
     @Override
     public String toString() {
         return "NotificationModel{" +
-                "jobId='" + jobId + '\'' +
+                "serialNumber=" + serialNumber +
+                ", jobId='" + jobId + '\'' +
                 ", navId='" + navId + '\'' +
                 ", title='" + title + '\'' +
                 ", message='" + message + '\'' +
