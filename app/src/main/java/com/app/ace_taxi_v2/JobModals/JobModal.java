@@ -88,7 +88,6 @@ public class JobModal {
             Log.d("Accept Job Button clicked",""+bookingId);
             Intent intent = new Intent(context, HomeActivity.class);
             context.startActivity(intent);
-
         });
 
         Button rejectBooking = dialogView.findViewById(R.id.reject_button);

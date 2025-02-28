@@ -151,7 +151,7 @@
                 android:id="@+id/startButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="START"
+                android:text="New"
                 android:textAllCaps="true"
                 app:backgroundTint="@color/blue"
                 android:textColor="@color/white"

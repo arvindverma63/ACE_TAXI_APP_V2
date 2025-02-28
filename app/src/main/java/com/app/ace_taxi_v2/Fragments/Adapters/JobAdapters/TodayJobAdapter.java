@@ -1,6 +1,7 @@
 package com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Activity.JobOfferDialogActivity;
+import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.ShiftChangeModal;
+import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
@@ -29,6 +33,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
     private final List<TodayBooking> jobList;
     private final OnItemClickListener listener;
     private final Context context;
+    int statusBookingId = 0;
 
     public TodayJobAdapter(Context context, List<TodayBooking> jobList, OnItemClickListener listener) {
         this.context = context;
@@ -83,104 +88,176 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
         }
 
         public void bind(TodayBooking job, OnItemClickListener listener) {
-            String pickup = job.getPickupAddress();
-            String[] pickupParts = pickup.split(",");
-            String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
-            String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim()+job.getPickupPostCode() : job.getPickupPostCode();
+            try {
+                // Address parsing with null checks
+                String pickup = job.getPickupAddress() != null ? job.getPickupAddress() : "";
+                String[] pickupParts = pickup.split(",");
+                String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
+                String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() + (job.getPickupPostCode() != null ? job.getPickupPostCode() : "")
+                        : (job.getPickupPostCode() != null ? job.getPickupPostCode() : "");
 
-            String destination = job.getDestinationAddress();
-            String[] destinationParts = destination.split(",");
-            String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
-            String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim()+job.getDestinationPostCode() : job.getDestinationPostCode();
+                String destination = job.getDestinationAddress() != null ? job.getDestinationAddress() : "";
+                String[] destinationParts = destination.split(",");
+                String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
+                String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() + (job.getDestinationPostCode() != null ? job.getDestinationPostCode() : "")
+                        : (job.getDestinationPostCode() != null ? job.getDestinationPostCode() : "");
 
-            customerTextView.setText(String.valueOf(job.getPassengers()));
-            mainAddressTextView.setText(firstPickup);
-            subAddressTextView.setText(firstDestination);
-            price.setText("£" + job.getPrice());
+                // Set basic UI elements
+                customerTextView.setText(String.valueOf(job.getPassengers()));
+                mainAddressTextView.setText(firstPickup);
+                subAddressTextView.setText(firstDestination);
+                price.setText("£" + job.getPrice());
+                pickupAddress.setText(lastPickup);
+                destinationAddress.setText(lastDestination);
 
-            pickupAddress.setText(lastPickup);
-            destinationAddress.setText(lastDestination);
+                BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
+
+                // Initial button state check
 
 
-            // Check job status on load and update button accordingly
-            GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
-            getBookingInfoApi.getInfo(job.getBookingId(), new GetBookingInfoApi.BookingCallback() {
-                @Override
-                public void onSuccess(com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
-                    CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
-                    String id;
-                    int bookingId = 1;
-                    try{
-                         id = currentBookingSession.getBookingId();
-                         bookingId = Integer.parseInt(id);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-                    if(job.getBookingId() == bookingId){
-                        startButton.setText("Started");
-                        startButton.setBackgroundColor(ContextCompat.getColor(context,R.color.dark_green));
-                    }
-                    if ("3".equals(bookingInfo.getStatus())) {
-                        startButton.setText("Completed");
-                        startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
-                        startButton.setEnabled(false); // Disable button after completion
-                    }
-                    if ("2".equals(bookingInfo.getStatus())) {
-                        startButton.setText("Rejected");
-                        startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
-                        startButton.setEnabled(false); // Disable button after completion
-                    }
-
-                }
-
-                @Override
-                public void onfailer(String error) {
-                    // Handle failure (optional logging or error message)
-                }
-            });
-
-            viewButton.setOnClickListener(v -> listener.onViewClick(job));
-
-            startButton.setOnClickListener(v -> {
-
-                CurrentShiftStatus currentShiftStatus = new CurrentShiftStatus(context);
-                if(!currentShiftStatus.getStatus().equals("onShift")){
-                    Toast.makeText(context,"Start Your Shift",Toast.LENGTH_LONG).show();
-                    Log.d("Current Driver shift: "," "+currentShiftStatus.getStatus());
-                    return;
-                }
-
-                listener.onStartClick(job);
-
-                // Update button dynamically when job is completed
+                // Check job status and update button
+                GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
                 getBookingInfoApi.getInfo(job.getBookingId(), new GetBookingInfoApi.BookingCallback() {
                     @Override
                     public void onSuccess(com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
-                        if ("3".equals(bookingInfo.getStatus())) {
-                            startButton.setText("Completed");
-                            startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
-                            startButton.setEnabled(false);
-                        }
-                        if ("2".equals(bookingInfo.getStatus())) {
-                            startButton.setText("Rejected");
-                            startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
-                            startButton.setEnabled(false); // Disable button after completion
+                        try {
+                            CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
+                            int bookingId = -1;
+                            try {
+                                String id = currentBookingSession.getBookingId();
+                                if (id != null && !id.isEmpty()) {
+                                    bookingId = Integer.parseInt(id);
+                                }
+                            } catch (NumberFormatException e) {
+                                Log.e("TodayJobAdapter", "Error parsing current booking ID", e);
+                            }
+
+                            if (job.getBookingId() == bookingId) {
+                                startButton.setText("Started");
+                                startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.dark_green));
+                            }
+
+                            String status = bookingInfo.getStatus();
+                            if ("3".equals(status)) {
+                                bookingStartStatus.clearBookingId();
+                                startButton.setText("Completed");
+                                startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
+                                startButton.setEnabled(false);
+                            } else if ("2".equals(status)) {
+                                bookingStartStatus.clearBookingId();
+                                startButton.setText("Rejected");
+                                startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
+                                startButton.setEnabled(false);
+                            }
+                            else if("1".equals(status)){
+                                startButton.setText("Start");
+                                try {
+                                    statusBookingId = bookingStartStatus.getBookingId() != null ?
+                                            Integer.parseInt(bookingStartStatus.getBookingId()) : -1;
+                                    if (statusBookingId == job.getBookingId()) {
+                                        startButton.setText("Active");
+                                        startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.dark_blue));
+                                    }
+                                } catch (NumberFormatException e) {
+                                    Log.e("TodayJobAdapter", "Invalid booking ID format", e);
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("TodayJobAdapter", "Error processing booking status", e);
                         }
                     }
 
                     @Override
                     public void onfailer(String error) {
-                        // Handle failure scenario
+                        Log.e("TodayJobAdapter", "Failed to fetch booking info: " + error);
+                        Toast.makeText(context, "Failed to load booking status", Toast.LENGTH_SHORT).show();
                     }
                 });
-            });
+
+                // Setup click listeners
+                viewButton.setOnClickListener(v -> listener.onViewClick(job));
+
+                startButton.setOnClickListener(v -> {
+                    Log.e("Status and Id", "Status and Id : " + job.getStatus() + " " + job.getBookingId() + " bookingStart Status: " + bookingStartStatus.getBookingId());
+
+                    try {
+                        CurrentShiftStatus currentShiftStatus = new CurrentShiftStatus(context);
+                        int activeBookingId = -1; // Default value if no active booking exists
+
+                        // Check if bookingStartStatus has a valid ID before parsing
+                        if (bookingStartStatus != null && bookingStartStatus.getBookingId() != null && !bookingStartStatus.getBookingId().isEmpty()) {
+                            try {
+                                activeBookingId = Integer.parseInt(bookingStartStatus.getBookingId());
+                            } catch (NumberFormatException e) {
+                                Log.e("TodayJobAdapter", "Error parsing active booking ID", e);
+                            }
+                        }
+
+                        if (job.getStatus() == null || "0".equals(job.getStatus())) {
+                            JobModal jobModal = new JobModal(context);
+                            jobModal.jobOfferModalForTodayJob(job.getBookingId());
+                        }
+
+                        if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
+                            Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (bookingStartStatus.getBookingId() == null && "1".equals(job.getStatus())) {
+                            bookingStartStatus.setBookingId(String.valueOf(job.getBookingId()));
+                        }
+
+                        if (!"onShift".equals(currentShiftStatus.getStatus())) {
+                            Toast.makeText(context, "Start Your Shift", Toast.LENGTH_LONG).show();
+                            Log.d("Current Driver shift: ", " " + currentShiftStatus.getStatus());
+                            return;
+                        }
+
+                        // Set booking ID and start job if no active booking exists
+                        if (activeBookingId == job.getBookingId()) {
+                            bookingStartStatus.setBookingId(String.valueOf(job.getBookingId()));
+                            listener.onStartClick(job);
+                        }
+
+                        // Verify status after starting
+                        getBookingInfoApi.getInfo(job.getBookingId(), new GetBookingInfoApi.BookingCallback() {
+                            @Override
+                            public void onSuccess(com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
+                                String status = bookingInfo.getStatus();
+                                if ("3".equals(status)) {
+                                    bookingStartStatus.clearBookingId();
+                                    startButton.setText("Completed");
+                                    startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
+                                    startButton.setEnabled(false);
+                                } else if ("2".equals(status)) {
+                                    bookingStartStatus.clearBookingId();
+                                    startButton.setText("Rejected");
+                                    startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
+                                    startButton.setEnabled(false);
+                                }
+                            }
+
+                            @Override
+                            public void onfailer(String error) {
+                                Log.e("TodayJobAdapter", "Failed to verify booking status: " + error);
+                                Toast.makeText(context, "Failed to verify booking status", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e("TodayJobAdapter", "Error handling start button click", e);
+                        Toast.makeText(context, "Error starting job", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (Exception e) {
+                Log.e("TodayJobAdapter", "Error binding job data", e);
+                Toast.makeText(context, "Error loading job details", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     public interface OnItemClickListener {
         void onViewClick(TodayBooking job);
-
         void onStartClick(TodayBooking job);
     }
 }

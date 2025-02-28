@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
@@ -55,7 +56,25 @@ public class TodayJobManager {
                         Toast.makeText(context, "No jobs available for today", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
+                    int bookingId = 0;
 
+                    try {
+                        bookingId = Integer.parseInt(bookingStartStatus.getBookingId());
+                    } catch (NumberFormatException e) {
+                        bookingId = -1;
+                    }
+                    boolean bookingExists = false;
+
+                    for (TodayBooking booking : bookingList) {
+                        if (booking.getBookingId() == bookingId) {
+                            bookingExists = true;
+                            break;
+                        }
+                    }
+                    if (!bookingExists) {
+                        bookingStartStatus.clearBookingId();
+                    }
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setAdapter(new TodayJobAdapter(context, bookingList, new TodayJobAdapter.OnItemClickListener() {
@@ -113,13 +132,12 @@ public class TodayJobManager {
     private void handleJobStart(TodayBooking booking) {
         JobStatusModal jobStatusModal = new JobStatusModal(context);
         GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
-
         getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {
             @Override
             public void onSuccess(GetBookingInfo bookingInfo) {
                 Log.e("Booking Status", "Status: " + bookingInfo.getStatus());
 
-                if (bookingInfo.getStatus() == null) {
+                if (bookingInfo.getStatus() == "0") {
                     JobModal jobModal = new JobModal(context);
                     jobModal.jobOfferModalForTodayJob(
                             booking.getBookingId()

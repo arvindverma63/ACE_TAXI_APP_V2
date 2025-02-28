@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.BookingRequest.BookingCompleteRequest;
 
@@ -40,6 +41,8 @@ public class BookingCompleteApi {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
                     Toast.makeText(context, "Booking Completed", Toast.LENGTH_LONG).show();
+                    BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
+                    bookingStartStatus.clearBookingId();
                 } else {
                     String errorMessage = "BookingCompleteApi Error: HTTP " + response.code() + " - " + response.message();
                     Log.e(TAG, errorMessage);

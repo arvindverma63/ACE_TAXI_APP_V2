@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
+import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
@@ -132,31 +133,44 @@ public class HomeFragment extends Fragment {
     }
 
     public void getCurrentBooking() {
+        BookingStartStatus bookingStartStatus = new BookingStartStatus(getContext());
+        int bookingId = 0; // Default to -1 if no booking exists
+
+        try {
+            String bookingIdStr = bookingStartStatus.getBookingId();
+            if (bookingIdStr != null && !bookingIdStr.isEmpty()) {
+                bookingId = Integer.parseInt(bookingIdStr);
+            }
+        } catch (NumberFormatException e) {
+            Log.e("getCurrentBooking", "Invalid booking ID", e);
+        }
+
         CurrentBooking currentBooking = new CurrentBooking(getContext());
+        int finalBookingId = bookingId;
         currentBooking.getCurrentBooking(new CurrentBooking.CurrentJobCallback() {
             @Override
             public void onSuccess(List<TodayBooking> list) {
-                for (int i = 0; i < list.size(); i++) {
-                    String status = list.get(i).getStatus(); // Store in variable
-                    if ("1".equals(status)) { // Safe way to compare
-                        String pickup = list.get(i).getPickupAddress();
+                for (TodayBooking booking : list) {
+                    String status = booking.getStatus();
+                    if ("1".equals(status) && booking.getBookingId() == finalBookingId) {
+                        String pickup = booking.getPickupAddress();
                         String[] pickupParts = pickup != null ? pickup.split(",") : new String[]{""};
                         String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
-                        String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() + list.get(i).getPickupPostCode() : list.get(i).getPickupPostCode();
+                        String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() + booking.getPickupPostCode() : booking.getPickupPostCode();
 
-                        String destination = list.get(i).getDestinationAddress();
+                        String destination = booking.getDestinationAddress();
                         String[] destinationParts = destination != null ? destination.split(",") : new String[]{""};
                         String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
-                        String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() + list.get(i).getDestinationPostCode() : list.get(i).getDestinationPostCode();
+                        String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() + booking.getDestinationPostCode() : booking.getDestinationPostCode();
 
                         pickup_address.setText(firstPickup);
                         pickup_subaddress.setText(lastPickup);
                         destination_address.setText(firstDestination);
                         destination_subaddress.setText(lastDestination);
-                        price.setText("£" + list.get(i).getPrice());
-                        date.setText(list.get(i).getPickupDateTime());
-                        passenger_count.setText("" + list.get(i).getPassengers());
-                        passenger_name.setText(list.get(i).getPassengerName());
+                        price.setText("£" + booking.getPrice());
+                        date.setText(booking.getPickupDateTime());
+                        passenger_count.setText(String.valueOf(booking.getPassengers()));
+                        passenger_name.setText(booking.getPassengerName());
                     }
                 }
             }
@@ -167,5 +181,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 
 }
