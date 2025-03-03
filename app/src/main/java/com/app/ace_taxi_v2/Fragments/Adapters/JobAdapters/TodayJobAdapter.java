@@ -52,7 +52,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TodayBooking job = jobList.get(position);
-        holder.bind(job, listener);
+        holder.bind(job, listener, position); // Pass position to bind method
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
         private final ImageView clockIcon;
         private final ImageView personIcon;
         private final TextView price;
-        private final TextView pickupAddress,destinationAddress;
+        private final TextView pickupAddress, destinationAddress;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,7 +87,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
             destinationAddress = itemView.findViewById(R.id.destinationAddress);
         }
 
-        public void bind(TodayBooking job, OnItemClickListener listener) {
+        public void bind(TodayBooking job, OnItemClickListener listener, int position) { // Added position parameter
             try {
                 // Address parsing with null checks
                 String pickup = job.getPickupAddress() != null ? job.getPickupAddress() : "";
@@ -113,7 +113,6 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                 BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
 
                 // Initial button state check
-
 
                 // Check job status and update button
                 GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
@@ -148,8 +147,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                                 startButton.setText("Rejected");
                                 startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
                                 startButton.setEnabled(false);
-                            }
-                            else if("1".equals(status)){
+                            } else if ("1".equals(status)) {
                                 startButton.setText("Start");
                                 try {
                                     statusBookingId = bookingStartStatus.getBookingId() != null ?
@@ -175,7 +173,10 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                 });
 
                 // Setup click listeners
-                viewButton.setOnClickListener(v -> listener.onViewClick(job));
+                viewButton.setOnClickListener(v -> {
+                    listener.onViewClick(job);
+                    notifyItemChanged(position); // Rerender this item after view button click
+                });
 
                 startButton.setOnClickListener(v -> {
                     Log.e("Status and Id", "Status and Id : " + job.getStatus() + " " + job.getBookingId() + " bookingStart Status: " + bookingStartStatus.getBookingId());
@@ -219,30 +220,8 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                             listener.onStartClick(job);
                         }
 
-                        // Verify status after starting
-                        getBookingInfoApi.getInfo(job.getBookingId(), new GetBookingInfoApi.BookingCallback() {
-                            @Override
-                            public void onSuccess(com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
-                                String status = bookingInfo.getStatus();
-                                if ("3".equals(status)) {
-                                    bookingStartStatus.clearBookingId();
-                                    startButton.setText("Completed");
-                                    startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
-                                    startButton.setEnabled(false);
-                                } else if ("2".equals(status)) {
-                                    bookingStartStatus.clearBookingId();
-                                    startButton.setText("Rejected");
-                                    startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
-                                    startButton.setEnabled(false);
-                                }
-                            }
+                        notifyItemChanged(position); // Rerender this item after start button click
 
-                            @Override
-                            public void onfailer(String error) {
-                                Log.e("TodayJobAdapter", "Failed to verify booking status: " + error);
-                                Toast.makeText(context, "Failed to verify booking status", Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     } catch (Exception e) {
                         Log.e("TodayJobAdapter", "Error handling start button click", e);
                         Toast.makeText(context, "Error starting job", Toast.LENGTH_SHORT).show();

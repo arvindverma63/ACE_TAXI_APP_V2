@@ -1,6 +1,8 @@
 package com.app.ace_taxi_v2.Activity;
 
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,27 +22,43 @@ public class SplashScreenActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash_screen);
 
-        Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        if (title != null) {
-            Intent notificationIntent = new Intent(this, NotificationModalActivity.class);
-            notificationIntent.putExtra("title", title);
-            startActivity(notificationIntent);
-        }
-        Intent incomingIntent = getIntent();
-        Log.d("SplashScreenActivity", "Intent Extras: " + incomingIntent.getExtras());
-
-        Log.d("SplashScreenActivity", "Title from notification: " + title);
-
-        new Handler().postDelayed(() -> {
-            if (title != null) {
-                Intent notificationIntent = new Intent(SplashScreenActivity.this, NotificationModalActivity.class);
-                notificationIntent.putExtra("title", title);
-                startActivity(notificationIntent);
-            } else {
-                Intent homeIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
-                startActivity(homeIntent);
+        int navId = -1;
+        int jobId = -1;
+        String message = "";
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key);
+                Log.d("MainActivity: ", "Key: " + key + " Value: " + value);
+                if ("NavId".equals(key.toString()) && value != null) {
+                    try {
+                        navId = Integer.parseInt(value.toString());
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "Invalid navId: " + value, e);
+                    }
+                }else if("bookingId".equals(key.toString()) && value!=null){
+                    try {
+                        {
+                            jobId = Integer.parseInt(value.toString());
+                        }
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG,"Invalid BookingId"+value,e);
+                    }
+                }else if("message".equals(key.toString()) && value != null){
+                    message = value.toString();
+                }
             }
+        }
+        Log.d("MainActivity navId notification : ",navId+"");
+
+        int finalNavId = navId;
+        int finalJobId = jobId;
+        String finalMessage = message;
+        new Handler().postDelayed(() -> {
+                Intent homeIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                homeIntent.putExtra("navId", finalNavId);
+                homeIntent.putExtra("jobId", finalJobId);
+                homeIntent.putExtra("message", finalMessage);
+                startActivity(homeIntent);
             finish();
         }, 1000);
     }

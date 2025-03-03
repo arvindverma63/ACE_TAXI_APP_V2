@@ -24,6 +24,8 @@ import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.R;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeFragment extends Fragment {
 
@@ -61,8 +63,11 @@ public class HomeFragment extends Fragment {
         }
 
 
+
         getCurrentBooking(); // Load booking details
 
+//        NotificationJobDialog notificationJobDialog = new NotificationJobDialog(getContext());
+//        notificationJobDialog.openNotificationModalForJob();
         // Initialize Switch and TextView
         locationSwitch = view.findViewById(R.id.online_toggle);
         onlineStatusLabel = view.findViewById(R.id.online_status_label);

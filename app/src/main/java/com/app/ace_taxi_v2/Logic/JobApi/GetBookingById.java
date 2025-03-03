@@ -1,11 +1,9 @@
 package com.app.ace_taxi_v2.Logic.JobApi;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.app.ace_taxi_v2.Activity.JobOfferDialogActivity;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
@@ -20,7 +18,7 @@ import retrofit2.Response;
 public class GetBookingById {
     private final Context context;
 
-    public GetBookingById(Context context){
+    public GetBookingById(Context context) {
         this.context = context;
     }
 
@@ -32,29 +30,46 @@ public class GetBookingById {
         apiService.getBookingById(token, bookingId).enqueue(new Callback<Booking>() {
             @Override
             public void onResponse(Call<Booking> call, Response<Booking> response) {
-                if (response.body() != null) {
+                CustomDialog customDialog = new CustomDialog();
+                customDialog.showProgressDialog(context);
+
+                try {
+                    if (!response.isSuccessful()) {
+                        Log.e("GetBookingById", "Error: " + response.code() + " - " + response.message());
+                        Toast.makeText(context, "Error fetching booking details: " + response.message(), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     Booking booking = response.body();
+                    if (booking == null) {
+                        Log.e("GetBookingById", "Error: Booking response is null");
+                        Toast.makeText(context, "Booking details not found", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
-                    Intent intent = new Intent(context, JobOfferDialogActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  // Important for starting activity from a service
+                    JobModal jobModal = new JobModal(context);
+                    jobModal.jobOfferModal(
+                            booking.getPickupAddress(),
+                            booking.getDestinationAddress(),
+                            booking.getPrice(),
+                            booking.getPickupDateTime(),
+                            booking.getPassengerName(),
+                            bookingId
+                    );
 
-                    // Pass booking details to activity
-                    intent.putExtra("pickupAddress", booking.getPickupAddress());
-                    intent.putExtra("destinationAddress", booking.getDestinationAddress());
-                    intent.putExtra("price", booking.getPrice());
-                    intent.putExtra("pickupDate", booking.getPickupDateTime());
-                    intent.putExtra("passengerName", booking.getPassengerName());
-                    intent.putExtra("bookingId", bookingId);
-
-                    context.startActivity(intent);
+                } catch (Exception e) {
+                    Log.e("GetBookingById", "Exception occurred: " + e.getMessage(), e);
+                    Toast.makeText(context, "An unexpected error occurred", Toast.LENGTH_LONG).show();
+                } finally {
+                    customDialog.dismissProgressDialog();
                 }
             }
 
             @Override
             public void onFailure(Call<Booking> call, Throwable t) {
-                Log.e("GetBookingById", "Failed to fetch booking details", t);
+                Log.e("GetBookingById", "API Call Failed: " + t.getMessage(), t);
+                Toast.makeText(context, "Network error! Please try again.", Toast.LENGTH_LONG).show();
             }
         });
     }
-
 }

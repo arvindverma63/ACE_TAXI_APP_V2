@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,20 +74,22 @@ public class JobModal {
     }
 
 
-    public void jobOfferModal(String pickupAddress, String destinationAddress, double price, String pickupDate, String passengerName,int bookingId){
+    public void jobOfferModal(String pickupAddress, String destinationAddress, double price, String pickupDate, String passengerName, int bookingId) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.job_offer,null);
+        View dialogView = inflater.inflate(R.layout.job_offer, null);
 
         TextView pickup_address = dialogView.findViewById(R.id.pickup_address);
         TextView destination_address = dialogView.findViewById(R.id.destination_address);
         TextView fairy_price = dialogView.findViewById(R.id.price);
         TextView pickupDateAndTime = dialogView.findViewById(R.id.pickup_date);
         TextView passenger_name = dialogView.findViewById(R.id.passenger_name);
+        TextView timer = dialogView.findViewById(R.id.timer); // Timer TextView
         Button acceptButton = dialogView.findViewById(R.id.accept_button);
         JobResponseApi jobResponseApi = new JobResponseApi(context);
+
         acceptButton.setOnClickListener(view -> {
             jobResponseApi.acceptResponse(bookingId);
-            Log.d("Accept Job Button clicked",""+bookingId);
+            Log.d("Accept Job Button clicked", "" + bookingId);
             Intent intent = new Intent(context, HomeActivity.class);
             context.startActivity(intent);
         });
@@ -97,26 +101,46 @@ public class JobModal {
             context.startActivity(intent);
         });
 
-        pickup_address.setText(""+pickupAddress);
-        destination_address.setText(""+destinationAddress);
-        fairy_price.setText("£"+price);
-        pickupDateAndTime.setText(""+pickupDate);
-        passenger_name.setText(""+passengerName);
-
+        pickup_address.setText("" + pickupAddress);
+        destination_address.setText("" + destinationAddress);
+        fairy_price.setText("£" + price);
+        pickupDateAndTime.setText("" + pickupDate);
+        passenger_name.setText("" + passengerName);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
 
         AlertDialog alertDialog = builder.create();
-        // Set transparent background for the dialog window
         if (alertDialog.getWindow() != null) {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         }
+        alertDialog.setCancelable(false);
 
-        // Apply rounded background programmatically
         dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
 
         alertDialog.show();
+
+        // Real-time countdown timer
+        final int[] timeLeft = {15}; // Starting at 15 seconds
+        Handler handler = new Handler(Looper.getMainLooper());
+        Runnable timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (timeLeft[0] >= 0) {
+                    timer.setText(timeLeft[0] + "s"); // Update timer text
+                    timeLeft[0]--;
+                    handler.postDelayed(this, 1000); // Run every second
+                } else {
+                    if (alertDialog.isShowing()) {
+                        JobResponseApi jobResponseApi = new JobResponseApi(context);
+                        jobResponseApi.timeOut(bookingId);
+                        alertDialog.dismiss(); // Close dialog when timer reaches 0
+                    }
+                    handler.removeCallbacks(this); // Stop the timer
+                }
+            }
+        };
+        handler.post(timerRunnable); // Start the timer
     }
 
 
@@ -221,6 +245,39 @@ public class JobModal {
 
         message.setText(notificationMessage);
         Log.d("NotificationDebug", "Read Message: " + notificationMessage);
+
+        closeBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(context, HomeActivity.class);
+            context.startActivity(intent);
+        });
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+
+        AlertDialog alertDialog = builder.create();
+
+        if (alertDialog.getWindow() != null) {
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
+
+        alertDialog.show();
+    }
+
+    public void JobReadNotificationClick(String messages) {
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.read_message, null);
+
+        Button closeBtn = dialogView.findViewById(R.id.btnRead);
+        TextView message = dialogView.findViewById(R.id.tvMessage);
+
+
+
+        message.setText(messages);
+        Log.d("NotificationDebug", "Read Message: " + messages);
 
         closeBtn.setOnClickListener(view -> {
             Intent intent = new Intent(context, HomeActivity.class);

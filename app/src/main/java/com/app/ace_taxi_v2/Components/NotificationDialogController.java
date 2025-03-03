@@ -32,9 +32,13 @@ public class NotificationDialogController {
                 break;
             case 1:
                 Log.d("NotificationDialogController", "Processing job amendment...");
-                new GetBookingById(context).getBookingDetails(jobid);
-                int bookingId = Integer.parseInt(notificationModalSession.getLatestJobId());
-                notificationModalSession.deleteNotificationBySerial(bookingId);
+                try{
+                    new GetBookingById(context).getBookingDetails(jobid);
+                    int bookingId = Integer.parseInt(notificationModalSession.getLatestJobId());
+                    notificationModalSession.deleteNotificationBySerial(bookingId);
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
                 break;
             case 2:
                 Log.d("NotificationDialogController", "Processing job cancellation...");

@@ -43,6 +43,8 @@ import com.app.ace_taxi_v2.Fragments.JobFragment;
 import com.app.ace_taxi_v2.Fragments.ProfileFragment;
 import com.app.ace_taxi_v2.Fragments.ReportPageFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
+import com.app.ace_taxi_v2.JobModals.JobModal;
+import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Logic.Service.BackgroundPermissionHelper;
 import com.app.ace_taxi_v2.Logic.Service.BatteryOptimizationHelper;
@@ -115,7 +117,7 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
 
-
+        getNotificationData();
 
         // Force the app to follow the user's preference
         AppCompatDelegate.setDefaultNightMode(isDarkMode
@@ -372,6 +374,60 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void getNotificationData() {
+        Intent intent = getIntent();
+        int navId = -1;
+        int jobId = -1;
+        String message = "";
+
+        if (intent.getExtras() != null) {
+            try {
+                // Get values safely
+                if (intent.getExtras().containsKey("navId")) {
+                    Object navIdObj = intent.getExtras().get("navId");
+                    if (navIdObj instanceof Integer) {
+                        navId = (int) navIdObj;
+                    } else if (navIdObj instanceof String) {
+                        navId = Integer.parseInt((String) navIdObj);
+                    }
+                }
+
+                if (intent.getExtras().containsKey("jobId")) {
+                    Object jobIdObj = intent.getExtras().get("jobId");
+                    if (jobIdObj instanceof Integer) {
+                        jobId = (int) jobIdObj;
+                    } else if (jobIdObj instanceof String) {
+                        jobId = Integer.parseInt((String) jobIdObj);
+                    }
+                }
+
+                if (intent.getExtras().containsKey("message")) {
+                    message = intent.getStringExtra("message");
+                }
+
+            } catch (NumberFormatException e) {
+                Log.e("HomeActivity", "Invalid number format in intent extras", e);
+            }
+        }
+
+        Log.d("HomeActivity", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message);
+
+        try {
+            if (jobId != -1 && jobId != 0) {  // Fixed condition
+                GetBookingById getBookingById = new GetBookingById(this);
+                getBookingById.getBookingDetails(jobId);
+            }
+
+            if (navId == 5) {
+                JobModal jobModal = new JobModal(this);
+                jobModal.JobReadNotificationClick(message);
+            }
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error processing notification data", e);
+        }
+    }
+
 
 
 
