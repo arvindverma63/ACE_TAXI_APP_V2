@@ -30,7 +30,11 @@ public class MessageDialogActivity extends AppCompatActivity {
         } else if ("2".equals(navId)) {
             Log.d("NotificationDebug", "Opening unallocatedBooking()");
             unallocatedBooking();
-        } else {
+        } else if("4".equals(navId)){
+            cancelDialog();
+        }else if("3".equals(navId)){
+            jobAmend();
+        }else {
             Log.d("NotificationDebug", "Invalid navId: " + navId);
             finish(); // Exit if no valid ID
         }
@@ -101,6 +105,79 @@ public class MessageDialogActivity extends AppCompatActivity {
         bookingId.setText(jobId);
         passengerName.setText(passenger);
         dateTime.setText(date);
+
+        builder.setCancelable(false);
+        AlertDialog alertDialog = builder.create();
+        // Set transparent background for the dialog window
+        if (alertDialog.getWindow() != null) {
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        // Apply rounded background programmatically
+        dialogView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_dialog));
+
+        alertDialog.show();
+    }
+
+    public void cancelDialog(){
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.job_cancel,null);
+        Button closeBtn = dialogView.findViewById(R.id.btnClose);
+        TextView datetime,passengerName,bookingId;
+        datetime = dialogView.findViewById(R.id.tvDateTime);
+        passengerName = dialogView.findViewById(R.id.tvCustomerName);
+        bookingId = dialogView.findViewById(R.id.tvJobId);
+
+        String jobId = getIntent().getStringExtra("jobId");
+        String passenger = getIntent().getStringExtra("passenger");
+        String date = getIntent().getStringExtra("datetime");
+
+        datetime.setText(date);
+        passengerName.setText(passenger);
+        bookingId.setText(jobId+"");
+        closeBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+
+        builder.setCancelable(false);
+        AlertDialog alertDialog = builder.create();
+        // Set transparent background for the dialog window
+        if (alertDialog.getWindow() != null) {
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        // Apply rounded background programmatically
+        dialogView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_dialog));
+
+        alertDialog.show();
+    }
+    public void jobAmend(){
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.job_amenedment,null);
+        Button closeBtn = dialogView.findViewById(R.id.btnClose);
+
+        TextView datetime,passengerName,bookingId;
+        datetime = dialogView.findViewById(R.id.tvDateTime);
+        passengerName = dialogView.findViewById(R.id.tvCustomerName);
+        bookingId = dialogView.findViewById(R.id.tvBookingId);
+
+        String jobId = getIntent().getStringExtra("jobId");
+        String passenger = getIntent().getStringExtra("passenger");
+        String date = getIntent().getStringExtra("datetime");
+
+        datetime.setText(date);
+        passengerName.setText(passenger);
+        bookingId.setText(jobId+"");
+
+        closeBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            this.startActivity(intent);
+        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
 
         builder.setCancelable(false);
         AlertDialog alertDialog = builder.create();

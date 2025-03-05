@@ -70,6 +70,7 @@ import java.util.List;
 
 import io.sentry.SentryLevel;
 import io.sentry.android.core.SentryAndroid;
+import kotlinx.coroutines.Job;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -442,6 +443,12 @@ public class HomeActivity extends AppCompatActivity {
 
             if (navId == 2) {
                 new JobModal(this).jobUnallocated(jobId, passenger, dateTime != null ? dateTime.toString() : "");
+            }
+            if(navId == 3){
+                new JobModal(this).jobAmenedment();
+            }
+            if(navId == 4){
+                new JobModal(this).jobCancel();
             }
         } catch (Exception e) {
             Log.e("HomeActivity", "Error processing notification data", e);

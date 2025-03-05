@@ -16,7 +16,6 @@
         app:cardElevation="4dp"
         android:layout_margin="16dp"
         app:cardBackgroundColor="@android:color/white"
-        app:strokeColor="@color/dark_green"
         android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,10 +45,10 @@
 
             <!-- Job ID -->
             <TextView
-                android:id="@+id/tvJobId"
+                android:id="@+id/tvBookingId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="81254"
+                android:text="bookingId"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -59,7 +58,7 @@
                 android:id="@+id/tvCustomerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PETER FARRELL"
+                android:text="passenger name"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -69,7 +68,7 @@
                 android:id="@+id/tvDateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23/01/2025 – 13:00"
+                android:text="dd/mm/yyyy – HH:mm"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />

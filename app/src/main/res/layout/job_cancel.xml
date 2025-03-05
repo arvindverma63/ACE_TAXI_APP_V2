@@ -16,7 +16,6 @@
         app:cardElevation="4dp"
         android:layout_margin="16dp"
         app:cardBackgroundColor="@color/red"
-        app:strokeColor="@color/dark_green"
         android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,33 +48,33 @@
                 android:id="@+id/tvJobId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="81254"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:layout_marginBottom="4dp"
+                android:text="bookingId"
                 android:textColor="@color/white"
-                android:layout_marginBottom="4dp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <!-- Customer Name -->
             <TextView
                 android:id="@+id/tvCustomerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PETER FARRELL"
-                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                android:text="passenger name"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <!-- Date and Time -->
             <TextView
                 android:id="@+id/tvDateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23/01/2025 – 13:00"
-                android:textSize="14sp"
+                android:layout_marginBottom="8dp"
+                android:text="dd/mm/yyyy - HH:mm"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <!-- Message -->
             <TextView

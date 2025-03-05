@@ -134,6 +134,24 @@ public class NotificationService extends FirebaseMessagingService {
                     intent.putExtra("navId",navId);
                     startActivity(intent);
                 }
+                if("3".equals(navId)){
+                    Intent intent = new Intent(this,MessageDialogActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("datetime",datetime);
+                    intent.putExtra("passenger",passenger);
+                    intent.putExtra("jobId",jobId);
+                    intent.putExtra("navId",navId);
+                    startActivity(intent);
+                }
+                if("4".equals(navId)){
+                    Intent intent = new Intent(this,MessageDialogActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("datetime",datetime);
+                    intent.putExtra("passenger",passenger);
+                    intent.putExtra("jobId",jobId);
+                    intent.putExtra("navId",navId);
+                    startActivity(intent);
+                }
             } catch (Exception e) {
                 Log.e(TAG, "Invalid jobId: " + jobId, e);
             }
