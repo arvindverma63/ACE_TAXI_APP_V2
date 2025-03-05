@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -61,6 +62,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +121,9 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
 
-        getNotificationData();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getNotificationData();
+        }
 
         // Force the app to follow the user's preference
         AppCompatDelegate.setDefaultNightMode(isDarkMode
@@ -152,7 +158,13 @@ public class HomeActivity extends AppCompatActivity {
             navigationView.setCheckedItem(R.id.nav_home);
         }
 
-        // Handle NavigationView item clicks
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key)
+                        ;
+                Log.d("HomeActivity: ", "Key: " + key + " Value: " + value);
+            }
+        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -160,9 +172,6 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
-        // Show the popup menu
         navigationHeader();
         batteryOptimization();
         phoneBtn();
@@ -375,35 +384,44 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void getNotificationData() {
         Intent intent = getIntent();
-        int navId = -1;
-        int jobId = -1;
-        String message = "";
+        int navId = -1, jobId = -1;
+        String message = "", passenger = "";
+        LocalDateTime dateTime = null; // Store parsed date-time
 
-        if (intent.getExtras() != null) {
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
             try {
-                // Get values safely
-                if (intent.getExtras().containsKey("navId")) {
-                    Object navIdObj = intent.getExtras().get("navId");
-                    if (navIdObj instanceof Integer) {
-                        navId = (int) navIdObj;
-                    } else if (navIdObj instanceof String) {
-                        navId = Integer.parseInt((String) navIdObj);
+                Object navIdObj = extras.get("navId");
+                if (navIdObj != null) {
+                    navId = Integer.parseInt(navIdObj.toString());
+                }
+
+                Object jobIdObj = extras.get("jobId");
+                if (jobIdObj != null) {
+                    jobId = Integer.parseInt(jobIdObj.toString());
+                }
+
+                if (extras.containsKey("passenger")) {
+                    passenger = extras.getString("passenger", "");
+                }
+
+                if (extras.containsKey("datetime")) {
+                    String dateString = extras.getString("datetime", "");
+                    if (!dateString.isEmpty()) {
+                        try {
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            dateTime = LocalDateTime.parse(dateString, formatter);
+                        } catch (DateTimeParseException e) {
+                            Log.e("HomeActivity", "Invalid date format: " + dateString, e);
+                        }
                     }
                 }
 
-                if (intent.getExtras().containsKey("jobId")) {
-                    Object jobIdObj = intent.getExtras().get("jobId");
-                    if (jobIdObj instanceof Integer) {
-                        jobId = (int) jobIdObj;
-                    } else if (jobIdObj instanceof String) {
-                        jobId = Integer.parseInt((String) jobIdObj);
-                    }
-                }
-
-                if (intent.getExtras().containsKey("message")) {
-                    message = intent.getStringExtra("message");
+                if (extras.containsKey("message")) {
+                    message = extras.getString("message", "");
                 }
 
             } catch (NumberFormatException e) {
@@ -411,24 +429,24 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        Log.d("HomeActivity", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message);
+        Log.d("HomeActivity", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message + ", DateTime: " + dateTime);
 
         try {
-            if (jobId != -1 && jobId != 0) {  // Fixed condition
-                GetBookingById getBookingById = new GetBookingById(this);
-                getBookingById.getBookingDetails(jobId);
+            if (jobId > 0 && navId == 1) {
+                new GetBookingById(this).getBookingDetails(jobId);
             }
 
-            if (navId == 5) {
-                JobModal jobModal = new JobModal(this);
-                jobModal.JobReadNotificationClick(message);
+            if (navId == 5 || navId == 6) {
+                new JobModal(this).JobReadNotificationClick(message);
+            }
+
+            if (navId == 2) {
+                new JobModal(this).jobUnallocated(jobId, passenger, dateTime != null ? dateTime.toString() : "");
             }
         } catch (Exception e) {
             Log.e("HomeActivity", "Error processing notification data", e);
         }
     }
-
-
 
 
 }

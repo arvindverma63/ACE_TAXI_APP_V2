@@ -4,40 +4,57 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/gradient_background">
+    android:padding="20dp"
+    android:background="@drawable/gradient_background"
+    android:elevation="4dp"
+    android:clipToPadding="false">
 
     <!-- Profile Image Section -->
     <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_profile"
         android:background="@drawable/circular_border"
-        android:contentDescription="Profile Image" />
+        android:contentDescription="Profile Image"
+        android:padding="4dp"
+        android:clipToOutline="true"
+        android:outlineProvider="background"
+        android:transitionName="profile_transition"/>
 
     <!-- User Name -->
     <TextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:layout_gravity="center_horizontal"
         android:text="User Name"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:letterSpacing="0.01"
+        android:shadowColor="#40000000"
+        android:shadowDy="2"
+        android:shadowDx="2"
+        android:shadowRadius="4"/>
 
     <!-- User Email -->
     <TextView
         android:id="@+id/user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="8dp"
         android:layout_gravity="center_horizontal"
         android:text="user@example.com"
-        android:textSize="14sp"
-        android:textColor="@android:color/white" />
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:alpha="0.9"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 </LinearLayout>

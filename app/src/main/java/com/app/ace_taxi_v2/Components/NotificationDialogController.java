@@ -16,7 +16,7 @@ public class NotificationDialogController {
         notificationModalSession = new NotificationModalSession(context);
     }
 
-    public void openModal(String navId, String jobId) {
+    public void openModal(String navId, String jobId,String message,String passenger,String datetime) {
         JobModal jobModal = new JobModal(context);
 
         // Convert navId and jobId safely
@@ -42,7 +42,7 @@ public class NotificationDialogController {
                 break;
             case 2:
                 Log.d("NotificationDialogController", "Processing job cancellation...");
-                jobModal.jobUnallocated();
+                jobModal.jobUnallocated(jobid,passenger,datetime);
                 break;
             case 3:
                 Log.d("NotificationDialogController", "Processing job read...");

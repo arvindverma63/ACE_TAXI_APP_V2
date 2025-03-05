@@ -372,7 +372,7 @@ public class JobModal {
     }
 
 
-    public void jobUnallocated(){
+    public void jobUnallocated(int jobId,String passenger,String date){
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.unallocated_job,null);
         Button closeBtn = dialogView.findViewById(R.id.btnClose);
@@ -382,6 +382,15 @@ public class JobModal {
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
+
+        TextView bookingId,passengerName,dateTime;
+        bookingId = dialogView.findViewById(R.id.tvJobId);
+        passengerName = dialogView.findViewById(R.id.tvPassengerName);
+        dateTime = dialogView.findViewById(R.id.tvDate);
+
+        bookingId.setText(jobId+"");
+        passengerName.setText(passenger);
+        dateTime.setText(date);
 
         builder.setCancelable(false);
         AlertDialog alertDialog = builder.create();
@@ -431,6 +440,7 @@ public class JobModal {
         TextView etParking = dialogView.findViewById(R.id.etParking);
         TextView etPrice = dialogView.findViewById(R.id.etPrice);
         TextView tvJobId = dialogView.findViewById(R.id.tvJobId);
+        TextView tip = dialogView.findViewById(R.id.etTip);
 
         tvJobId.setText(""+bookingId);
 
@@ -456,15 +466,17 @@ public class JobModal {
             String waitingTimeStr = etWaitingTime.getText().toString().trim();
             String parkingStr = etParking.getText().toString().trim();
             String priceStr = etPrice.getText().toString().trim();
+            String etTipStr = tip.getText().toString().trim();
 
             // Convert to numeric values (handle empty input safely)
             double waitingTime = waitingTimeStr.isEmpty() ? 0 : Double.parseDouble(waitingTimeStr);
             double parking = parkingStr.isEmpty() ? 0 : Double.parseDouble(parkingStr);
             double price = priceStr.isEmpty() ? 0 : Double.parseDouble(priceStr);
+            double etTip = etTipStr.isEmpty() ? 0 : Double.parseDouble(etTipStr);
 
             // Call API with correct data types
             BookingCompleteApi bookingCompleteApi = new BookingCompleteApi(context);
-            bookingCompleteApi.complete(bookingId, (int) waitingTime, (int) parking, price, 0);
+            bookingCompleteApi.complete(bookingId, (int) waitingTime, (int) parking, price, 0,etTip);
 
             // Dismiss dialog and navigate to HomeActivity
             alertDialog.dismiss();

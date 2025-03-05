@@ -208,11 +208,11 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                             bookingStartStatus.setBookingId(String.valueOf(job.getBookingId()));
                         }
 
-                        if (!"onShift".equals(currentShiftStatus.getStatus())) {
-                            Toast.makeText(context, "Start Your Shift", Toast.LENGTH_LONG).show();
-                            Log.d("Current Driver shift: ", " " + currentShiftStatus.getStatus());
-                            return;
-                        }
+//                        if (!"onShift".equals(currentShiftStatus.getStatus())) {
+//                            Toast.makeText(context, "Start Your Shift", Toast.LENGTH_LONG).show();
+//                            Log.d("Current Driver shift: ", " " + currentShiftStatus.getStatus());
+//                            return;
+//                        }
 
                         // Set booking ID and start job if no active booking exists
                         if (activeBookingId == job.getBookingId()) {

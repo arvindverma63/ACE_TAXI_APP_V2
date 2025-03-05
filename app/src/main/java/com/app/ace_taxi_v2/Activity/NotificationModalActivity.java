@@ -23,10 +23,16 @@ public class NotificationModalActivity extends AppCompatActivity {
         NotificationModalSession notificationModalSession = new NotificationModalSession(this);
         notificationModalSession.clearAllNotifications();
 
+        String message = "";
+        String passenger = "";
+        String datetime = "";
         // Retrieve Intent Data
         Intent intent = getIntent();
         String jobId = intent.getStringExtra("jobid");
         String navId = intent.getStringExtra("navId");
+        message = intent.getStringExtra("message");
+        passenger = intent.getStringExtra("passenger");
+        datetime = intent.getStringExtra("datetime");
 
 
         Log.e("NotificationActivity", "Job ID: " + jobId);
@@ -79,7 +85,7 @@ public class NotificationModalActivity extends AppCompatActivity {
                 jobModal.jobComplete();
                 break;
             case 6:
-                jobModal.jobUnallocated();
+                jobModal.jobUnallocated(jobid,passenger,datetime);
                 break;
             case 7:
                 jobModal.JobRead();

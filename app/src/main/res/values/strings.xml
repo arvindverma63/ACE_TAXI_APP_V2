@@ -7,5 +7,5 @@
 
     <string name="google_maps_key">AIzaSyBuJb8CAD3wyvSzekqZ8YCUxG79pbKkujk</string>
 
-        <string name="default_notification_channel_id">default_channel_id</string>
+    <string name="default_notification_channel_id">default_channel_id</string>
 </resources>

@@ -23,7 +23,7 @@ public class BookingCompleteApi {
         this.context = context;
     }
 
-    public void complete(int bookingId, int bookingTime, int parking, double drivePrice, double accountPrice) {
+    public void complete(int bookingId, int bookingTime, int parking, double drivePrice, double accountPrice,double tip) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
         int userId = sessionManager.getUserId(); // Assuming session manager provides the user ID
@@ -33,7 +33,7 @@ public class BookingCompleteApi {
         sentryUser.setId(String.valueOf(userId));
         Sentry.setUser(sentryUser);
 
-        BookingCompleteRequest bookingCompleteRequest = new BookingCompleteRequest(bookingId, bookingTime, parking, drivePrice, accountPrice);
+        BookingCompleteRequest bookingCompleteRequest = new BookingCompleteRequest(bookingId, bookingTime, parking, drivePrice, accountPrice,tip);
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
 
         apiService.completeBooking(token, bookingCompleteRequest).enqueue(new Callback<Void>() {

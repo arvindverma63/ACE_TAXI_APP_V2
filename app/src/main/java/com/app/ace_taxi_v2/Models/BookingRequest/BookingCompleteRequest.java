@@ -7,18 +7,20 @@ public class BookingCompleteRequest {
     private int parkingCharge;
     private double driverPrice;
     private double accountPrice;
+    private double tip;
 
     // Default Constructor
     public BookingCompleteRequest() {
     }
 
     // Parameterized Constructor
-    public BookingCompleteRequest(int bookingId, int waitingTime, int parkingCharge, double driverPrice, double accountPrice) {
+    public BookingCompleteRequest(int bookingId, int waitingTime, int parkingCharge, double driverPrice, double accountPrice,double tip) {
         this.bookingId = bookingId;
         this.waitingTime = waitingTime;
         this.parkingCharge = parkingCharge;
         this.driverPrice = driverPrice;
         this.accountPrice = accountPrice;
+        this.tip = tip;
     }
 
     // Getters and Setters

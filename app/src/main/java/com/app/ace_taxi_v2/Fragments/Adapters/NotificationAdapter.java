@@ -54,7 +54,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             holder.viewJobsButton.setOnClickListener(v -> {
                 Log.i("Notification clicked data : ","data: "+notification.getJobId()+" "+notification.getNavId());
                 NotificationDialogController notificationDialogController = new NotificationDialogController(context);
-                notificationDialogController.openModal(notification.getNavId(), notification.getJobId());
+                notificationDialogController.openModal(notification.getNavId(), notification.getJobId(),notification.getMessage(),notification.getPassenger(),notification.getDatetime());
             });
         }
     }

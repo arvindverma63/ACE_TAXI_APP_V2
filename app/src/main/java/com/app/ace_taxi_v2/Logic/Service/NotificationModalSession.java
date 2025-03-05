@@ -167,5 +167,10 @@ public class NotificationModalSession {
         return -1; // Return -1 if not found
     }
 
+    public String getPassenger(){
+        NotificationModel latest = getLatestNotification();
+        return (latest != null) ? latest.getPassenger() : "N/A";
+    }
+
 
 }
