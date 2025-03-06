@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
@@ -91,6 +93,7 @@ public class HomeFragment extends Fragment {
             saveSwitchState(isChecked);
             handleSwitchToggle(isChecked);
         });
+
 
         return view;
     }
@@ -185,6 +188,24 @@ public class HomeFragment extends Fragment {
                 Log.e("CurrentBooking", "Error: " + error);
             }
         });
+    }
+    private final Handler handler = new Handler();
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            getCurrentBooking();
+            handler.postDelayed(this, 3000); // Repeat every 3 seconds
+        }
+    };
+
+    // Start the repeated task
+    private void startRepeatingTask() {
+        handler.postDelayed(runnable, 3000);
+    }
+
+    // Stop the repeated task (when needed)
+    private void stopRepeatingTask() {
+        handler.removeCallbacks(runnable);
     }
 
 

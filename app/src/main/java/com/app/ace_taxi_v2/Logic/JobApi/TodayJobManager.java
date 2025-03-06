@@ -66,14 +66,17 @@ public class TodayJobManager {
                     }
                     boolean bookingExists = false;
 
+                    Log.d("bookingId check start ","booking Id start : "+bookingId);
                     for (TodayBooking booking : bookingList) {
                         if (booking.getBookingId() == bookingId) {
                             bookingExists = true;
                             break;
                         }
                     }
+                    Log.d("bookingId check start ","booking Id start : "+bookingId);
                     if (!bookingExists) {
                         bookingStartStatus.clearBookingId();
+                        Log.d("bookingId clear start","bookingId clear");
                     }
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true);

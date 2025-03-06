@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -135,7 +136,10 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                                 startButton.setText("Started");
                                 startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.dark_green));
                             }
-
+                            if("4".equals(job.getStatus())){
+                                startButton.setText("TimeOut");
+                                startButton.setBackgroundColor(ContextCompat.getColor(context,R.color.red));
+                            }
                             String status = bookingInfo.getStatus();
                             if ("3".equals(status)) {
                                 bookingStartStatus.clearBookingId();
@@ -155,6 +159,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                                     if (statusBookingId == job.getBookingId()) {
                                         startButton.setText("Active");
                                         startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.dark_blue));
+                                        checkStatus(startButton);
                                     }
                                 } catch (NumberFormatException e) {
                                     Log.e("TodayJobAdapter", "Invalid booking ID format", e);
@@ -199,6 +204,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                             jobModal.jobOfferModalForTodayJob(job.getBookingId());
                         }
 
+
                         if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
                             Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
                             return;
@@ -207,12 +213,6 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                         if (bookingStartStatus.getBookingId() == null && "1".equals(job.getStatus())) {
                             bookingStartStatus.setBookingId(String.valueOf(job.getBookingId()));
                         }
-
-//                        if (!"onShift".equals(currentShiftStatus.getStatus())) {
-//                            Toast.makeText(context, "Start Your Shift", Toast.LENGTH_LONG).show();
-//                            Log.d("Current Driver shift: ", " " + currentShiftStatus.getStatus());
-//                            return;
-//                        }
 
                         // Set booking ID and start job if no active booking exists
                         if (activeBookingId == job.getBookingId()) {
@@ -239,4 +239,35 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
         void onViewClick(TodayBooking job);
         void onStartClick(TodayBooking job);
     }
+    public void checkStatus(Button statusText){
+        CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
+            switch (currentBookingSession.getBookingShift()) {
+                case "3003":
+                    statusText.setText("On Route");
+                    statusText.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.light_red));
+                    break;
+                case "3004":
+                    statusText.setText("On Pickup");
+                    statusText.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.light_blue));
+                    break;
+                case "3005":
+                    statusText.setText("POB");
+                    statusText.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                    break;
+                case "3006":
+                    statusText.setText("STC");
+                    statusText.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.light_orange));
+                    break;
+                case "3007":
+
+                    break;
+                case "3008":
+
+                    break;
+                default:
+                    // Optional: Log unknown status for debugging
+                    break;
+            }
+        }
+
 }

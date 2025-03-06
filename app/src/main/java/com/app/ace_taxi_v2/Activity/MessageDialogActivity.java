@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.R;
 
 public class MessageDialogActivity extends AppCompatActivity {
@@ -101,6 +102,11 @@ public class MessageDialogActivity extends AppCompatActivity {
         String jobId = getIntent().getStringExtra("jobId");
         String passenger = getIntent().getStringExtra("passenger");
         String date = getIntent().getStringExtra("datetime");
+
+        BookingStartStatus bookingStartStatus = new BookingStartStatus(this);
+        if(jobId.equals(bookingStartStatus.getBookingId())){
+            bookingStartStatus.clearBookingId();
+        }
 
         bookingId.setText(jobId);
         passengerName.setText(passenger);

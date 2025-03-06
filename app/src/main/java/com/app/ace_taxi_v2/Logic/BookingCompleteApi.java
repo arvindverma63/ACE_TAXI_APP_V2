@@ -43,6 +43,7 @@ public class BookingCompleteApi {
                     Toast.makeText(context, "Booking Completed", Toast.LENGTH_LONG).show();
                     BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
                     bookingStartStatus.clearBookingId();
+
                 } else {
                     String errorMessage = "BookingCompleteApi Error: HTTP " + response.code() + " - " + response.message();
                     Log.e(TAG, errorMessage);

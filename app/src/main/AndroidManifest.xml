@@ -33,7 +33,7 @@
             android:exported="false" />
         <activity
             android:name=".Activity.JobOfferDialogActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog" />
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog"/>
 
         <service
             android:name=".Logic.Service.LocationService"

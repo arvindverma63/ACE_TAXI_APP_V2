@@ -189,22 +189,8 @@
             </LinearLayout>
 
             <!-- Notes -->
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="NOTES\nTHESE ARE THE NOTES"
-                android:textSize="14sp" />
 
             <!-- Complete Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/complete_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="@color/primaryColor"
-                android:text="COMPLETE"
-                android:textColor="@color/white" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -1,6 +1,6 @@
 package com.app.ace_taxi_v2.JobModals;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -12,15 +12,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.app.ace_taxi_v2.Activity.HomeActivity;
+import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Logic.ArrivedJobApi;
 import com.app.ace_taxi_v2.Logic.BookingCompleteApi;
 import com.app.ace_taxi_v2.Logic.JobResponseApi;
 import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.w3c.dom.Text;
 
@@ -75,73 +78,95 @@ public class JobModal {
 
 
     public void jobOfferModal(String pickupAddress, String destinationAddress, double price, String pickupDate, String passengerName, int bookingId) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.job_offer, null);
+        Dialog fullScreenDialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        fullScreenDialog.setContentView(R.layout.job_offer);
+        fullScreenDialog.setCancelable(false);
 
-        TextView pickup_address = dialogView.findViewById(R.id.pickup_address);
-        TextView destination_address = dialogView.findViewById(R.id.destination_address);
-        TextView fairy_price = dialogView.findViewById(R.id.price);
-        TextView pickupDateAndTime = dialogView.findViewById(R.id.pickup_date);
-        TextView passenger_name = dialogView.findViewById(R.id.passenger_name);
-        TextView timer = dialogView.findViewById(R.id.timer); // Timer TextView
-        Button acceptButton = dialogView.findViewById(R.id.accept_button);
+        TextView pickup_address = fullScreenDialog.findViewById(R.id.pickup_address);
+        TextView destination_address = fullScreenDialog.findViewById(R.id.destination_address);
+        TextView fairy_price = fullScreenDialog.findViewById(R.id.price);
+        TextView pickupDateAndTime = fullScreenDialog.findViewById(R.id.pickup_date);
+        TextView passenger_name = fullScreenDialog.findViewById(R.id.passenger_name);
+        TextView timer = fullScreenDialog.findViewById(R.id.timer);
+        Button acceptButton = fullScreenDialog.findViewById(R.id.accept_button);
+        Button rejectBooking = fullScreenDialog.findViewById(R.id.reject_button);
+
         JobResponseApi jobResponseApi = new JobResponseApi(context);
 
-        acceptButton.setOnClickListener(view -> {
-            jobResponseApi.acceptResponse(bookingId);
-            Log.d("Accept Job Button clicked", "" + bookingId);
-            Intent intent = new Intent(context, HomeActivity.class);
-            context.startActivity(intent);
-        });
-
-        Button rejectBooking = dialogView.findViewById(R.id.reject_button);
-        rejectBooking.setOnClickListener(view -> {
-            jobResponseApi.rejectBooking(bookingId);
-            Intent intent = new Intent(context, HomeActivity.class);
-            context.startActivity(intent);
-        });
-
-        pickup_address.setText("" + pickupAddress);
-        destination_address.setText("" + destinationAddress);
+        // Set values
+        pickup_address.setText(pickupAddress);
+        destination_address.setText(destinationAddress);
         fairy_price.setText("£" + price);
-        pickupDateAndTime.setText("" + pickupDate);
-        passenger_name.setText("" + passengerName);
+        pickupDateAndTime.setText(pickupDate);
+        passenger_name.setText(passengerName);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(dialogView);
-
-        AlertDialog alertDialog = builder.create();
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-        alertDialog.setCancelable(false);
-
-        dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
-
-        alertDialog.show();
-
-        // Real-time countdown timer
-        final int[] timeLeft = {15}; // Starting at 15 seconds
+        // Prevent timeout if user responds
+        final boolean[] isResponded = {false};
         Handler handler = new Handler(Looper.getMainLooper());
+
+        acceptButton.setOnClickListener(view -> {
+            if (!isResponded[0]) {
+                isResponded[0] = true;
+                jobResponseApi.acceptResponse(bookingId);
+                Log.d("Accept Job", "Booking ID: " + bookingId);
+                stopTimeout(handler);
+                fullScreenDialog.dismiss();
+                context.startActivity(new Intent(context, HomeActivity.class));
+            }
+        });
+
+        rejectBooking.setOnClickListener(view -> {
+            if (!isResponded[0]) {
+                isResponded[0] = true;
+                jobResponseApi.rejectBooking(bookingId);
+                stopTimeout(handler);
+                fullScreenDialog.dismiss();
+                context.startActivity(new Intent(context, HomeActivity.class));
+            }
+        });
+
+        // Countdown Timer
+        final int[] timeLeft = {15};
         Runnable timerRunnable = new Runnable() {
             @Override
             public void run() {
+                if (isResponded[0]) {
+                    handler.removeCallbacks(this);
+                    return;
+                }
+
                 if (timeLeft[0] >= 0) {
-                    timer.setText(timeLeft[0] + "s"); // Update timer text
+                    timer.setText(timeLeft[0] + "s");
                     timeLeft[0]--;
-                    handler.postDelayed(this, 1000); // Run every second
+                    handler.postDelayed(this, 1000);
                 } else {
-                    if (alertDialog.isShowing()) {
-                        JobResponseApi jobResponseApi = new JobResponseApi(context);
-                        jobResponseApi.timeOut(bookingId);
-                        alertDialog.dismiss(); // Close dialog when timer reaches 0
+                    if (!isResponded[0] && fullScreenDialog.isShowing()) {
+                        new JobResponseApi(context).timeOut(bookingId);
+                        Log.d("Job Offer", "Timed out for booking: " + bookingId);
+                        Intent intent = new Intent(context, HomeActivity.class);
+                        context.startActivity(intent);
+                        fullScreenDialog.dismiss();
+
                     }
-                    handler.removeCallbacks(this); // Stop the timer
+                    handler.removeCallbacks(this);
                 }
             }
         };
-        handler.post(timerRunnable); // Start the timer
+        handler.post(timerRunnable);
+
+        // Show dialog
+        fullScreenDialog.show();
     }
+
+    // Helper method to stop the timeout
+    private void stopTimeout(Handler handler) {
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+    }
+
+
+
 
 
     public void jobOfferModalForTodayJob(int bookingId) {
@@ -391,6 +416,17 @@ public class JobModal {
         bookingId.setText(jobId+"");
         passengerName.setText(passenger);
         dateTime.setText(date);
+
+
+        try {
+            BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
+            String bookingId1 = bookingStartStatus.getBookingId();
+            if (jobId == Integer.parseInt(bookingId1)) {
+                bookingStartStatus.clearBookingId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         builder.setCancelable(false);
         AlertDialog alertDialog = builder.create();

@@ -3,224 +3,234 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:background="@android:color/transparent"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        style="@style/CardBG">
-
+        android:layout_height="match_parent"
+        app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp">
 
+            <!-- Header -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/header"
+                style="@style/TextBG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/font_urban"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="Job Offer"
+                android:textColor="@color/black"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_check_yellow"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"/>
+
+            <!-- Timer -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/font_urban"
+                android:padding="8dp"
                 android:text="15s"
-                android:textSize="16sp"
                 android:textColor="@color/red"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <!-- Job Offer Header -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="12dp"
-                android:text="JOB OFFER"
-                style="@style/TextBG"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
-            <!-- Date and Time Section -->
+
+            <!-- Pickup Date -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="16dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/status_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/ic_status"
-                    style="@style/IconTint"/>
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/pickup_date"
+                    style="@style/TextBG"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="14/01/2025\n10:20AM (ASAP)"
-                    style="@style/TextBG"
-                    android:textSize="14sp"
-                    android:gravity="center" />
+                    android:text="14/01/2025 10:20AM (ASAP)"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- Stop Information -->
+            <!-- Address Section -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="241dp"
+                android:layout_marginTop="12dp"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp">
+                android:padding="4dp">
 
-                <!-- Pickup Location -->
+                <!-- Pickup Address -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/ic_pickup"
-                        android:contentDescription="Pickup" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_pickup" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/pickup_address"
+                        style="@style/TextBG"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/font_urban"
                         android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
-                        style="@style/TextBG"
+                        android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <!-- Dotted Line (Vertical) -->
+                <!-- Dotted Line -->
                 <View
                     android:layout_width="2dp"
-                    android:layout_height="12dp"
-                    android:background="@drawable/dotted_line"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_height="20dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/dotted_line" />
 
-                <!-- Destination -->
+                <!-- Destination Address -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/ic_destination"
-                        android:contentDescription="Destination" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_destination" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/destination_address"
+                        style="@style/TextBG"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/font_urban"
                         android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
-                        style="@style/TextBG"
+                        android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <!-- Passenger -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/gray" />
+
+                <!-- Passenger Info -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/ic_profile"
-                        android:contentDescription="Passenger" />
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="Passenger"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_profile" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/passenger_name"
+                        style="@style/TextBG"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/font_urban"
                         android:text="Peter Farrel"
-                        style="@style/TextBG"
+                        android:textColor="@android:color/black"
                         android:textSize="14sp" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/font_urban"
+                        android:padding="12dp"
+                        android:text="£23.00"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Fare Price -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/account_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:text="FARE PRICE"
-                android:textColor="@color/blue"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/account_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_gravity="center"
-                app:cardBackgroundColor="@color/gray"
-                app:cardCornerRadius="8dp">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="£23.00"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </com.google.android.material.card.MaterialCardView>
+            <!-- Price -->
 
             <!-- Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginTop="40dp"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/accept_button"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/green"
-                    android:text="ACCEPT"
-                    android:textColor="@color/white" />
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/font_urban"
+                    app:backgroundTint="@null"
+                    android:padding="14dp"
+                    android:text="Accept"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="5dp"
+                    app:cornerRadius="20dp"
+                    app:elevation="6dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/reject_button"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/red"
-                    android:text="REJECT"
-                    android:textColor="@color/white" />
+                    android:background="@drawable/gradiant_red"
+                    android:fontFamily="@font/font_urban"
+                    android:padding="14dp"
+                    android:textAllCaps="false"
+                    android:text="Reject"
+                    app:backgroundTint="@null"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="20dp"
+                    app:elevation="6dp" />
             </LinearLayout>
-
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
