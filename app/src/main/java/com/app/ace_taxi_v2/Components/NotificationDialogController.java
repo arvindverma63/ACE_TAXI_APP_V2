@@ -46,11 +46,11 @@ public class NotificationDialogController {
                 break;
             case 3:
                 Log.d("NotificationDialogController", "Processing job read...");
-                jobModal.jobAmenedment(); // Handles general/global messages
+                jobModal.jobAmenedment(jobId,passenger,datetime); // Handles general/global messages
                 break;
             case 4:
                 Log.d("NotificationDialogController", "Processing job completion...");
-                jobModal.jobCancel();
+                jobModal.jobCancel(jobId,passenger,datetime);
                 break;
             case 5:
                 Log.d("NotificationDialogController", "Processing unallocated job...");

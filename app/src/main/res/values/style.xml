@@ -67,6 +67,11 @@
         <item name="android:windowEnterAnimation">@anim/flip_in</item>
         <item name="android:windowExitAnimation">@anim/flip_out</item>
     </style>
+    <style name="BottomSheetDialogTransparent" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:background">@color/trans</item>
+        <item name="android:backgroundTint">@color/trans</item>
+        <item name="backgroundColor">@color/trans</item>
+    </style>
 
 
 

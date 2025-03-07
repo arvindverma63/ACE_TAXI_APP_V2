@@ -44,6 +44,7 @@ import com.app.ace_taxi_v2.Fragments.JobFragment;
 import com.app.ace_taxi_v2.Fragments.ProfileFragment;
 import com.app.ace_taxi_v2.Fragments.ReportPageFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
+import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.app.ace_taxi_v2.Logic.LoginManager;
@@ -324,14 +325,6 @@ public class HomeActivity extends AppCompatActivity {
             NotificationDialog notificationDialog = new NotificationDialog(this);
             notificationDialog.openModal();
 
-//            Intent intent = new Intent(this, NotificationModalActivity.class);
-//            intent.putExtra("navId", navid);
-//            intent.putExtra("jobid", jobid);
-//
-//            notificationModalSession.clearNotificationCount();
-//            notificationCount.setVisibility(View.GONE);
-//
-//            startActivity(intent);
         });
     }
 
@@ -390,7 +383,10 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int navId = -1, jobId = -1;
         String message = "", passenger = "";
-        LocalDateTime dateTime = null; // Store parsed date-time
+        String dateTime = intent.getStringExtra("datetime");
+        String pickupAddress = intent.getStringExtra("pickupAddress");
+        boolean accepted = intent.getBooleanExtra("accepted",false);
+        boolean rejected = intent.getBooleanExtra("rejected",false);
 
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -407,18 +403,6 @@ public class HomeActivity extends AppCompatActivity {
 
                 if (extras.containsKey("passenger")) {
                     passenger = extras.getString("passenger", "");
-                }
-
-                if (extras.containsKey("datetime")) {
-                    String dateString = extras.getString("datetime", "");
-                    if (!dateString.isEmpty()) {
-                        try {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                            dateTime = LocalDateTime.parse(dateString, formatter);
-                        } catch (DateTimeParseException e) {
-                            Log.e("HomeActivity", "Invalid date format: " + dateString, e);
-                        }
-                    }
                 }
 
                 if (extras.containsKey("message")) {
@@ -438,17 +422,25 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             if (navId == 5 || navId == 6) {
-                new JobModal(this).JobReadNotificationClick(message);
+                new JobModal(this).JobReadNotificationClick(message,dateTime.toString());
             }
 
             if (navId == 2) {
                 new JobModal(this).jobUnallocated(jobId, passenger, dateTime != null ? dateTime.toString() : "");
             }
             if(navId == 3){
-                new JobModal(this).jobAmenedment();
+                new JobModal(this).jobAmenedment(jobId+"",passenger,dateTime.toString());
             }
             if(navId == 4){
-                new JobModal(this).jobCancel();
+                new JobModal(this).jobCancel(jobId+"",passenger,dateTime.toString());
+            }
+            if(accepted){
+                BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(this);
+                bottomSheetDialogs.openJobAccepted(passenger,pickupAddress);
+            }
+            if(rejected){
+                BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(this);
+                bottomSheetDialogs.openJobRejected();
             }
         } catch (Exception e) {
             Log.e("HomeActivity", "Error processing notification data", e);

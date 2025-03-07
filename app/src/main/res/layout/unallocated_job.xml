@@ -34,31 +34,30 @@
             android:padding="20dp"
             android:gravity="center_horizontal">
 
-            <!-- Header -->
-            <TextView
-                android:id="@+id/tvHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/red"
-                android:text="Job Unallocated"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                android:letterSpacing="0.02"
-                android:paddingVertical="12dp"
-                android:paddingHorizontal="16dp"
-                android:gravity="center"
-                android:layout_marginBottom="16dp"/>
+           <ImageView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/ic_unallocated"/>
 
             <!-- Job ID -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Un-allocated"
+                android:textSize="20sp"
+                android:fontFamily="@font/font_urban"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp"/>
+
             <TextView
                 android:id="@+id/tvJobId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="BookingId"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/font_urban"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="8dp"/>
 
@@ -70,9 +69,10 @@
                 android:text="Passenger Name"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:fontFamily="@font/font_urban"
                 android:textAllCaps="false"
                 android:textColor="@android:color/black"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="8dp"/>
 
             <!-- Date and Time -->
             <TextView
@@ -80,8 +80,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="dd/mm/yyyy – HH:mm"
-                android:textSize="16sp"
+                android:textStyle="normal"
+                android:textSize="12sp"
                 android:textColor="@android:color/black"
+                android:fontFamily="@font/font_urban"
                 android:layout_marginBottom="12dp"/>
 
             <!-- Message -->
@@ -93,6 +95,7 @@
                 android:textSize="14sp"
                 android:textColor="@android:color/black"
                 android:gravity="center"
+                android:fontFamily="@font/font_urban"
                 android:lineSpacingExtra="4dp"
                 android:layout_marginBottom="20dp"/>
 
@@ -104,13 +107,13 @@
                 android:text="Close"
                 android:textSize="16sp"
                 android:textAllCaps="false"
+                app:backgroundTint="#E6EFFF"
                 android:paddingVertical="12dp"
-                app:strokeColor="@color/red"
+                android:fontFamily="@font/font_urban"
+                app:strokeColor="@color/trans"
                 app:strokeWidth="1dp"
-                android:backgroundTint="@color/white"
-                android:textColor="@color/red"
-                app:cornerRadius="12dp"
-                style="@style/Widget.MaterialComponents.Button"
+                android:textColor="@color/dark_blue"
+                app:cornerRadius="1000dp"
                 android:letterSpacing="0.02"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

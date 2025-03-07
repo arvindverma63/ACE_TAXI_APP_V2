@@ -73,10 +73,10 @@ public class NotificationModalActivity extends AppCompatActivity {
                 new GetBookingById(this).getBookingDetails(jobid); //job offer
                 break;
             case 2:
-                jobModal.jobAmenedment();
+//                jobModal.jobAmenedment();
                 break;
             case 3:
-                jobModal.jobCancel();
+//                jobModal.jobCancel();
                 break;
             case 4:
                 jobModal.JobRead(); //will be navId 7

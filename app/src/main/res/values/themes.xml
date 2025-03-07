@@ -17,7 +17,7 @@
 
 
     <style name="MainBG">
-        <item name="android:background">@color/primaryGray</item>
+        <item name="android:background">#FFFFFF</item>
     </style>
     <style name="CardBG">
         <item name="android:backgroundTint">@color/white</item>

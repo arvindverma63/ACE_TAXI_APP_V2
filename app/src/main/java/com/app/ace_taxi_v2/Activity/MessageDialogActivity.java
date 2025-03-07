@@ -14,13 +14,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.R;
+
+import kotlinx.coroutines.Job;
 
 public class MessageDialogActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_home);
 
         Intent intent = getIntent();
         String navId = intent.getStringExtra("navId");
@@ -43,60 +47,17 @@ public class MessageDialogActivity extends AppCompatActivity {
 
 
     public void messageDialog(){
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View dialogView = inflater.inflate(R.layout.read_message, null);
-
-        Button closeBtn = dialogView.findViewById(R.id.btnRead);
-        TextView message = dialogView.findViewById(R.id.tvMessage);
 
         Intent messageIntent = getIntent();
         String messages = "";
         if (messageIntent.getExtras() != null) {
             messages = messageIntent.getStringExtra("message");
         }
-
-        message.setText(messages);
-        Log.d("NotificationDebug", "Read Message: " + messages);
-
-        closeBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-            finish(); // Ensure this activity is removed from the stack
-        });
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-        builder.setCancelable(false);
-
-        AlertDialog alertDialog = builder.create();
-
-        // Set background color properly
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        dialogView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_dialog));
-
-        alertDialog.show(); // Show the dialog last to avoid UI glitches
-        closeBtn.setOnClickListener(view -> {
-           alertDialog.dismiss();
-        });
+        String datetime = messageIntent.getStringExtra("datetime");
+        JobModal jobModal = new JobModal(this);
+        jobModal.JobReadNotificationClick(messages,datetime);
     }
     public void unallocatedBooking(){
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View dialogView = inflater.inflate(R.layout.unallocated_job,null);
-        Button closeBtn = dialogView.findViewById(R.id.btnClose);
-        closeBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-        });
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-
-        TextView bookingId,passengerName,dateTime;
-        bookingId = dialogView.findViewById(R.id.tvJobId);
-        passengerName = dialogView.findViewById(R.id.tvPassengerName);
-        dateTime = dialogView.findViewById(R.id.tvDate);
 
         Intent intent = getIntent();
         String jobId = getIntent().getStringExtra("jobId");
@@ -107,94 +68,32 @@ public class MessageDialogActivity extends AppCompatActivity {
         if(jobId.equals(bookingStartStatus.getBookingId())){
             bookingStartStatus.clearBookingId();
         }
-
-        bookingId.setText(jobId);
-        passengerName.setText(passenger);
-        dateTime.setText(date);
-
-        builder.setCancelable(false);
-        AlertDialog alertDialog = builder.create();
-        // Set transparent background for the dialog window
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        int bookingId = -1;
+        try{
+            if(jobId != null){
+                bookingId = Integer.parseInt(jobId);
+            }
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
         }
-
-        // Apply rounded background programmatically
-        dialogView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_dialog));
-
-        alertDialog.show();
+        JobModal jobModal = new JobModal(this);
+        jobModal.jobUnallocated(bookingId,passenger,date);
     }
 
     public void cancelDialog(){
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View dialogView = inflater.inflate(R.layout.job_cancel,null);
-        Button closeBtn = dialogView.findViewById(R.id.btnClose);
-        TextView datetime,passengerName,bookingId;
-        datetime = dialogView.findViewById(R.id.tvDateTime);
-        passengerName = dialogView.findViewById(R.id.tvCustomerName);
-        bookingId = dialogView.findViewById(R.id.tvJobId);
 
         String jobId = getIntent().getStringExtra("jobId");
         String passenger = getIntent().getStringExtra("passenger");
         String date = getIntent().getStringExtra("datetime");
+        JobModal jobModal = new JobModal(this);
+        jobModal.jobCancel(jobId,passenger,date);
 
-        datetime.setText(date);
-        passengerName.setText(passenger);
-        bookingId.setText(jobId+"");
-        closeBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
-        });
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-
-        builder.setCancelable(false);
-        AlertDialog alertDialog = builder.create();
-        // Set transparent background for the dialog window
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        // Apply rounded background programmatically
-        dialogView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_dialog));
-
-        alertDialog.show();
     }
     public void jobAmend(){
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View dialogView = inflater.inflate(R.layout.job_amenedment,null);
-        Button closeBtn = dialogView.findViewById(R.id.btnClose);
-
-        TextView datetime,passengerName,bookingId;
-        datetime = dialogView.findViewById(R.id.tvDateTime);
-        passengerName = dialogView.findViewById(R.id.tvCustomerName);
-        bookingId = dialogView.findViewById(R.id.tvBookingId);
-
         String jobId = getIntent().getStringExtra("jobId");
         String passenger = getIntent().getStringExtra("passenger");
         String date = getIntent().getStringExtra("datetime");
-
-        datetime.setText(date);
-        passengerName.setText(passenger);
-        bookingId.setText(jobId+"");
-
-        closeBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, HomeActivity.class);
-            this.startActivity(intent);
-        });
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-
-        builder.setCancelable(false);
-        AlertDialog alertDialog = builder.create();
-        // Set transparent background for the dialog window
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        // Apply rounded background programmatically
-        dialogView.setBackground(ContextCompat.getDrawable(this, R.drawable.rounded_dialog));
-
-        alertDialog.show();
+        JobModal jobModal = new JobModal(this);
+        jobModal.jobAmenedment(jobId,passenger,date);
     }
 }

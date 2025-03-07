@@ -27,13 +27,15 @@
         tools:targetApi="31">
         <activity
             android:name=".Activity.MessageDialogActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog"/>
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog"
+            android:noHistory="true"/>
         <activity
             android:name=".Activity.NotificationModalActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.JobOfferDialogActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog"/>
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog"
+            android:noHistory="true"/>
 
         <service
             android:name=".Logic.Service.LocationService"
@@ -71,7 +73,8 @@
         </activity>
         <activity
             android:name=".Activity.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true"/>
         <activity
             android:name=".Activity.LoginActivity"
             android:exported="false" />

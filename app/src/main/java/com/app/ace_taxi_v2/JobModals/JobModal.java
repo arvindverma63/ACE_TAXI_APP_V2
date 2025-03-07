@@ -19,8 +19,10 @@ import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Logic.ArrivedJobApi;
 import com.app.ace_taxi_v2.Logic.BookingCompleteApi;
+import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.JobResponseApi;
 import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
+import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -111,7 +113,11 @@ public class JobModal {
                 Log.d("Accept Job", "Booking ID: " + bookingId);
                 stopTimeout(handler);
                 fullScreenDialog.dismiss();
-                context.startActivity(new Intent(context, HomeActivity.class));
+                Intent intent = new Intent(context,HomeActivity.class);
+                intent.putExtra("accepted",true);
+                intent.putExtra("passenger",passengerName);
+                intent.putExtra("pickupAddress",pickupAddress);
+                context.startActivity(intent);
             }
         });
 
@@ -121,7 +127,9 @@ public class JobModal {
                 jobResponseApi.rejectBooking(bookingId);
                 stopTimeout(handler);
                 fullScreenDialog.dismiss();
-                context.startActivity(new Intent(context, HomeActivity.class));
+                Intent intent = new Intent(context,HomeActivity.class);
+                intent.putExtra("rejected",true);
+                context.startActivity(intent);
             }
         });
 
@@ -202,19 +210,27 @@ public class JobModal {
     }
 
 
-    public void jobAmenedment(){
+    public void jobAmenedment(String jobId,String passenger,String date){
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.job_amenedment,null);
         Button closeBtn = dialogView.findViewById(R.id.btnClose);
+        TextView datetime,passengerName,bookingId;
+        datetime = dialogView.findViewById(R.id.tvDateTime);
+        passengerName = dialogView.findViewById(R.id.tvCustomerName);
+        bookingId = dialogView.findViewById(R.id.tvBookingId);
+        datetime.setText(date);
+        passengerName.setText(passenger);
+        bookingId.setText(jobId+"");
+
         closeBtn.setOnClickListener(view -> {
             Intent intent = new Intent(context, HomeActivity.class);
             context.startActivity(intent);
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setView(dialogView);
 
         builder.setCancelable(false);
-        AlertDialog alertDialog = builder.create();
+        android.app.AlertDialog alertDialog = builder.create();
         // Set transparent background for the dialog window
         if (alertDialog.getWindow() != null) {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -227,19 +243,26 @@ public class JobModal {
     }
 
 
-    public void jobCancel(){
+    public void jobCancel(String jobId,String passenger,String date){
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.job_cancel,null);
         Button closeBtn = dialogView.findViewById(R.id.btnClose);
+        TextView datetime,passengerName,bookingId;
+        datetime = dialogView.findViewById(R.id.tvDateTime);
+        passengerName = dialogView.findViewById(R.id.tvCustomerName);
+        bookingId = dialogView.findViewById(R.id.tvJobId);
+        datetime.setText(date);
+        passengerName.setText(passenger);
+        bookingId.setText(jobId+"");
         closeBtn.setOnClickListener(view -> {
             Intent intent = new Intent(context, HomeActivity.class);
             context.startActivity(intent);
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setView(dialogView);
 
         builder.setCancelable(false);
-        AlertDialog alertDialog = builder.create();
+        android.app.AlertDialog alertDialog = builder.create();
         // Set transparent background for the dialog window
         if (alertDialog.getWindow() != null) {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -291,7 +314,7 @@ public class JobModal {
         alertDialog.show();
     }
 
-    public void JobReadNotificationClick(String messages) {
+    public void JobReadNotificationClick(String messages,String date) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.read_message, null);
@@ -467,37 +490,32 @@ public class JobModal {
     }
 
     public void jobCompleteBooking(int bookingId) {
+        // Inflate the dialog layout
         LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.complete_job, null);
+        View dialogView = inflater.inflate(R.layout.job_complete_dialog, null);
 
         // Initialize views
-        Button closeBtn = dialogView.findViewById(R.id.btnSubmit);
+        Button closeBtn = dialogView.findViewById(R.id.btnClose);
         TextView etWaitingTime = dialogView.findViewById(R.id.etWaitingTime);
         TextView etParking = dialogView.findViewById(R.id.etParking);
         TextView etPrice = dialogView.findViewById(R.id.etPrice);
-        TextView tvJobId = dialogView.findViewById(R.id.tvJobId);
         TextView tip = dialogView.findViewById(R.id.etTip);
+        Button btnSubmit = dialogView.findViewById(R.id.btnSubmit);
 
-        tvJobId.setText(""+bookingId);
+
+        // Create full-screen dialog
+        Dialog fullScreenDialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        fullScreenDialog.setContentView(dialogView);
+        fullScreenDialog.setCancelable(true);
 
         // Show the dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(dialogView);
-        builder.setCancelable(true);
-        AlertDialog alertDialog = builder.create();
-
-        // Set transparent background for the dialog window
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        }
-
-        // Apply rounded background programmatically
-        dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
-
-        alertDialog.show();
+        fullScreenDialog.show();
+        closeBtn.setOnClickListener(v -> {
+            fullScreenDialog.dismiss();
+        });
 
         // Handle submit button click
-        closeBtn.setOnClickListener(view -> {
+        btnSubmit.setOnClickListener(view -> {
             // Extract user inputs
             String waitingTimeStr = etWaitingTime.getText().toString().trim();
             String parkingStr = etParking.getText().toString().trim();
@@ -512,12 +530,27 @@ public class JobModal {
 
             // Call API with correct data types
             BookingCompleteApi bookingCompleteApi = new BookingCompleteApi(context);
-            bookingCompleteApi.complete(bookingId, (int) waitingTime, (int) parking, price, 0,etTip);
+            bookingCompleteApi.complete(bookingId, (int) waitingTime, (int) parking, price, 0, etTip);
 
             // Dismiss dialog and navigate to HomeActivity
-            alertDialog.dismiss();
+            fullScreenDialog.dismiss();
+
+            GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+            getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
+                @Override
+                public void onSuccess(GetBookingInfo bookingInfo) {
+                    BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
+                    bottomSheetDialogs.openJobCompleted(bookingInfo.getPassengerName(),bookingInfo.getPickupAddress());
+                }
+
+                @Override
+                public void onfailer(String error) {
+
+                }
+            });
 
         });
     }
+
 
 }

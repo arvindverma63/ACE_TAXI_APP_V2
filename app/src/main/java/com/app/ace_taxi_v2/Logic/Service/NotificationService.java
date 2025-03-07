@@ -85,11 +85,9 @@ public class NotificationService extends FirebaseMessagingService {
             datetime = remoteMessage.getData().getOrDefault("datetime", datetime);
         }
 
+        Log.d("datetime",datetime);
         // Convert and format datetime
-        String formattedDateTime = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            formattedDateTime = String.valueOf(parseDateTime(datetime));
-        }
+
 
         // Save notification details in SharedPreferences
         editor.putString("notification_payload", body);
@@ -98,11 +96,11 @@ public class NotificationService extends FirebaseMessagingService {
         editor.putString("notification_navId", navId);
         editor.apply();
 
-        NotificationModel notificationModel = new NotificationModel(jobId, navId, title, message, passenger, formattedDateTime);
+        NotificationModel notificationModel = new NotificationModel(jobId, navId, title, message, passenger, datetime);
         notificationModalSession.saveNotification(notificationModel);
 
         Log.d(TAG, "Calling showNotification with title: " + title + ", body: " + body);
-        showNotification(title, body, jobId, navId, passenger, formattedDateTime);
+        showNotification(title, body, jobId, navId, passenger, datetime);
 
         // Process navigation logic
         if (!"N/A".equals(navId)) {
@@ -118,16 +116,17 @@ public class NotificationService extends FirebaseMessagingService {
                         String finalNavId = navId;
                         new Handler(Looper.getMainLooper()).post(() -> {
                             Intent intent = new Intent(this, MessageDialogActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);;
                             intent.putExtra("message", finalMessage);
                             intent.putExtra("navId", finalNavId);
                             startActivity(intent);
+
                         });
                     }
                 }
                 if("2".equals(navId)){
                     Intent intent = new Intent(this,MessageDialogActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("datetime",datetime);
                     intent.putExtra("passenger",passenger);
                     intent.putExtra("jobId",jobId);
@@ -136,7 +135,7 @@ public class NotificationService extends FirebaseMessagingService {
                 }
                 if("3".equals(navId)){
                     Intent intent = new Intent(this,MessageDialogActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("datetime",datetime);
                     intent.putExtra("passenger",passenger);
                     intent.putExtra("jobId",jobId);
@@ -145,7 +144,7 @@ public class NotificationService extends FirebaseMessagingService {
                 }
                 if("4".equals(navId)){
                     Intent intent = new Intent(this,MessageDialogActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("datetime",datetime);
                     intent.putExtra("passenger",passenger);
                     intent.putExtra("jobId",jobId);
@@ -233,22 +232,7 @@ public class NotificationService extends FirebaseMessagingService {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static LocalDateTime parseDateTime(String dateTimeString) {
-        String[] formats = {"dd/MM/yyyy HH:mm", "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy HH:mm"};
 
-        for (String format : formats) {
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-                return LocalDateTime.parse(dateTimeString, formatter);
-            } catch (DateTimeParseException ignored) {
-                // Try the next format
-            }
-        }
-
-        Log.e("NotificationService", "Invalid datetime format: " + dateTimeString);
-        return null;
-    }
 
 
 }

@@ -15,7 +15,7 @@
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
         android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/red"
+        app:cardBackgroundColor="@color/white"
         android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -29,19 +29,21 @@
             android:padding="16dp"
             android:gravity="center_horizontal">
 
-            <!-- Header -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_job_cancel"/>
+
+            <!-- Job ID -->
             <TextView
-                android:id="@+id/tvHeader"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:background="@color/dark_blue"
-                android:text="JOB CANCELLED"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Cancelled"
+                android:textSize="20sp"
+                android:fontFamily="@font/font_urban"
                 android:textStyle="bold"
-                android:padding="8dp"
-                android:layout_marginBottom="12dp" />
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp"/>
 
             <!-- Job ID -->
             <TextView
@@ -50,8 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="bookingId"
-                android:textColor="@color/white"
-                android:textSize="18sp"
+                android:fontFamily="@font/font_urban"
+                android:textColor="@color/black"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <!-- Customer Name -->
@@ -61,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="passenger name"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
+                android:fontFamily="@font/font_urban"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -72,8 +76,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="dd/mm/yyyy - HH:mm"
-                android:textColor="@color/white"
-                android:textSize="14sp"
+                android:fontFamily="@font/font_urban"
+                android:textColor="@color/black"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <!-- Message -->
@@ -83,7 +88,8 @@
                 android:layout_height="wrap_content"
                 android:text="Your booking for the above journey has been canceled."
                 android:textSize="14sp"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/font_urban"
                 android:gravity="center"
                 android:layout_marginBottom="16dp" />
 
@@ -92,11 +98,17 @@
                 android:id="@+id/btnClose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CLOSE"
-                app:cornerRadius="20dp"
-                android:backgroundTint="@android:color/black"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"/>
+                android:text="Close"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                app:backgroundTint="#E6EFFF"
+                android:paddingVertical="12dp"
+                android:fontFamily="@font/font_urban"
+                app:strokeColor="@color/trans"
+                app:strokeWidth="1dp"
+                android:textColor="@color/dark_blue"
+                app:cornerRadius="1000dp"
+                android:letterSpacing="0.02"/>
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

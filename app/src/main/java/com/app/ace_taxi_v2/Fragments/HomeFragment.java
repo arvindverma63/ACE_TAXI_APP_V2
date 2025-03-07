@@ -14,6 +14,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -36,9 +37,10 @@ public class HomeFragment extends Fragment {
     private static final String SWITCH_STATE_KEY = "switch_state";
 
     private Switch locationSwitch;
-    private TextView onlineStatusLabel;
+    private TextView onlineStatusLabel,set_job_status;
     private LocationPermissions locationPermissions;
     private TextView pickup_address, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
+    private CardView current_job_card;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +55,8 @@ public class HomeFragment extends Fragment {
         price = view.findViewById(R.id.current_price);
         passenger_count = view.findViewById(R.id.current_passenger_count);
         passenger_name = view.findViewById(R.id.passenger_name);
-
+        current_job_card = view.findViewById(R.id.current_job_card);
+        set_job_status = view.findViewById(R.id.set_job_status);
         // Check user session
         if (getActivity() == null) return view;
         SessionManager sessionManager = new SessionManager(getActivity());
@@ -179,6 +182,12 @@ public class HomeFragment extends Fragment {
                         date.setText(booking.getPickupDateTime());
                         passenger_count.setText(String.valueOf(booking.getPassengers()));
                         passenger_name.setText(booking.getPassengerName());
+
+                        current_job_card.setVisibility(getView().VISIBLE);
+                        set_job_status.setText("Active Job");
+                    }else {
+                        current_job_card.setVisibility(getView().GONE);
+                        set_job_status.setText("No Active Job");
                     }
                 }
             }

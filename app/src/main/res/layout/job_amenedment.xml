@@ -29,19 +29,21 @@
             android:padding="16dp"
             android:gravity="center_horizontal">
 
-            <!-- Header -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_job_amend"/>
+
+            <!-- Job ID -->
             <TextView
-                android:id="@+id/tvHeader"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:background="@color/dark_blue"
-                android:text="JOB AMENDMENT"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Amendment"
+                android:textSize="20sp"
+                android:fontFamily="@font/font_urban"
                 android:textStyle="bold"
-                android:padding="8dp"
-                android:layout_marginBottom="12dp" />
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp"/>
 
             <!-- Job ID -->
             <TextView
@@ -58,6 +60,7 @@
                 android:id="@+id/tvCustomerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/font_urban"
                 android:text="passenger name"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -67,10 +70,10 @@
             <TextView
                 android:id="@+id/tvDateTime"
                 android:layout_width="wrap_content"
+                android:fontFamily="@font/font_urban"
                 android:layout_height="wrap_content"
                 android:text="dd/mm/yyyy – HH:mm"
-                android:textSize="14sp"
-                android:textStyle="bold"
+                android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
 
             <!-- Message -->
@@ -78,9 +81,9 @@
                 android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/font_urban"
                 android:text="Your booking for the above journey has been amended."
                 android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
                 android:gravity="center"
                 android:layout_marginBottom="16dp" />
 
@@ -89,11 +92,17 @@
                 android:id="@+id/btnClose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CLOSE"
-                app:cornerRadius="20dp"
-                android:backgroundTint="@color/red"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"/>
+                android:text="Close"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                app:backgroundTint="#E6EFFF"
+                android:paddingVertical="12dp"
+                android:fontFamily="@font/font_urban"
+                app:strokeColor="@color/trans"
+                app:strokeWidth="1dp"
+                android:textColor="@color/dark_blue"
+                app:cornerRadius="1000dp"
+                android:letterSpacing="0.02"/>
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
