@@ -72,6 +72,11 @@
         <item name="android:backgroundTint">@color/trans</item>
         <item name="backgroundColor">@color/trans</item>
     </style>
+    <style name="MaterialAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="android:windowMinWidthMajor">80%</item>
+        <item name="android:windowMinWidthMinor">80%</item>
+    </style>
 
 
 

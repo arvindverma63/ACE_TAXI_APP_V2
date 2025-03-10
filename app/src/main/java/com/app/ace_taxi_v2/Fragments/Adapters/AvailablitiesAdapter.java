@@ -40,23 +40,24 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
         holder.tv_driver_name.setText(response.getFullName());
 
         // Convert availability type integer to String
-        holder.tv_availability_type.setText("Availability Type: " + response.getAvailabilityType());
+        holder.to.setText(response.getTo());
 
         // Show available hours instead of description
-        holder.tv_availability_details.setText(response.getAvailableHours());
+        holder.from.setText(response.getFrom());
+        holder.user_id.setText(response.getUserId()+"");
 
         DeleteAvailbility deleteAvailbility = new DeleteAvailbility(context);
 
-        holder.deleteIcon.setOnClickListener(v -> {
-            deleteAvailbility.deleteAva(response.getId());
-
-            // Remove the item from the list
-            list.remove(position);
-
-            // Notify RecyclerView about item removal
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, list.size()); // Refresh positions
-        });
+//        holder.deleteIcon.setOnClickListener(v -> {
+//            deleteAvailbility.deleteAva(response.getId());
+//
+//            // Remove the item from the list
+//            list.remove(position);
+//
+//            // Notify RecyclerView about item removal
+//            notifyItemRemoved(position);
+//            notifyItemRangeChanged(position, list.size()); // Refresh positions
+//        });
     }
 
 
@@ -66,15 +67,15 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_driver_name, tv_availability_type, tv_availability_details;
+        TextView tv_driver_name, user_id, from,to;
         ImageView deleteIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_driver_name = itemView.findViewById(R.id.tv_driver_name);
-            tv_availability_details = itemView.findViewById(R.id.tv_availability_details);
-            tv_availability_type = itemView.findViewById(R.id.tv_availability_type);
-            deleteIcon = itemView.findViewById(R.id.deleteIcon);
+            user_id = itemView.findViewById(R.id.user_id);
+            from = itemView.findViewById(R.id.from);
+            to = itemView.findViewById(R.id.to);
         }
     }
 }

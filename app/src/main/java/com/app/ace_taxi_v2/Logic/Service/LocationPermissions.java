@@ -6,20 +6,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.R;
+import com.google.android.material.button.MaterialButton;
 
 public class LocationPermissions {
 
@@ -92,20 +99,50 @@ public class LocationPermissions {
     }
 
     public void promptEnableGPS() {
-        new AlertDialog.Builder(activity)
-                .setTitle("Enable Location Services")
-                .setMessage("Location services are required for this feature. Please enable them.")
-                .setPositiveButton("Settings", (dialog, which) -> {
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    activity.startActivity(intent);
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> {
-                    Log.d(TAG, "User declined to enable GPS.");
-                    setSwitchState(false);
-                })
-                .create()
-                .show();
+        try {
+            // Use 'activity' instead of 'context' to avoid theme issues
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+            // Inflate custom dialog layout
+            LayoutInflater inflater = activity.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.location_permission_dialog, null);
+            builder.setView(dialogView);
+
+            // Prevent dialog from being dismissed outside clicks
+            builder.setCancelable(false);
+            AlertDialog alertDialog = builder.create();
+
+            // Set transparent background for a clean look
+            if (alertDialog.getWindow() != null) {
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            }
+
+            // Apply rounded background programmatically
+            dialogView.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_dialog));
+
+            // Initialize UI elements correctly
+            MaterialButton btnPermission = dialogView.findViewById(R.id.btnPermission);
+//            MaterialButton btnClose = dialogView.findViewById(R.id.btnClose);
+
+            // Open Location Settings on "Enable" click
+            btnPermission.setOnClickListener(v -> {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                activity.startActivity(intent);
+                alertDialog.dismiss();
+            });
+
+            // Close the dialog on "Close" click
+//            btnClose.setOnClickListener(v -> alertDialog.dismiss());
+
+            // Show the dialog
+            alertDialog.show();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error displaying GPS enable prompt: ", e);
+        }
     }
+
+
 
     public boolean checkBatteryOptimizations() {
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);

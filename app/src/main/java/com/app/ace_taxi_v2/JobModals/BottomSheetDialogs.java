@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Fragments.JobFragment;
+import com.app.ace_taxi_v2.Fragments.ListAvailabillity;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -34,7 +35,7 @@ public class BottomSheetDialogs {
         pickupAddress.setText(pickup);
 
         Button btnBack = view.findViewById(R.id.btnBack);
-        Button btnViewJobs = view.findViewById(R.id.btnViewJobs);
+        Button btnViewJobs = view.findViewById(R.id.btnAvail);
         view.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         btnBack.setOnClickListener(v -> bottomSheetDialogs.dismiss());
 
@@ -64,7 +65,7 @@ public class BottomSheetDialogs {
         pickupAddress.setText(pickup);
 
         Button btnBack = view.findViewById(R.id.btnBack);
-        Button btnViewJobs = view.findViewById(R.id.btnViewJobs);
+        Button btnViewJobs = view.findViewById(R.id.btnAvail);
         view.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         btnBack.setOnClickListener(v -> bottomSheetDialogs.dismiss());
 
@@ -94,5 +95,45 @@ public class BottomSheetDialogs {
         btnBack.setOnClickListener(v -> {
             bottomSheetDialogs.dismiss();
         });
+    }
+
+    public void addAvail(){
+        BottomSheetDialog bottomSheetDialogs = new BottomSheetDialog(context,R.style.BottomSheetDialogTransparent);
+        View view = LayoutInflater.from(context).inflate(R.layout.availablitiy_add_bottom_sheet, null);
+        bottomSheetDialogs.setContentView(view);
+        Button btnBack = view.findViewById(R.id.btnBack);
+        Button viewAvail = view.findViewById(R.id.btnAvail);
+
+        view.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        btnBack.setOnClickListener(v -> bottomSheetDialogs.dismiss());
+
+        bottomSheetDialogs.show(); // Important: Show the BottomSheetDialog
+        btnBack.setOnClickListener(v -> {
+            bottomSheetDialogs.dismiss();
+        });
+        viewAvail.setOnClickListener(v -> {
+            Fragment fragment = new ListAvailabillity();
+            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        });
+    }
+
+    public void alreadyAdd(){
+        BottomSheetDialog bottomSheetDialogs = new BottomSheetDialog(context,R.style.BottomSheetDialogTransparent);
+        View view = LayoutInflater.from(context).inflate(R.layout.avail_error, null);
+        bottomSheetDialogs.setContentView(view);
+        Button btnBack = view.findViewById(R.id.btnBack);
+
+        view.setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        btnBack.setOnClickListener(v -> bottomSheetDialogs.dismiss());
+
+        bottomSheetDialogs.show(); // Important: Show the BottomSheetDialog
+        btnBack.setOnClickListener(v -> {
+            bottomSheetDialogs.dismiss();
+        });
+
     }
 }

@@ -5,7 +5,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
+import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
 import com.app.ace_taxi_v2.Models.AvailabilityRequest;
 import com.app.ace_taxi_v2.Models.AvailabilityResponse;
 
@@ -28,6 +30,8 @@ public class AvailabilityAddApi {
     public void addAvailability(int userId, String date, String from, String to, boolean giveOrTake, int type, String note) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
+        CustomDialog customDialog = new CustomDialog();
+        customDialog.showProgressDialog(context);
 
         // Attach user details to Sentry
         User sentryUser = new User();
@@ -41,12 +45,16 @@ public class AvailabilityAddApi {
             @Override
             public void onResponse(Call<List<AvailabilityResponse>> call, Response<List<AvailabilityResponse>> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(context, "Added Successfully", Toast.LENGTH_LONG).show();
+                    BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
+                    bottomSheetDialogs.addAvail();
+                    customDialog.dismissProgressDialog();
                 } else {
                     String errorMessage = "Availability API Error: HTTP " + response.code() + " - " + response.message();
                     Log.e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
-                    Toast.makeText(context, "Failed to add availability", Toast.LENGTH_LONG).show();
+                    BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
+                    bottomSheetDialogs.alreadyAdd();
+                    customDialog.dismissProgressDialog();
                 }
             }
 
@@ -55,7 +63,9 @@ public class AvailabilityAddApi {
                 String failureMessage = "Availability API Call Failed: " + t.getMessage();
                 Log.e(TAG, failureMessage, t);
                 Sentry.captureException(t);
-                Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
+                BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
+                bottomSheetDialogs.alreadyAdd();
+                customDialog.dismissProgressDialog();
             }
         });
     }

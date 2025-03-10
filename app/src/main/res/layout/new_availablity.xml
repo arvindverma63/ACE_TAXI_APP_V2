@@ -1,19 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    app:cardCornerRadius="0dp"
-    style="@style/CardBG">
+    android:padding="16dp"
+    style="@style/MainBG">
+
+    <!-- Header with Back Arrow and Title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_arrow"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Availability"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Date Selection -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <!-- Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Date"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Date Container with Material CardView -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            style="@style/CardBG">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Dec 22, 2024"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="start" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    style="@style/IconTint"
+                    android:src="@drawable/ic_calender" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <!-- Toggle for Me and All -->
+
     <!-- Availability Entries -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:padding="12dp"
         android:orientation="vertical">
 
         <!-- Peter Farrell Entry -->
@@ -26,7 +94,6 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:id="@+id/tv_driver_name"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Peter Farrell"
@@ -37,7 +104,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="08"
-                android:id="@+id/user_id"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginStart="8dp" />
@@ -73,7 +139,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10:00 AM"
-                    android:id="@+id/from"
                     android:textSize="14sp"
                     android:layout_marginStart="16dp"
                     android:gravity="end"
@@ -112,11 +177,28 @@
                     android:layout_height="wrap_content"
                     android:text="10:08 AM"
                     android:textSize="14sp"
-                    android:id="@+id/to"
                     android:layout_marginStart="16dp"
                     android:gravity="end"
                     android:layout_weight="1" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:layout_marginTop="250dp"
+        app:backgroundTint="#E6EFFF"
+        android:paddingVertical="12dp"
+        android:fontFamily="@font/font_urban"
+        app:strokeColor="@color/trans"
+        app:strokeWidth="1dp"
+        android:textColor="@color/dark_blue"
+        app:cornerRadius="1000dp"
+        android:letterSpacing="0.02"/>
+
+</LinearLayout>

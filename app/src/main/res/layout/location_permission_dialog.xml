@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <!-- Card Container -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/messageCard"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/location_permission_icon"/>
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable Location"
+                android:textSize="20sp"
+                android:fontFamily="@font/font_urban"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/tvDateTime"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="To be able to use the service, we require permission to access your location."
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- Message -->
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Enable Permission from settings"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Grant Permission Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPermission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Grant Permission"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/green"
+                android:paddingVertical="12dp"
+                android:fontFamily="@font/font_urban"
+                app:strokeColor="@color/trans"
+                app:strokeWidth="1dp"
+                android:textColor="@color/white"
+                app:cornerRadius="1000dp"
+                android:letterSpacing="0.02"/>
+
+            <!-- Maybe Later Button -->
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/btnClose"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Maybe Later"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textAllCaps="false"-->
+<!--                app:backgroundTint="#E6FFED"-->
+<!--                android:paddingVertical="12dp"-->
+<!--                android:fontFamily="@font/font_urban"-->
+<!--                app:strokeColor="@color/trans"-->
+<!--                app:strokeWidth="1dp"-->
+<!--                android:textColor="@color/dark_green"-->
+<!--                app:cornerRadius="1000dp"-->
+<!--                android:letterSpacing="0.02"/>-->
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

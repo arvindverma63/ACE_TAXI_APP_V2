@@ -1,182 +1,391 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:overScrollMode="never">
+    android:orientation="vertical"
+    android:padding="16dp"
+    style="@style/MainBG">
 
+    <!-- Header with Back Arrow and Title -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
-        style="@style/MainBG">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <!-- Top Buttons -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Availability"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Date Selection -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <!-- Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Date"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Date Container with CardView -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            android:id="@+id/date_button"
+            style="@style/CardBG"
+            app:cardBackgroundColor="#F5F5F5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/dateText"
+                    android:text="Dec 22, 2024"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="start" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_calender"
+                    app:tint="?attr/colorControlNormal" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <!-- Options Grid with CardView -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        style="@style/MainBG"
+        android:background="@drawable/border_background"
+        android:padding="20dp"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="16dp">
+            android:layout_marginBottom="16dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/date_button"
+            <!-- Unavailable Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Select Date Range"
-                android:paddingVertical="14dp"
-                android:paddingHorizontal="16dp"
-                android:textSize="10sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@color/primaryColor"
-                android:textColor="@android:color/white"
-                app:cornerRadius="12dp"
-                style="@style/Widget.MaterialComponents.Button"
-                android:letterSpacing="0.02"/>
-
-            <View
-                android:layout_width="12dp"
-                android:layout_height="0dp"/>
-
-            <com.google.android.material.button.MaterialButton
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="0dp"
+                style="@style/CardBG"
                 android:id="@+id/unavailable_button"
-                android:layout_width="wrap_content"
+                android:layout_marginEnd="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:tint="@color/light_red"
+                        android:src="@drawable/ic_unavail" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Unavailable"
+                        android:textSize="14sp"
+                        android:gravity="center" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="All day"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- AM Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Unavailable All Day"
-                android:paddingVertical="14dp"
-                android:paddingHorizontal="16dp"
-                android:textSize="14sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@android:color/white"
-                app:strokeColor="@color/red"
-                app:strokeWidth="1dp"
-                android:textColor="@color/red"
-                app:cornerRadius="12dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:letterSpacing="0.02"/>
+                android:layout_weight="1"
+                app:cardCornerRadius="20dp"
+                android:id="@+id/am_school_button"
+                style="@style/CardBG"
+                app:strokeWidth="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:tint="@color/green"
+                        android:src="@drawable/ic_am" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AM"
+                        android:textSize="14sp"
+                        android:gravity="center" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="School only"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- PM Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="20dp"
+                android:id="@+id/pm_school_button"
+                app:strokeWidth="0dp"
+                style="@style/CardBG"
+                android:layout_marginStart="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:tint="@color/blue"
+                        android:src="@drawable/ic_pm"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PM"
+                        android:textSize="14sp"
+                        android:gravity="center" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="School only"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <!-- School Options Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="8dp"
-            android:layout_marginTop="20dp">
+            android:orientation="horizontal"
+            android:gravity="center">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/am_school_button"
-                android:layout_width="match_parent"
+            <!-- AM-PM Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="AM School Only"
-                android:paddingVertical="16dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@color/primaryColor"
-                android:textColor="@android:color/white"
-                app:cornerRadius="12dp"
-                style="@style/Widget.MaterialComponents.Button"
-                android:letterSpacing="0.01"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/pm_school_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="PM School Only"
-                android:paddingVertical="16dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@color/primaryColor"
-                android:textColor="@android:color/white"
-                app:cornerRadius="12dp"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_marginTop="12dp"
-                android:letterSpacing="0.01"/>
-
-            <com.google.android.material.button.MaterialButton
+                android:layout_weight="1"
+                app:cardCornerRadius="20dp"
                 android:id="@+id/am_pm_school_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="AM/PM School Only"
-                android:paddingVertical="16dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@color/primaryColor"
-                android:textColor="@android:color/white"
-                app:cornerRadius="12dp"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_marginTop="12dp"
-                android:letterSpacing="0.01"/>
+                app:strokeWidth="0dp"
+                style="@style/CardBG"
+                android:layout_marginEnd="8dp">
 
-            <com.google.android.material.button.MaterialButton
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_am"
+                        app:tint="@color/red" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AM-PM"
+                        android:textSize="14sp"
+                        android:gravity="center" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="School only"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Custom Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="20dp"
                 android:id="@+id/custom_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Custom"
-                android:paddingVertical="16dp"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@android:color/white"
-                app:strokeColor="@color/red"
-                app:strokeWidth="1dp"
-                android:textColor="@color/red"
-                app:cornerRadius="12dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_marginTop="12dp"
-                android:letterSpacing="0.01"/>
-        </LinearLayout>
+                app:strokeWidth="0dp"
+                style="@style/CardBG"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp">
 
-        <!-- Content Box -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        app:tint="@color/black"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_custom" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Custom"
+                        android:textSize="14sp"
+                        android:gravity="center" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Set manually"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- View Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/view_all"
+                app:strokeWidth="0dp"
+                app:cardCornerRadius="20dp"
+                style="@style/CardBG"
+                android:layout_marginStart="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        app:tint="@color/purple"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_view" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View"
+                        android:textSize="14sp"
+                        android:gravity="center" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View all"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:gravity="center" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/content_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_gray"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Your Availabilities"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:padding="16dp"
+                android:letterSpacing="0.02"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclar_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="@android:color/darker_gray"
-            style="@style/CardBG">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/light_gray"
-                    app:cardCornerRadius="0dp"
-                    app:cardElevation="0dp">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Your Availabilities"
-                        android:textColor="@color/red"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:padding="16dp"
-                        android:letterSpacing="0.02"/>
-                </com.google.android.material.card.MaterialCardView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclar_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:padding="8dp"
-                    android:clipToPadding="false"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            android:padding="8dp"
+            android:clipToPadding="false"/>
     </LinearLayout>
-</ScrollView>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:layout_marginTop="250dp"
+        app:backgroundTint="#E6EFFF"
+        android:paddingVertical="12dp"
+        android:fontFamily="@font/font_urban"
+        app:strokeColor="@color/trans"
+        app:strokeWidth="1dp"
+        android:textColor="@color/dark_blue"
+        app:cornerRadius="1000dp"
+        android:letterSpacing="0.02"/>
+</LinearLayout>

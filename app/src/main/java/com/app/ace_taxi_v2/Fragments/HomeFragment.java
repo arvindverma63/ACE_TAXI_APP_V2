@@ -4,17 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -41,6 +44,8 @@ public class HomeFragment extends Fragment {
     private LocationPermissions locationPermissions;
     private TextView pickup_address, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
     private CardView current_job_card;
+    private ImageView nav_icon;
+    private View header_view;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +62,12 @@ public class HomeFragment extends Fragment {
         passenger_name = view.findViewById(R.id.passenger_name);
         current_job_card = view.findViewById(R.id.current_job_card);
         set_job_status = view.findViewById(R.id.set_job_status);
+        nav_icon = view.findViewById(R.id.nav_icon);
+        header_view = view.findViewById(R.id.header_slide);
+
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) header_view.getLayoutParams();
+        params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 150); // 50px bottom margin
+        header_view.setLayoutParams(params);
         // Check user session
         if (getActivity() == null) return view;
         SessionManager sessionManager = new SessionManager(getActivity());
@@ -133,13 +144,16 @@ public class HomeFragment extends Fragment {
 
     private void updateStatusLabel(boolean isOnline) {
         onlineStatusLabel.setText(isOnline ? "You Are Online" : "You Are Offline");
+        nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.red), PorterDuff.Mode.SRC_IN);
 
         if (isOnline) {
-            locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
-            locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+            locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.green), PorterDuff.Mode.SRC_IN);
         } else {
             locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray))); // Change to your OFF color
             locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.red), PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -185,6 +199,9 @@ public class HomeFragment extends Fragment {
 
                         current_job_card.setVisibility(getView().VISIBLE);
                         set_job_status.setText("Active Job");
+                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) header_view.getLayoutParams();
+                        params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 10); // 50px bottom margin
+                        header_view.setLayoutParams(params);
                     }else {
                         current_job_card.setVisibility(getView().GONE);
                         set_job_status.setText("No Active Job");
