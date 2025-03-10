@@ -12,36 +12,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:padding="12dp"
         android:orientation="vertical">
 
         <!-- Peter Farrell Entry -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:id="@+id/tv_driver_name"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Peter Farrell"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="08"
-                android:id="@+id/user_id"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginStart="8dp" />
-        </LinearLayout>
 
         <!-- Available Entry -->
         <com.google.android.material.card.MaterialCardView
@@ -60,6 +33,7 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:id="@+id/pin_icon"
                     android:src="@drawable/ic_pickup"/>
 
                 <TextView
@@ -67,17 +41,25 @@
                     android:layout_height="wrap_content"
                     android:text="Available"
                     android:textSize="14sp"
+                    android:id="@+id/availText"
                     android:layout_marginStart="8dp" />
 
                 <TextView
+                    android:layout_width="222dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:id="@+id/fromToEnd"
+                    android:gravity="end"
+                    android:maxLength="15"
+                    android:text="10:00 AM"
+                    android:textSize="14sp" />
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10:00 AM"
-                    android:id="@+id/from"
-                    android:textSize="14sp"
-                    android:layout_marginStart="16dp"
-                    android:gravity="end"
-                    android:layout_weight="1" />
+                    android:id="@+id/delete_icon"
+                    android:src="@drawable/ic_delete"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -86,37 +68,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="0dp"
-            style="@style/CardBG">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_destination"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Unavailable"
-                    android:textSize="14sp"
-                    android:layout_marginStart="8dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10:08 AM"
-                    android:textSize="14sp"
-                    android:id="@+id/to"
-                    android:layout_marginStart="16dp"
-                    android:gravity="end"
-                    android:layout_weight="1" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            style="@style/CardBG"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

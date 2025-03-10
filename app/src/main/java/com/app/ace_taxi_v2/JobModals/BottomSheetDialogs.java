@@ -118,6 +118,7 @@ public class BottomSheetDialogs {
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+            bottomSheetDialogs.dismiss();
         });
     }
 

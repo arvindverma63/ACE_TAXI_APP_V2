@@ -41,10 +41,10 @@ public class AvailabilityAddApi {
         AvailabilityRequest availabilityRequest = new AvailabilityRequest(userId, date, from, to, giveOrTake, type, note);
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
 
-        apiService.addAvailability(token, availabilityRequest).enqueue(new Callback<List<AvailabilityResponse>>() {
+        apiService.addAvailability(token, availabilityRequest).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<List<AvailabilityResponse>> call, Response<List<AvailabilityResponse>> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 200) {
                     BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
                     bottomSheetDialogs.addAvail();
                     customDialog.dismissProgressDialog();
@@ -59,7 +59,7 @@ public class AvailabilityAddApi {
             }
 
             @Override
-            public void onFailure(Call<List<AvailabilityResponse>> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 String failureMessage = "Availability API Call Failed: " + t.getMessage();
                 Log.e(TAG, failureMessage, t);
                 Sentry.captureException(t);

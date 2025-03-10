@@ -50,6 +50,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/datePicker"
             app:cardCornerRadius="12dp"
             style="@style/CardBG">
 
@@ -65,6 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Dec 22, 2024"
+                    android:id="@+id/datetime_text"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:gravity="start" />

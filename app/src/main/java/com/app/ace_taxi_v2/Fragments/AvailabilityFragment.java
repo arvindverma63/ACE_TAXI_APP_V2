@@ -43,6 +43,7 @@ public class AvailabilityFragment extends Fragment {
     private TextView dateText;
     public SessionManager sessionManager;
     public MaterialCardView am_school_button,pm_school_button,am_pm_school_button,unavailable_button,view_all;
+    public Button close;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +64,15 @@ public class AvailabilityFragment extends Fragment {
         am_school_button.setOnClickListener(v -> amSchoolOnly());
         unavailable_button.setOnClickListener(v -> setUnavailable());
         am_pm_school_button.setOnClickListener(v -> bothOnly());
+        close = rootView.findViewById(R.id.btnClose);
+        close.setOnClickListener(v -> {
+            Fragment selected = new HomeFragment();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, selected);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commitAllowingStateLoss();
+        });
 
         view_all.setOnClickListener(v -> {
             Fragment selected = new ListAvailabillity();
@@ -94,7 +104,7 @@ public class AvailabilityFragment extends Fragment {
 
     public void renderList(){
         AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
-        availabilitiesApi.getAvailabilities(recyclerView);
+        availabilitiesApi.getAvailabilities(recyclerView,getView());
     }
 
     // Show Date Picker and then Time Picker

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.Logic.DeleteAvailbility;
@@ -37,27 +38,29 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
     public void onBindViewHolder(@NonNull AvailablitiesAdapter.ViewHolder holder, int position) {
         AvailabilityResponse.Driver response = list.get(position);
 
-        holder.tv_driver_name.setText(response.getFullName());
+        holder.fromToEnd.setText(response.getAvailableHours());
 
-        // Convert availability type integer to String
-        holder.to.setText(response.getTo());
+        if(response.getAvailabilityType() == 0){
+            holder.availText.setText("UnAvailable");
+            holder.pinIcon.setImageTintList(ContextCompat.getColorStateList(context,R.color.red));
+        }else{
+            holder.availText.setText("Available");
+            holder.pinIcon.setImageTintList(ContextCompat.getColorStateList(context,R.color.green));
+        }
 
-        // Show available hours instead of description
-        holder.from.setText(response.getFrom());
-        holder.user_id.setText(response.getUserId()+"");
 
         DeleteAvailbility deleteAvailbility = new DeleteAvailbility(context);
 
-//        holder.deleteIcon.setOnClickListener(v -> {
-//            deleteAvailbility.deleteAva(response.getId());
-//
-//            // Remove the item from the list
-//            list.remove(position);
-//
-//            // Notify RecyclerView about item removal
-//            notifyItemRemoved(position);
-//            notifyItemRangeChanged(position, list.size()); // Refresh positions
-//        });
+        holder.deleteIcon.setOnClickListener(v -> {
+            deleteAvailbility.deleteAva(response.getId());
+
+            // Remove the item from the list
+            list.remove(position);
+
+            // Notify RecyclerView about item removal
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, list.size()); // Refresh positions
+        });
     }
 
 
@@ -67,15 +70,15 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_driver_name, user_id, from,to;
-        ImageView deleteIcon;
+        TextView fromToEnd,availText;
+        ImageView deleteIcon,pinIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv_driver_name = itemView.findViewById(R.id.tv_driver_name);
-            user_id = itemView.findViewById(R.id.user_id);
-            from = itemView.findViewById(R.id.from);
-            to = itemView.findViewById(R.id.to);
+            fromToEnd = itemView.findViewById(R.id.fromToEnd);
+            deleteIcon = itemView.findViewById(R.id.delete_icon);
+            availText = itemView.findViewById(R.id.availText);
+            pinIcon = itemView.findViewById(R.id.pin_icon);
         }
     }
 }

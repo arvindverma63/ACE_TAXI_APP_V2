@@ -12,22 +12,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.app.ace_taxi_v2.Activity.HomeActivity;
-import com.app.ace_taxi_v2.Activity.MessageDialogActivity;
-import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.app.ace_taxi_v2.Logic.JobApi.NotificationJobDialogResponse;
 import com.app.ace_taxi_v2.Models.NotificationModel;
 import com.app.ace_taxi_v2.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class NotificationService extends FirebaseMessagingService {
 
@@ -53,41 +46,25 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d(TAG, "Message received: " + (remoteMessage.getMessageId() != null ? remoteMessage.getMessageId() : "Unknown"));
+        Log.d(TAG, "Message received: " + remoteMessage.getMessageId());
 
         SharedPreferences sharedPreferences = getSharedPreferences("check_notification", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         // Default values
-        String title = "Notification";
-        String body = "New message received.";
-        String jobId = "N/A";
-        String navId = "N/A";
-        String message = "No additional information.";
-        String passenger = "";
-        String datetime = "";
-
-        // Extract notification title & body safely
-        if (remoteMessage.getNotification() != null) {
-            title = remoteMessage.getNotification().getTitle() != null ? remoteMessage.getNotification().getTitle() : title;
-            body = remoteMessage.getNotification().getBody() != null ? remoteMessage.getNotification().getBody() : body;
-        }
+        String title = remoteMessage.getNotification() != null && remoteMessage.getNotification().getTitle() != null
+                ? remoteMessage.getNotification().getTitle() : "Notification";
+        String body = remoteMessage.getNotification() != null && remoteMessage.getNotification().getBody() != null
+                ? remoteMessage.getNotification().getBody() : "New message received.";
 
         // Extract data payload
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Data Payload: " + remoteMessage.getData());
-            title = remoteMessage.getData().getOrDefault("customTitle", title);
-            body = remoteMessage.getData().getOrDefault("customMessage", body);
-            jobId = remoteMessage.getData().getOrDefault("bookingId", jobId);
-            navId = remoteMessage.getData().getOrDefault("NavId", navId);
-            message = remoteMessage.getData().getOrDefault("message", message);
-            passenger = remoteMessage.getData().getOrDefault("passenger", passenger);
-            datetime = remoteMessage.getData().getOrDefault("datetime", datetime);
-        }
+        String jobId = remoteMessage.getData().getOrDefault("bookingId", "N/A");
+        String navId = remoteMessage.getData().getOrDefault("NavId", "N/A");
+        String message = remoteMessage.getData().getOrDefault("message", "No additional information.");
+        String passenger = remoteMessage.getData().getOrDefault("passenger", "");
+        String datetime = remoteMessage.getData().getOrDefault("datetime", "");
 
-        Log.d("datetime",datetime);
-        // Convert and format datetime
-
+        Log.d(TAG, "Data Payload: Title=" + title + ", Body=" + body + ", JobId=" + jobId + ", NavId=" + navId+" datetime: "+datetime+" message : "+message);
 
         // Save notification details in SharedPreferences
         editor.putString("notification_payload", body);
@@ -96,67 +73,45 @@ public class NotificationService extends FirebaseMessagingService {
         editor.putString("notification_navId", navId);
         editor.apply();
 
+        Log.e("Notification Service datetime",datetime);
+
         NotificationModel notificationModel = new NotificationModel(jobId, navId, title, message, passenger, datetime);
         notificationModalSession.saveNotification(notificationModel);
 
-        Log.d(TAG, "Calling showNotification with title: " + title + ", body: " + body);
         showNotification(title, body, jobId, navId, passenger, datetime);
-
-        // Process navigation logic
-        if (!"N/A".equals(navId)) {
-            try {
-                if ("1".equals(navId)) {
-                    int bookingId = Integer.parseInt(jobId);
-                    NotificationJobDialogResponse notificationJobDialogResponse = new NotificationJobDialogResponse(this);
-                    notificationJobDialogResponse.getBookingDetails(bookingId);
-                } if ("5".equals(navId)) {
-                    if ("5".equals(navId) || "6".equals(navId)) {
-                        Log.d(TAG, "Opening MessageDialogActivity with message: " + message);
-                        String finalMessage = message;
-                        String finalNavId = navId;
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            Intent intent = new Intent(this, MessageDialogActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);;
-                            intent.putExtra("message", finalMessage);
-                            intent.putExtra("navId", finalNavId);
-                            startActivity(intent);
-
-                        });
-                    }
-                }
-                if("2".equals(navId)){
-                    Intent intent = new Intent(this,MessageDialogActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("datetime",datetime);
-                    intent.putExtra("passenger",passenger);
-                    intent.putExtra("jobId",jobId);
-                    intent.putExtra("navId",navId);
-                    startActivity(intent);
-                }
-                if("3".equals(navId)){
-                    Intent intent = new Intent(this,MessageDialogActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("datetime",datetime);
-                    intent.putExtra("passenger",passenger);
-                    intent.putExtra("jobId",jobId);
-                    intent.putExtra("navId",navId);
-                    startActivity(intent);
-                }
-                if("4".equals(navId)){
-                    Intent intent = new Intent(this,MessageDialogActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("datetime",datetime);
-                    intent.putExtra("passenger",passenger);
-                    intent.putExtra("jobId",jobId);
-                    intent.putExtra("navId",navId);
-                    startActivity(intent);
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Invalid jobId: " + jobId, e);
-            }
-        }
+        handleNavigation(navId, jobId, message, passenger, datetime);
     }
 
+    private void handleNavigation(String navId, String jobId, String message, String passenger, String datetime) {
+        if ("N/A".equals(navId)) return;
+
+        new Handler(Looper.getMainLooper()).post(() -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("datetime", datetime);
+            intent.putExtra("passenger", passenger);
+            intent.putExtra("jobId", jobId);
+            intent.putExtra("navId", navId);
+
+            switch (navId) {
+//                case "1":
+//                    try {
+//                        int bookingId = Integer.parseInt(jobId);
+//                        new NotificationJobDialogResponse(this).getBookingDetails(bookingId);
+//                    } catch (NumberFormatException e) {
+//                        Log.e(TAG, "Invalid jobId format: " + jobId, e);
+//                    }
+//                    break;
+                case "5":
+                    intent.putExtra("message", message);
+                    break;
+                case "6":
+                    intent.putExtra("message", message);
+                    break;
+            }
+            startActivity(intent);
+        });
+    }
 
     private void saveTokenToPreferences(String token) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
@@ -170,39 +125,31 @@ public class NotificationService extends FirebaseMessagingService {
         Log.d(TAG, "FCM Token sent to server: " + token);
     }
 
-    private void showNotification(String title, String message, String jobId, String navId,String passenger,String datetime) {
+    private void showNotification(String title, String message, String jobId, String navId, String passenger, String datetime) {
         Log.d(TAG, "showNotification called with title: " + title + ", message: " + message);
 
         String channelId = getString(R.string.default_notification_channel_id);
-        String channelName = "Default Channel";
-        Log.d(TAG, "Channel ID: " + channelId);
-
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager == null) {
             Log.e(TAG, "NotificationManager is null");
             return;
         }
-        Log.d(TAG, "NotificationManager retrieved");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(channelId, "Default Channel", NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
-            Log.d(TAG, "Channel created: " + channelId);
         }
 
         Intent intent = new Intent(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("title", title);
         intent.putExtra("message", message);
         intent.putExtra("jobId", jobId);
         intent.putExtra("navId", navId);
-        intent.putExtra("passenger",passenger);
-        intent.putExtra("datetime",datetime);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        Log.d(TAG, "Intent prepared");
+        intent.putExtra("passenger", passenger);
+        intent.putExtra("datetime", datetime);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        Log.d(TAG, "PendingIntent created");
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle(title)
@@ -211,17 +158,12 @@ public class NotificationService extends FirebaseMessagingService {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
-        Log.d(TAG, "NotificationBuilder configured");
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        if (notificationManagerCompat == null) {
-            Log.e(TAG, "NotificationManagerCompat is null");
-            return;
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                Log.w(TAG, "Notification permission not granted in kill mode.");
+                Log.w(TAG, "Notification permission not granted.");
                 return;
             }
         }
@@ -230,9 +172,4 @@ public class NotificationService extends FirebaseMessagingService {
         notificationManagerCompat.notify(notificationId, notificationBuilder.build());
         Log.d(TAG, "Notification posted with ID: " + notificationId);
     }
-
-
-
-
-
 }

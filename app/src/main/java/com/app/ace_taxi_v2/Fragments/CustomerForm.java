@@ -78,7 +78,7 @@ public class CustomerForm extends Fragment {
 
     public void renderList(){
         AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
-        availabilitiesApi.getAvailabilities(recyclerView);
+        availabilitiesApi.getAvailabilities(recyclerView,getView());
     }
 
     private void showTimePicker(final TextInputEditText timeEditText) {
@@ -127,7 +127,6 @@ public class CustomerForm extends Fragment {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void unAvailability() {

@@ -82,7 +82,7 @@ public class NotificationModalActivity extends AppCompatActivity {
                 jobModal.JobRead(); //will be navId 7
                 break;
             case 5:
-                jobModal.jobComplete();
+//                jobModal.jobComplete();
                 break;
             case 6:
                 jobModal.jobUnallocated(jobid,passenger,datetime);

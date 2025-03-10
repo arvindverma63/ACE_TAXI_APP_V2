@@ -55,6 +55,15 @@
         <item name="colorOnPrimary">#FFFFFF</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MaterialComponents.MediumComponent</item>
     </style>
+    <style name="DrawerNavigation">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textSize">30sp</item>
+        <item name="itemTextAppearance">@style/NavMenuTextStyle</item>
+    </style>
+    <style name="NavMenuTextStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/font_urban</item>
+    </style>
 
     <style name="TabItemStyle">
         <item name="android:layout_margin">8dp</item>

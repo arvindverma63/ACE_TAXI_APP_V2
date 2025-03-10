@@ -387,6 +387,8 @@ public class HomeActivity extends AppCompatActivity {
         String pickupAddress = intent.getStringExtra("pickupAddress");
         boolean accepted = intent.getBooleanExtra("accepted",false);
         boolean rejected = intent.getBooleanExtra("rejected",false);
+        message = intent.getStringExtra("message");
+        Log.e("Get Notification: ","message"+message+" datetime "+dateTime);
 
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -414,7 +416,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        Log.d("HomeActivity", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message + ", DateTime: " + dateTime);
+        Log.d("HomeActivity Intent Data", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message + ", DateTime: " + dateTime);
 
         try {
             if (jobId > 0 && navId == 1) {
@@ -422,17 +424,18 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             if (navId == 5 || navId == 6) {
-                new JobModal(this).JobReadNotificationClick(message,dateTime.toString());
+                Log.e("Job Modal message",message+" datetime: "+dateTime);
+                new JobModal(this).JobReadNotificationClick(message,dateTime);
             }
 
             if (navId == 2) {
-                new JobModal(this).jobUnallocated(jobId, passenger, dateTime != null ? dateTime.toString() : "");
+                new JobModal(this).jobUnallocated(jobId, passenger,dateTime);
             }
             if(navId == 3){
-                new JobModal(this).jobAmenedment(jobId+"",passenger,dateTime.toString());
+                new JobModal(this).jobAmenedment(jobId+"",passenger,dateTime);
             }
             if(navId == 4){
-                new JobModal(this).jobCancel(jobId+"",passenger,dateTime.toString());
+                new JobModal(this).jobCancel(jobId+"",passenger,dateTime);
             }
             if(accepted){
                 BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(this);
