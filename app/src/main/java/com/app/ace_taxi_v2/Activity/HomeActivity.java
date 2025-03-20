@@ -3,8 +3,11 @@ package com.app.ace_taxi_v2.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +23,11 @@ import com.app.ace_taxi_v2.Activity.HomeActivityHelper.NotificationHandler;
 import com.app.ace_taxi_v2.Components.ShiftChangeModal;
 import com.app.ace_taxi_v2.Fragments.HomeFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
+import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
+import com.app.ace_taxi_v2.JobModals.JobModal;
+import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.app.ace_taxi_v2.Logic.Service.BackgroundPermissionHelper;
+import com.app.ace_taxi_v2.Logic.Service.ConfigSessionManager;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -50,6 +57,11 @@ public class HomeActivity extends BaseActivity {
         setupToolbar();
         setupNavigation();
         setupClickListeners();
+
+        // Handle notifications based on Android version
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getNotificationData();
+        }
 
         if (savedInstanceState == null) {
             navigationHandler.loadFragment(new HomeFragment());
@@ -103,16 +115,8 @@ public class HomeActivity extends BaseActivity {
 
     private void setupClickListeners() {
         hamMenu.setOnClickListener(v -> new ShiftChangeModal(this, getSupportFragmentManager()).openModal());
-
-        phoneIcon.setOnClickListener(v -> {
-            // Add phone call functionality here
-            Toast.makeText(this, "Phone icon clicked", Toast.LENGTH_SHORT).show();
-        });
-
-        messageIcon.setOnClickListener(v -> {
-            // Add messaging functionality here
-            Toast.makeText(this, "Message icon clicked", Toast.LENGTH_SHORT).show();
-        });
+        setupPhoneButton();
+        setupMessageButton();
     }
 
     @Override
@@ -138,7 +142,7 @@ public class HomeActivity extends BaseActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null) // Optional: adds fragment to back stack
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -177,5 +181,103 @@ public class HomeActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         notificationHandler.stopNotificationUpdates();
+    }
+
+    @SuppressLint("NewApi")
+    private void getNotificationData() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return; // Early return for pre-Oreo devices
+        }
+
+        Intent intent = getIntent();
+        int navId = -1, jobId = -1;
+        String message = intent.getStringExtra("message") != null ? intent.getStringExtra("message") : "";
+        String passenger = "";
+        String dateTime = intent.getStringExtra("datetime");
+        String pickupAddress = intent.getStringExtra("pickupAddress");
+        boolean accepted = intent.getBooleanExtra("accepted", false);
+        boolean rejected = intent.getBooleanExtra("rejected", false);
+
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            try {
+                Object navIdObj = extras.get("navId");
+                if (navIdObj != null) {
+                    navId = Integer.parseInt(navIdObj.toString());
+                }
+
+                Object jobIdObj = extras.get("jobId");
+                if (jobIdObj != null) {
+                    jobId = Integer.parseInt(jobIdObj.toString());
+                }
+
+                passenger = extras.getString("passenger", "");
+                message = extras.getString("message", message);
+            } catch (NumberFormatException e) {
+                Log.e("HomeActivity", "Invalid number format in intent extras", e);
+            }
+        }
+
+        Log.d("HomeActivity Intent Data", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message + ", DateTime: " + dateTime);
+
+        try {
+            if (jobId > 0 && navId == 1) {
+                new GetBookingById(this).getBookingDetails(jobId);
+            }
+            if (navId == 5 || navId == 6) {
+                new JobModal(this).JobReadNotificationClick(message, dateTime);
+            }
+            if (navId == 2) {
+                new JobModal(this).jobUnallocated(jobId, passenger, dateTime);
+            }
+            if (navId == 3) {
+                new JobModal(this).jobAmenedment(String.valueOf(jobId), passenger, dateTime);
+            }
+            if (navId == 4) {
+                new JobModal(this).jobCancel(String.valueOf(jobId), passenger, dateTime);
+            }
+            if (accepted) {
+                new BottomSheetDialogs(this).openJobAccepted(passenger, pickupAddress);
+            }
+            if (rejected) {
+                new BottomSheetDialogs(this).openJobRejected();
+            }
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error processing notification data", e);
+        }
+    }
+
+    private void setupPhoneButton() {
+        phoneIcon.setOnClickListener(v -> {
+            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
+            String phoneNumber = configSessionManager.getPhoneNumber();
+
+            if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Phone number not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupMessageButton() {
+        messageIcon.setOnClickListener(v -> {
+            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
+            String whatsappNumber = configSessionManager.getWhatsAppNumber();
+
+            if (whatsappNumber != null && !whatsappNumber.isEmpty()) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("https://wa.me/" + whatsappNumber));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "WhatsApp number not found", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

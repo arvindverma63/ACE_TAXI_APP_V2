@@ -84,15 +84,16 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="1000dp"
         android:layout_marginTop="16dp"
         style="@style/CardBG"
         android:padding="16dp"
-        android:backgroundTint="@color/dark_blue">
+        android:backgroundTint="@color/green">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -112,7 +113,7 @@
                 android:text="£0.00"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:gravity="center"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

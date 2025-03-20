@@ -346,13 +346,9 @@ public class JobModal {
         customerName.setText(passenger);
         bookingprice.setText("£"+price);
 
-        Button completeBtn = dialogView.findViewById(R.id.complete_button);
         TextView closeBtn = dialogView.findViewById(R.id.close_dialog);
 
-        completeBtn.setOnClickListener(v -> {
-            ArrivedJobApi arrivedJobApi = new ArrivedJobApi(context);
-            arrivedJobApi.updateStatus(bookingId);
-        });
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
