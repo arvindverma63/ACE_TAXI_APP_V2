@@ -44,7 +44,11 @@
         <item name="android:background">@color/primaryGray</item>
     </style>
 
-
+    <style name="bottomNav" parent="Widget.Design.BottomNavigationView">
+        <item name="itemTextColor">@color/gray</item>
+        <item name="itemIconTint">@color/gray</item>
+        <item name="android:background">#FFFFFF</item>
+    </style>
 
     <style name="SettingText">
         <item name="android:drawableTint">@color/black</item>

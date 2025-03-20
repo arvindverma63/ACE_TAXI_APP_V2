@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <!-- Toolbar -->
@@ -44,7 +45,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="User Profile"
+                    android:text="Profile Info"
                     android:textSize="16sp"
                     style="@style/TextBG"/>
 
@@ -76,12 +77,12 @@
                 android:padding="16dp">
 
                 <TextView
+                    style="@style/TextBG"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Uesr Documents"
-                    android:textSize="16sp"
-                    style="@style/TextBG"/>
+                    android:text="User Documents"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:layout_width="24dp"
@@ -146,7 +147,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="New Expenses"
+                    android:text="Add Expenses"
                     android:textSize="16sp"
                     style="@style/TextBG"/>
 
