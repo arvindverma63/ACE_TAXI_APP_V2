@@ -13,7 +13,6 @@ android {
         targetSdk = 34
         versionCode = 10
         versionName = "1.9"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -31,30 +30,41 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-dependencies {
 
+dependencies {
+    // AndroidX Core Libraries
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.play.services.location)
+    implementation(libs.swiperefreshlayout)
+
+    // Google Play Services (deduplicated)
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.maps.android:android-maps-utils:3.4.0")
+
+    // Firebase
     implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging)
+
+    // Work Manager
     implementation(libs.work.runtime)
-    implementation(libs.swiperefreshlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+
+    // Networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
-    implementation("com.google.android.gms:play-services-maps:19.0.0")
-    implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.25")
-    implementation ("com.google.android.gms:play-services-maps:18.2.0")
-    implementation ("com.google.maps.android:android-maps-utils:3.4.0")
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
-    implementation("com.google.gms:google-services:4.4.2")
-    implementation("io.sentry:sentry-android:8.2.0")
 
+    // GIF Support
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.25")
+
+    // Sentry for crash reporting
+    implementation("io.sentry:sentry-android:8.2.0")
+    implementation ("androidx.palette:palette:1.0.0")
+
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }

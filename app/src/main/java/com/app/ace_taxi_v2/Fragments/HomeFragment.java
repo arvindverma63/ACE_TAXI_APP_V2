@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -23,11 +24,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.DashboardHelper;
+import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ProfileHelper;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.R;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 import java.util.Timer;
@@ -46,7 +50,9 @@ public class HomeFragment extends Fragment {
     private CardView current_job_card;
     private ImageView nav_icon;
     private View header_view;
-
+    private TextView user_email,user_name;
+    private MaterialCardView activeJobStatus;
+    private MaterialCardView profile_btn,view_expenses,add_expenses,upload_document;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -63,7 +69,17 @@ public class HomeFragment extends Fragment {
         current_job_card = view.findViewById(R.id.current_job_card);
         set_job_status = view.findViewById(R.id.set_job_status);
         nav_icon = view.findViewById(R.id.nav_icon);
+        user_name = view.findViewById(R.id.user_name);
         header_view = view.findViewById(R.id.header_slide);
+        user_email = view.findViewById(R.id.user_email);
+        activeJobStatus = view.findViewById(R.id.activeJobStatus);
+        upload_document = view.findViewById(R.id.upload_document);
+        view_expenses = view.findViewById(R.id.view_expenses);
+        add_expenses = view.findViewById(R.id.add_expenses);
+        profile_btn = view.findViewById(R.id.profile_btn);
+
+        ProfileHelper profileHelper = new ProfileHelper(getContext(),R.id.fragment_container);
+        profileHelper.profileEvent(profile_btn,upload_document,add_expenses,view_expenses);
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) header_view.getLayoutParams();
         params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 150); // 50px bottom margin
@@ -78,19 +94,20 @@ public class HomeFragment extends Fragment {
             return view;
         }
 
-
+        DashboardHelper dashboardHelper = new DashboardHelper(getContext());
+        dashboardHelper.updateMessage(user_name,user_email);
 
         getCurrentBooking(); // Load booking details
 
-//        NotificationJobDialog notificationJobDialog = new NotificationJobDialog(getContext());
-//        notificationJobDialog.openNotificationModalForJob();
-        // Initialize Switch and TextView
+
         locationSwitch = view.findViewById(R.id.online_toggle);
         onlineStatusLabel = view.findViewById(R.id.online_status_label);
 
         // Initialize LocationPermissions instance
         locationPermissions = new LocationPermissions(getActivity(), locationSwitch, onlineStatusLabel);
-
+        if (!isLocationEnabled()) {
+            locationPermissions.promptEnableGPS();
+        }
         // Retrieve switch state from SharedPreferences, default to true
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean switchState = sharedPreferences.getBoolean(SWITCH_STATE_KEY, true); // Default is true
@@ -202,6 +219,7 @@ public class HomeFragment extends Fragment {
                         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) header_view.getLayoutParams();
                         params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 10); // 50px bottom margin
                         header_view.setLayoutParams(params);
+                        activeJobStatus.setVisibility(getView().GONE);
                     }else {
                         current_job_card.setVisibility(getView().GONE);
                         set_job_status.setText("No Active Job");
@@ -232,6 +250,28 @@ public class HomeFragment extends Fragment {
     // Stop the repeated task (when needed)
     private void stopRepeatingTask() {
         handler.removeCallbacks(runnable);
+    }
+
+    public boolean isLocationEnabled() {
+        if (getContext() == null) {
+            Log.e(TAG, "Context is null in isLocationEnabled");
+            return false;
+        }
+
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null) {
+            Log.e(TAG, "LocationManager is null");
+            return false;
+        }
+
+        try {
+            boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            return gpsEnabled || networkEnabled;
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking location status", e);
+            return false;
+        }
     }
 
 

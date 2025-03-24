@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -47,16 +46,15 @@ public class LocationService extends Service {
                 if (locationResult != null && locationResult.getLocations() != null) {
                     Log.d(TAG, "LocationCallback triggered with " + locationResult.getLocations().size() + " location(s).");
                     for (android.location.Location location : locationResult.getLocations()) {
-
                         float speed = location.hasSpeed() ? location.getSpeed() : 0.0f; // Speed in meters/second
                         float heading = location.hasBearing() ? location.getBearing() : 0.0f; // Heading in degrees
-                        Log.d(TAG, "Location received: " + location.getLatitude() + ", " + location.getLongitude()+",speed: "+speed+" Heading: "+heading);
+                        Log.d(TAG, "Location received: " + location.getLatitude() + ", " + location.getLongitude() + ", speed: " + speed + " Heading: " + heading);
                         // Process location data
                         SendLocation sendLocation = new SendLocation(
                                 getApplicationContext(),
                                 location.getLatitude(),
                                 location.getLongitude(),
-                                speed, heading  //speed and heading
+                                speed, heading  // speed and heading
                         );
                         sendLocation.sendLocation();
                     }
@@ -65,16 +63,20 @@ public class LocationService extends Service {
                 }
             }
         };
-
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "Service started");
 
-        // Start foreground service with notification
-        startForeground(1, createNotification());
+        try {
 
+            // Start foreground service with notification
+            startForeground(1, createNotification());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Check permissions and start location updates
         if (checkPermissions()) {
             requestLocationUpdates();
@@ -83,7 +85,7 @@ public class LocationService extends Service {
             stopSelf();
         }
 
-        // Check and request disabling battery optimizations
+        // Check and handle battery optimizations without redirecting
         checkBatteryOptimizations();
 
         return START_STICKY;
@@ -150,19 +152,32 @@ public class LocationService extends Service {
         }
     }
 
-
     private void checkBatteryOptimizations() {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         if (powerManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean isIgnoringOptimizations = powerManager.isIgnoringBatteryOptimizations(getPackageName());
             if (!isIgnoringOptimizations) {
-                Log.d(TAG, "Battery optimization is enabled. Prompting user to disable it.");
-                Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                Log.w(TAG, "Battery optimization is enabled. Please disable it manually in Battery settings for optimal performance.");
+                // Optionally, update the notification to inform the user
+                updateNotificationForBatteryOptimization();
             } else {
                 Log.d(TAG, "Battery optimization is already disabled for this app.");
             }
+        }
+    }
+
+    private void updateNotificationForBatteryOptimization() {
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("Location Service")
+                .setContentText("Battery optimization is enabled. Disable it manually for best performance.")
+                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build();
+
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        if (manager != null) {
+            manager.notify(1, notification);
+            Log.d(TAG, "Notification updated to warn about battery optimization.");
         }
     }
 

@@ -1,522 +1,842 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:overScrollMode="never">
+    style="@style/MainBG"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray"
+        android:alpha="0.2"/>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
-        style="@style/MainBG">
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:cardCornerRadius="12dp"
+        app:strokeWidth="0dp"
+        app:strokeColor="@android:color/darker_gray"
+        style="@style/CardBG">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/darker_gray"
-            android:alpha="0.2"/>
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            app:cardCornerRadius="12dp"
-            app:strokeWidth="0dp"
-            app:strokeColor="@android:color/darker_gray"
-            style="@style/CardBG">
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_vertical"
+                style="@style/MainBG"
+                android:gravity="center"
+                app:cornerRadius="8dp">
 
-                <LinearLayout
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center_vertical"
-                    style="@style/MainBG"
-                    android:gravity="center"
-                    app:cornerRadius="8dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_car"/>
-                </LinearLayout>
-
-
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="No Active Job"
-                        android:id="@+id/set_job_status"
-                        style="@style/TextBG"
-                        android:layout_gravity="center"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_logo_ace"/>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/darker_gray"
-            android:id="@+id/header_slide"
-            android:alpha="0.2"/>
-        <!-- Current Job Section -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/current_job_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:strokeWidth="0dp"
-            android:visibility="gone"
-            app:strokeColor="@android:color/darker_gray"
-            app:cardCornerRadius="12dp"
-            style="@style/CardBG">
 
             <LinearLayout
+                android:layout_width="314dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/user_name"
+                    style="@style/TextBG"
+                    android:layout_width="290dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="12dp"
+                    android:text="---------------"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="266dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/user_email"
+                    android:textSize="12sp"
+                    android:text="-----------------"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/header_slide"
+        android:alpha="0.2"/>
+    <!-- Scrolling Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+            style="@style/MainBG">
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <!-- Pickup Section -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/ic_pickup"
-                        android:layout_marginEnd="12dp"
-                        android:contentDescription="Pickup Location"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/pickup_address"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="No Current Active Jobs"
-                            android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            style="@style/TextBG"/>
-
-                        <TextView
-                            android:id="@+id/pickup_subaddress"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            android:textSize="14sp"
-                            android:textColor="@android:color/darker_gray"
-                            android:maxLines="2"
-                            android:ellipsize="end"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/current_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        style="@style/TextBG"/>
-                </LinearLayout>
-
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray"
-                    android:alpha="0.2"
-                    android:layout_marginVertical="12dp"/>
+                app:cardCornerRadius="12dp"
+                android:id="@+id/activeJobStatus"
+                app:strokeWidth="0dp"
+                android:layout_marginLeft="8dp"
+                app:strokeColor="@android:color/darker_gray"
+                style="@style/CardBG">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/ic_destination"
-                        android:layout_marginEnd="12dp"
-                        android:contentDescription="Destination Location"/>
+                    <LinearLayout
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_vertical"
+                        style="@style/MainBG"
+                        android:gravity="center"
+                        app:cornerRadius="8dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_car" />
+                    </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
-
+                        android:layout_width="314dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
                         <TextView
-                            android:id="@+id/destination_address"
-                            android:layout_width="match_parent"
+                            android:id="@+id/set_job_status"
+                            style="@style/TextBG"
+                            android:layout_width="290dp"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:textStyle="bold"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="12dp"
+                            android:text="No Active Job"
                             android:textSize="16sp"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            style="@style/TextBG"/>
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <!-- Current Job Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/current_job_card"
+                style="@style/CardBG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:strokeColor="@android:color/darker_gray"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Pickup Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_marginEnd="12dp"
+                            android:contentDescription="Pickup Location"
+                            android:src="@drawable/ic_pickup" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/pickup_address"
+                                style="@style/TextBG"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="No Current Active Jobs"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/pickup_subaddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:text=""
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
 
                         <TextView
-                            android:id="@+id/destination_subaddress"
-                            android:layout_width="match_parent"
+                            android:id="@+id/current_price"
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
                             android:textSize="14sp"
-                            android:textColor="@android:color/darker_gray"
-                            android:maxLines="2"
-                            android:ellipsize="end"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/current_passenger_count"
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:alpha="0.2"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_marginEnd="12dp"
+                            android:contentDescription="Destination Location"
+                            android:src="@drawable/ic_destination" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/destination_address"
+                                style="@style/TextBG"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text=""
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/destination_subaddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:text=""
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/current_passenger_count"
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Footer Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/current_date"
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/passenger_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text=""
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="2dp"
+                android:alpha="0.2"
+                android:background="@android:color/darker_gray" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:text="Earnings"
+                style="@style/TextBG"/>
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CardBG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="12dp"
+                app:strokeColor="@android:color/darker_gray"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        style="@style/MainBG"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        app:cornerRadius="8dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_count_today"
+                            app:tint="@color/green" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        style="@style/TextBG"/>
-                </LinearLayout>
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                <!-- Footer Section -->
+                        <TextView
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="0"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="Today's Count"
+                            android:textSize="12sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CardBG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="12dp"
+                app:strokeColor="@android:color/darker_gray"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        style="@style/MainBG"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        app:cornerRadius="8dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_pound"
+                            app:tint="@color/green" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="£0.00"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="Today’s earnings"
+                            android:textSize="12sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Week Totals Section -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CardBG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="1dp"
+                app:cardCornerRadius="12dp"
+                app:strokeColor="@android:color/darker_gray"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        style="@style/MainBG"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        app:cornerRadius="8dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_count_today"
+                            app:tint="#235DFF" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="0"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="Weekly Count"
+                            android:textSize="12sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CardBG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:strokeColor="@android:color/darker_gray"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        style="@style/MainBG"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        app:cornerRadius="8dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_pound"
+                            app:tint="#235DFF" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <TextView
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="£0.00"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="Weekly earnings"
+                            android:textSize="12sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <!-- Fixed Online Status Section -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray"
+                android:alpha="0.2"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:text="Profile"
+                style="@style/TextBG"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                style="@style/MainBG"
+                android:paddingTop="20dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
-
-                    <TextView
-                        android:id="@+id/current_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="14sp"
-                        style="@style/TextBG"/>
-
-                    <TextView
-                        android:id="@+id/passenger_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="14sp"
-                        android:layout_marginStart="20dp"
-                        android:textColor="@android:color/darker_gray"/>
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
-            android:alpha="0.2"
-            android:layout_marginVertical="12dp"/>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            android:layout_marginTop="12dp"
-            app:strokeWidth="0dp"
-            app:strokeColor="@android:color/darker_gray"
-            style="@style/CardBG">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center_vertical"
-                    style="@style/MainBG"
                     android:gravity="center"
-                    app:cornerRadius="8dp">
+                    android:layout_marginBottom="16dp">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_today_count"/>
+                    <!-- Unavailable Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardCornerRadius="20dp"
+                        app:strokeWidth="0dp"
+                        style="@style/CardBG"
+                        android:id="@+id/profile_btn"
+                        android:layout_marginEnd="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="8dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:src="@drawable/ic_profile_info" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Profile"
+                                android:textSize="14sp"
+                                android:gravity="center" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Info"
+                                android:textSize="12sp"
+                                android:textColor="#757575"
+                                android:gravity="center" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- AM Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/upload_document"
+                        style="@style/CardBG"
+                        app:strokeWidth="0dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="8dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:src="@drawable/ic_document" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Dcoument"
+                                android:textSize="14sp"
+                                android:gravity="center" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upload"
+                                android:textSize="12sp"
+                                android:textColor="#757575"
+                                android:gravity="center" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- PM Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/add_expenses"
+                        app:strokeWidth="0dp"
+                        style="@style/CardBG"
+                        android:layout_marginStart="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="8dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:tint="@color/green"
+                                android:src="@drawable/ic_add_expenses" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Add"
+                                android:textSize="14sp"
+                                android:gravity="center" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Expenses"
+                                android:textSize="12sp"
+                                android:textColor="#757575"
+                                android:gravity="center" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:orientation="vertical">
-                    <TextView
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <!-- AM-PM Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="0"
-                        style="@style/TextBG"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-                    <TextView
+                        android:layout_weight="1"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/view_expenses"
+                        app:strokeWidth="0dp"
+                        style="@style/CardBG"
+                        android:layout_marginEnd="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="8dp">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:tint="@color/orange"
+                                android:src="@drawable/ic_view_expenses" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="View"
+                                android:textSize="14sp"
+                                android:gravity="center" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Expenses"
+                                android:textSize="12sp"
+                                android:textColor="#757575"
+                                android:gravity="center" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Custom Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Today's Count"
-                        style="@style/TextBG"
-                        android:textSize="12sp"
-                        android:textStyle="normal"/>
+                        android:layout_weight="1"
+                        app:cardCornerRadius="20dp"
+                        android:id="@+id/custom_button"
+                        app:strokeWidth="0dp"
+                        style="@style/CardBG"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"/>
+
+                    <!-- View Card -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/view_all"
+                        app:strokeWidth="0dp"
+                        app:cardCornerRadius="20dp"
+                        style="@style/CardBG"
+                        android:layout_marginStart="8dp"/>
                 </LinearLayout>
-
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
+
+        </LinearLayout>
+
+    </ScrollView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/online_status_card"
+        style="@style/CardBG"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:strokeColor="@android:color/darker_gray"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:strokeWidth="0dp"
-            app:strokeColor="@android:color/darker_gray"
-            style="@style/CardBG">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="4dp"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <ImageView
+                android:id="@+id/nav_icon"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:rotation="45"
+                android:src="@drawable/ic_nav" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="10dp">
 
-                <LinearLayout
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center_vertical"
-                    style="@style/MainBG"
-                    android:gravity="center"
-                    app:cornerRadius="8dp">
+                <TextView
+                    android:id="@+id/online_status_label"
+                    style="@style/TextBG"
+                    android:layout_width="143dp"
+                    android:layout_height="wrap_content"
+                    android:text="You Are Offline"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_pound"/>
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/TextBG"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="£0.00"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Today’s earnings"
-                        style="@style/TextBG"
-                        android:textSize="12sp"
-                        android:textStyle="normal"/>
-                </LinearLayout>
+                    android:layout_marginStart="12dp"
+                    android:text="Clear"
+                    android:textColor="@color/green"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Week Totals Section -->
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:strokeWidth="0dp"
-            app:strokeColor="@android:color/darker_gray"
-            style="@style/CardBG">
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Switch
+                android:id="@+id/online_toggle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:minWidth="48dp"
+                android:layout_marginLeft="100dp"
+                android:minHeight="48dp"
+                app:thumbTint="@color/gray"
+                app:trackTint="@color/gray" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-                <LinearLayout
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center_vertical"
-                    style="@style/MainBG"
-                    android:gravity="center"
-                    app:cornerRadius="8dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_weekly_count" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="0"
-                        style="@style/TextBG"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Weekly Count"
-                        style="@style/TextBG"
-                        android:textSize="12sp"
-                        android:textStyle="normal"/>
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:strokeWidth="0dp"
-            app:strokeColor="@android:color/darker_gray"
-            style="@style/CardBG">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center_vertical"
-                    style="@style/MainBG"
-                    android:gravity="center"
-                    app:cornerRadius="8dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_pound"
-                        app:tint="#235DFF"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/TextBG"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="£0.00"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Weekly earnings"
-                        style="@style/TextBG"
-                        android:textSize="12sp"
-                        android:textStyle="normal"/>
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Online Status Section -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/online_status_card"
-            style="@style/CardBG"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="20dp"
-            app:cardCornerRadius="12dp"
-            app:strokeColor="@android:color/darker_gray"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_nav_green"
-                    android:id="@+id/nav_icon"/>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/online_status_label"
-                        style="@style/TextBG"
-                        android:layout_width="143dp"
-                        android:layout_height="wrap_content"
-                        android:text="You Are Offline"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Clear"
-                        android:textSize="12sp"
-                        android:textColor="@color/green"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-
-
-
-                <Switch
-                    android:id="@+id/online_toggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    android:thumbTint="@color/gray"
-                    android:trackTint="@color/gray"
-                    tools:ignore="UseSwitchCompatOrMaterialXml" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

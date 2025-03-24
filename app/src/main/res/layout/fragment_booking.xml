@@ -24,7 +24,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        app:cornerRadius="0dp"
+        app:cornerRadius="1000dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/blue"
         android:textColor="@color/white"/>
@@ -196,7 +196,7 @@
             android:text="£23.00"
             android:textSize="18sp"
             android:backgroundTint="@color/green"
-            app:cornerRadius="0dp"
+            app:cornerRadius="1000dp"
             android:textColor="@android:color/white"/>
 
         <com.google.android.material.button.MaterialButton
@@ -205,7 +205,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="BOOK NOW"
-            app:cornerRadius="0dp"
+            app:cornerRadius="1000dp"
             android:textSize="18sp"
             android:backgroundTint="@color/blue"
             android:textColor="@android:color/white"/>

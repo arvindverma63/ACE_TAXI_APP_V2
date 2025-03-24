@@ -48,7 +48,6 @@ public class CurrentBooking {
             public void onResponse(Call<TodayJobResponse> call, Response<TodayJobResponse> response) {
                 if(response.code() == 200 && response.body() != null){
                     jobCallback.onSuccess(response.body().getBookings());
-                    Toast.makeText(context,"success code 200 ok",Toast.LENGTH_LONG).show();
                 } else {
                     String errorMessage = "CurrentBooking API Error: HTTP " + response.code() + " - " + response.message();
                     Log.e("CurrentBooking", errorMessage);

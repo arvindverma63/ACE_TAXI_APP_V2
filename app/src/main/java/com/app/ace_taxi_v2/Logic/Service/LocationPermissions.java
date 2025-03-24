@@ -15,7 +15,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -24,8 +23,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.R;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 
 public class LocationPermissions {
@@ -33,6 +37,7 @@ public class LocationPermissions {
     private static final String TAG = "LocationPermissions";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
     private static final int BATTERY_OPTIMIZATION_REQUEST_CODE = 1002;
+    private static final int REQUEST_CHECK_SETTINGS = 1003; // New request code for GPS settings
 
     private final Context context;
     private final Activity activity;
@@ -99,50 +104,69 @@ public class LocationPermissions {
     }
 
     public void promptEnableGPS() {
-        try {
-            // Use 'activity' instead of 'context' to avoid theme issues
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        LocationRequest locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10000)
+                .setFastestInterval(5000);
 
-            // Inflate custom dialog layout
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+
+        Task<LocationSettingsResponse> task = LocationServices.getSettingsClient(activity)
+                .checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(locationSettingsResponse -> {
+            // Location settings are satisfied
+            Log.d(TAG, "Location settings are already enabled");
+            setSwitchState(true);
+            startLocationService();
+        });
+
+        task.addOnFailureListener(exception -> {
+            if (exception instanceof ResolvableApiException) {
+                // Location settings are not satisfied, show dialog to enable
+                try {
+                    ResolvableApiException resolvable = (ResolvableApiException) exception;
+                    resolvable.startResolutionForResult(activity, REQUEST_CHECK_SETTINGS);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error showing location settings dialog", e);
+                    // Fallback to custom dialog if Google Play Services fails
+                    showCustomGPSPrompt();
+                }
+            } else {
+                Log.e(TAG, "Location settings cannot be resolved automatically", exception);
+                // Fallback to custom dialog
+                showCustomGPSPrompt();
+            }
+        });
+    }
+
+    private void showCustomGPSPrompt() {
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             LayoutInflater inflater = activity.getLayoutInflater();
             View dialogView = inflater.inflate(R.layout.location_permission_dialog, null);
             builder.setView(dialogView);
-
-            // Prevent dialog from being dismissed outside clicks
             builder.setCancelable(false);
-            AlertDialog alertDialog = builder.create();
 
-            // Set transparent background for a clean look
+            AlertDialog alertDialog = builder.create();
             if (alertDialog.getWindow() != null) {
                 alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             }
-
-            // Apply rounded background programmatically
             dialogView.setBackground(ContextCompat.getDrawable(activity, R.drawable.rounded_dialog));
 
-            // Initialize UI elements correctly
             MaterialButton btnPermission = dialogView.findViewById(R.id.btnPermission);
-//            MaterialButton btnClose = dialogView.findViewById(R.id.btnClose);
-
-            // Open Location Settings on "Enable" click
             btnPermission.setOnClickListener(v -> {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 activity.startActivity(intent);
                 alertDialog.dismiss();
             });
 
-            // Close the dialog on "Close" click
-//            btnClose.setOnClickListener(v -> alertDialog.dismiss());
-
-            // Show the dialog
             alertDialog.show();
-
         } catch (Exception e) {
-            Log.e(TAG, "Error displaying GPS enable prompt: ", e);
+            Log.e(TAG, "Error displaying custom GPS prompt", e);
         }
     }
-
-
 
     public boolean checkBatteryOptimizations() {
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -230,16 +254,4 @@ public class LocationPermissions {
         activity.startActivity(intent);
     }
 
-    public void handleActivityResult(int requestCode) {
-        if (requestCode == BATTERY_OPTIMIZATION_REQUEST_CODE) {
-            if (checkBatteryOptimizations()) {
-                Log.d(TAG, "Battery optimization disabled by user.");
-                setSwitchState(true);
-                startLocationService();
-            } else {
-                Log.e(TAG, "Battery optimization still enabled.");
-                setSwitchState(false);
-            }
-        }
-    }
 }
