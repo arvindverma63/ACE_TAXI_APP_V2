@@ -254,4 +254,25 @@ public class LocationPermissions {
         activity.startActivity(intent);
     }
 
+    public void handleActivityResult(int requestCode, int resultCode) {
+        if (requestCode == BATTERY_OPTIMIZATION_REQUEST_CODE) {
+            if (checkBatteryOptimizations()) {
+                Log.d(TAG, "Battery optimization disabled by user.");
+                setSwitchState(true);
+                startLocationService();
+            } else {
+                Log.e(TAG, "Battery optimization still enabled.");
+                setSwitchState(false);
+            }
+        } else if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.d(TAG, "User enabled location settings");
+                setSwitchState(true);
+                startLocationService();
+            } else {
+                Log.d(TAG, "User declined to enable location settings");
+                setSwitchState(false);
+            }
+        }
+    }
 }
