@@ -24,10 +24,13 @@ import android.widget.TextView;
 
 import com.app.ace_taxi_v2.Components.ConfigModal;
 import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Logic.LoginManager;
+import com.app.ace_taxi_v2.Models.UserProfileResponse;
 import com.app.ace_taxi_v2.R;
 import com.app.ace_taxi_v2.SettingsPermission.CheckPermission;
 import com.app.ace_taxi_v2.SettingsPermission.Permission;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textview.MaterialTextView;
 
 public class SettingFragment extends Fragment {
 
@@ -37,6 +40,7 @@ public class SettingFragment extends Fragment {
     private Switch switch_dark_mode,notification_swtich,gps_switch,sms_switch,keep_alive_switch;
     public Button config;
     Permission permission;
+    public MaterialTextView driver_name,driver_email;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +56,8 @@ public class SettingFragment extends Fragment {
         keep_alive_switch = view.findViewById(R.id.keep_alive_switch);
         config = view.findViewById(R.id.config);
         permission = new Permission(getContext());
+        driver_email = view.findViewById(R.id.driver_email);
+        driver_name = view.findViewById(R.id.driver_name);
 
         notification_switch_text = view.findViewById(R.id.notification_switch_text);
         gps_switch_text = view.findViewById(R.id.gps_switch_text);
@@ -61,6 +67,7 @@ public class SettingFragment extends Fragment {
         CheckPermission checkPermission = new CheckPermission(getContext());
         checkPermission.notificationPermission(notification_swtich);
         checkPermission.gpsPermission(gps_switch);
+        setDriverDetails();
 
 
         notification_swtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -210,6 +217,22 @@ public class SettingFragment extends Fragment {
         config.setOnClickListener(v->{
             ConfigModal configModal = new ConfigModal(getContext());
             configModal.openConfigModal();
+        });
+    }
+
+    public void setDriverDetails(){
+        LoginManager loginManager = new LoginManager(getContext());
+        loginManager.getProfile(new LoginManager.ProfileCallback() {
+            @Override
+            public void onSuccess(UserProfileResponse userProfileResponse) {
+                driver_email.setText(userProfileResponse.getEmail());
+                driver_name.setText(userProfileResponse.getFullname());
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+
+            }
         });
     }
 }

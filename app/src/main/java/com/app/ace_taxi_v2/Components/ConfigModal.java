@@ -48,16 +48,15 @@ public class ConfigModal {
 
         // Reset to default values
         btnReset.setOnClickListener(v -> {
-            configSessionManager.savePhoneNumber(defaultNumber);
-            configSessionManager.saveWhatsAppNumber(defaultWhatsapp);
+//            configSessionManager.savePhoneNumber(defaultNumber);
+//            configSessionManager.saveWhatsAppNumber(defaultWhatsapp);
 
             // Update UI
             phoneNumber.setText(defaultNumber);
             whatsappNumber.setText(defaultWhatsapp);
 
             // Close dialog & Show success message
-            closeConfigModal();
-            Toast.makeText(context, "Settings reset successfully!", Toast.LENGTH_SHORT).show();
+//            closeConfigModal();
         });
 
         // Submit updated values

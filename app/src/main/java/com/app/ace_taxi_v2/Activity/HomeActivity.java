@@ -36,7 +36,7 @@ import io.sentry.android.core.SentryAndroid;
 
 public class HomeActivity extends BaseActivity {
     private BottomNavigationView bottomNavigationView;
-    private ImageView hamMenu, phoneIcon, messageIcon;
+    private ImageView hamMenu;
     private NotificationHandler notificationHandler;
     public BackgroundPermissionHelper permissionHelper;
     private NavigationHandler navigationHandler;
@@ -72,8 +72,8 @@ public class HomeActivity extends BaseActivity {
     private void initializeViews() {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         hamMenu = findViewById(R.id.ham_menu);
-        phoneIcon = findViewById(R.id.phone_icon);
-        messageIcon = findViewById(R.id.message_icon);
+//        phoneIcon = findViewById(R.id.phone_icon);
+//        messageIcon = findViewById(R.id.message_icon);
 
         notificationHandler = new NotificationHandler(this,
                 findViewById(R.id.notificationIcon),
@@ -115,8 +115,8 @@ public class HomeActivity extends BaseActivity {
 
     private void setupClickListeners() {
         hamMenu.setOnClickListener(v -> new ShiftChangeModal(this, getSupportFragmentManager()).openModal());
-        setupPhoneButton();
-        setupMessageButton();
+//        setupPhoneButton();
+//        setupMessageButton();
     }
 
     @Override
@@ -247,37 +247,37 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void setupPhoneButton() {
-        phoneIcon.setOnClickListener(v -> {
-            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
-            String phoneNumber = configSessionManager.getPhoneNumber();
-
-            if (phoneNumber != null && !phoneNumber.isEmpty()) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + phoneNumber));
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, "Phone number not found", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void setupMessageButton() {
-        messageIcon.setOnClickListener(v -> {
-            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
-            String whatsappNumber = configSessionManager.getWhatsAppNumber();
-
-            if (whatsappNumber != null && !whatsappNumber.isEmpty()) {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("https://wa.me/" + whatsappNumber));
-                    startActivity(intent);
-                } catch (Exception e) {
-                    Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(this, "WhatsApp number not found", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    private void setupPhoneButton() {
+//        phoneIcon.setOnClickListener(v -> {
+//            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
+//            String phoneNumber = configSessionManager.getPhoneNumber();
+//
+//            if (phoneNumber != null && !phoneNumber.isEmpty()) {
+//                Intent intent = new Intent(Intent.ACTION_DIAL);
+//                intent.setData(Uri.parse("tel:" + phoneNumber));
+//                startActivity(intent);
+//            } else {
+//                Toast.makeText(this, "Phone number not found", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+//
+//    private void setupMessageButton() {
+//        messageIcon.setOnClickListener(v -> {
+//            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
+//            String whatsappNumber = configSessionManager.getWhatsAppNumber();
+//
+//            if (whatsappNumber != null && !whatsappNumber.isEmpty()) {
+//                try {
+//                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                    intent.setData(Uri.parse("https://wa.me/" + whatsappNumber));
+//                    startActivity(intent);
+//                } catch (Exception e) {
+//                    Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+//                }
+//            } else {
+//                Toast.makeText(this, "WhatsApp number not found", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }

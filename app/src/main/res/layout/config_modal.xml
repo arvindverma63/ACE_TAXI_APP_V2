@@ -34,7 +34,7 @@
                 android:layout_height="40dp"
                 android:layout_marginBottom="12dp"
                 android:gravity="center"
-                android:text="Change Config Details"
+                android:text="Office Contact"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -113,7 +113,7 @@
                 android:id="@+id/btnSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Submit"
+                android:text="Submit Changes"
                 android:textSize="16sp"
                 android:textAllCaps="false"
                 app:backgroundTint="@color/green"

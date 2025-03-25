@@ -31,24 +31,24 @@
                 android:gravity="center_vertical">
 
                 <!-- Phone Icon -->
-                <ImageView
-                    android:id="@+id/phone_icon"
-                    style="@style/IconTint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="phone_icon"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_mobile" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/phone_icon"-->
+<!--                    style="@style/IconTint"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:contentDescription="phone_icon"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:src="@drawable/ic_mobile" />-->
 
-                <!-- Message Icon -->
-                <ImageView
-                    android:id="@+id/message_icon"
-                    style="@style/IconTint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="message_icon"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_message" />
+<!--                &lt;!&ndash; Message Icon &ndash;&gt;-->
+<!--                <ImageView-->
+<!--                    android:id="@+id/message_icon"-->
+<!--                    style="@style/IconTint"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:contentDescription="message_icon"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:src="@drawable/ic_message" />-->
 
                 <!-- Centered Title -->
                 <TextView

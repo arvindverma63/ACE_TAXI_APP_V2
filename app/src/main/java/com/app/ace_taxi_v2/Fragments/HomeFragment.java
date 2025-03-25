@@ -20,12 +20,14 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ActivitiesHelper;
 import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.DashboardHelper;
+import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ApplicationsHelper;
 import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ProfileHelper;
+import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ReportsHelper;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
@@ -34,8 +36,6 @@ import com.app.ace_taxi_v2.R;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class HomeFragment extends Fragment {
 
@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
     private View header_view;
     private TextView user_email,user_name;
     private MaterialCardView activeJobStatus;
-    private MaterialCardView profile_btn,view_expenses,add_expenses,upload_document;
+    private MaterialCardView profile_btn,view_expenses,add_expenses,upload_document,message_btn,phone_btn,settings_btn,jobs_btn,avail_btn,chat_btn,earning_report_btn,statement_report_btn;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -77,14 +77,24 @@ public class HomeFragment extends Fragment {
         view_expenses = view.findViewById(R.id.view_expenses);
         add_expenses = view.findViewById(R.id.add_expenses);
         profile_btn = view.findViewById(R.id.profile_btn);
+        message_btn = view.findViewById(R.id.message_btn);
+        phone_btn = view.findViewById(R.id.phone_btn);
+        settings_btn = view.findViewById(R.id.settings_btn);
+        jobs_btn = view.findViewById(R.id.jobs_btn);
+        avail_btn = view.findViewById(R.id.avail_btn);
+        chat_btn = view.findViewById(R.id.chat_btn);
+        earning_report_btn = view.findViewById(R.id.earning_report_btn);
+        statement_report_btn = view.findViewById(R.id.statement_report_btn);
 
         ProfileHelper profileHelper = new ProfileHelper(getContext(),R.id.fragment_container);
         profileHelper.profileEvent(profile_btn,upload_document,add_expenses,view_expenses);
+        ApplicationsHelper applicationsHelper = new ApplicationsHelper(getContext(),R.id.fragment_container);
+        applicationsHelper.applicationEvents(message_btn,phone_btn,settings_btn);
+        ActivitiesHelper activitiesHelper = new ActivitiesHelper(getContext(),R.id.fragment_container);
+        activitiesHelper.activitiesEvent(jobs_btn,avail_btn,chat_btn);
+        ReportsHelper reportsHelper = new ReportsHelper(getContext(),R.id.fragment_container);
+        reportsHelper.reportEvent(earning_report_btn,statement_report_btn);
 
-//        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) header_view.getLayoutParams();
-//        params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 150); // 50px bottom margin
-//        header_view.setLayoutParams(params);
-        // Check user session
         if (getActivity() == null) return view;
         SessionManager sessionManager = new SessionManager(getActivity());
         if (!sessionManager.isLoggedIn()) {

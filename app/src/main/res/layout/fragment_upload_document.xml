@@ -20,7 +20,7 @@
             app:title="DOCUMENTS"
             app:titleCentered="true"
             android:id="@+id/toolbar_header"
-            app:navigationIcon="@drawable/ic_close"
+            app:navigationIcon="@drawable/ic_back_arrow"
             app:navigationContentDescription="Close" />
 
         <!-- Document Cards -->
