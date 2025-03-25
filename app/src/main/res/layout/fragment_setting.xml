@@ -67,14 +67,14 @@
                         android:id="@+id/driver_name"
                         android:textSize="16sp"
                         android:layout_gravity="start"
-                        android:text="Peter Farrel"/>
+                        android:text="----------"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:textSize="12sp"
                         android:id="@+id/driver_email"
-                        android:text="driver@gmail.com"/>
+                        android:text="----------------"/>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

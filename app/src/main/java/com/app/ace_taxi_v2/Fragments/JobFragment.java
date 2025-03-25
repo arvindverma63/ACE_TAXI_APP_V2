@@ -2,19 +2,18 @@ package com.app.ace_taxi_v2.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Fragments.Adapters.ViewPagerAdapterJob;
+import com.app.ace_taxi_v2.Fragments.JobFragments.TodayFragment; // Add this import
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.tabs.TabLayout;
@@ -29,7 +28,6 @@ public class JobFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_job, container, false);
     }
 
@@ -40,8 +38,17 @@ public class JobFragment extends Fragment {
         if(!sessionManager.isLoggedIn()){
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
+            return;
         }
 
+        tabLayout = view.findViewById(R.id.job_tab_layout);
+        viewPager2 = view.findViewById(R.id.pageView);
+
+        // Initialize adapter with the correct context
+        viewPagerAdapterJob = new ViewPagerAdapterJob(requireActivity());
+        viewPager2.setAdapter(viewPagerAdapterJob);
+
+        // Customize tab margins if needed
         if (tabLayout != null) {
             ViewGroup tabStrip = (ViewGroup) tabLayout.getChildAt(0);
             for (int i = 0; i < tabStrip.getChildCount(); i++) {
@@ -52,16 +59,8 @@ public class JobFragment extends Fragment {
             }
         }
 
-        tabLayout = view.findViewById(R.id.job_tab_layout);
-        viewPager2 = view.findViewById(R.id.pageView);
-
-        // Initialize adapter with the correct context
-        viewPagerAdapterJob = new ViewPagerAdapterJob(requireActivity());
-        viewPager2.setAdapter(viewPagerAdapterJob);
-
         // Use TabLayoutMediator to link TabLayout and ViewPager2
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
-            // Set tab titles based on position
             switch (position) {
                 case 0:
                     tab.setText("Today");
@@ -74,5 +73,27 @@ public class JobFragment extends Fragment {
                     break;
             }
         }).attach();
+
+        // Add page change listener to refresh fragments
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                Fragment fragment = viewPagerAdapterJob.getFragment(position);
+                if (fragment instanceof TodayFragment) {
+                    ((TodayFragment) fragment).refreshData();
+                }
+                // Add similar checks for FutureFragment and HistoryFragment if they exist
+            }
+        });
+    }
+
+    // Optional: Method to manually trigger refresh of current fragment
+    public void refreshCurrentFragment() {
+        int currentPosition = viewPager2.getCurrentItem();
+        Fragment fragment = viewPagerAdapterJob.getFragment(currentPosition);
+        if (fragment instanceof TodayFragment) {
+            ((TodayFragment) fragment).refreshData();
+        }
     }
 }

@@ -12,6 +12,9 @@ import com.app.ace_taxi_v2.Fragments.JobFragments.HistoryFragment;
 import com.app.ace_taxi_v2.Fragments.JobFragments.TodayFragment;
 
 public class ViewPagerAdapterJob extends FragmentStateAdapter {
+    private static final int TAB_COUNT = 3;
+    private Fragment[] fragments = new Fragment[TAB_COUNT];
+
     public ViewPagerAdapterJob(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
@@ -21,11 +24,20 @@ public class ViewPagerAdapterJob extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new TodayFragment();
+                if (fragments[0] == null) {
+                    fragments[0] = new TodayFragment();
+                }
+                return fragments[0];
             case 1:
-                return new FutureFragment();
-            case 2: // Corrected to 2 instead of 3
-                return new HistoryFragment();
+                if (fragments[1] == null) {
+                    fragments[1] = new FutureFragment();
+                }
+                return fragments[1];
+            case 2:
+                if (fragments[2] == null) {
+                    fragments[2] = new HistoryFragment();
+                }
+                return fragments[2];
             default:
                 throw new IllegalArgumentException("Invalid position: " + position);
         }
@@ -33,6 +45,18 @@ public class ViewPagerAdapterJob extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return TAB_COUNT;
+    }
+
+    // Method to get existing fragment instance
+    public Fragment getFragment(int position) {
+        if (position < 0 || position >= TAB_COUNT) {
+            throw new IllegalArgumentException("Invalid position: " + position);
+        }
+        // Create fragment if it doesn't exist
+        if (fragments[position] == null) {
+            createFragment(position);
+        }
+        return fragments[position];
     }
 }

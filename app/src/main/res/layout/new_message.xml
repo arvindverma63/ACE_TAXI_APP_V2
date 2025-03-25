@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@android:color/white">
+    style="@style/MainBG">
 
     <!-- Back Button and Title -->
     <LinearLayout
@@ -19,6 +19,7 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_back_arrow"
             android:contentDescription="Back"
+            style="@style/IconTint"
             android:padding="8dp"
             android:clickable="true"
             android:focusable="true" />

@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
@@ -30,18 +31,27 @@ import retrofit2.Response;
 public class TodayJobManager {
     private final Context context;
     private final FragmentManager fragmentManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
-    public TodayJobManager(Context context, FragmentManager fragmentManager) {
+    public TodayJobManager(Context context, FragmentManager fragmentManager, SwipeRefreshLayout swipeRefreshLayout) {
         this.context = context;
         this.fragmentManager = fragmentManager;
+        this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
     public void getTodayJobs(View view, RecyclerView recyclerView) {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(true);
+        }
+
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
 
         if (token == null || token.isEmpty()) {
             Toast.makeText(context, "Authentication error: Token missing", Toast.LENGTH_SHORT).show();
+            if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
             return;
         }
 
@@ -49,6 +59,10 @@ public class TodayJobManager {
         apiService.todayJobs(token).enqueue(new Callback<TodayJobResponse>() {
             @Override
             public void onResponse(Call<TodayJobResponse> call, Response<TodayJobResponse> response) {
+                if (swipeRefreshLayout != null) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+
                 if (response.isSuccessful() && response.body() != null) {
                     List<TodayBooking> bookingList = response.body().getBookings();
 
@@ -99,6 +113,9 @@ public class TodayJobManager {
 
             @Override
             public void onFailure(Call<TodayJobResponse> call, Throwable t) {
+                if (swipeRefreshLayout != null) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 Toast.makeText(context, "Failed to fetch jobs. Check internet connection.", Toast.LENGTH_SHORT).show();
             }
         });

@@ -19,6 +19,7 @@ public class NotificationDialogController {
     public void openModal(String navId, String jobId,String message,String passenger,String datetime) {
         JobModal jobModal = new JobModal(context);
 
+        notificationModalSession.clearAllNotifications();
         // Convert navId and jobId safely
         int navid = parseInteger(navId, -1);
         int jobid = parseInteger(jobId, -1);
