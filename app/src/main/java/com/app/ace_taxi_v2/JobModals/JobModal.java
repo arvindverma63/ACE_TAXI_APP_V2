@@ -28,6 +28,7 @@ import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.w3c.dom.Text;
@@ -200,10 +201,7 @@ public class JobModal {
         passengerName.setText(passenger);
         bookingId.setText(jobId+"");
 
-        closeBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(context, HomeActivity.class);
-            context.startActivity(intent);
-        });
+
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setView(dialogView);
 
@@ -218,6 +216,9 @@ public class JobModal {
         dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
 
         alertDialog.show();
+        closeBtn.setOnClickListener(view -> {
+            alertDialog.dismiss();
+        });
     }
 
 
@@ -329,23 +330,47 @@ public class JobModal {
 
 
 
-    public void JobViewForTodayJob(String pickup,String destination,String date,String passenger,int bookingId,String status,double price){
+    public void JobViewForTodayJob(int bookingId){
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.job_view,null);
 
-        TextView pickupAddress,destinationAddress,pickupdate,bookingprice,customerName;
+        TextView pickupAddress,destinationAddress,pickupdate,bookingprice,customerName,jobId,payment_status,distance_duration,notes,passenger_email,
+                passengers_count;
         pickupAddress = dialogView.findViewById(R.id.pickup_address);
         destinationAddress = dialogView.findViewById(R.id.destination_address);
         pickupdate = dialogView.findViewById(R.id.pickup_date);
         bookingprice = dialogView.findViewById(R.id.price);
         customerName = dialogView.findViewById(R.id.passenger_name);
+        jobId = dialogView.findViewById(R.id.job_id);
+        payment_status = dialogView.findViewById(R.id.payment_status);
+        distance_duration = dialogView.findViewById(R.id.distance_duration);
+        notes = dialogView.findViewById(R.id.notes);
+        passenger_email = dialogView.findViewById(R.id.passenger_email);
+        MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
+        passengers_count = dialogView.findViewById(R.id.passengers_count);
 
-        pickupAddress.setText(pickup);
-        destinationAddress.setText(destination);
-        pickupdate.setText(date);
-        customerName.setText(passenger);
-        bookingprice.setText("£"+price);
+        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+        getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
+            @Override
+            public void onSuccess(GetBookingInfo bookingInfo) {
+                pickupAddress.setText(bookingInfo.getPickupAddress());
+                destinationAddress.setText(bookingInfo.getDestinationAddress());
+                pickupdate.setText(bookingInfo.getPickupDateTime());
+                customerName.setText("Passenger Name: "+bookingInfo.getPassengerName());
+                bookingprice.setText("£"+bookingInfo.getPrice());
+                jobId.setText(bookingInfo.getBookingId()+"");
+                payment_status.setText(bookingInfo.getScopeText()+"/"+bookingInfo.getPaymentStatusText());
+                distance_duration.setText("Duration : "+bookingInfo.getDurationText()+" min");
+                notes.setText(bookingInfo.getDetails());
+                passenger_email.setText(bookingInfo.getEmail());
+                passengers_count.setText("Passenger Count: "+bookingInfo.getPassengers());
+            }
 
+            @Override
+            public void onfailer(String error) {
+
+            }
+        });
         TextView closeBtn = dialogView.findViewById(R.id.close_dialog);
 
 
@@ -366,6 +391,10 @@ public class JobModal {
 
         closeBtn.setOnClickListener(v -> {
             alertDialog.dismiss();
+        });
+        complete_button.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            jobCompleteBooking(bookingId);
         });
     }
 

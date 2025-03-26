@@ -131,13 +131,7 @@ public class TodayJobManager {
                     jobModal.notJobStartedYetModal();
                 } else {
                     jobModal.JobViewForTodayJob(
-                            bookingInfo.getPickupAddress(),
-                            bookingInfo.getDestinationAddress(),
-                            bookingInfo.getPickupDateTime(),
-                            bookingInfo.getPassengerName(),
-                            bookingInfo.getBookingId(),
-                            bookingInfo.getStatus(),
-                            bookingInfo.getPrice()
+                            bookingInfo.getBookingId()
                     );
                 }
             }

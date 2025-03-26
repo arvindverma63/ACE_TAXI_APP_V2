@@ -871,7 +871,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Chats"
+                                android:text="Message"
                                 android:textSize="12sp"
                                 android:gravity="center" />
                         </LinearLayout>
@@ -970,7 +970,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Message"
+                                android:text="WhatsApp"
                                 android:textSize="12sp"
                                 android:gravity="center" />
                         </LinearLayout>

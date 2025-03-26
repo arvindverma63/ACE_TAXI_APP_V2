@@ -75,8 +75,11 @@ public class NotificationService extends FirebaseMessagingService {
 
         Log.e("Notification Service datetime",datetime);
 
-        NotificationModel notificationModel = new NotificationModel(jobId, navId, title, message, passenger, datetime);
-        notificationModalSession.saveNotification(notificationModel);
+        if("5".equals(navId) || "6".equals(navId)){
+            NotificationModel notificationModel = new NotificationModel(jobId, navId, title, message, passenger, datetime);
+            notificationModalSession.saveNotification(notificationModel);
+        }
+
 
         showNotification(title, body, jobId, navId, passenger, datetime);
         handleNavigation(navId, jobId, message, passenger, datetime);

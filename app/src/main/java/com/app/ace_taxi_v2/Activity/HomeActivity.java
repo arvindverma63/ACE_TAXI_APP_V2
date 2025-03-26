@@ -246,38 +246,4 @@ public class HomeActivity extends BaseActivity {
             Log.e("HomeActivity", "Error processing notification data", e);
         }
     }
-
-//    private void setupPhoneButton() {
-//        phoneIcon.setOnClickListener(v -> {
-//            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
-//            String phoneNumber = configSessionManager.getPhoneNumber();
-//
-//            if (phoneNumber != null && !phoneNumber.isEmpty()) {
-//                Intent intent = new Intent(Intent.ACTION_DIAL);
-//                intent.setData(Uri.parse("tel:" + phoneNumber));
-//                startActivity(intent);
-//            } else {
-//                Toast.makeText(this, "Phone number not found", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//
-//    private void setupMessageButton() {
-//        messageIcon.setOnClickListener(v -> {
-//            ConfigSessionManager configSessionManager = new ConfigSessionManager(this);
-//            String whatsappNumber = configSessionManager.getWhatsAppNumber();
-//
-//            if (whatsappNumber != null && !whatsappNumber.isEmpty()) {
-//                try {
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setData(Uri.parse("https://wa.me/" + whatsappNumber));
-//                    startActivity(intent);
-//                } catch (Exception e) {
-//                    Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
-//                }
-//            } else {
-//                Toast.makeText(this, "WhatsApp number not found", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 }

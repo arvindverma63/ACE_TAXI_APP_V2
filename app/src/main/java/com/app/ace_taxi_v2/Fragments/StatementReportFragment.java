@@ -29,7 +29,9 @@ public class StatementReportFragment extends Fragment {
 
     private TextView totalEarn;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private List<StatementItem> statementList = new ArrayList<>();
+    private StatementAdapter statementAdapter; // Add adapter as a field
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,10 +46,18 @@ public class StatementReportFragment extends Fragment {
         // Initialize UI Components
         recyclerView = view.findViewById(R.id.recycler_view);
         totalEarn = view.findViewById(R.id.totalAmount);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         MaterialToolbar toolbar = view.findViewById(R.id.header_toolbar);
 
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        statementAdapter = new StatementAdapter(getContext(),statementList); // Initialize adapter
+        recyclerView.setAdapter(statementAdapter); // Set adapter
+
+        // Set up SwipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            fetchStatements(view); // Refresh data when swiped
+        });
 
         // Load Data Initially
         fetchStatements(view);
@@ -57,6 +67,8 @@ public class StatementReportFragment extends Fragment {
     }
 
     private void fetchStatements(View view) {
+        swipeRefreshLayout.setRefreshing(true); // Show refresh indicator
+
         GetStatementsApi getStatementsApi = new GetStatementsApi(getContext());
         getStatementsApi.getStatements(view, recyclerView, new GetStatementsApi.statementListener() {
             @Override
@@ -64,15 +76,18 @@ public class StatementReportFragment extends Fragment {
                 if (items != null && !items.isEmpty()) {
                     statementList.clear();
                     statementList.addAll(items);
+                    statementAdapter.notifyDataSetChanged(); // Update adapter
                     calculateTotalEarnings(items);
                 } else {
                     Toast.makeText(getContext(), "No statements found", Toast.LENGTH_SHORT).show();
                 }
+                swipeRefreshLayout.setRefreshing(false); // Hide refresh indicator
             }
 
             @Override
             public void onFail(String error) {
                 Toast.makeText(getContext(), "Failed to fetch statements: " + error, Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false); // Hide refresh indicator on failure
             }
         });
     }
@@ -80,7 +95,7 @@ public class StatementReportFragment extends Fragment {
     private void calculateTotalEarnings(List<StatementItem> items) {
         double total = 0;
         for (StatementItem item : items) {
-            total += item.getTotalEarned(); // Ensure `getAmount()` returns a double
+            total += item.getTotalEarned();
         }
         totalEarn.setText(String.format("Total: £%.2f", total));
     }
@@ -90,7 +105,7 @@ public class StatementReportFragment extends Fragment {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, selectedFragment);
-        fragmentTransaction.addToBackStack(null); // Allows back navigation
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Fragments.AvailabilityFragment;
 import com.app.ace_taxi_v2.Fragments.JobFragment;
+import com.app.ace_taxi_v2.Fragments.MessageFragment;
 import com.app.ace_taxi_v2.Fragments.NewExpense;
 import com.google.android.material.card.MaterialCardView;
 
@@ -45,7 +46,8 @@ public class ActivitiesHelper {
 
         if (chatBtn != null) {
             chatBtn.setOnClickListener(v -> {
-                Toast.makeText(context,"Does not have any event",Toast.LENGTH_LONG).show();
+                Fragment fragment = new MessageFragment();
+                replaceFragment(fragmentManager,fragment);
             });
         }
     }

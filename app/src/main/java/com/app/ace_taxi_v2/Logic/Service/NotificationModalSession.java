@@ -6,20 +6,24 @@ import android.util.Log;
 
 import com.app.ace_taxi_v2.Models.NotificationModel;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class NotificationModalSession {
     private static final String PREF_NAME = "NotificationData";
     private static final String KEY_NOTIFICATIONS = "notifications_json";
     private static final String KEY_NOTIFICATION_COUNT = "notification_count";
+    private static final String TAG = "NotificationDebug";
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private Gson gson;
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences.Editor editor;
+    private final Gson gson;
+    private final Object lock = new Object();
 
     public NotificationModalSession(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -28,149 +32,147 @@ public class NotificationModalSession {
     }
 
     public void saveNotification(NotificationModel notification) {
-        List<NotificationModel> notifications = getAllNotifications();
+        if (notification == null) {
+            Log.w(TAG, "Attempted to save null notification.");
+            return;
+        }
 
-        // Find the highest serial number in existing notifications
-        int maxSerialNumber = 0;
-        for (NotificationModel model : notifications) {
-            if (model.getSerialNumber() > maxSerialNumber) {
-                maxSerialNumber = model.getSerialNumber();
+        synchronized (lock) {
+            List<NotificationModel> notifications = getAllNotifications();
+
+            // Assign next serial number
+            int maxSerialNumber = notifications.stream()
+                    .mapToInt(NotificationModel::getSerialNumber)
+                    .max()
+                    .orElse(0);
+            notification.setSerialNumber(maxSerialNumber + 1);
+
+            // Generate and set unique notification number
+            String notificationNumber = generateUniqueNotificationNumber();
+            notification.setNotificationNumber(notificationNumber);
+
+            notifications.add(notification);
+
+            try {
+                String jsonNotifications = gson.toJson(notifications);
+                editor.putString(KEY_NOTIFICATIONS, jsonNotifications);
+                incrementNotificationCount();
+                editor.apply();
+                Log.d(TAG, "Saved Notification: " + notification.toString());
+            } catch (JsonSyntaxException e) {
+                Log.e(TAG, "Failed to serialize notifications: " + e.getMessage());
             }
         }
-
-        // Assign the next serial number
-        notification.setSerialNumber(maxSerialNumber + 1);
-
-        notifications.add(notification);
-
-        // Convert list to JSON and save it
-        String jsonNotifications = gson.toJson(notifications);
-        editor.putString(KEY_NOTIFICATIONS, jsonNotifications);
-        incrementNotificationCount();
-        editor.commit();
-
-        Log.d("NotificationDebug", "Saved Notification: " + notification.toString());
     }
 
+    private String generateUniqueNotificationNumber() {
+        // Using timestamp + UUID suffix for uniqueness
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String uniqueId = UUID.randomUUID().toString().substring(0, 8);
+        return "NOTIF-" + timestamp + "-" + uniqueId;
+    }
 
-    // ✅ Retrieve All Notifications as List<NotificationModel>
     public List<NotificationModel> getAllNotifications() {
-        String jsonNotifications = sharedPreferences.getString(KEY_NOTIFICATIONS, "[]");
-        Type type = new TypeToken<ArrayList<NotificationModel>>() {}.getType();
-        List<NotificationModel> notifications = gson.fromJson(jsonNotifications, type);
-
-        if (notifications == null) {
-            Log.d("NotificationDebug", "Returning empty list due to parsing failure.");
-            return new ArrayList<>();
+        synchronized (lock) {
+            String jsonNotifications = sharedPreferences.getString(KEY_NOTIFICATIONS, "[]");
+            Type type = new TypeToken<ArrayList<NotificationModel>>() {}.getType();
+            try {
+                List<NotificationModel> notifications = gson.fromJson(jsonNotifications, type);
+                return notifications != null ? notifications : new ArrayList<>();
+            } catch (JsonSyntaxException e) {
+                Log.e(TAG, "Failed to deserialize notifications: " + e.getMessage());
+                return new ArrayList<>();
+            }
         }
-        return notifications;
     }
 
-    // ✅ Retrieve the Latest Notification (Object)
-    public NotificationModel getLatestNotification() {
-        List<NotificationModel> notifications = getAllNotifications();
-
-        if (notifications.isEmpty()) {
-            Log.d("NotificationDebug", "No stored notifications found!");
-            return null;
+    public void deleteNotificationByNumber(String notificationNumber) {
+        if (notificationNumber == null) {
+            Log.w(TAG, "Notification number is null. Cannot delete.");
+            return;
         }
 
-        return notifications.get(notifications.size() - 1);
+        synchronized (lock) {
+            List<NotificationModel> notifications = getAllNotifications();
+            boolean deleted = notifications.removeIf(model -> notificationNumber.equals(model.getNotificationNumber()));
+
+            if (deleted) {
+                try {
+                    String jsonNotifications = gson.toJson(notifications);
+                    editor.putString(KEY_NOTIFICATIONS, jsonNotifications);
+                    decrementNotificationCount(); // Decrease the count
+                    editor.apply();
+                    Log.d(TAG, "Deleted Notification with Notification Number: " + notificationNumber);
+                } catch (JsonSyntaxException e) {
+                    Log.e(TAG, "Failed to serialize notifications after deletion: " + e.getMessage());
+                }
+            } else {
+                Log.d(TAG, "No matching notification found for Notification Number: " + notificationNumber);
+            }
+        }
     }
 
-    // ✅ Retrieve the Latest Notification Message
-    public String getLatestMessage() {
-        NotificationModel latest = getLatestNotification();
-        return (latest != null) ? latest.getMessage() : "No messages available.";
-    }
-
-    // ✅ Retrieve the Latest Job ID
-    public String getLatestJobId() {
-        NotificationModel latest = getLatestNotification();
-        return (latest != null) ? latest.getJobId() : "N/A";
-    }
-
-    // ✅ Retrieve the Latest Nav ID
-    public String getLatestNavId() {
-        NotificationModel latest = getLatestNotification();
-        return (latest != null) ? latest.getNavId() : "N/A";
-    }
-
-    // ✅ Retrieve the Latest Notification Title
-    public String getLatestTitle() {
-        NotificationModel latest = getLatestNotification();
-        return (latest != null) ? latest.getTitle() : "Untitled";
-    }
-
-    // ✅ Increment Notification Count
     public void incrementNotificationCount() {
-        int count = getNotificationCount();
-        editor.putInt(KEY_NOTIFICATION_COUNT, count + 1);
-        editor.apply();
+        synchronized (lock) {
+            int count = getNotificationCount();
+            editor.putInt(KEY_NOTIFICATION_COUNT, count + 1);
+            editor.apply();
+        }
     }
 
-    // ✅ Get Notification Count
+    public void decrementNotificationCount() {
+        synchronized (lock) {
+            int count = getNotificationCount();
+            if (count > 0) { // Ensure count doesn't go below 0
+                editor.putInt(KEY_NOTIFICATION_COUNT, count - 1);
+                editor.apply();
+            }
+        }
+    }
+
     public int getNotificationCount() {
         return sharedPreferences.getInt(KEY_NOTIFICATION_COUNT, 0);
     }
 
-    // ✅ Clear Notification Count
-    public void clearNotificationCount() {
-        editor.putInt(KEY_NOTIFICATION_COUNT, 0);
-        editor.apply();
-    }
-
-    // ✅ Clear All Notifications
-    public void clearAllNotifications() {
-        editor.remove(KEY_NOTIFICATIONS);
-        editor.remove(KEY_NOTIFICATION_COUNT);
-        editor.apply();
-        Log.d("NotificationDebug", "All notifications cleared.");
-    }
-    public void deleteNotificationBySerial(int serialNumber) {
+    // Other methods remain unchanged
+    public NotificationModel getLatestNotification() {
         List<NotificationModel> notifications = getAllNotifications();
-        boolean deleted = false;
-
-        for (int i = 0; i < notifications.size(); i++) {
-            if (notifications.get(i).getSerialNumber() == serialNumber) {
-                notifications.remove(i);
-                deleted = true;
-                break; // Stop after deleting the first match
-            }
-        }
-
-        if (deleted) {
-            // Convert the updated list to JSON and save it back
-            String jsonNotifications = gson.toJson(notifications);
-            editor.putString(KEY_NOTIFICATIONS, jsonNotifications);
-            editor.apply();
-            Log.d("NotificationDebug", "Deleted Notification with Serial Number: " + serialNumber);
-        } else {
-            Log.d("NotificationDebug", "No matching notification found for Serial Number: " + serialNumber);
-        }
-    }
-    public int getSerialNumberByJobId(String jobId) {
-        if (jobId == null) {
-            Log.d("NotificationDebug", "Job ID is null. Cannot retrieve serial number.");
-            return -1; // Return -1 to indicate not found
-        }
-
-        List<NotificationModel> notifications = getAllNotifications();
-
-        for (NotificationModel model : notifications) {
-            if (jobId.equals(model.getJobId())) { // Avoid null comparison error
-                return model.getSerialNumber();
-            }
-        }
-
-        Log.d("NotificationDebug", "No notification found with Job ID: " + jobId);
-        return -1; // Return -1 if not found
+        if (notifications.isEmpty()) return null;
+        return notifications.get(notifications.size() - 1);
     }
 
-    public String getPassenger(){
+    public String getLatestMessage() {
         NotificationModel latest = getLatestNotification();
-        return (latest != null) ? latest.getPassenger() : "N/A";
+        return latest != null ? latest.getMessage() : "No messages available.";
     }
 
+    public String getLatestJobId() {
+        NotificationModel latest = getLatestNotification();
+        return latest != null ? latest.getJobId() : "N/A";
+    }
 
+    public String getLatestNavId() {
+        NotificationModel latest = getLatestNotification();
+        return latest != null ? latest.getNavId() : "N/A";
+    }
+
+    public String getLatestTitle() {
+        NotificationModel latest = getLatestNotification();
+        return latest != null ? latest.getTitle() : "Untitled";
+    }
+
+    public String getPassenger() {
+        NotificationModel latest = getLatestNotification();
+        return latest != null ? latest.getPassenger() : "N/A";
+    }
+    public void clearAllNotifications() {
+        synchronized (lock) {
+            // Clear the notifications list
+            editor.putString(KEY_NOTIFICATIONS, "[]"); // Store an empty list
+            // Reset the notification count to 0
+            editor.putInt(KEY_NOTIFICATION_COUNT, 0);
+            editor.apply();
+            Log.d(TAG, "Cleared all notifications and reset count to 0");
+        }
+    }
 }

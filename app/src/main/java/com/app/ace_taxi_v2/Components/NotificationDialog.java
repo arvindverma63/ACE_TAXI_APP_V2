@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.app.ace_taxi_v2.Fragments.Adapters.NotificationAdapter;
+import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
@@ -31,6 +32,12 @@ public class NotificationDialog {
             throw new IllegalStateException("RecyclerView not found in layout. Check notification_layout.xml");
         }
 
+        MaterialButton delete_all = view.findViewById(R.id.delete_all);
+        delete_all.setOnClickListener(v -> {
+            NotificationModalSession notificationModalSession = new NotificationModalSession(context);
+            notificationModalSession.clearAllNotifications();
+            dismissDialog();
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Set Adapter

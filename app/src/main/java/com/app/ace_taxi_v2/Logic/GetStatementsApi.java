@@ -32,9 +32,7 @@ public class GetStatementsApi {
     public void getStatements(View view, RecyclerView recyclerView, statementListener listener) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
-        int userId = sessionManager.getUserId(); // Getting user ID from session
-
-        // Attach user details to Sentry
+        int userId = sessionManager.getUserId();
         User sentryUser = new User();
         sentryUser.setId(String.valueOf(userId));
         Sentry.setUser(sentryUser);

@@ -21,7 +21,6 @@ public class NotificationModalActivity extends AppCompatActivity {
 
 
         NotificationModalSession notificationModalSession = new NotificationModalSession(this);
-        notificationModalSession.clearAllNotifications();
 
         String message = "";
         String passenger = "";

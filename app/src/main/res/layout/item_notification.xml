@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="0dp"
+    style="@style/CardBG"
+    app:cardElevation="2dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Foreground content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/notification_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                style="@style/TextBG" />
+
+            <TextView
+                android:id="@+id/notification_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Message"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                style="@style/TextBG" />
+
+            <TextView
+                android:id="@+id/notification_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notification #: "
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                style="@style/TextBG" />
+        </LinearLayout>
+
+        <!-- Swipe background -->
+        <FrameLayout
+            android:id="@+id/swipe_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/red"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:drawableStart="@drawable/ic_delete"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:layout_gravity="center" />
+        </FrameLayout>
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>

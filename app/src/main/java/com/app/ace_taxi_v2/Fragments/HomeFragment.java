@@ -226,9 +226,6 @@ public class HomeFragment extends Fragment {
 
                         current_job_card.setVisibility(getView().VISIBLE);
                         set_job_status.setText("Active Job");
-//                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) header_view.getLayoutParams();
-//                        params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 10); // 50px bottom margin
-//                        header_view.setLayoutParams(params);
                         activeJobStatus.setVisibility(getView().GONE);
                     }else {
                         current_job_card.setVisibility(getView().GONE);

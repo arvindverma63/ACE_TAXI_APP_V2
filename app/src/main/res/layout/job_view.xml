@@ -2,16 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@android:color/transparent">
 
     <com.google.android.material.card.MaterialCardView
         style="@style/CardBG"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:cardCornerRadius="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardElevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,9 +35,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:text="JOB VIEW"
+                    android:text="JOB DETAILS"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/close_dialog"
@@ -43,155 +45,205 @@
                     android:layout_height="wrap_content"
                     android:text="X"
                     android:textColor="@color/red"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:padding="4dp"
+                    android:clickable="true"
+                    android:focusable="true" />
             </LinearLayout>
 
-            <!-- Price and Account -->
+            <!-- Job ID and Price -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginTop="8dp">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/price"
+                    android:id="@+id/job_id"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:text="£23.00"
-                    android:textColor="@color/red"
-                    android:textSize="22sp"
+                    android:text="----- ---"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="ACCOUNT"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:text="----- -----"
+                    android:textColor="@color/red"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Acc/Cash and Payment Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/acc_cash"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Acc/Cash: ACCOUNT"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/payment_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="----- -----"
+                    android:textSize="14sp"
+                    android:textColor="@color/green" />
             </LinearLayout>
 
             <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginVertical="12dp"
                 android:background="@color/gray" />
 
-            <!-- Job Details -->
+            <!-- Passenger and Date -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/passenger_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:gravity="start"
-                    android:text="PETER FARRELL"
+                    android:text="---------"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/passengers_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Passenger count: ------"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/passenger_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email: ------"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/pickup_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="14/01/2025\n10:20AM (ASAP)"
-                    android:textSize="14sp" />
+                    android:text="-------- - -------- (ASAP)"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
 
-                <!-- Stop Information -->
+
+            <!-- Stops -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+
+                <!-- Pickup -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
 
-                    <!-- Stop A -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_pickup"
+                        android:contentDescription="Pickup"
+                        app:tint="@color/green" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/pickup_address"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="-----------------------"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:contentDescription="Stop A"
-                            android:src="@drawable/ic_pickup" />
+                <!-- Destination -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/pickup_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
-                            android:textSize="14sp" />
-                    </LinearLayout>
+                    <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_destination"
+                    app:tint="@color/red" />
 
-                    <!-- Stop V -->
-                    <!--                <LinearLayout-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="wrap_content"-->
-                    <!--                    android:orientation="horizontal"-->
-                    <!--                    android:gravity="center_vertical"-->
-                    <!--                    android:layout_marginBottom="8dp">-->
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="40dp"-->
-                    <!--                        android:layout_height="40dp"-->
-                    <!--                        android:src="@drawable/ic_taxi"-->
-                    <!--                        style="@style/IconTint"-->
-                    <!--                        android:contentDescription="Stop V" />-->
-
-                    <!--                    <com.google.android.material.textview.MaterialTextView-->
-                    <!--                        android:layout_width="0dp"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_weight="1"-->
-                    <!--                        android:layout_marginStart="8dp"-->
-                    <!--                        android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"-->
-                    <!--                        android:textSize="14sp" />-->
-                    <!--                </LinearLayout>-->
-
-                    <!-- Stop B -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/destination_address"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:contentDescription="Stop B"
-                            android:src="@drawable/ic_destination" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/destination_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
-                            android:textSize="14sp" />
-                    </LinearLayout>
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="---------------"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Distance and Duration -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/distance_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Distance: -------- | Duration: ------"
+                android:textSize="14sp"
+                android:layout_marginTop="12dp" />
+
             <!-- Notes -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notes: ----------------"
+                android:textSize="14sp"
+                android:layout_marginTop="12dp"
+                android:maxLines="3"
+                android:ellipsize="end" />
 
-            <!-- Complete Button -->
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="12dp"
+                android:background="@color/gray" />
 
+            <!-- Action Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/complete_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Complete"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/red"
+                app:cornerRadius="1000dp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
