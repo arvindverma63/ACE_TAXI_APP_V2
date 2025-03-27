@@ -15,8 +15,11 @@ public class Booking {
     private String pickupAddress;
     private String destinationAddress;
     private double price;
+    private String pickupPostCode;
+    private String destinationPostCode;
     private String passengerName;
     private String pickupDateTime;
+    private String status;
 
     public int getPassengers() {
         return passengers;
@@ -138,4 +141,15 @@ public class Booking {
         this.passengerName = passengerName;
     }
 
+    public String getPickupPostCode() {
+        return pickupPostCode;
+    }
+
+    public String getDestinationPostCode() {
+        return destinationPostCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }

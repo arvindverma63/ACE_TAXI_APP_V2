@@ -40,10 +40,10 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
 
         holder.fromToEnd.setText(response.getAvailableHours());
 
-        if(response.getAvailabilityType() == 0){
+        if(response.getAvailabilityType() == 2){
             holder.availText.setText("UnAvailable");
             holder.pinIcon.setImageTintList(ContextCompat.getColorStateList(context,R.color.red));
-        }else{
+        }if(response.getAvailabilityType() == 1){
             holder.availText.setText("Available");
             holder.pinIcon.setImageTintList(ContextCompat.getColorStateList(context,R.color.green));
         }

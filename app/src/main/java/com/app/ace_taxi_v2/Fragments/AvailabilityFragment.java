@@ -143,7 +143,7 @@ public class AvailabilityFragment extends Fragment {
         }
 
         AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 1, "Am only");
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 2, "Am only");
 
         try {
             Thread.sleep(2000);
@@ -163,8 +163,8 @@ public class AvailabilityFragment extends Fragment {
         }
 
         AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 1, "PM only");
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 1, "Am only");
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 2, "PM only");
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 2, "Am only");
 
         try {
             Thread.sleep(2000);
@@ -183,7 +183,7 @@ public class AvailabilityFragment extends Fragment {
         }
 
         AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 1, "PM only");
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 2, "PM only");
 
         try {
             Thread.sleep(2000);
@@ -202,7 +202,7 @@ public class AvailabilityFragment extends Fragment {
         }
 
         AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "00:00", "23:59", true, 1, "Unavailable All Day");
+        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "00:00", "23:59", true, 2, "Unavailable All Day");
 
         Toast.makeText(getContext(), "added successfully!", Toast.LENGTH_SHORT).show();
         try {

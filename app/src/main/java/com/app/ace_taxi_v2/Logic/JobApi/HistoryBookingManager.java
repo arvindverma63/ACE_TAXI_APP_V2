@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.HistoryAdapter;
@@ -25,14 +26,24 @@ import retrofit2.Response;
 
 public class HistoryBookingManager {
     private final Context context;
+    public SwipeRefreshLayout swipeRefreshLayout;
 
-    public HistoryBookingManager(Context context) { // Fixed constructor visibility
+    public HistoryBookingManager(Context context,SwipeRefreshLayout swipeRefreshLayout) { // Fixed constructor visibility
         this.context = context;
+        this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
     public void getHistoryBookings(View view, RecyclerView recyclerView) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
+
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(context, "Authentication error: Token missing", Toast.LENGTH_SHORT).show();
+            if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
 
         if (token == null || token.isEmpty()) {
             Toast.makeText(context, "Authentication error: Token missing", Toast.LENGTH_SHORT).show();
@@ -44,8 +55,10 @@ public class HistoryBookingManager {
             @Override
             public void onResponse(Call<List<HistoryBooking>> call, Response<List<HistoryBooking>> response) {
                 Log.d(TAG, "Response: " + response);
-
-                if (response.isSuccessful() && response.body() != null) {
+                if (swipeRefreshLayout != null) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+                if (response.code() == 200) {
                     List<HistoryBooking> bookingList = response.body();
 
                     if (bookingList == null || bookingList.isEmpty()) {
@@ -55,10 +68,9 @@ public class HistoryBookingManager {
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     recyclerView.setHasFixedSize(true); // Performance optimization
-                    recyclerView.setAdapter(new HistoryAdapter(bookingList, new HistoryAdapter.OnItemClickListener() {
+                    recyclerView.setAdapter(new HistoryAdapter(bookingList, context,new HistoryAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(HistoryBooking booking) {
-
                         }
 
                         @Override
@@ -74,7 +86,6 @@ public class HistoryBookingManager {
 
             @Override
             public void onFailure(Call<List<HistoryBooking>> call, Throwable t) {
-                Toast.makeText(context, "Failed to fetch jobs: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Error: " + t);
             }
         });

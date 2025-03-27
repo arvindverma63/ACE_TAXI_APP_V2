@@ -28,6 +28,7 @@ import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.DashboardHelper;
 import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ApplicationsHelper;
 import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ProfileHelper;
 import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ReportsHelper;
+import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
@@ -199,6 +200,7 @@ public class HomeFragment extends Fragment {
 
         CurrentBooking currentBooking = new CurrentBooking(getContext());
         int finalBookingId = bookingId;
+        int finalBookingId1 = bookingId;
         currentBooking.getCurrentBooking(new CurrentBooking.CurrentJobCallback() {
             @Override
             public void onSuccess(List<TodayBooking> list) {
@@ -227,6 +229,11 @@ public class HomeFragment extends Fragment {
                         current_job_card.setVisibility(getView().VISIBLE);
                         set_job_status.setText("Active Job");
                         activeJobStatus.setVisibility(getView().GONE);
+
+                        current_job_card.setOnClickListener(v -> {
+                            JobModal jobModal = new JobModal(getContext());
+                            jobModal.JobViewForTodayJob(finalBookingId1);
+                        });
                     }else {
                         current_job_card.setVisibility(getView().GONE);
                         set_job_status.setText("No Active Job");

@@ -74,7 +74,7 @@
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="----- -----"
+                    android:text=""
                     android:textColor="@color/red"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -112,6 +112,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="60dp"
                     app:cardCornerRadius="3dp"
+                    android:id="@+id/payment_status_card"
                     android:backgroundTint="@color/green"
                     app:strokeWidth="0dp"
                     android:layout_height="30dp">

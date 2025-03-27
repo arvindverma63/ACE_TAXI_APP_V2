@@ -240,10 +240,7 @@ public class JobModal {
         datetime.setText(date);
         passengerName.setText(passenger);
         bookingId.setText(jobId+"");
-        closeBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(context, HomeActivity.class);
-            context.startActivity(intent);
-        });
+
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setView(dialogView);
 
@@ -258,6 +255,9 @@ public class JobModal {
         dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
 
         alertDialog.show();
+        closeBtn.setOnClickListener(view -> {
+           alertDialog.dismiss();
+        });
     }
 
 
@@ -280,10 +280,6 @@ public class JobModal {
         message.setText(notificationMessage);
         Log.d("NotificationDebug", "Read Message: " + notificationMessage);
 
-        closeBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(context, HomeActivity.class);
-            context.startActivity(intent);
-        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
@@ -298,6 +294,9 @@ public class JobModal {
         dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
 
         alertDialog.show();
+        closeBtn.setOnClickListener(view -> {
+            alertDialog.dismiss();
+        });
     }
 
     public void JobReadNotificationClick(String messages,String date) {
@@ -345,6 +344,7 @@ public class JobModal {
         TextView payment_status, account_status;
         TextView pickupAddress, destinationAddress, pickupdate, bookingprice, customerName,
                 jobId, distance_duration, notes, passenger_email, passengers_count;
+        MaterialCardView payment_card;
 
         // Initialize views
         pickupAddress = dialogView.findViewById(R.id.pickup_address);
@@ -360,6 +360,7 @@ public class JobModal {
         passenger_email = dialogView.findViewById(R.id.passenger_email);
         MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
         passengers_count = dialogView.findViewById(R.id.passengers_count);
+        payment_card = dialogView.findViewById(R.id.payment_status_card);
 
 
         // API call
@@ -379,6 +380,11 @@ public class JobModal {
                 passenger_email.setText(bookingInfo.getEmail());
                 passengers_count.setText(" X " + bookingInfo.getPassengers());
                 account_status.setText(bookingInfo.getScopeText());
+
+                if("Account".equals(bookingInfo.getScopeText())){
+                    payment_card.setVisibility(View.GONE);
+                    bookingprice.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -584,6 +590,7 @@ public class JobModal {
         TextView payment_status, account_status;
         TextView pickupAddress, destinationAddress, pickupdate, bookingprice, customerName,
                 jobId, distance_duration, notes, passenger_email, passengers_count;
+        MaterialCardView payment_card;
 
         // Initialize views
         pickupAddress = dialogView.findViewById(R.id.pickup_address);
@@ -599,6 +606,7 @@ public class JobModal {
         passenger_email = dialogView.findViewById(R.id.passenger_email);
         MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
         passengers_count = dialogView.findViewById(R.id.passengers_count);
+        payment_card = dialogView.findViewById(R.id.payment_status_card);
 
 
         // API call
@@ -618,6 +626,11 @@ public class JobModal {
                 passenger_email.setText(bookingInfo.getEmail());
                 passengers_count.setText(" X " + bookingInfo.getPassengers());
                 account_status.setText(bookingInfo.getScopeText());
+
+                if("Account".equals(bookingInfo.getScopeText())){
+                    payment_card.setVisibility(View.GONE);
+                    bookingprice.setVisibility(View.GONE);
+                }
             }
 
             @Override

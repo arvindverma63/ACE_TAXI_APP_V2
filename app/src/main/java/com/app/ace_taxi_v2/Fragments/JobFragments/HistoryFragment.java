@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,8 @@ import java.util.List;
 public class HistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    public SwipeRefreshLayout swipeRefreshLayout;
+    public HistoryBookingManager historyBookingManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -31,12 +34,16 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclar_view);
 
-        HistoryBookingManager historyBookingManager = new HistoryBookingManager(getContext());
+        historyBookingManager = new HistoryBookingManager(getContext(),swipeRefreshLayout);
         historyBookingManager.getHistoryBookings(view,recyclerView);
 
+        swipeRefreshLayout.setOnRefreshListener(()->{
+            historyBookingManager.getHistoryBookings(view,recyclerView);
+        });
         return view;
     }
 
