@@ -43,9 +43,9 @@ public class AddExpenses {
 
         // Create the API service instance and make the call
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.expenses(token, expensesRequest).enqueue(new Callback<ExpensesResponse>() {
+        apiService.expenses(token, expensesRequest).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ExpensesResponse> call, Response<ExpensesResponse> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.d(TAG, "Response code: " + response.code());
 
                 if (response.isSuccessful()) {
@@ -59,7 +59,7 @@ public class AddExpenses {
             }
 
             @Override
-            public void onFailure(Call<ExpensesResponse> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Failed to add expense", Toast.LENGTH_LONG).show();
 
                 // Capture exception in Sentry

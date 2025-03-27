@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.os.Handler;
@@ -14,7 +15,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
@@ -27,8 +30,12 @@ import com.app.ace_taxi_v2.Logic.JobResponseApi;
 import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.app.ace_taxi_v2.R;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.w3c.dom.Text;
@@ -329,13 +336,17 @@ public class JobModal {
     }
 
 
-
-    public void JobViewForTodayJob(int bookingId){
+    @OptIn(markerClass = ExperimentalBadgeUtils.class)
+    public void JobViewForTodayJob(int bookingId) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.job_view,null);
+        View dialogView = inflater.inflate(R.layout.job_view, null);
 
-        TextView pickupAddress,destinationAddress,pickupdate,bookingprice,customerName,jobId,payment_status,distance_duration,notes,passenger_email,
-                passengers_count;
+        // Variable declarations
+        TextView payment_status, account_status;
+        TextView pickupAddress, destinationAddress, pickupdate, bookingprice, customerName,
+                jobId, distance_duration, notes, passenger_email, passengers_count;
+
+        // Initialize views
         pickupAddress = dialogView.findViewById(R.id.pickup_address);
         destinationAddress = dialogView.findViewById(R.id.destination_address);
         pickupdate = dialogView.findViewById(R.id.pickup_date);
@@ -345,10 +356,13 @@ public class JobModal {
         payment_status = dialogView.findViewById(R.id.payment_status);
         distance_duration = dialogView.findViewById(R.id.distance_duration);
         notes = dialogView.findViewById(R.id.notes);
+        account_status = dialogView.findViewById(R.id.account_status);
         passenger_email = dialogView.findViewById(R.id.passenger_email);
         MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
         passengers_count = dialogView.findViewById(R.id.passengers_count);
 
+
+        // API call
         GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
         getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
             @Override
@@ -356,42 +370,42 @@ public class JobModal {
                 pickupAddress.setText(bookingInfo.getPickupAddress());
                 destinationAddress.setText(bookingInfo.getDestinationAddress());
                 pickupdate.setText(bookingInfo.getPickupDateTime());
-                customerName.setText("Passenger Name: "+bookingInfo.getPassengerName());
-                bookingprice.setText("£"+bookingInfo.getPrice());
-                jobId.setText(bookingInfo.getBookingId()+"");
-                payment_status.setText(bookingInfo.getScopeText()+"/"+bookingInfo.getPaymentStatusText());
-                distance_duration.setText("Duration : "+bookingInfo.getDurationText()+" min");
+                customerName.setText(String.valueOf(bookingInfo.getPassengerName()));
+                bookingprice.setText("£" + bookingInfo.getPrice());
+                jobId.setText(String.valueOf(bookingInfo.getBookingId()));
+                payment_status.setText(bookingInfo.getPaymentStatusText());
+                distance_duration.setText(bookingInfo.getDurationMinutes() + " minutes");
                 notes.setText(bookingInfo.getDetails());
                 passenger_email.setText(bookingInfo.getEmail());
-                passengers_count.setText("Passenger Count: "+bookingInfo.getPassengers());
+                passengers_count.setText(" X " + bookingInfo.getPassengers());
+                account_status.setText(bookingInfo.getScopeText());
             }
 
             @Override
             public void onfailer(String error) {
 
             }
+
+
         });
+
         TextView closeBtn = dialogView.findViewById(R.id.close_dialog);
 
-
-
+        // Dialog setup
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
-
         builder.setCancelable(true);
         AlertDialog alertDialog = builder.create();
-        // Set transparent background for the dialog window
+
         if (alertDialog.getWindow() != null) {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         }
-        // Apply rounded background programmatically
         dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
 
         alertDialog.show();
 
-        closeBtn.setOnClickListener(v -> {
-            alertDialog.dismiss();
-        });
+        // Click listeners
+        closeBtn.setOnClickListener(v -> alertDialog.dismiss());
         complete_button.setOnClickListener(v -> {
             alertDialog.dismiss();
             jobCompleteBooking(bookingId);
@@ -560,8 +574,78 @@ public class JobModal {
             fullScreenDialog.dismiss();
         });
 
-        // Handle submit button click
+    }
 
+    public void JobViewForFutureAndHistory(int bookingId){
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.job_view, null);
+
+        // Variable declarations
+        TextView payment_status, account_status;
+        TextView pickupAddress, destinationAddress, pickupdate, bookingprice, customerName,
+                jobId, distance_duration, notes, passenger_email, passengers_count;
+
+        // Initialize views
+        pickupAddress = dialogView.findViewById(R.id.pickup_address);
+        destinationAddress = dialogView.findViewById(R.id.destination_address);
+        pickupdate = dialogView.findViewById(R.id.pickup_date);
+        bookingprice = dialogView.findViewById(R.id.price);
+        customerName = dialogView.findViewById(R.id.passenger_name);
+        jobId = dialogView.findViewById(R.id.job_id);
+        payment_status = dialogView.findViewById(R.id.payment_status);
+        distance_duration = dialogView.findViewById(R.id.distance_duration);
+        notes = dialogView.findViewById(R.id.notes);
+        account_status = dialogView.findViewById(R.id.account_status);
+        passenger_email = dialogView.findViewById(R.id.passenger_email);
+        MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
+        passengers_count = dialogView.findViewById(R.id.passengers_count);
+
+
+        // API call
+        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+        getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
+            @Override
+            public void onSuccess(GetBookingInfo bookingInfo) {
+                pickupAddress.setText(bookingInfo.getPickupAddress());
+                destinationAddress.setText(bookingInfo.getDestinationAddress());
+                pickupdate.setText(bookingInfo.getPickupDateTime());
+                customerName.setText(String.valueOf(bookingInfo.getPassengerName()));
+                bookingprice.setText("£" + bookingInfo.getPrice());
+                jobId.setText(String.valueOf(bookingInfo.getBookingId()));
+                payment_status.setText(bookingInfo.getPaymentStatusText());
+                distance_duration.setText(bookingInfo.getDurationMinutes() + " minutes");
+                notes.setText(bookingInfo.getDetails());
+                passenger_email.setText(bookingInfo.getEmail());
+                passengers_count.setText(" X " + bookingInfo.getPassengers());
+                account_status.setText(bookingInfo.getScopeText());
+            }
+
+            @Override
+            public void onfailer(String error) {
+
+            }
+
+
+        });
+
+        TextView closeBtn = dialogView.findViewById(R.id.close_dialog);
+
+        // Dialog setup
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView);
+        builder.setCancelable(true);
+        AlertDialog alertDialog = builder.create();
+
+        if (alertDialog.getWindow() != null) {
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+        dialogView.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_dialog));
+
+        alertDialog.show();
+
+        // Click listeners
+        closeBtn.setOnClickListener(v -> alertDialog.dismiss());
+       complete_button.setVisibility(View.GONE);
     }
 
 

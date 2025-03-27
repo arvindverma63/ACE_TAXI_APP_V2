@@ -53,10 +53,10 @@ public class NotificationDialogController {
                 break;
             case 5:
                 Log.d("NotificationDialogController", "Processing unallocated job...");
-                jobModal.JobRead();
+                jobModal.readMessage(message,datetime);
                 break;
             case 6:
-                jobModal.JobRead();
+                jobModal.readMessage(message,datetime);
             default:
                 Log.w("NotificationDialogController", "Unknown navId: " + navid);
                 break;

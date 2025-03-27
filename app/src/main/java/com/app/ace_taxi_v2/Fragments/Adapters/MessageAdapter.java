@@ -8,8 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Models.NotificationModel;
 import com.app.ace_taxi_v2.R;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -37,6 +39,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         holder.title.setText(model.getTitle());
         holder.message.setText(model.getMessage());
         holder.notificationNumber.setText("NOTIF-" + model.getNotificationNumber());
+        holder.cardView.setOnClickListener(v -> {
+            JobModal jobModal = new JobModal(v.getContext());
+            jobModal.readMessage(messages.get(position).getMessage(),messages.get(position).getDatetime());
+        });
     }
 
     @Override
@@ -56,12 +62,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, message, notificationNumber;
+        MaterialCardView cardView;
 
         ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.notification_title);
             message = itemView.findViewById(R.id.notification_message);
             notificationNumber = itemView.findViewById(R.id.notification_number);
+            cardView = itemView.findViewById(R.id.card_view);
         }
     }
 }

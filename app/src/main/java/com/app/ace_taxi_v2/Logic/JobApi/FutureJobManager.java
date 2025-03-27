@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.FutureJobAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
+import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Models.Jobs.Booking;
 import com.app.ace_taxi_v2.Models.Jobs.FutureJobResponse;
@@ -53,7 +54,8 @@ public class FutureJobManager {
                     recyclerView.setAdapter(new FutureJobAdapter(bookingList, new FutureJobAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(Booking booking) {
-
+                            JobModal jobModal = new JobModal(context);
+                            jobModal.JobViewForFutureAndHistory(booking.getBookingId());
                         }
 
                         @Override

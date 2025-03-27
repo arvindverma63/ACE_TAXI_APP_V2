@@ -38,9 +38,9 @@ public class UploadDocumentApi {
         }
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.uploadDoc(token, type, body).enqueue(new Callback<ImageUploadResponse>() {
+        apiService.uploadDoc(token, type, body).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ImageUploadResponse> call, Response<ImageUploadResponse> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
                     Toast.makeText(context, "Upload Successful!", Toast.LENGTH_SHORT).show();
                     Log.d("UploadDocumentApi", "Upload successful: " + response.body());
@@ -58,7 +58,7 @@ public class UploadDocumentApi {
             }
 
             @Override
-            public void onFailure(Call<ImageUploadResponse> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.e("UploadDocumentApi", "Error uploading file", t);
                 Sentry.captureException(t);
                 Toast.makeText(context, "Upload failed. Please check your connection.", Toast.LENGTH_SHORT).show();

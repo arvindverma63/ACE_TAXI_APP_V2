@@ -91,7 +91,7 @@ public interface ApiService {
                                           @Query("status") int status);
 
     @POST("/api/DriverApp/AddExpense")
-    Call<ExpensesResponse> expenses(@Header("Authorization") String token,
+    Call<Void> expenses(@Header("Authorization") String token,
                                     @Body ExpensesRequest expensesRequest);
 
     @GET("/api/DriverApp/JobStatusReply")
@@ -129,7 +129,7 @@ public interface ApiService {
                                                    @Query("to") String to);
     @Multipart
     @POST("/api/DriverApp/UploadDocument")
-    Call<ImageUploadResponse> uploadDoc(@Header("Authorization") String token,
+    Call<Void> uploadDoc(@Header("Authorization") String token,
                                         @Query("type") int type,
                                         @Part MultipartBody.Part file);
 

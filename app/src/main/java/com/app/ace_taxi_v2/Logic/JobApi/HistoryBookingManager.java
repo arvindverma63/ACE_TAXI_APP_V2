@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.HistoryAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
+import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Models.Jobs.HistoryBooking;
 
@@ -57,12 +58,13 @@ public class HistoryBookingManager {
                     recyclerView.setAdapter(new HistoryAdapter(bookingList, new HistoryAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(HistoryBooking booking) {
-                            Toast.makeText(context,"job id is : "+booking.getBookingId(),Toast.LENGTH_LONG).show();;
+
                         }
 
                         @Override
                         public void onStartClick(HistoryBooking booking) {
-                            Toast.makeText(context, "Revisiting job: " + booking.getBookingId(), Toast.LENGTH_SHORT).show();
+                            JobModal jobModal = new JobModal(context);
+                            jobModal.JobViewForFutureAndHistory(booking.getBookingId());
                         }
                     }));
                 } else {

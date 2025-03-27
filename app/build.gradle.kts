@@ -11,8 +11,8 @@ android {
         applicationId = "com.app.ace_taxi_v2"
         minSdk = 24
         targetSdk = 34
-        versionCode = 12
-        versionName = "2.1"
+        versionCode = 13
+        versionName = "2.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -62,6 +62,7 @@ dependencies {
     // Sentry for crash reporting
     implementation("io.sentry:sentry-android:8.2.0")
     implementation ("androidx.palette:palette:1.0.0")
+    implementation(libs.engage.core)
 
     // Testing
     testImplementation(libs.junit)
