@@ -161,7 +161,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         style="@style/IconTint"
-                        android:src="@drawable/ic_passenger"/>
+                        android:src="@drawable/ic_profile"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/passengers_count"
                         android:layout_width="match_parent"

@@ -177,7 +177,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateStatusLabel(boolean isOnline) {
-        onlineStatusLabel.setText(isOnline ? "You Are Online" : "You Are Offline");
+        onlineStatusLabel.setText(isOnline ? "Send Location ON" : "Send Location OFF");
         nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.red), PorterDuff.Mode.SRC_IN);
 
         if (isOnline) {
@@ -232,9 +232,12 @@ public class HomeFragment extends Fragment {
                         passenger_count.setText(String.valueOf(booking.getPassengers()));
                         passenger_name.setText(booking.getPassengerName());
 
+                        try {
                         if("Account".equals(booking.getScopeText())){
                             price.setText("ACC");
                             price.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
+                        }} catch (Exception e) {
+                            e.printStackTrace();
                         }
 
                         current_job_card.setOnClickListener(v -> {

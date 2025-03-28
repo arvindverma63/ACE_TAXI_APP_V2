@@ -3,7 +3,7 @@
     <style name="Base.Theme.ACE_TAXI_V2" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-        <item name="android:fontFamily">@font/font_urban</item>
+        <item name="android:fontFamily">@font/font_roborto</item>
     </style>
 
     <style name="Theme.ACE_TAXI_V2" parent="Base.Theme.ACE_TAXI_V2"/>

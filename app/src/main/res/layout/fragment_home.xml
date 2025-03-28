@@ -158,8 +158,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                app:cardCornerRadius="12dp"
                 android:visibility="gone"
+                app:cardCornerRadius="12dp"
                 app:strokeColor="@android:color/darker_gray"
                 app:strokeWidth="0dp">
 
@@ -278,7 +278,7 @@
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 style="@style/IconTint"
-                                android:src="@drawable/ic_passenger"/>
+                                android:src="@drawable/ic_profile"/>
                             <TextView
                                 android:id="@+id/current_passenger_count"
                                 style="@style/TextBG"
@@ -1186,26 +1186,20 @@
                     style="@style/TextBG"
                     android:layout_width="143dp"
                     android:layout_height="wrap_content"
-                    android:text="You Are Offline"
+                    android:text="Send Location OFF"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Clear"
-                    android:textColor="@color/green"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
             <Switch
                 android:id="@+id/online_toggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="48dp"
-                android:layout_marginLeft="100dp"
                 android:minHeight="48dp"
                 app:thumbTint="@color/gray"
                 app:trackTint="@color/gray" />
