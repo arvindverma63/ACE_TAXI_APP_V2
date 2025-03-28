@@ -72,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="14/01/2025 10:20AM (ASAP)"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@android:color/black"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -105,7 +105,7 @@
                         android:fontFamily="@font/font_urban"
                         android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
                         android:textColor="@android:color/black"
-                        android:textSize="14sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <!-- Dotted Line -->
@@ -138,7 +138,7 @@
                         android:fontFamily="@font/font_urban"
                         android:text="32 RIDGEWAY ROAD, GILLINGHAM, SP8 4GH"
                         android:textColor="@android:color/black"
-                        android:textSize="14sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <View
@@ -171,7 +171,7 @@
                         android:fontFamily="@font/font_urban"
                         android:text="Peter Farrel"
                         android:textColor="@android:color/black"
-                        android:textSize="14sp" />
+                        android:textSize="18sp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/price"
@@ -179,10 +179,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/font_urban"
-                        android:padding="12dp"
+                        android:padding="18dp"
                         android:text="£23.00"
                         android:textColor="@color/black"
-                        android:textSize="12sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -208,7 +208,7 @@
                     android:padding="14dp"
                     android:text="Accept"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textAllCaps="false"
                     android:textStyle="bold"
                     android:layout_marginBottom="5dp"
@@ -226,7 +226,7 @@
                     android:text="Reject"
                     app:backgroundTint="@null"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:cornerRadius="20dp"
                     app:elevation="6dp" />
