@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.Components.DeleteDialog;
@@ -113,7 +114,10 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
                         deleteDialog.rejectBooking(job.getBookingId());
                     });
                 }
-
+                if("Account".equals(job.getScopeText())){
+                    price.setText("ACC");
+                    price.setTextColor(ContextCompat.getColor(context,R.color.red));
+                }
             } catch (Exception e) {
                 Log.e("TodayJobAdapter", "Error binding job data", e);
 

@@ -18,16 +18,13 @@ import com.app.ace_taxi_v2.R;
 public class FutureFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private FutureJobAdapter adapter;
     private FutureJobManager futureJobs;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private View fragmentView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_future, container, false);
-        fragmentView = view; // Store the view
 
         recyclerView = view.findViewById(R.id.recyclar_view);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);

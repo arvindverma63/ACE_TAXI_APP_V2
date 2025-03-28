@@ -1,6 +1,7 @@
 package com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,6 +108,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                     jobModal.JobViewForFutureAndHistory(job.getBookingId());
                 });
                 startButton.setVisibility(View.GONE);
+                if("Account".equals(job.getScopeText())){
+                    price.setText("ACC");
+                    price.setTextColor(ContextCompat.getColor(context,R.color.red));
+                }
+
 
 
             } catch (Exception e) {

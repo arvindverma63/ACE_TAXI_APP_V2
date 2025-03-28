@@ -76,7 +76,7 @@
                     android:id="@+id/etPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="9.00"
+                    android:text="0.00"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
                     android:textColor="@color/black"/>
@@ -98,7 +98,7 @@
                     android:id="@+id/etWaitingTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:text="0"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
                     android:textColor="@color/black"/>
@@ -120,7 +120,7 @@
                     android:id="@+id/etParking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="5"
+                    android:text="0"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
                     android:textColor="@color/black"/>
@@ -142,7 +142,7 @@
                     android:id="@+id/etTip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="7.65"
+                    android:text="0.00"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium"
                     android:textColor="@color/black"/>

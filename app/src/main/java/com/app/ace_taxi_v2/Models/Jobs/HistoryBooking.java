@@ -19,7 +19,9 @@ public class HistoryBooking {
     private String destinationPostCode;
     private String passengerName;
     private String pickupDateTime;
+    private int scope;
     private String status;
+    private int paymentStatus;
 
     public int getPassengers() {
         return passengers;
@@ -156,4 +158,32 @@ public class HistoryBooking {
     public String getStatus() {
         return status;
     }
+
+    public int getScope() {
+        return scope;
+    }
+
+    public int getPaymentStatus() {
+        return paymentStatus;
+    }
+    public String getScopeText() {
+        switch (scope) {
+            case 0: return "Cash";
+            case 1: return "Account";
+            case 2: return "Rank";
+            case 3: return "All";
+            case 4: return "Card";
+            default: return "Unknown";
+        }
+    }
+
+    public String getPaymentStatusText() {
+        switch (paymentStatus) {
+            case 0: return "UnPaid";
+            case 2: return "Paid";
+            case 3: return "Awaiting Payment";
+            default: return "Unknown";
+        }
+    }
+
 }

@@ -20,6 +20,8 @@ public class Booking {
     private String passengerName;
     private String pickupDateTime;
     private String status;
+    private int scope;
+    private int paymentStatus;
 
     public int getPassengers() {
         return passengers;
@@ -151,5 +153,32 @@ public class Booking {
 
     public String getStatus() {
         return status;
+    }
+
+    public int getScope() {
+        return scope;
+    }
+
+    public int getPaymentStatus() {
+        return paymentStatus;
+    }
+    public String getScopeText() {
+        switch (scope) {
+            case 0: return "Cash";
+            case 1: return "Account";
+            case 2: return "Rank";
+            case 3: return "All";
+            case 4: return "Card";
+            default: return "Unknown";
+        }
+    }
+
+    public String getPaymentStatusText() {
+        switch (paymentStatus) {
+            case 0: return "UnPaid";
+            case 2: return "Paid";
+            case 3: return "Awaiting Payment";
+            default: return "Unknown";
+        }
     }
 }

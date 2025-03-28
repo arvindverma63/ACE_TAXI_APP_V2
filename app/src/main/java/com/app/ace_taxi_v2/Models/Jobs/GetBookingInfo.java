@@ -76,7 +76,7 @@ public class GetBookingInfo {
 
     public String getPaymentStatusText() {
         switch (paymentStatus) {
-            case 0: return "UnPaid";
+            case 0: return "Unpaid";
             case 2: return "Paid";
             case 3: return "Awaiting Payment";
             default: return "Unknown";

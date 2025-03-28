@@ -1,7 +1,6 @@
 package com.app.ace_taxi_v2.Models.Jobs;
 
 import android.os.Build;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -20,14 +19,18 @@ public class TodayBooking {
     private String passengerName;
     private String pickupDateTime;
     private String status;
+    private int scope;
+    private int paymentStatus;
+    private int passengers;
 
-    public String getStatus(){
-        return status;
+    public String getStatus() {
+        return status != null ? status : "";
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
+
     public int getPassengers() {
         return passengers;
     }
@@ -37,39 +40,23 @@ public class TodayBooking {
     }
 
     public String getPickupDateTime() {
-        try {
-            // Parse the ISO 8601 datetime string
-            LocalDateTime dateTime = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                dateTime = LocalDateTime.parse(pickupDateTime);
-            }
-
-            // Define the desired output format
-            DateTimeFormatter formatter = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a");
-            }
-
-            // Format the parsed datetime and return
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                return dateTime.format(formatter);
-            }
-        } catch (Exception e) {
-            // Handle parsing errors gracefully
-            e.printStackTrace();
-            return pickupDateTime; // Return the original if formatting fails
-        }
-        return pickupDateTime;
+        return formatDateTime(pickupDateTime);
     }
 
     public void setPickupDateTime(String pickupDateTime) {
         this.pickupDateTime = pickupDateTime;
     }
 
-    private int passengers;
+    public String getEndTime() {
+        return formatDateTime(endTime);
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 
     public String getRegNo() {
-        return regNo;
+        return regNo != null ? regNo : "";
     }
 
     public void setRegNo(String regNo) {
@@ -77,7 +64,7 @@ public class TodayBooking {
     }
 
     public String getBackgroundColorRGB() {
-        return backgroundColorRGB;
+        return backgroundColorRGB != null ? backgroundColorRGB : "";
     }
 
     public void setBackgroundColorRGB(String backgroundColorRGB) {
@@ -85,7 +72,7 @@ public class TodayBooking {
     }
 
     public String getFullname() {
-        return fullname;
+        return fullname != null ? fullname : "";
     }
 
     public void setFullname(String fullname) {
@@ -101,45 +88,15 @@ public class TodayBooking {
     }
 
     public String getCellText() {
-        return cellText;
+        return cellText != null ? cellText : "";
     }
 
     public void setCellText(String cellText) {
         this.cellText = cellText;
     }
 
-    public String getEndTime() {
-        try {
-            // Parse the ISO 8601 datetime string
-            LocalDateTime dateTime = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                dateTime = LocalDateTime.parse(endTime);
-            }
-
-            // Define the desired output format
-            DateTimeFormatter formatter = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a");
-            }
-
-            // Format the parsed datetime and return
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                return dateTime.format(formatter);
-            }
-        } catch (Exception e) {
-            // Handle parsing errors gracefully
-            e.printStackTrace();
-            return pickupDateTime; // Return the original if formatting fails
-        }
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
     public String getPickupAddress() {
-        return pickupAddress;
+        return pickupAddress != null ? pickupAddress : "";
     }
 
     public void setPickupAddress(String pickupAddress) {
@@ -147,7 +104,7 @@ public class TodayBooking {
     }
 
     public String getDestinationAddress() {
-        return destinationAddress;
+        return destinationAddress != null ? destinationAddress : "";
     }
 
     public void setDestinationAddress(String destinationAddress) {
@@ -163,7 +120,7 @@ public class TodayBooking {
     }
 
     public String getPassengerName() {
-        return passengerName;
+        return passengerName != null ? passengerName : "";
     }
 
     public void setPassengerName(String passengerName) {
@@ -171,7 +128,7 @@ public class TodayBooking {
     }
 
     public String getPickupPostCode() {
-        return pickupPostCode;
+        return pickupPostCode != null ? pickupPostCode : "";
     }
 
     public void setPickupPostCode(String pickupPostCode) {
@@ -179,10 +136,70 @@ public class TodayBooking {
     }
 
     public String getDestinationPostCode() {
-        return destinationPostCode;
+        return destinationPostCode != null ? destinationPostCode : "";
     }
 
     public void setDestinationPostCode(String destinationPostCode) {
         this.destinationPostCode = destinationPostCode;
+    }
+
+    public int getScope() {
+        return scope;
+    }
+
+    public void setScope(int scope) {
+        this.scope = scope;
+    }
+
+    public int getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(int paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getScopeText() {
+        switch (scope) {
+            case 0: return "Cash";
+            case 1: return "Account";
+            case 2: return "Rank";
+            case 3: return "All";
+            case 4: return "Card";
+            default: return "Unknown";
+        }
+    }
+
+    public String getPaymentStatusText() {
+        switch (paymentStatus) {
+            case 0: return "UnPaid";
+            case 2: return "Paid";
+            case 3: return "Awaiting Payment";
+            default: return "Unknown";
+        }
+    }
+
+    private String formatDateTime(String dateTimeStr) {
+        if (dateTimeStr == null) return "";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a");
+                return dateTime.format(formatter);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                java.text.SimpleDateFormat inputFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("dd MMM yyyy, hh:mm a");
+                java.util.Date date = inputFormat.parse(dateTimeStr);
+                return outputFormat.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return dateTimeStr;
     }
 }

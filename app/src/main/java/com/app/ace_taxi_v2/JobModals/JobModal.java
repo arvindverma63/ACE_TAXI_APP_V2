@@ -344,7 +344,7 @@ public class JobModal {
         TextView payment_status, account_status;
         TextView pickupAddress, destinationAddress, pickupdate, bookingprice, customerName,
                 jobId, distance_duration, notes, passenger_email, passengers_count;
-        MaterialCardView payment_card;
+        MaterialCardView payment_card,cardView;
 
         // Initialize views
         pickupAddress = dialogView.findViewById(R.id.pickup_address);
@@ -361,9 +361,9 @@ public class JobModal {
         MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
         passengers_count = dialogView.findViewById(R.id.passengers_count);
         payment_card = dialogView.findViewById(R.id.payment_status_card);
+        cardView = dialogView.findViewById(R.id.card_view);
 
 
-        // API call
         GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
         getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
             @Override
@@ -380,19 +380,23 @@ public class JobModal {
                 passenger_email.setText(bookingInfo.getEmail());
                 passengers_count.setText(" X " + bookingInfo.getPassengers());
                 account_status.setText(bookingInfo.getScopeText());
+                if("Cash".equals(bookingInfo.getScopeText())){
+                    payment_card.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                    cardView.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                }
+                if("Unpaid".equals(bookingInfo.getPaymentStatusText())){
+                    payment_card.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
+                }
 
                 if("Account".equals(bookingInfo.getScopeText())){
                     payment_card.setVisibility(View.GONE);
                     bookingprice.setVisibility(View.GONE);
                 }
             }
-
             @Override
             public void onfailer(String error) {
 
             }
-
-
         });
 
         TextView closeBtn = dialogView.findViewById(R.id.close_dialog);
@@ -590,7 +594,7 @@ public class JobModal {
         TextView payment_status, account_status;
         TextView pickupAddress, destinationAddress, pickupdate, bookingprice, customerName,
                 jobId, distance_duration, notes, passenger_email, passengers_count;
-        MaterialCardView payment_card;
+        MaterialCardView payment_card,cardView;
 
         // Initialize views
         pickupAddress = dialogView.findViewById(R.id.pickup_address);
@@ -607,9 +611,9 @@ public class JobModal {
         MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
         passengers_count = dialogView.findViewById(R.id.passengers_count);
         payment_card = dialogView.findViewById(R.id.payment_status_card);
+        cardView = dialogView.findViewById(R.id.card_view);
 
 
-        // API call
         GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
         getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
             @Override
@@ -626,19 +630,23 @@ public class JobModal {
                 passenger_email.setText(bookingInfo.getEmail());
                 passengers_count.setText(" X " + bookingInfo.getPassengers());
                 account_status.setText(bookingInfo.getScopeText());
+                if("Cash".equals(bookingInfo.getScopeText())){
+                    payment_card.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                    cardView.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                }
+                if("Unpaid".equals(bookingInfo.getPaymentStatusText())){
+                    payment_card.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
+                }
 
                 if("Account".equals(bookingInfo.getScopeText())){
                     payment_card.setVisibility(View.GONE);
                     bookingprice.setVisibility(View.GONE);
                 }
             }
-
             @Override
             public void onfailer(String error) {
 
             }
-
-
         });
 
         TextView closeBtn = dialogView.findViewById(R.id.close_dialog);

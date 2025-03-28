@@ -158,8 +158,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:visibility="gone"
                 app:cardCornerRadius="12dp"
+                android:visibility="gone"
                 app:strokeColor="@android:color/darker_gray"
                 app:strokeWidth="0dp">
 
@@ -269,14 +269,26 @@
                                 android:textSize="14sp" />
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/current_passenger_count"
-                            style="@style/TextBG"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:layout_gravity="center"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                style="@style/IconTint"
+                                android:src="@drawable/ic_passenger"/>
+                            <TextView
+                                android:id="@+id/current_passenger_count"
+                                style="@style/TextBG"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                     <!-- Footer Section -->

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -27,23 +26,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FutureJobManager {
-    private Context context;
-    SwipeRefreshLayout swipeRefreshLayout;
+    private final Context context;
+    private final SwipeRefreshLayout swipeRefreshLayout;
+    private final SessionManager sessionManager;
+    private FutureJobAdapter adapter;
 
-    public FutureJobManager(Context context,SwipeRefreshLayout swipeRefreshLayout) {
+    public FutureJobManager(Context context, SwipeRefreshLayout swipeRefreshLayout) {
         this.context = context;
         this.swipeRefreshLayout = swipeRefreshLayout;
+        this.sessionManager = new SessionManager(context);
     }
 
     public void fetchJob(View view, RecyclerView recyclerView) {
-        SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
 
         if (token == null || token.isEmpty()) {
-            Toast.makeText(context, "Authentication error: Token missing", Toast.LENGTH_SHORT).show();
-            if (swipeRefreshLayout != null) {
-                swipeRefreshLayout.setRefreshing(false);
-            }
+            showToast("Authentication error: Token missing");
+            stopRefreshing();
             return;
         }
 
@@ -51,20 +50,24 @@ public class FutureJobManager {
         apiService.futureJobs(token).enqueue(new Callback<FutureJobResponse>() {
             @Override
             public void onResponse(Call<FutureJobResponse> call, Response<FutureJobResponse> response) {
+                stopRefreshing();
                 Log.d(TAG, "Response: " + response);
-                if (swipeRefreshLayout != null) {
-                    swipeRefreshLayout.setRefreshing(false);
+
+                if (!response.isSuccessful() || response.body() == null) {
+                    showToast("Error fetching jobs: " + response.code());
+                    return;
                 }
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Booking> bookingList = response.body().getBookings();
 
-                    if (bookingList == null || bookingList.isEmpty()) {
-                        Toast.makeText(context, "No future jobs available", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+                List<Booking> bookingList = response.body().getBookings();
 
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                    recyclerView.setAdapter(new FutureJobAdapter(bookingList,context, new FutureJobAdapter.OnItemClickListener() {
+                if (bookingList == null || bookingList.isEmpty()) {
+                    showToast("No future jobs available");
+                    return;
+                }
+
+                // If adapter is already set, just update the list
+                if (adapter == null) {
+                    adapter = new FutureJobAdapter(bookingList, context, new FutureJobAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(Booking booking) {
                             JobModal jobModal = new JobModal(context);
@@ -73,22 +76,33 @@ public class FutureJobManager {
 
                         @Override
                         public void onStartClick(Booking booking) {
-                            // Handle start click
+                            // Handle start click (if required)
                         }
-                    }));
+                    });
+
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerView.setAdapter(adapter);
                 } else {
-                    Toast.makeText(context, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    adapter.notifyDataSetChanged(); // Refresh only data instead of recreating adapter
                 }
             }
 
             @Override
             public void onFailure(Call<FutureJobResponse> call, Throwable t) {
-                if (swipeRefreshLayout != null) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-                Toast.makeText(context, "Failed to fetch jobs. Check internet connection.", Toast.LENGTH_SHORT).show();
+                stopRefreshing();
+                showToast("Network error: Please check your internet connection.");
+                Log.e(TAG, "API Call Failed", t);
             }
         });
     }
 
+    private void showToast(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void stopRefreshing() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
 }

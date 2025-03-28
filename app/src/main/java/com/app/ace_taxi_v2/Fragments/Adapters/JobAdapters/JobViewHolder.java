@@ -75,11 +75,18 @@ public class JobViewHolder extends RecyclerView.ViewHolder {
         subAddressTextView.setText(firstDestination);
         pickupAddress.setText(lastPickup);
         destinationAddress.setText(lastDestination);
+
+
     }
 
     private void setupBasicInfo(TodayBooking job) {
         customerTextView.setText(String.valueOf(job.getPassengers()));
         price.setText("£" + job.getPrice());
+
+        if("Account".equals(job.getScopeText())){
+            price.setText("ACC");
+            price.setTextColor(ContextCompat.getColor(context,R.color.red));
+        }
     }
 
     private void setupButtonListeners(TodayBooking job, int position) {

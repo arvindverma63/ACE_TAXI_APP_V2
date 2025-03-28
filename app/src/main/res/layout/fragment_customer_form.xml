@@ -51,60 +51,31 @@
         android:layout_height="1dp"
         android:background="@color/gray"
         android:layout_marginBottom="16dp" />
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_info"
-        style="@style/SettingText"
-        android:layout_margin="10dp"
-        android:textStyle="italic"
-        android:textSize="15sp"
-        android:drawablePadding="10dp"
-
-        android:text="Double tap to select time picker"/>
     <!-- FROM Time Picker -->
-    <com.google.android.material.textfield.TextInputLayout
+<com.google.android.material.button.MaterialButton
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="FROM: 07:00"
+    android:backgroundTint="@color/white"
+    android:textColor="@color/black"
+    app:strokeColor="@color/gray"
+    app:strokeWidth="1dp"
+    app:cornerRadius="8dp"
+    android:padding="20dp"
+    android:id="@+id/from_time_edit_text"/>
+
+
+    <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:boxBackgroundMode="outline"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:boxStrokeColor="@color/primaryColor">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/from_time_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="FROM: 08:00"
-            style="@style/TextBG"
-            android:textColorHint="@color/gray"
-            android:gravity="center" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- TO Time Picker -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:boxBackgroundMode="outline"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp"
-        app:boxStrokeColor="@color/primaryColor">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/to_time_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="TO: 08:00"
-            style="@style/TextBG"
-            android:textColorHint="@color/gray"
-            android:gravity="center" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:text="TO: 08:00"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        app:strokeColor="@color/gray"
+        app:strokeWidth="1dp"
+        app:cornerRadius="8dp"
+        android:padding="20dp"
+        android:id="@+id/to_time_edit_text"/>
 
     <!-- Note Input -->
     <com.google.android.material.textfield.TextInputLayout

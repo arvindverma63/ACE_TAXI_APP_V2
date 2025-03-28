@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment {
     private TextView onlineStatusLabel,set_job_status;
     private LocationPermissions locationPermissions;
     private TextView pickup_address, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
-    private CardView current_job_card;
+    private MaterialCardView current_job_card;
     private ImageView nav_icon;
     private View header_view;
     private TextView user_email,user_name;
@@ -226,17 +226,21 @@ public class HomeFragment extends Fragment {
                         passenger_count.setText(String.valueOf(booking.getPassengers()));
                         passenger_name.setText(booking.getPassengerName());
 
-                        current_job_card.setVisibility(getView().VISIBLE);
-                        set_job_status.setText("Active Job");
-                        activeJobStatus.setVisibility(getView().GONE);
+                        if("Account".equals(booking.getScopeText())){
+                            price.setText("ACC");
+                            price.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
+                        }
 
                         current_job_card.setOnClickListener(v -> {
                             JobModal jobModal = new JobModal(getContext());
                             jobModal.JobViewForTodayJob(finalBookingId1);
                         });
+                        Log.e("current Job card vissble ","visiable");
+                        current_job_card.setVisibility(getView().VISIBLE);
+                        set_job_status.setText("Active Job");
+                        activeJobStatus.setVisibility(getView().GONE);
                     }else {
-                        current_job_card.setVisibility(getView().GONE);
-                        set_job_status.setText("No Active Job");
+//
                     }
                 }
             }
