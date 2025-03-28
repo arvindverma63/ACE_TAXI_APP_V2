@@ -104,7 +104,6 @@ public class JobViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onSuccess(com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
                 statusHandler.updateButtonStatus(startButton, job, bookingInfo.getStatus());
-                adapter.updateAndSort(); // Re-sort after status update
             }
 
             @Override
@@ -140,7 +139,6 @@ public class JobViewHolder extends RecyclerView.ViewHolder {
                 listener.onStartClick(job);
                 startButton.setText("Started");
                 notifyItemChanged(position);
-                adapter.updateAndSort(); // Re-sort after starting the booking
             }
 
         } catch (Exception e) {

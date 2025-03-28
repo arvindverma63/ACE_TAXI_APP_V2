@@ -6,6 +6,7 @@ import com.app.ace_taxi_v2.Models.AvailabilityRequest;
 import com.app.ace_taxi_v2.Models.AvailabilityResponse;
 import com.app.ace_taxi_v2.Models.BookingRequest.BookingCompleteRequest;
 import com.app.ace_taxi_v2.Models.BookingRequest.BookingCompleteResponse;
+import com.app.ace_taxi_v2.Models.Dashtotal;
 import com.app.ace_taxi_v2.Models.DriverShiftResponse;
 import com.app.ace_taxi_v2.Models.EarningResponse;
 import com.app.ace_taxi_v2.Models.Expense;
@@ -147,6 +148,9 @@ public interface ApiService {
     @GET("/api/DriverApp/DeleteAvailability")
     Call<Void> deleteAvailablities(@Header("Authorization") String token,
                                    @Query("id") int id);
+
+    @GET("/api/DriverApp/DashTotals")
+    Call<Dashtotal> getDashTotal(@Header("Authorization") String token);
 
 
 }

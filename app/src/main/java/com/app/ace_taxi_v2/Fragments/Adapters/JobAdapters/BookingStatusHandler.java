@@ -57,7 +57,7 @@ public class BookingStatusHandler {
                     if (statusBookingId == job.getBookingId()) {
                         startButton.setText("Active");
                         startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.dark_blue));
-                        updateDetailedStatus(startButton);
+//                        updateDetailedStatus(startButton);
                     }
                     break;
             }
@@ -84,27 +84,27 @@ public class BookingStatusHandler {
         }
     }
 
-    private void updateDetailedStatus(MaterialButton statusText) {
-        String bookingShift = currentBookingSession.getBookingShift();
-        if (bookingShift == null) return;
-
-        switch (bookingShift) {
-            case "3003":
-                statusText.setText("On Route");
-                statusText.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_red));
-                break;
-            case "3004":
-                statusText.setText("On Pickup");
-                statusText.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_blue));
-                break;
-            case "3005":
-                statusText.setText("POB");
-                statusText.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.green));
-                break;
-            case "3006":
-                statusText.setText("STC");
-                statusText.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_orange));
-                break;
-        }
-    }
+//    private void updateDetailedStatus(MaterialButton statusText) {
+//        String bookingShift = currentBookingSession.getBookingShift();
+//        if (bookingShift == null) return;
+//
+//        switch (bookingShift) {
+//            case "3003":
+//                statusText.setText("On Route");
+//                statusText.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_red));
+//                break;
+//            case "3004":
+//                statusText.setText("On Pickup");
+//                statusText.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_blue));
+//                break;
+//            case "3005":
+//                statusText.setText("POB");
+//                statusText.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.green));
+//                break;
+//            case "3006":
+//                statusText.setText("STC");
+//                statusText.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_orange));
+//                break;
+//        }
+//    }
 }

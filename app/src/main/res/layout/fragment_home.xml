@@ -372,6 +372,7 @@
 
                         <TextView
                             style="@style/TextBG"
+                            android:id="@+id/today_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
@@ -431,6 +432,7 @@
                             style="@style/TextBG"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/today_earning"
                             android:layout_marginStart="12dp"
                             android:text="£0.00"
                             android:textSize="16sp"
@@ -489,6 +491,7 @@
                             style="@style/TextBG"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/weekly_count"
                             android:layout_marginStart="12dp"
                             android:text="0"
                             android:textSize="16sp"
@@ -548,6 +551,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
                             android:text="£0.00"
+                            android:id="@+id/weekly_earning"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 

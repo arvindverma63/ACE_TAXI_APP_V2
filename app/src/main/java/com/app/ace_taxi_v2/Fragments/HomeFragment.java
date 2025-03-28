@@ -32,6 +32,8 @@ import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
+import com.app.ace_taxi_v2.Logic.dashboard.DashboardTotalApi;
+import com.app.ace_taxi_v2.Models.Dashtotal;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.card.MaterialCardView;
@@ -51,7 +53,7 @@ public class HomeFragment extends Fragment {
     private MaterialCardView current_job_card;
     private ImageView nav_icon;
     private View header_view;
-    private TextView user_email,user_name;
+    private TextView user_email,user_name,today_count,weekly_count,today_earning,weekly_earning;
     private MaterialCardView activeJobStatus;
     private MaterialCardView profile_btn,view_expenses,add_expenses,upload_document,message_btn,phone_btn,settings_btn,jobs_btn,avail_btn,chat_btn,earning_report_btn,statement_report_btn;
     @Override
@@ -86,6 +88,10 @@ public class HomeFragment extends Fragment {
         chat_btn = view.findViewById(R.id.chat_btn);
         earning_report_btn = view.findViewById(R.id.earning_report_btn);
         statement_report_btn = view.findViewById(R.id.statement_report_btn);
+        today_count = view.findViewById(R.id.today_count);
+        weekly_count = view.findViewById(R.id.weekly_count);
+        today_earning = view.findViewById(R.id.today_earning);
+        weekly_earning = view.findViewById(R.id.weekly_earning);
 
         ProfileHelper profileHelper = new ProfileHelper(getContext(),R.id.fragment_container);
         profileHelper.profileEvent(profile_btn,upload_document,add_expenses,view_expenses);
@@ -109,7 +115,7 @@ public class HomeFragment extends Fragment {
         dashboardHelper.updateMessage(user_name,user_email);
 
         getCurrentBooking(); // Load booking details
-
+        updateDash();
 
         locationSwitch = view.findViewById(R.id.online_toggle);
         onlineStatusLabel = view.findViewById(R.id.online_status_label);
@@ -292,5 +298,23 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    public void updateDash(){
+        DashboardTotalApi dashboardTotalApi = new DashboardTotalApi(getContext());
+        dashboardTotalApi.getData(new DashboardTotalApi.DashCallback() {
+            @Override
+            public void onSuccess(Dashtotal dashtotal) {
+                today_count.setText(dashtotal.getTotalJobCountToday()+"");
+                today_earning.setText("£"+dashtotal.getEarningsTotalToday());
+                weekly_count.setText(dashtotal.getTotalJobCountWeek()+"");
+                weekly_earning.setText("£"+dashtotal.getEarningsTotalWeek());
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
 
 }

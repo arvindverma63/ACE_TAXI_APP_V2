@@ -22,7 +22,31 @@
             android:id="@+id/toolbar_header"
             style="@style/ActionBar"
             android:backgroundTint="#005f75"
-            app:navigationIcon="@drawable/ic_back_arrow" />
+            app:navigationIcon="@drawable/ic_back_arrow" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextBG"
+                    android:layout_width="124dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="start"
+                    android:text="Settings"
+                    android:textSize="20dp" />
+
+                <TextView
+                    style="@style/TextBG"
+                    android:layout_width="106dp"
+                    android:layout_height="wrap_content"
+                    android:text="version 2.8"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
 
 
 
