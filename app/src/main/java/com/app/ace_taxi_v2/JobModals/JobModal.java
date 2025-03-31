@@ -281,11 +281,14 @@ public class JobModal {
         String shift = currentBookingSession.getBookingShift();
 
         try {
-            if(bookingId != Integer.parseInt(currentBookingSession.getBookingId())){
+            if(bookingId == Integer.parseInt(currentBookingSession.getBookingId())){
+                status_controller_layout.setVisibility(View.VISIBLE);
+            }else{
                 status_controller_layout.setVisibility(View.GONE);
             }
         }catch (Exception e){
             e.printStackTrace();
+            status_controller_layout.setVisibility(View.GONE);
         }
 
         switch (shift) {
