@@ -17,7 +17,7 @@
 
         <TextView
             android:id="@+id/text_day"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingEnd="8dp"
@@ -48,17 +48,18 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/action"
-            android:layout_width="wrap_content"
+            android:layout_width="65dp"
             android:layout_height="36dp"
-            android:text="View"
             android:layout_gravity="center"
+            android:backgroundTint="@color/trans"
             android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:text="View"
+            android:textColor="@color/red"
             android:textSize="14sp"
             app:cornerRadius="1000dp"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:paddingHorizontal="16dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="?attr/colorPrimary"/>
+            app:strokeColor="@color/red"
+            app:strokeWidth="1dp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

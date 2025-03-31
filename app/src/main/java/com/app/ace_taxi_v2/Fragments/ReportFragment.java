@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class ReportFragment extends Fragment {
     private SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
     public String startDate, endDate;
     public TextView total_cash,total_epay;
+    public ImageView arrowBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,11 +71,19 @@ public class ReportFragment extends Fragment {
         date_range_button = view.findViewById(R.id.date_range_button);
         total_cash = view.findViewById(R.id.total_cash);
         total_epay = view.findViewById(R.id.total_epay);
-
+        arrowBack = view.findViewById(R.id.arrow_back);
         webView = view.findViewById(R.id.google_pie_chart);
         recyclarView = view.findViewById(R.id.recycler_view);
 
         date_range_button.setOnClickListener(v -> showDateRangePicker());
+        arrowBack.setOnClickListener(v -> {
+            Fragment select = new ReportPageFragment();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager(); // Get FragmentManager from the current activity
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, select); // Replace with the correct container ID
+            fragmentTransaction.addToBackStack(null); // Optional: Adds to back stack for navigation
+            fragmentTransaction.commit();
+        });
 
 
 

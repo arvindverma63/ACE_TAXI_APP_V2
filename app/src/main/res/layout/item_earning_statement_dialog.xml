@@ -227,7 +227,7 @@
             android:id="@+id/close_btn"
             android:textSize="14sp"
             app:cornerRadius="8dp"
-            style="@style/Widget.Material3.Button"
+            android:backgroundTint="@color/red"
             android:paddingHorizontal="16dp"/>
 
     </LinearLayout>

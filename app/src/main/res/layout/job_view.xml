@@ -284,6 +284,36 @@
                 android:layout_marginVertical="12dp"
                 android:background="@color/gray" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/status_controller_layout"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Job Status"
+                    android:textStyle="bold"
+                    android:id="@+id/set_job_status"
+                    style="@style/TextBG"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change Status"
+                    android:id="@+id/change_status"
+                    android:textStyle="bold"
+                    android:textColor="@color/blue"/>
+
+            </LinearLayout>
+
             <!-- Action Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/complete_button"

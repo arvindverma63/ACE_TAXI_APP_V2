@@ -21,6 +21,12 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back_arrow"
+                    style="@style/IconTint"
+                    android:id="@+id/arrow_back"/>
 
                 <!-- Date Range Button -->
                 <com.google.android.material.button.MaterialButton
@@ -97,7 +103,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ePAYMENT"
+                        android:text="VIEW"
                         android:textStyle="bold"
                         android:padding="8dp" />
                 </TableRow>

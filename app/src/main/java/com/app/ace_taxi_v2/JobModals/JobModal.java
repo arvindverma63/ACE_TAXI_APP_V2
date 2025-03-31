@@ -19,16 +19,20 @@ import androidx.core.content.ContextCompat;
 
 import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Logic.ArrivedJobApi;
 import com.app.ace_taxi_v2.Logic.BookingCompleteApi;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.JobResponseApi;
+import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
 import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+
+import org.w3c.dom.Text;
 
 public class JobModal {
     public Context context;
@@ -264,6 +268,45 @@ public class JobModal {
         MaterialCardView payment_card = dialogView.findViewById(R.id.payment_status_card);
         MaterialCardView cardView = dialogView.findViewById(R.id.card_view);
         MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
+        TextView job_status_change = dialogView.findViewById(R.id.change_status);
+        TextView set_job_status = dialogView.findViewById(R.id.set_job_status);
+        job_status_change.setOnClickListener(v -> {
+            JobStatusModal jobStatusModal = new JobStatusModal(context);
+            dialog.dismiss();
+            jobStatusModal.openModal(bookingId);
+        });
+        CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
+        String shift = currentBookingSession.getBookingShift();
+
+        switch (shift) {
+            case "3003":
+                set_job_status.setText("On Route");
+                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.red));
+                break;
+            case "3004":
+                set_job_status.setText("At Pickup");
+                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.blue));
+                break;
+            case "3005":
+                set_job_status.setText("POB");
+                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.green));
+                break;
+            case "3006":
+                set_job_status.setText("STC");
+                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.orange));
+                break;
+//            case "3007":
+//                set_job_status.setText("On Route");
+//                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.red));
+//                break;
+            case "3008":
+                set_job_status.setText("No job");
+                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.black));
+                break;
+            default:
+                // Optional: Log unknown status for debugging
+                break;
+        }
 
         if (!showCompleteButton) complete_button.setVisibility(View.GONE);
 
@@ -415,4 +458,6 @@ public class JobModal {
         backIcon.setOnClickListener(v -> fullScreenDialog.dismiss());
         fullScreenDialog.show();
     }
+
+
 }
