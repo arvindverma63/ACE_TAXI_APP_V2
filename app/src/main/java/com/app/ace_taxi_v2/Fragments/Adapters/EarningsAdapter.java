@@ -9,9 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Components.EarningStatementDialog;
 import com.app.ace_taxi_v2.Models.EarningResponse;
 import com.app.ace_taxi_v2.R;
+import com.google.android.material.button.MaterialButton;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -19,8 +22,9 @@ import java.util.Locale;
 
 public class EarningsAdapter extends RecyclerView.Adapter<EarningsAdapter.EarningsViewHolder> {
     private final List<EarningResponse> earningsList;
-    private final SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private final SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
     private final SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+    private final DecimalFormat currencyFormat = new DecimalFormat("£#,##0.00");
 
     public EarningsAdapter(List<EarningResponse> earningsList) {
         this.earningsList = earningsList;
@@ -29,42 +33,64 @@ public class EarningsAdapter extends RecyclerView.Adapter<EarningsAdapter.Earnin
     @NonNull
     @Override
     public EarningsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_earning, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_earning, parent, false);
         return new EarningsViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EarningsViewHolder holder, int position) {
-        EarningResponse earningResponse = earningsList.get(position);
+        EarningResponse earning = earningsList.get(position);
 
-        // Format Date
-        String formattedDate = formatDate(earningResponse.getDate());
-        holder.day.setText(formattedDate);
+        // Bind data
+        holder.day.setText(formatDate(earning.getDate()));
 
-        // Set values with null checks
-        holder.jobs.setText(String.valueOf(earningResponse.getAccJobsCount()));
-        holder.cash.setText(formatCurrency(earningResponse.getCashTotal()));
-        holder.ePayment.setText(formatCurrency(earningResponse.getAccTotal()));
+        // Calculate total jobs
+        int totalJobs = earning.getCashJobsCount() + earning.getAccJobsCount() + earning.getRankJobsCount();
+        holder.jobs.setText(String.valueOf(totalJobs));
+
+        holder.cash.setText(currencyFormat.format(earning.getNetTotal()));
+
+        // Set up dialog button
+        holder.action.setOnClickListener(v -> {
+            EarningStatementDialog dialog = new EarningStatementDialog(v.getContext());
+            dialog.openDialog(
+                    earning.getDate(),
+                    earning.getUserId(),
+                    earning.getCashTotal(),
+                    earning.getAccTotal(),
+                    earning.getRankTotal(),
+                    earning.getCommsTotal(),
+                    earning.getGrossTotal(),
+                    earning.getNetTotal(),
+                    earning.getCashJobsCount(),
+                    earning.getAccJobsCount(),
+                    earning.getRankJobsCount(),
+                    earning.getCashMilesCount(),
+                    earning.getAccMilesCount(),
+                    earning.getRankMilesCount()
+            );
+        });
     }
 
     @Override
     public int getItemCount() {
-        return earningsList != null ? earningsList.size() : 0; // Prevents potential NullPointerException
+        return earningsList != null ? earningsList.size() : 0;
     }
 
     public static class EarningsViewHolder extends RecyclerView.ViewHolder {
-        TextView day, jobs, cash, ePayment;
+        TextView day, jobs, cash;
+        MaterialButton action;
 
         public EarningsViewHolder(@NonNull View itemView) {
             super(itemView);
             day = itemView.findViewById(R.id.text_day);
             jobs = itemView.findViewById(R.id.text_jobs);
             cash = itemView.findViewById(R.id.text_cash);
-            ePayment = itemView.findViewById(R.id.text_ePayment);
+            action = itemView.findViewById(R.id.action);
         }
     }
 
-    // Format date from API response
     private String formatDate(String dateStr) {
         if (!TextUtils.isEmpty(dateStr)) {
             try {
@@ -73,11 +99,15 @@ public class EarningsAdapter extends RecyclerView.Adapter<EarningsAdapter.Earnin
                 e.printStackTrace();
             }
         }
-        return "N/A"; // Default if date is missing
+        return "N/A";
     }
 
-    // Format currency with two decimal places
-    private String formatCurrency(double amount) {
-        return String.format(Locale.getDefault(), "£%.2f", amount);
+    // Method to update data
+    public void updateEarnings(List<EarningResponse> newEarnings) {
+        if (earningsList != null) {
+            earningsList.clear();
+            earningsList.addAll(newEarnings);
+            notifyDataSetChanged();
+        }
     }
 }

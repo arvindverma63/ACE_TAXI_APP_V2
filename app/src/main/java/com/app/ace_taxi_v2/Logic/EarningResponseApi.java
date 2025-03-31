@@ -34,7 +34,7 @@ public class EarningResponseApi {
         configureWebView();
     }
 
-    public void getResponse(String from, String to, RecyclerView recyclerView) {
+    public void getResponse(String from, String to, RecyclerView recyclerView,EarningCallback earningCallback) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
         int userId = sessionManager.getUserId(); // Assuming session manager provides the user ID
@@ -59,6 +59,8 @@ public class EarningResponseApi {
                 if (response.isSuccessful() && response.body() != null) {
                     List<EarningResponse> earningsList = response.body();
                     Log.d(TAG, "Earnings Report Response: " + earningsList);
+
+                    earningCallback.onSuccess(earningsList);
 
                     if (earningsList.isEmpty()) {
                         Toast.makeText(context, "No earnings data available for the selected period.", Toast.LENGTH_SHORT).show();
@@ -144,5 +146,10 @@ public class EarningResponseApi {
             Log.e(TAG, "WebView is null. Cannot execute JavaScript.");
             Sentry.captureMessage("WebView is null. Cannot execute JavaScript.");
         }
+    }
+
+    public interface EarningCallback{
+        void onSuccess(List<EarningResponse> responses);
+        void onError(String error);
     }
 }

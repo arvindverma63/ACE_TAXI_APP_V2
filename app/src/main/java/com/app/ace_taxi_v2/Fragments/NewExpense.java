@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -123,30 +125,78 @@ public class NewExpense extends Fragment {
     }
 
     public void addRecord() {
-        // Get the original date string in dd/MM/yyyy format
+        // Get values from input fields
         String originalDate = dateEditText.getText().toString().trim();
+        String amountText = amout.getText().toString().trim();
+        String description = descriptionEditText.getText().toString().trim();
+        String selectedCategory = categoryDropdown.getText().toString().trim();
+
+        // Validate Date
+        if (originalDate.isEmpty()) {
+            dateEditText.setError("Please select a date");
+            dateEditText.requestFocus();
+            return;
+        }
 
         // Convert to ISO 8601 format
         String isoDate = convertToISO8601(originalDate);
         if (isoDate == null) {
-            // Handle conversion error (e.g., show an error message to the user)
+            Toast.makeText(getContext(), "Invalid date format", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String amountText = amout.getText().toString().trim();
+        // Validate Amount
         if (amountText.isEmpty()) {
-            // Handle empty amount input here
+            amout.setError("Amount is required");
+            amout.requestFocus();
             return;
         }
-        double amount = Double.parseDouble(amountText);
 
-        String description = descriptionEditText.getText().toString().trim();
-        String selectedCategory = categoryDropdown.getText().toString().trim();
-        int categoryId = getCategoryId(selectedCategory);  // Your helper mapping method
+        double amount;
+        try {
+            amount = Double.parseDouble(amountText);
+            if (amount <= 0) {
+                amout.setError("Enter a valid amount");
+                amout.requestFocus();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            amout.setError("Invalid number format");
+            amout.requestFocus();
+            return;
+        }
 
+
+        // Validate Category
+        if (selectedCategory.isEmpty() || getCategoryId(selectedCategory) == -1) {
+            categoryDropdown.setError("Please select a valid category");
+            categoryDropdown.requestFocus();
+            return;
+        }
+
+        int categoryId = getCategoryId(selectedCategory);
+
+        // Proceed with API Call
         AddExpenses addExpenses = new AddExpenses(getContext());
-        addExpenses.addExpnses(isoDate, description, amount, categoryId);
+        addExpenses.addExpnses(isoDate, description, amount, categoryId, new AddExpenses.ExpensesCallback() {
+            @Override
+            public void onSuccess(Boolean ok) {
+                if (ok) {
+                    Toast.makeText(getContext(), "Expense recorded successfully", Toast.LENGTH_SHORT).show();
+                    // Clear input fields
+                    amout.setText("");
+                    descriptionEditText.setText("");
+                    categoryDropdown.setText("");
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getContext(), "Error: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
 
     /**

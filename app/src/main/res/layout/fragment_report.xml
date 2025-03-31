@@ -26,14 +26,16 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/date_range_button"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_weight="1"
                     android:text="Select Date Range"
-                    android:padding="20dp"
-                    android:backgroundTint="@color/light_gray"
+                    android:padding="10dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/black"
+                    android:backgroundTint="@color/white"
                     android:textColor="@android:color/black"
                     android:drawableRight="@drawable/ic_calender"
-                    app:cornerRadius="30dp"
+                    app:cornerRadius="10dp"
                     android:paddingHorizontal="16dp"
                     android:gravity="center" />
                 <!-- Spacer -->
@@ -104,8 +106,38 @@
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     style="@style/MainBG"
-                    android:layout_height="575dp" />
+                    android:layout_height="325dp" />
             </TableLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            style="@style/CardBG">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical">
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/total_cash"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="Total Cash"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/total_epay"
+                    android:textStyle="bold"
+                    android:text="Total E-Pay"
+                    android:textSize="16sp"/>
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
+
 </ScrollView>

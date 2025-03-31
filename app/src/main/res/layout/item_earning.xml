@@ -1,41 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/MainBG"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    app:cardCornerRadius="0dp"
+    app:cardElevation="4dp"
+    style="@style/CardBG">
 
-    <TextView
-        android:id="@+id/text_day"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        style="@style/TextBG"
-        android:text="Day"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/text_jobs"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        style="@style/TextBG"
-        android:text="Jobs" />
+        <TextView
+            android:id="@+id/text_day"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingEnd="8dp"
+            android:text="Day"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/text_cash"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        style="@style/TextBG"
-        android:text="Cash" />
+        <TextView
+            android:id="@+id/text_jobs"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingEnd="5dp"
+            android:text="Jobs"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/text_ePayment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        style="@style/TextBG"
-        android:text="ePayment" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/text_cash"
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingEnd="8dp"
+            android:text="Cash"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="View"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="14sp"
+            app:cornerRadius="1000dp"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:paddingHorizontal="16dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorPrimary"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

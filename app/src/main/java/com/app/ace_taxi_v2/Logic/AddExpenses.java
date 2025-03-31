@@ -25,7 +25,7 @@ public class AddExpenses {
         this.context = context;
     }
 
-    public void addExpnses(String date, String description, double amount, int category) {
+    public void addExpnses(String date, String description, double amount, int category,ExpensesCallback expensesCallback) {
         // Get session data
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
@@ -48,8 +48,9 @@ public class AddExpenses {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Log.d(TAG, "Response code: " + response.code());
 
-                if (response.isSuccessful()) {
+                if (response.code() == 200) {
                     Toast.makeText(context, "Added Successfully", Toast.LENGTH_SHORT).show();
+                    expensesCallback.onSuccess(true);
                 } else {
                     Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
 
@@ -68,5 +69,10 @@ public class AddExpenses {
         });
 
         customDialog.dismissProgressDialog();
+    }
+
+    public interface ExpensesCallback{
+        void onSuccess(Boolean ok);
+        void onError(String error);
     }
 }

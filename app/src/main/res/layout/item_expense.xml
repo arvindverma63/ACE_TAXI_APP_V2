@@ -5,9 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="0dp"
     style="@style/CardBG"
-    android:layout_margin="8dp"
     android:padding="12dp">
 
     <LinearLayout
