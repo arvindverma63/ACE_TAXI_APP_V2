@@ -1,73 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="0dp"
-    style="@style/CardBG"
-    android:padding="12dp">
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/white"
+    style="@style/CardBG">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="8dp">
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <!-- Expense Date (Clickable & Blue) -->
         <TextView
             android:id="@+id/expenseDate"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:minHeight="48dp"
-            android:text="01 Jan"
-            android:textColor="@color/blue"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:maxLength="11"
-            tools:ignore="TouchTargetSizeCheck" />
-
-        <!-- Expense Category (Grey) -->
-        <TextView
-            android:id="@+id/expenseCategory"
-            android:layout_width="54dp"
-            android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:text="Food"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/expenseDescription"
-            android:layout_width="0dp"
+            android:layout_width="113dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Lunch at Cafe"
-            android:textSize="14sp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            style="@style/TextBG"
-            android:paddingStart="8dp"/>
-
-        <!-- Expense Amount (Bold & Green) -->
+            android:gravity="center"
+            android:maxLength="11"
+            android:text="Day"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/expenseCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Jobs"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/expenseAmount"
-            android:layout_width="68dp"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:paddingEnd="8dp"
-            android:text="£15.50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Cash"
             android:textColor="@color/green"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
-        <!-- Delete Button (Red) -->
-
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_view"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/red"
+            android:gravity="center"
+            android:text="View"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:cornerRadius="50dp"
+            app:strokeColor="@color/red"
+            app:strokeWidth="1dp"/>
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -270,6 +271,7 @@ public class JobModal {
         MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
         TextView job_status_change = dialogView.findViewById(R.id.change_status);
         TextView set_job_status = dialogView.findViewById(R.id.set_job_status);
+        LinearLayout status_controller_layout = dialogView.findViewById(R.id.status_controller_layout);
         job_status_change.setOnClickListener(v -> {
             JobStatusModal jobStatusModal = new JobStatusModal(context);
             dialog.dismiss();
@@ -277,6 +279,14 @@ public class JobModal {
         });
         CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
         String shift = currentBookingSession.getBookingShift();
+
+        try {
+            if(bookingId != Integer.parseInt(currentBookingSession.getBookingId())){
+                status_controller_layout.setVisibility(View.GONE);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         switch (shift) {
             case "3003":
@@ -399,12 +409,13 @@ public class JobModal {
         fullScreenDialog.setContentView(dialogView);
         fullScreenDialog.setCancelable(true);
 
+
+
         TextView etWaitingTime = dialogView.findViewById(R.id.etWaitingTime);
         TextView etParking = dialogView.findViewById(R.id.etParking);
         TextView etPrice = dialogView.findViewById(R.id.etPrice);
         TextView tip = dialogView.findViewById(R.id.etTip);
         Button btnSubmit = dialogView.findViewById(R.id.btnSubmit);
-
         setupCloseButton(dialogView, fullScreenDialog, R.id.btnClose);
 
         btnSubmit.setOnClickListener(v -> {
@@ -422,8 +433,10 @@ public class JobModal {
                 public void onSuccess(GetBookingInfo bookingInfo) {
                     BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
                     bottomSheetDialogs.openJobCompleted(bookingInfo.getPassengerName(), bookingInfo.getPickupAddress());
+                    if("Account".equals(bookingInfo.getScopeText())){
+                        etPrice.setEnabled(false);
+                    }
                 }
-
                 @Override
                 public void onfailer(String error) {
                     Log.e(TAG, "Failed to get booking info: " + error);

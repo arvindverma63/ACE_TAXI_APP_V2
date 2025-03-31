@@ -1,30 +1,35 @@
 package com.app.ace_taxi_v2.Fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
+import android.provider.MediaStore;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.app.ace_taxi_v2.Logic.Service.FileUtils;
 import com.app.ace_taxi_v2.Logic.UploadDocumentApi;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -32,9 +37,11 @@ import okhttp3.RequestBody;
 public class UploadDocumentFragment extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int CAMERA_REQUEST = 2;
+    private static final int CAMERA_PERMISSION_REQUEST = 100;
     private Uri imageUri;
     private ImageView selectedUploadButton;
-    private int selectedType = -1; // Track selected document type
+    private int selectedType = -1;
 
     private Map<ImageView, Integer> uploadButtonToTypeMap = new HashMap<>();
     private Map<ImageView, ImageView> uploadButtonToCardMap = new HashMap<>();
@@ -53,7 +60,7 @@ public class UploadDocumentFragment extends Fragment {
     }
 
     private void setupImageUploaders(View view) {
-        // Upload buttons (icons)
+        // Same as your original setup
         ImageView licenceUploadButton = view.findViewById(R.id.select_lisence_img);
         ImageView insuranceUploadButton = view.findViewById(R.id.insurance_image);
         ImageView dbsCertUploadButton = view.findViewById(R.id.dbs_cert_image);
@@ -62,7 +69,6 @@ public class UploadDocumentFragment extends Fragment {
         ImageView safeguardingCertUploadButton = view.findViewById(R.id.safe_guarding_cert_image);
         ImageView firstAidCertUploadButton = view.findViewById(R.id.first_aid_cert_image);
 
-        // Display areas (where the selected image will be set)
         ImageView licenceDisplay = view.findViewById(R.id.licence_card);
         ImageView insuranceDisplay = view.findViewById(R.id.insurance_card);
         ImageView dbsCertDisplay = view.findViewById(R.id.dbs_cert_card);
@@ -71,7 +77,6 @@ public class UploadDocumentFragment extends Fragment {
         ImageView safeguardingCertDisplay = view.findViewById(R.id.safe_guarding_cert_card);
         ImageView firstAidCertDisplay = view.findViewById(R.id.first_aid_cert_card);
 
-        // Map upload buttons to corresponding display areas
         uploadButtonToCardMap.put(licenceUploadButton, licenceDisplay);
         uploadButtonToCardMap.put(insuranceUploadButton, insuranceDisplay);
         uploadButtonToCardMap.put(dbsCertUploadButton, dbsCertDisplay);
@@ -80,21 +85,19 @@ public class UploadDocumentFragment extends Fragment {
         uploadButtonToCardMap.put(safeguardingCertUploadButton, safeguardingCertDisplay);
         uploadButtonToCardMap.put(firstAidCertUploadButton, firstAidCertDisplay);
 
-        // Map upload buttons to document types (0-7)
-        uploadButtonToTypeMap.put(licenceUploadButton, 4); // Driver Licence
-        uploadButtonToTypeMap.put(insuranceUploadButton, 0); // Insurance
-        uploadButtonToTypeMap.put(dbsCertUploadButton, 2); // DBS
-        uploadButtonToTypeMap.put(vehicleLicenceUploadButton, 3); // Vehicle Badge
-        uploadButtonToTypeMap.put(driversLicenceUploadButton, 4); // Driver Licence
-        uploadButtonToTypeMap.put(safeguardingCertUploadButton, 5); // Safe Guarding
-        uploadButtonToTypeMap.put(firstAidCertUploadButton, 6); // First Aid Cert
+        uploadButtonToTypeMap.put(licenceUploadButton, 4);
+        uploadButtonToTypeMap.put(insuranceUploadButton, 0);
+        uploadButtonToTypeMap.put(dbsCertUploadButton, 2);
+        uploadButtonToTypeMap.put(vehicleLicenceUploadButton, 3);
+        uploadButtonToTypeMap.put(driversLicenceUploadButton, 4);
+        uploadButtonToTypeMap.put(safeguardingCertUploadButton, 5);
+        uploadButtonToTypeMap.put(firstAidCertUploadButton, 6);
 
-        // Set click listeners on upload buttons
         for (ImageView uploadButton : uploadButtonToCardMap.keySet()) {
             uploadButton.setOnClickListener(v -> {
                 selectedUploadButton = uploadButton;
                 selectedType = uploadButtonToTypeMap.get(uploadButton);
-                openImageChooser();
+                openImageOptions(); // Updated to offer both camera and gallery
             });
         }
     }
@@ -107,7 +110,36 @@ public class UploadDocumentFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    public void openImageChooser() {
+    private void openImageOptions() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
+        } else {
+            // Show dialog to choose between camera and gallery
+            String[] options = {"Take Photo", "Choose from Gallery"};
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+            builder.setTitle("Select Image Source");
+            builder.setItems(options, (dialog, which) -> {
+                if (which == 0) {
+                    openCamera();
+                } else if (which == 1) {
+                    openImageChooser();
+                }
+            });
+            builder.setNegativeButton("Cancel", null);
+            builder.show();
+        }
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivityForResult(intent, CAMERA_REQUEST);
+        } else {
+            Toast.makeText(getContext(), "No camera app found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openImageChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -115,16 +147,40 @@ public class UploadDocumentFragment extends Fragment {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openImageOptions(); // Re-show options after permission is granted
+            } else {
+                Toast.makeText(getContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
+                openImageChooser(); // Fallback to gallery
+            }
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            if (selectedUploadButton != null) {
-                // Get the corresponding display ImageView
-                ImageView displayImageView = uploadButtonToCardMap.get(selectedUploadButton);
+        if (resultCode == Activity.RESULT_OK && selectedUploadButton != null) {
+            ImageView displayImageView = uploadButtonToCardMap.get(selectedUploadButton);
+            if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+                imageUri = data.getData();
                 if (displayImageView != null) {
-                    displayImageView.setImageURI(imageUri); // Set selected image to display area
+                    displayImageView.setImageURI(imageUri);
                     uploadImage(imageUri, selectedType);
+                }
+            } else if (requestCode == CAMERA_REQUEST && data != null) {
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Bitmap bitmap = (Bitmap) extras.get("data");
+                    if (bitmap != null) {
+                        imageUri = FileUtils.saveBitmapToFile(requireContext(), bitmap);
+                        if (displayImageView != null && imageUri != null) {
+                            displayImageView.setImageURI(imageUri);
+                            uploadImage(imageUri, selectedType);
+                        }
+                    }
                 }
             }
         }
@@ -136,7 +192,7 @@ public class UploadDocumentFragment extends Fragment {
             return;
         }
 
-        File file = FileUtils.getFileFromUri(getContext(), imageUri); // Convert URI to File
+        File file = FileUtils.getFileFromUri(getContext(), imageUri);
         if (file == null || !file.exists()) {
             Toast.makeText(getContext(), "File not found!", Toast.LENGTH_SHORT).show();
             return;
@@ -150,5 +206,4 @@ public class UploadDocumentFragment extends Fragment {
 
         Toast.makeText(getContext(), "Uploading image...", Toast.LENGTH_SHORT).show();
     }
-
 }

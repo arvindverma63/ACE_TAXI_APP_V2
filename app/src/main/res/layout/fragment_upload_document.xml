@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/MainBG"
+    android:scrollbars="none"
     android:padding="16dp">
 
     <LinearLayout
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/ActionBar"
-            app:title="DOCUMENTS"
+            app:title="Documents"
             app:titleCentered="true"
             android:id="@+id/toolbar_header"
             app:navigationIcon="@drawable/ic_back_arrow"
@@ -58,7 +59,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="LICENCE"
+                        android:text="License"
                         style="@style/TextBG"
                         android:textStyle="bold"
                         android:textSize="14sp"
@@ -116,7 +117,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="INSURANCE"
+                        android:text="Insurance"
                         style="@style/TextBG"
                         android:textStyle="bold"
                         android:textSize="14sp"
@@ -229,13 +230,13 @@
 
                     <!-- Card Title -->
                     <TextView
+                        style="@style/TextBG"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="VEHICLE LICENCE"
-                        style="@style/TextBG"
-                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:text="Vehicle License"
                         android:textSize="14sp"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <!-- Icons Row -->
                     <LinearLayout
@@ -289,7 +290,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="DRIVERS LICENCE"
+                        android:text="Drivers License"
                         style="@style/TextBG"
                         android:textStyle="bold"
                         android:textSize="14sp"
@@ -347,7 +348,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="SAFE GUARDING CERT"
+                        android:text="Safe Guarding CERT"
                         style="@style/TextBG"
                         android:textStyle="bold"
                         android:textSize="14sp"
@@ -404,7 +405,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="FIRST AID CERT"
+                        android:text="First AID CERT"
                         style="@style/TextBG"
                         android:textStyle="bold"
                         android:textSize="14sp"

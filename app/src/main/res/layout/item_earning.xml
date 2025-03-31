@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="0dp"
     app:cardElevation="4dp"
+    android:backgroundTint="@color/white"
     style="@style/CardBG">
 
     <LinearLayout
@@ -16,50 +16,49 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/text_day"
-            android:layout_width="wrap_content"
+            android:id="@+id/text_jobs"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingEnd="8dp"
+            android:text="Jobs"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/text_day"
+            android:layout_width="113dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="Day"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="13sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/text_jobs"
-            android:layout_width="5dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingEnd="5dp"
-            android:text="Jobs"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="14sp" />
-
-        <TextView
             android:id="@+id/text_cash"
-            android:layout_width="18dp"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingEnd="8dp"
+            android:gravity="center"
             android:text="Cash"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="14sp" />
+            android:textColor="@color/green"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/action"
-            android:layout_width="65dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/trans"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/red"
             android:gravity="center"
-            android:paddingHorizontal="16dp"
             android:text="View"
-            android:textColor="@color/red"
+            android:textColor="@color/white"
             android:textSize="14sp"
-            app:cornerRadius="1000dp"
+            app:cornerRadius="50dp"
             app:strokeColor="@color/red"
-            app:strokeWidth="1dp" />
-
+            app:strokeWidth="1dp"/>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

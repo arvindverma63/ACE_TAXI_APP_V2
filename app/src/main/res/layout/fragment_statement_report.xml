@@ -19,42 +19,7 @@
         app:navigationContentDescription="Back Button" />
 
     <!-- Earnings Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="1dp"
-        app:cardElevation="4dp"
-        app:strokeWidth="1dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="16dp"
-        style="@style/CardBG"
-        android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EARNINGS ALL TIME"
-                android:textColor="#FFBB00"
-                android:textStyle="bold"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/totalAmount"
-                android:text="£0.00"
-                android:textColor="#FF0000"
-                android:textStyle="bold"
-                android:textSize="24sp" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
     <!-- RecyclerView for Statement Items -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -72,4 +37,39 @@
             android:divider="#DDDDDD"
             android:scrollbars="vertical" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="1000dp"
+        app:cardElevation="4dp"
+        app:strokeWidth="1dp"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/green"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EARNINGS ALL TIME"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/totalAmount"
+                android:text="£0.00"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="24sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

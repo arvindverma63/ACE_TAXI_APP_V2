@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.app.ace_taxi_v2.Components.ExpensesDialog;
 import com.app.ace_taxi_v2.Models.Expense;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
@@ -38,8 +40,12 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
         holder.date.setText(expense.getDate());
         holder.category.setText(checkCategory(expense.getCategory())); // ✅ Fixed: Convert category ID to text
-        holder.description.setText(expense.getDescription());
         holder.amount.setText("£" + String.format("%.2f", expense.getAmount()));
+
+        holder.viewBtn.setOnClickListener(v -> {
+            ExpensesDialog dialog = new ExpensesDialog(context);
+            dialog.openExpensesDescriptionDialog(expense.getDescription());
+        });
     }
 
     @Override
@@ -48,14 +54,16 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView date, category, description, amount;
+        TextView date, category, amount;
+        MaterialButton viewBtn;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.expenseDate);
             category = itemView.findViewById(R.id.expenseCategory);
-            description = itemView.findViewById(R.id.expenseDescription);
             amount = itemView.findViewById(R.id.expenseAmount);
+            viewBtn = itemView.findViewById(R.id.btn_view);
         }
     }
 

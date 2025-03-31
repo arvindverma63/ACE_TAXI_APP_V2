@@ -14,6 +14,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.app.ace_taxi_v2.Logic.EarningResponseApi;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Models.EarningResponse;
 import com.app.ace_taxi_v2.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -50,7 +52,7 @@ public class ReportFragment extends Fragment {
     private SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
     public String startDate, endDate;
     public TextView total_cash,total_epay;
-    public ImageView arrowBack;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,21 +69,19 @@ public class ReportFragment extends Fragment {
             startActivity(intent);
         }
 
-        webView = view.findViewById(R.id.google_pie_chart);
         date_range_button = view.findViewById(R.id.date_range_button);
         total_cash = view.findViewById(R.id.total_cash);
         total_epay = view.findViewById(R.id.total_epay);
-        arrowBack = view.findViewById(R.id.arrow_back);
-        webView = view.findViewById(R.id.google_pie_chart);
+        MaterialToolbar toolbar = view.findViewById(R.id.header_toolbar);
         recyclarView = view.findViewById(R.id.recycler_view);
 
         date_range_button.setOnClickListener(v -> showDateRangePicker());
-        arrowBack.setOnClickListener(v -> {
+        toolbar.setNavigationOnClickListener(v -> {
             Fragment select = new ReportPageFragment();
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager(); // Get FragmentManager from the current activity
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, select); // Replace with the correct container ID
-            fragmentTransaction.addToBackStack(null); // Optional: Adds to back stack for navigation
+            fragmentTransaction.replace(R.id.fragment_container, select); // Use the correct container ID
+            fragmentTransaction.addToBackStack(null); // Optional: Allows back navigation
             fragmentTransaction.commit();
         });
 
@@ -167,5 +167,6 @@ public class ReportFragment extends Fragment {
         total_cash.setText("Total Cash: £"+totalCash);
         total_epay.setText("Total ACC: £"+epay);
     }
+
 
 }
