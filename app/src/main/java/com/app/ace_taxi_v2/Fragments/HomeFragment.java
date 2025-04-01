@@ -47,69 +47,20 @@ public class HomeFragment extends Fragment {
     private static final String SWITCH_STATE_KEY = "switch_state";
 
     private Switch locationSwitch;
-    private TextView onlineStatusLabel, set_job_status;
+    private TextView onlineStatusLabel,set_job_status;
     private LocationPermissions locationPermissions;
     private TextView pickup_address, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
     private MaterialCardView current_job_card;
     private ImageView nav_icon;
     private View header_view;
-    private TextView user_email, user_name, today_count, weekly_count, today_earning, weekly_earning;
+    private TextView user_email,user_name,today_count,weekly_count,today_earning,weekly_earning;
     private MaterialCardView activeJobStatus;
-    private MaterialCardView profile_btn, view_expenses, add_expenses, upload_document, message_btn, phone_btn, settings_btn, jobs_btn, avail_btn, chat_btn, earning_report_btn, statement_report_btn;
-
+    private MaterialCardView profile_btn,view_expenses,add_expenses,upload_document,message_btn,phone_btn,settings_btn,jobs_btn,avail_btn,chat_btn,earning_report_btn,statement_report_btn;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Initialize UI components
-        initializeViews(view);
-
-        if (getActivity() == null) return view;
-
-        // Setup helpers
-        setupHelpers();
-
-        SessionManager sessionManager = new SessionManager(getActivity());
-        if (!sessionManager.isLoggedIn()) {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
-            getActivity().finish();
-            return view;
-        }
-
-        DashboardHelper dashboardHelper = new DashboardHelper(getContext());
-        dashboardHelper.updateMessage(user_name, user_email);
-
-        getCurrentBooking();
-        updateDash();
-        startRepeatingTask();
-
-        locationSwitch = view.findViewById(R.id.online_toggle);
-        onlineStatusLabel = view.findViewById(R.id.online_status_label);
-
-        // Initialize LocationPermissions
-        locationPermissions = new LocationPermissions(getActivity(), locationSwitch, onlineStatusLabel);
-
-        // Load saved switch state
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        boolean switchState = sharedPreferences.getBoolean(SWITCH_STATE_KEY, true);
-        locationSwitch.setChecked(switchState);
-        updateStatusLabel(switchState);
-
-        // Initial permission check
-        if (switchState) {
-            locationPermissions.ensureAllPermissions();
-        }
-
-        // Setup switch listener
-        locationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            saveSwitchState(isChecked);
-            handleSwitchToggle(isChecked);
-        });
-
-        return view;
-    }
-
-    private void initializeViews(View view) {
         pickup_address = view.findViewById(R.id.pickup_address);
         destination_address = view.findViewById(R.id.destination_address);
         pickup_subaddress = view.findViewById(R.id.pickup_subaddress);
@@ -141,34 +92,83 @@ public class HomeFragment extends Fragment {
         weekly_count = view.findViewById(R.id.weekly_count);
         today_earning = view.findViewById(R.id.today_earning);
         weekly_earning = view.findViewById(R.id.weekly_earning);
-    }
 
-    private void setupHelpers() {
-        ProfileHelper profileHelper = new ProfileHelper(getContext(), R.id.fragment_container);
-        profileHelper.profileEvent(profile_btn, upload_document, add_expenses, view_expenses);
+        ProfileHelper profileHelper = new ProfileHelper(getContext(),R.id.fragment_container);
+        profileHelper.profileEvent(profile_btn,upload_document,add_expenses,view_expenses);
+        ApplicationsHelper applicationsHelper = new ApplicationsHelper(getContext(),R.id.fragment_container);
+        applicationsHelper.applicationEvents(message_btn,phone_btn,settings_btn);
+        ActivitiesHelper activitiesHelper = new ActivitiesHelper(getContext(),R.id.fragment_container);
+        activitiesHelper.activitiesEvent(jobs_btn,avail_btn,chat_btn);
+        ReportsHelper reportsHelper = new ReportsHelper(getContext(),R.id.fragment_container);
+        reportsHelper.reportEvent(earning_report_btn,statement_report_btn);
 
-        ApplicationsHelper applicationsHelper = new ApplicationsHelper(getContext(), R.id.fragment_container);
-        applicationsHelper.applicationEvents(message_btn, phone_btn, settings_btn);
+        if (getActivity() == null) return view;
+        SessionManager sessionManager = new SessionManager(getActivity());
+        if (!sessionManager.isLoggedIn()) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+            return view;
+        }
 
-        ActivitiesHelper activitiesHelper = new ActivitiesHelper(getContext(), R.id.fragment_container);
-        activitiesHelper.activitiesEvent(jobs_btn, avail_btn, chat_btn);
+        DashboardHelper dashboardHelper = new DashboardHelper(getContext());
+        dashboardHelper.updateMessage(user_name,user_email);
 
-        ReportsHelper reportsHelper = new ReportsHelper(getContext(), R.id.fragment_container);
-        reportsHelper.reportEvent(earning_report_btn, statement_report_btn);
+        getCurrentBooking(); // Load booking details
+        updateDash();
+
+        locationSwitch = view.findViewById(R.id.online_toggle);
+        onlineStatusLabel = view.findViewById(R.id.online_status_label);
+
+        // Initialize LocationPermissions instance
+        locationPermissions = new LocationPermissions(getActivity(), locationSwitch, onlineStatusLabel);
+        if (!isLocationEnabled()) {
+            locationPermissions.promptEnableGPS();
+        }
+        // Retrieve switch state from SharedPreferences, default to true
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        boolean switchState = sharedPreferences.getBoolean(SWITCH_STATE_KEY, true); // Default is true
+        locationSwitch.setChecked(switchState);
+        updateStatusLabel(switchState);
+
+        // If switch is enabled by default, start location service
+        if (switchState) {
+            locationPermissions.startLocationService();
+        }
+
+        // Set up the Switch listener
+        locationSwitch.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            saveSwitchState(isChecked);
+            handleSwitchToggle(isChecked);
+        });
+
+
+        return view;
     }
 
     private void saveSwitchState(boolean state) {
-        if (getActivity() != null) {
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(SWITCH_STATE_KEY, state);
-            editor.apply();
-        }
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SWITCH_STATE_KEY, state);
+        editor.apply();
     }
 
     private void handleSwitchToggle(boolean isChecked) {
         if (isChecked) {
-            locationPermissions.ensureAllPermissions();
+            if (locationPermissions.isLocationEnabled()) {
+                if (locationPermissions.checkLocationPermissions() && locationPermissions.checkBatteryOptimizations()) {
+                    locationPermissions.startLocationService();
+                    locationPermissions.setSwitchState(true);
+                    updateStatusLabel(true);
+                } else {
+                    locationPermissions.requestLocationPermissions();
+                    locationPermissions.setSwitchState(false);
+                }
+            } else {
+                Log.e(TAG, "Location services (GPS) are disabled.");
+                locationPermissions.promptEnableGPS();
+                locationPermissions.setSwitchState(false);
+            }
         } else {
             locationPermissions.setSwitchState(false);
             locationPermissions.stopLocationService();
@@ -177,24 +177,23 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateStatusLabel(boolean isOnline) {
-        if (onlineStatusLabel != null && nav_icon != null && getContext() != null) {
-            onlineStatusLabel.setText(isOnline ? "Send Location ON" : "Send Location OFF");
+        onlineStatusLabel.setText(isOnline ? "Send Location ON" : "Send Location OFF");
+        nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.red), PorterDuff.Mode.SRC_IN);
 
-            if (isOnline) {
-                locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-                locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-                nav_icon.setImageTintList(ContextCompat.getColorStateList(getContext(),R.color.green));
-            } else {
-                locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
-                locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
-                nav_icon.setImageTintList(ContextCompat.getColorStateList(getContext(),R.color.red));
-            }
+        if (isOnline) {
+            locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.green), PorterDuff.Mode.SRC_IN);
+        } else {
+            locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray))); // Change to your OFF color
+            locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+            nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.red), PorterDuff.Mode.SRC_IN);
         }
     }
 
     public void getCurrentBooking() {
         BookingStartStatus bookingStartStatus = new BookingStartStatus(getContext());
-        int bookingId = 0;
+        int bookingId = 0; // Default to -1 if no booking exists
 
         try {
             String bookingIdStr = bookingStartStatus.getBookingId();
@@ -207,25 +206,51 @@ public class HomeFragment extends Fragment {
 
         CurrentBooking currentBooking = new CurrentBooking(getContext());
         int finalBookingId = bookingId;
+        int finalBookingId1 = bookingId;
         currentBooking.getCurrentBooking(new CurrentBooking.CurrentJobCallback() {
             @Override
             public void onSuccess(List<TodayBooking> list) {
-                if (getView() == null) return;
-
-                boolean hasActiveJob = false;
                 for (TodayBooking booking : list) {
                     String status = booking.getStatus();
                     if ("1".equals(status) && booking.getBookingId() == finalBookingId) {
-                        updateBookingUI(booking);
-                        hasActiveJob = true;
-                        break;
-                    }
-                }
+                        String pickup = booking.getPickupAddress();
+                        String[] pickupParts = pickup != null ? pickup.split(",") : new String[]{""};
+                        String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
+                        String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() + booking.getPickupPostCode() : booking.getPickupPostCode();
 
-                if (!hasActiveJob) {
-                    current_job_card.setVisibility(View.GONE);
-                    set_job_status.setText("No Active Job");
-                    activeJobStatus.setVisibility(View.VISIBLE);
+                        String destination = booking.getDestinationAddress();
+                        String[] destinationParts = destination != null ? destination.split(",") : new String[]{""};
+                        String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
+                        String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() + booking.getDestinationPostCode() : booking.getDestinationPostCode();
+
+                        pickup_address.setText(firstPickup);
+                        pickup_subaddress.setText(lastPickup);
+                        destination_address.setText(firstDestination);
+                        destination_subaddress.setText(lastDestination);
+                        price.setText("£" + booking.getPrice());
+                        date.setText(booking.getPickupDateTime());
+                        passenger_count.setText(String.valueOf(booking.getPassengers()));
+                        passenger_name.setText(booking.getPassengerName());
+
+                        try {
+                            if("Account".equals(booking.getScopeText())){
+                                price.setText("ACC");
+                                price.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
+                            }} catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        current_job_card.setOnClickListener(v -> {
+                            JobModal jobModal = new JobModal(getContext());
+                            jobModal.JobViewForTodayJob(finalBookingId1);
+                        });
+                        Log.e("current Job card vissble ","visiable");
+                        current_job_card.setVisibility(getView().VISIBLE);
+                        set_job_status.setText("Active Job");
+                        activeJobStatus.setVisibility(getView().GONE);
+                    }else {
+//
+                    }
                 }
             }
 
@@ -235,55 +260,21 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
-    private void updateBookingUI(TodayBooking booking) {
-        String pickup = booking.getPickupAddress();
-        String[] pickupParts = pickup != null ? pickup.split(",") : new String[]{""};
-        String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
-        String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() + " " + booking.getPickupPostCode() : booking.getPickupPostCode();
-
-        String destination = booking.getDestinationAddress();
-        String[] destinationParts = destination != null ? destination.split(",") : new String[]{""};
-        String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
-        String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() + " " + booking.getDestinationPostCode() : booking.getDestinationPostCode();
-
-        pickup_address.setText(firstPickup);
-        pickup_subaddress.setText(lastPickup);
-        destination_address.setText(firstDestination);
-        destination_subaddress.setText(lastDestination);
-        price.setText("£" + booking.getPrice());
-        date.setText(booking.getPickupDateTime());
-        passenger_count.setText(String.valueOf(booking.getPassengers()));
-        passenger_name.setText(booking.getPassengerName());
-
-        if ("Account".equals(booking.getScopeText())) {
-            price.setText("ACC");
-            price.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-        }
-
-        current_job_card.setOnClickListener(v -> {
-            JobModal jobModal = new JobModal(getContext());
-            jobModal.JobViewForTodayJob(booking.getBookingId());
-        });
-
-        current_job_card.setVisibility(View.VISIBLE);
-        set_job_status.setText("Active Job");
-        activeJobStatus.setVisibility(View.GONE);
-    }
-
     private final Handler handler = new Handler();
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
             getCurrentBooking();
-            handler.postDelayed(this, 3000);
+            handler.postDelayed(this, 3000); // Repeat every 3 seconds
         }
     };
 
+    // Start the repeated task
     private void startRepeatingTask() {
         handler.postDelayed(runnable, 3000);
     }
 
+    // Stop the repeated task (when needed)
     private void stopRepeatingTask() {
         handler.removeCallbacks(runnable);
     }
@@ -310,27 +301,23 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void updateDash() {
+    public void updateDash(){
         DashboardTotalApi dashboardTotalApi = new DashboardTotalApi(getContext());
         dashboardTotalApi.getData(new DashboardTotalApi.DashCallback() {
             @Override
             public void onSuccess(Dashtotal dashtotal) {
-                today_count.setText(String.valueOf(dashtotal.getTotalJobCountToday()));
-                today_earning.setText("£" + dashtotal.getEarningsTotalToday());
-                weekly_count.setText(String.valueOf(dashtotal.getTotalJobCountWeek()));
-                weekly_earning.setText("£" + dashtotal.getEarningsTotalWeek());
+                today_count.setText(dashtotal.getTotalJobCountToday()+"");
+                today_earning.setText("£"+dashtotal.getEarningsTotalToday());
+                weekly_count.setText(dashtotal.getTotalJobCountWeek()+"");
+                weekly_earning.setText("£"+dashtotal.getEarningsTotalWeek());
+
             }
 
             @Override
             public void onError(String error) {
-                Log.e(TAG, "Dashboard update error: " + error);
+
             }
         });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        stopRepeatingTask();
-    }
 }

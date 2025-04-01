@@ -31,15 +31,13 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class LocationPermissions {
 
     private static final String TAG = "LocationPermissions";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
     private static final int BATTERY_OPTIMIZATION_REQUEST_CODE = 1002;
-    private static final int REQUEST_CHECK_SETTINGS = 1003;
-    private static final int BACKGROUND_LOCATION_REQUEST_CODE = 101;
+    private static final int REQUEST_CHECK_SETTINGS = 1003; // New request code for GPS settings
 
     private final Context context;
     private final Activity activity;
@@ -56,10 +54,9 @@ public class LocationPermissions {
     public boolean checkLocationPermissions() {
         boolean hasFineLocation = ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         boolean hasCoarseLocation = ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        boolean hasBackgroundLocation = true;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            hasBackgroundLocation = ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            boolean hasBackgroundLocation = ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED;
             if (!hasBackgroundLocation) {
                 Log.e(TAG, "Background location permission is missing.");
                 return false;
@@ -67,7 +64,7 @@ public class LocationPermissions {
         }
 
         if (!hasFineLocation || !hasCoarseLocation) {
-            Log.e(TAG, "Foreground location permissions are missing.");
+            Log.e(TAG, "Location permissions are missing.");
             return false;
         }
 
@@ -75,78 +72,34 @@ public class LocationPermissions {
         return true;
     }
 
+    public void requestLocationPermissions() {
+        Log.d(TAG, "Requesting location permissions...");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ActivityCompat.requestPermissions(activity, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            }, LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            ActivityCompat.requestPermissions(activity, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+            }, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
     public boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager == null) {
-            Log.e(TAG, "LocationManager is null");
-            return false;
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            return locationManager.isLocationEnabled();
+            return locationManager != null && locationManager.isLocationEnabled();
         } else {
-            try {
-                int mode = Settings.Secure.getInt(
-                        context.getContentResolver(),
-                        Settings.Secure.LOCATION_MODE,
-                        Settings.Secure.LOCATION_MODE_OFF
-                );
-                return mode != Settings.Secure.LOCATION_MODE_OFF;
-            } catch (Exception e) {
-                Log.e(TAG, "Error checking location mode", e);
-                return false;
-            }
-        }
-    }
-
-    public boolean checkBatteryOptimizations() {
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && powerManager != null) {
-            return powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
-        }
-        return true;
-    }
-
-    public void ensureAllPermissions() {
-        if (!checkLocationPermissions()) {
-            requestLocationPermissionsRepeatedly();
-        } else if (!isLocationEnabled()) {
-            promptEnableGPSRepeatedly();
-        } else if (!checkBatteryOptimizations()) {
-            requestBatteryOptimizationRepeatedly();
-        } else {
-            setSwitchState(true);
-            startLocationService();
-            updateStatusLabel(true);
-        }
-    }
-
-    public void requestForegroundPermissions() {
-        Log.d(TAG, "Requesting foreground location permissions...");
-        ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                LOCATION_PERMISSION_REQUEST_CODE);
-    }
-
-    public void requestBackgroundLocationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Requesting background location permission...");
-                    ActivityCompat.requestPermissions(activity,
-                            new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
-                            BACKGROUND_LOCATION_REQUEST_CODE);
-                } else {
-                    Log.d(TAG, "Background location permission already granted");
-                    ensureAllPermissions();
-                }
-            } else {
-                Log.d(TAG, "Foreground permissions not granted yet, requesting them first");
-                requestForegroundPermissions();
-            }
-        } else {
-            ensureAllPermissions();
+            int mode = Settings.Secure.getInt(
+                    context.getContentResolver(),
+                    Settings.Secure.LOCATION_MODE,
+                    Settings.Secure.LOCATION_MODE_OFF
+            );
+            return mode != Settings.Secure.LOCATION_MODE_OFF;
         }
     }
 
@@ -163,21 +116,26 @@ public class LocationPermissions {
                 .checkLocationSettings(builder.build());
 
         task.addOnSuccessListener(locationSettingsResponse -> {
+            // Location settings are satisfied
             Log.d(TAG, "Location settings are already enabled");
-            ensureAllPermissions();
+            setSwitchState(true);
+            startLocationService();
         });
 
         task.addOnFailureListener(exception -> {
             if (exception instanceof ResolvableApiException) {
+                // Location settings are not satisfied, show dialog to enable
                 try {
                     ResolvableApiException resolvable = (ResolvableApiException) exception;
                     resolvable.startResolutionForResult(activity, REQUEST_CHECK_SETTINGS);
                 } catch (Exception e) {
                     Log.e(TAG, "Error showing location settings dialog", e);
+                    // Fallback to custom dialog if Google Play Services fails
                     showCustomGPSPrompt();
                 }
             } else {
                 Log.e(TAG, "Location settings cannot be resolved automatically", exception);
+                // Fallback to custom dialog
                 showCustomGPSPrompt();
             }
         });
@@ -185,8 +143,9 @@ public class LocationPermissions {
 
     private void showCustomGPSPrompt() {
         try {
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
-            View dialogView = LayoutInflater.from(activity).inflate(R.layout.location_permission_dialog, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            LayoutInflater inflater = activity.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.location_permission_dialog, null);
             builder.setView(dialogView);
             builder.setCancelable(false);
 
@@ -199,7 +158,7 @@ public class LocationPermissions {
             MaterialButton btnPermission = dialogView.findViewById(R.id.btnPermission);
             btnPermission.setOnClickListener(v -> {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                activity.startActivityForResult(intent, REQUEST_CHECK_SETTINGS);
+                activity.startActivity(intent);
                 alertDialog.dismiss();
             });
 
@@ -209,87 +168,18 @@ public class LocationPermissions {
         }
     }
 
-    private void requestLocationPermissionsRepeatedly() {
-        try {
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity)
-                    .setTitle("Location Permissions Required")
-                    .setMessage("This app needs location access (including background location on Android 10+) to function properly. Please grant all requested permissions.")
-                    .setCancelable(false)
-                    .setPositiveButton("Grant", (dialog, which) -> {
-                        dialog.dismiss();
-                        requestForegroundPermissions();
-                    })
-                    .setNegativeButton("Exit", (dialog, which) -> activity.finish());
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } catch (Exception e) {
-            Log.e(TAG, "Error showing permission dialog", e);
-            requestForegroundPermissions();
-        }
-    }
-
-    private void requestBackgroundPermissionsRepeatedly() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            try {
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity)
-                        .setTitle("Background Location Permission")
-                        .setMessage("This app requires background location access to provide location updates even when the app is closed.")
-                        .setCancelable(false)
-                        .setPositiveButton("Grant", (dialog, which) -> {
-                            dialog.dismiss();
-                            requestBackgroundLocationPermission();
-                        })
-                        .setNegativeButton("Exit", (dialog, which) -> activity.finish());
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            } catch (Exception e) {
-                Log.e(TAG, "Error showing background permission dialog", e);
-                requestBackgroundLocationPermission();
+    public boolean checkBatteryOptimizations() {
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && powerManager != null) {
+            boolean isIgnoringOptimizations = powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+            if (!isIgnoringOptimizations) {
+                Log.d(TAG, "Battery optimization is enabled. Prompting user to disable it.");
+                Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                activity.startActivityForResult(intent, BATTERY_OPTIMIZATION_REQUEST_CODE);
+                return false;
             }
-        } else {
-            ensureAllPermissions();
         }
-    }
-
-    private void promptEnableGPSRepeatedly() {
-        try {
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity)
-                    .setTitle("GPS Required")
-                    .setMessage("Please enable GPS to use location services.")
-                    .setCancelable(false)
-                    .setPositiveButton("Enable", (dialog, which) -> {
-                        dialog.dismiss();
-                        promptEnableGPS();
-                    })
-                    .setNegativeButton("Exit", (dialog, which) -> activity.finish());
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } catch (Exception e) {
-            Log.e(TAG, "Error showing GPS dialog", e);
-        }
-    }
-
-    private void requestBatteryOptimizationRepeatedly() {
-        try {
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity)
-                    .setTitle("Battery Optimization")
-                    .setMessage("Please disable battery optimization for this app to work properly in the background.")
-                    .setCancelable(false)
-                    .setPositiveButton("Disable", (dialog, which) -> {
-                        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-                        activity.startActivityForResult(intent, BATTERY_OPTIMIZATION_REQUEST_CODE);
-                        dialog.dismiss();
-                    })
-                    .setNegativeButton("Exit", (dialog, which) -> activity.finish());
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } catch (Exception e) {
-            Log.e(TAG, "Error showing battery optimization dialog", e);
-        }
+        return true;
     }
 
     public void startLocationService() {
@@ -328,95 +218,33 @@ public class LocationPermissions {
             }
 
             if (permissionsGranted) {
-                Log.d(TAG, "Foreground location permissions granted.");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    requestBackgroundPermissionsRepeatedly();
-                } else {
-                    ensureAllPermissions();
+                Log.d(TAG, "Location permissions granted.");
+                if (checkBatteryOptimizations()) {
+                    startLocationService();
+                    setSwitchState(true);
                 }
             } else {
-                Log.e(TAG, "Foreground location permissions denied.");
+                Log.e(TAG, "Location permissions denied.");
                 setSwitchState(false);
-                requestLocationPermissionsRepeatedly();
-            }
-        } else if (requestCode == BACKGROUND_LOCATION_REQUEST_CODE) {
-            boolean permissionsGranted = true;
-            for (int result : grantResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    permissionsGranted = false;
-                    break;
-                }
-            }
-
-            if (permissionsGranted) {
-                Log.d(TAG, "Background location permission granted.");
-                ensureAllPermissions();
-            } else {
-                Log.e(TAG, "Background location permission denied.");
-                setSwitchState(false);
-                requestBackgroundPermissionsRepeatedly();
+                showPermissionRationale();
             }
         }
-    }
-
-    public void handleActivityResult(int requestCode, int resultCode) {
-        if (requestCode == BATTERY_OPTIMIZATION_REQUEST_CODE) {
-            if (checkBatteryOptimizations()) {
-                Log.d(TAG, "Battery optimization disabled.");
-                ensureAllPermissions();
-            } else {
-                Log.e(TAG, "Battery optimization still enabled.");
-                setSwitchState(false);
-                requestBatteryOptimizationRepeatedly();
-            }
-        } else if (requestCode == REQUEST_CHECK_SETTINGS) {
-            if (resultCode == Activity.RESULT_OK) {
-                Log.d(TAG, "User enabled location settings");
-                ensureAllPermissions();
-            } else {
-                Log.d(TAG, "User declined to enable location settings");
-                setSwitchState(false);
-                promptEnableGPSRepeatedly();
-            }
-        }
-    }
-
-    private void updateStatusLabel(boolean isOnline) {
-        if (onlineStatusLabel != null) {
-            activity.runOnUiThread(() -> {
-                onlineStatusLabel.setText(isOnline ? "Send Location ON" : "Send Location OFF");
-                onlineStatusLabel.setTextColor(ContextCompat.getColor(context,
-                        isOnline ? R.color.green : R.color.red));
-            });
-        }
-    }
-
-    private boolean shouldShowRequestPermissionRationale() {
-        return ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION) ||
-                ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_COARSE_LOCATION) ||
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                        ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION));
     }
 
     private void showPermissionRationale() {
-        try {
-            new MaterialAlertDialogBuilder(activity)
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            new AlertDialog.Builder(activity)
                     .setTitle("Location Permission Required")
-                    .setMessage("This app needs location permissions (including background on Android 10+) to provide location-based services. Please grant all permissions.")
-                    .setPositiveButton("Grant", (dialog, which) -> {
-                        dialog.dismiss();
-                        requestForegroundPermissions();
-                    })
+                    .setMessage("This app needs location permissions to provide location-based services. Please grant the required permissions.")
+                    .setPositiveButton("Grant", (dialog, which) -> requestLocationPermissions())
                     .setNegativeButton("Cancel", (dialog, which) -> {
-                        Log.d(TAG, "User declined to grant permissions in rationale.");
+                        Log.d(TAG, "User declined to grant permissions.");
                         setSwitchState(false);
                     })
-                    .setCancelable(false)
                     .create()
                     .show();
-        } catch (Exception e) {
-            Log.e(TAG, "Error showing permission rationale", e);
-            requestForegroundPermissions();
+        } else {
+            redirectToAppSettings();
         }
     }
 
@@ -424,5 +252,27 @@ public class LocationPermissions {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse("package:" + context.getPackageName()));
         activity.startActivity(intent);
+    }
+
+    public void handleActivityResult(int requestCode, int resultCode) {
+        if (requestCode == BATTERY_OPTIMIZATION_REQUEST_CODE) {
+            if (checkBatteryOptimizations()) {
+                Log.d(TAG, "Battery optimization disabled by user.");
+                setSwitchState(true);
+                startLocationService();
+            } else {
+                Log.e(TAG, "Battery optimization still enabled.");
+                setSwitchState(false);
+            }
+        } else if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.d(TAG, "User enabled location settings");
+                setSwitchState(true);
+                startLocationService();
+            } else {
+                Log.d(TAG, "User declined to enable location settings");
+                setSwitchState(false);
+            }
+        }
     }
 }

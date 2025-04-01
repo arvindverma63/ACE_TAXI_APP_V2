@@ -37,18 +37,26 @@ public class BackgroundPermissionHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
-
-                new AlertDialog.Builder(activity)
-                        .setTitle("Background Location Permission")
-                        .setMessage("This app requires background location access to provide location updates even when the app is closed.")
-                        .setPositiveButton("Grant", (dialog, which) -> ActivityCompat.requestPermissions(
-                                activity,
-                                new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
-                                BACKGROUND_LOCATION_REQUEST_CODE))
-                        .setNegativeButton("Cancel", null)
-                        .show();
+                showBackgroundPermissionDialog();
             }
         }
+    }
+
+    // Show dialog and handle repeated asking
+    private void showBackgroundPermissionDialog() {
+        new AlertDialog.Builder(activity)
+                .setTitle("Background Location Permission")
+                .setMessage("This app requires background location access to provide location updates even when the app is closed.")
+                .setPositiveButton("Grant", (dialog, which) -> ActivityCompat.requestPermissions(
+                        activity,
+                        new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                        BACKGROUND_LOCATION_REQUEST_CODE))
+                .setNegativeButton("Deny", (dialog, which) -> {
+                    // If denied, show the dialog again
+                    showBackgroundPermissionDialog();
+                })
+                .setCancelable(false) // Prevents dismissing the dialog without a choice
+                .show();
     }
 
     // Handle Permission Results
@@ -57,10 +65,16 @@ public class BackgroundPermissionHelper {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Foreground location granted, now request background location
                 requestBackgroundLocationPermission();
+            } else {
+                // If foreground permission denied, ask again
+                requestLocationPermissions();
             }
         } else if (requestCode == BACKGROUND_LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Background location permission granted
+            } else {
+                // If background permission denied, ask again
+                requestBackgroundLocationPermission();
             }
         }
     }
