@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -28,6 +30,7 @@ import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
 import com.app.ace_taxi_v2.Logic.Service.BackgroundPermissionHelper;
 import com.app.ace_taxi_v2.Logic.Service.ConfigSessionManager;
+import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -246,4 +249,5 @@ public class HomeActivity extends BaseActivity {
             Log.e("HomeActivity", "Error processing notification data", e);
         }
     }
+
 }

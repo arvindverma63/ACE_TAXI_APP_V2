@@ -109,13 +109,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
                 BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
 
-                // Initial button state check
 
-                // Check job status and update button
-                GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
-                getBookingInfoApi.getInfo(job.getBookingId(), new GetBookingInfoApi.BookingCallback() {
-                    @Override
-                    public void onSuccess(com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo bookingInfo) {
                         try {
                             CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
                             int bookingId = -1;
@@ -136,7 +130,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                                 startButton.setText("TimeOut");
                                 startButton.setBackgroundColor(ContextCompat.getColor(context,R.color.red));
                             }
-                            String status = bookingInfo.getStatus();
+                            String status = job.getStatus();
                             if ("3".equals(status)) {
                                 bookingStartStatus.clearBookingId();
                                 startButton.setText("Completed");
@@ -163,14 +157,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                         } catch (Exception e) {
                             Log.e("TodayJobAdapter", "Error processing booking status", e);
                         }
-                    }
 
-                    @Override
-                    public void onfailer(String error) {
-                        Log.e("TodayJobAdapter", "Failed to fetch booking info: " + error);
-                        Toast.makeText(context, "Failed to load booking status", Toast.LENGTH_SHORT).show();
-                    }
-                });
 
                 // Setup click listeners
                 viewButton.setOnClickListener(v -> {
