@@ -86,8 +86,8 @@ public class NavigationHandler {
                         new int[]{-android.R.attr.state_checked}  // Inactive state
                 },
                 new int[]{
-                        activity.getResources().getColor(R.color.white),  // Active color
-                        activity.getResources().getColor(R.color.white)            // Inactive color
+                        activity.getResources().getColor(R.color.green),  // Active color
+                        activity.getResources().getColor(R.color.gray)            // Inactive color
                 }
         );
 
