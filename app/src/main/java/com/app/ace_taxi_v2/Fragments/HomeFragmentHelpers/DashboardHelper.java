@@ -17,8 +17,8 @@ public class DashboardHelper {
         loginManager.getProfile(new LoginManager.ProfileCallback() {
             @Override
             public void onSuccess(UserProfileResponse userProfileResponse) {
-                username.setText(userProfileResponse.getFullname());
-                email.setText(userProfileResponse.getEmail());
+//                username.setText(userProfileResponse.getFullname());
+//                email.setText(userProfileResponse.getEmail());
             }
 
             @Override

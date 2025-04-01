@@ -72,9 +72,7 @@ public class HomeFragment extends Fragment {
         current_job_card = view.findViewById(R.id.current_job_card);
         set_job_status = view.findViewById(R.id.set_job_status);
         nav_icon = view.findViewById(R.id.nav_icon);
-        user_name = view.findViewById(R.id.user_name);
         header_view = view.findViewById(R.id.header_slide);
-        user_email = view.findViewById(R.id.user_email);
         activeJobStatus = view.findViewById(R.id.activeJobStatus);
         upload_document = view.findViewById(R.id.upload_document);
         view_expenses = view.findViewById(R.id.view_expenses);
