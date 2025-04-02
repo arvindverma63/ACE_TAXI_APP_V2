@@ -31,6 +31,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 public class LocationPermissions {
 
@@ -41,10 +42,10 @@ public class LocationPermissions {
 
     private final Context context;
     private final Activity activity;
-    private final Switch locationSwitch;
+    private final MaterialSwitch locationSwitch;
     private final TextView onlineStatusLabel;
 
-    public LocationPermissions(Activity activity, Switch locationSwitch, TextView onlineStatusLabel) {
+    public LocationPermissions(Activity activity, MaterialSwitch locationSwitch, TextView onlineStatusLabel) {
         this.context = activity.getApplicationContext();
         this.activity = activity;
         this.locationSwitch = locationSwitch;
@@ -201,11 +202,16 @@ public class LocationPermissions {
     }
 
     public void setSwitchState(boolean isEnabled) {
-        int color = isEnabled ? context.getResources().getColor(R.color.primaryColor) : context.getResources().getColor(R.color.gray);
-        locationSwitch.setTrackTintList(ColorStateList.valueOf(color));
-        locationSwitch.setThumbTintList(ColorStateList.valueOf(color));
+        int trackColor = isEnabled ? context.getResources().getColor(R.color.primaryColor)
+                : context.getResources().getColor(R.color.light_gray);
+        int thumbColor = isEnabled ? context.getResources().getColor(R.color.white)
+                : context.getResources().getColor(R.color.gray);
+
+        locationSwitch.setTrackTintList(ColorStateList.valueOf(trackColor));
+        locationSwitch.setThumbTintList(ColorStateList.valueOf(thumbColor));
         locationSwitch.setChecked(isEnabled);
     }
+
 
     public void handlePermissionsResult(int requestCode, @NonNull int[] grantResults) {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {

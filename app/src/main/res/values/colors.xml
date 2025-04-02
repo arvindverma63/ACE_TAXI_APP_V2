@@ -21,10 +21,12 @@
 
     <color name="light_red">#B8FF5858</color>
     <color name="light_blue">#CD71BBFF</color>
-    <color name="green_light">#EB9BFF9F</color> <!-- Green -->
+    <color name="green_light">#EB57905B</color> <!-- Green -->
     <color name="light_orange">#EAFFA363</color>
     <color name="color_fe3233">#FE3233</color>
     <color name="color_fe5c4f">#FE5C4F</color>
     <color name="purple">#673AB7</color>
+    <color name="light_purple">#A374FF</color>
+    <color name="light_yellow">#A9A16D</color>
 
 </resources>

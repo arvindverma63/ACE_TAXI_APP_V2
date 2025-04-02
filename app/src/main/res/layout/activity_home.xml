@@ -29,6 +29,35 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
+                <!-- Hamburger Menu -->
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/ham_menu"
+                        style="@style/IconTint"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:contentDescription="Notification Icon"
+                        android:src="@drawable/ic_shift" />
+
+                    <!-- Notification Count Badge -->
+                    <TextView
+                        android:id="@+id/shift_color"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="end|top"
+                        android:background="@drawable/circular_badge"
+                        android:gravity="center"
+                        android:minWidth="16dp"
+                        android:minHeight="16dp"
+                        android:padding="2dp"
+                        android:text=""
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
                 <!-- Centered Title -->
                 <TextView
                     android:id="@+id/toolbar_title"
@@ -36,6 +65,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
                     android:gravity="start"
                     android:text="ACE TAXIS"
                     android:textSize="18sp"
@@ -71,14 +101,7 @@
                         android:textStyle="bold" />
                 </FrameLayout>
 
-                <!-- Hamburger Menu -->
-                <ImageView
-                    android:id="@+id/ham_menu"
-                    style="@style/IconTint"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_shift" />
+
 
             </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>

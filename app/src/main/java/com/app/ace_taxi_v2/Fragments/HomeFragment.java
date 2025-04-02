@@ -37,6 +37,7 @@ import com.app.ace_taxi_v2.Models.Dashtotal;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class HomeFragment extends Fragment {
     private static final String PREFS_NAME = "AppPrefs";
     private static final String SWITCH_STATE_KEY = "switch_state";
 
-    private Switch locationSwitch;
+    private MaterialSwitch locationSwitch;
     private TextView onlineStatusLabel,set_job_status;
     private LocationPermissions locationPermissions;
     private TextView pickup_address, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
@@ -108,9 +109,9 @@ public class HomeFragment extends Fragment {
             getActivity().finish();
             return view;
         }
-
-        DashboardHelper dashboardHelper = new DashboardHelper(getContext());
-        dashboardHelper.updateMessage(user_name,user_email);
+//
+//        DashboardHelper dashboardHelper = new DashboardHelper(getContext());
+//        dashboardHelper.updateMessage(user_name,user_email);
 
         getCurrentBooking(); // Load booking details
         updateDash();
@@ -175,19 +176,20 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateStatusLabel(boolean isOnline) {
-        onlineStatusLabel.setText(isOnline ? "Send Location ON" : "Send Location OFF");
-        nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.red), PorterDuff.Mode.SRC_IN);
+        // Update the status label text
+        onlineStatusLabel.setText(isOnline ? "Send Location On" : "Send Location Off");
 
-        if (isOnline) {
-            locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-            locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-            nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.green), PorterDuff.Mode.SRC_IN);
-        } else {
-            locationSwitch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray))); // Change to your OFF color
-            locationSwitch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
-            nav_icon.setColorFilter(ContextCompat.getColor(getContext(),R.color.red), PorterDuff.Mode.SRC_IN);
-        }
+        // Define colors
+        int trackColor = ContextCompat.getColor(getContext(), isOnline ? R.color.green : R.color.light_gray);
+        int thumbColor = ContextCompat.getColor(getContext(), isOnline ? R.color.white : R.color.gray);
+        int iconColor = ContextCompat.getColor(getContext(), isOnline ? R.color.green : R.color.red);
+
+        // Apply colors to switch and icon
+        locationSwitch.setTrackTintList(ColorStateList.valueOf(trackColor));
+        locationSwitch.setThumbTintList(ColorStateList.valueOf(thumbColor));
+        nav_icon.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
     }
+
 
     public void getCurrentBooking() {
         BookingStartStatus bookingStartStatus = new BookingStartStatus(getContext());
