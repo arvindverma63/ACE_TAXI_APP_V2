@@ -29,6 +29,7 @@ import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ApplicationsHelper;
 import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ProfileHelper;
 import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ReportsHelper;
 import com.app.ace_taxi_v2.JobModals.JobModal;
+import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
@@ -52,10 +53,9 @@ public class HomeFragment extends Fragment {
     private LocationPermissions locationPermissions;
     private TextView pickup_address, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
     private MaterialCardView current_job_card;
-    private ImageView nav_icon;
     private View header_view;
     private TextView user_email,user_name,today_count,weekly_count,today_earning,weekly_earning;
-    private MaterialCardView activeJobStatus;
+    private MaterialCardView activeJobStatus,location_card;
     private MaterialCardView profile_btn,view_expenses,add_expenses,upload_document,message_btn,phone_btn,settings_btn,jobs_btn,avail_btn,chat_btn,earning_report_btn,statement_report_btn;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,7 +72,6 @@ public class HomeFragment extends Fragment {
         passenger_name = view.findViewById(R.id.passenger_name);
         current_job_card = view.findViewById(R.id.current_job_card);
         set_job_status = view.findViewById(R.id.set_job_status);
-        nav_icon = view.findViewById(R.id.nav_icon);
         header_view = view.findViewById(R.id.header_slide);
         activeJobStatus = view.findViewById(R.id.activeJobStatus);
         upload_document = view.findViewById(R.id.upload_document);
@@ -91,7 +90,7 @@ public class HomeFragment extends Fragment {
         weekly_count = view.findViewById(R.id.weekly_count);
         today_earning = view.findViewById(R.id.today_earning);
         weekly_earning = view.findViewById(R.id.weekly_earning);
-
+        location_card = view.findViewById(R.id.location_card);
         ProfileHelper profileHelper = new ProfileHelper(getContext(),R.id.fragment_container);
         profileHelper.profileEvent(profile_btn,upload_document,add_expenses,view_expenses);
         ApplicationsHelper applicationsHelper = new ApplicationsHelper(getContext(),R.id.fragment_container);
@@ -184,10 +183,11 @@ public class HomeFragment extends Fragment {
         int thumbColor = ContextCompat.getColor(getContext(), isOnline ? R.color.white : R.color.gray);
         int iconColor = ContextCompat.getColor(getContext(), isOnline ? R.color.green : R.color.red);
 
+        location_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),isOnline ? R.color.green : R.color.red));
+
         // Apply colors to switch and icon
         locationSwitch.setTrackTintList(ColorStateList.valueOf(trackColor));
         locationSwitch.setThumbTintList(ColorStateList.valueOf(thumbColor));
-        nav_icon.setColorFilter(iconColor, PorterDuff.Mode.SRC_IN);
     }
 
 
@@ -241,7 +241,7 @@ public class HomeFragment extends Fragment {
                         }
 
                         current_job_card.setOnClickListener(v -> {
-                            JobModal jobModal = new JobModal(getContext());
+                            JobViewDialog jobModal = new JobViewDialog(getContext());
                             jobModal.JobViewForTodayJob(finalBookingId1);
                         });
                         Log.e("current Job card vissble ","visiable");

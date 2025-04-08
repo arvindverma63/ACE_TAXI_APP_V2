@@ -8,20 +8,11 @@
     style="@style/MainBG"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:alpha="0.2"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="5dp"
         android:background="#00000000">
 
     <com.google.android.material.card.MaterialCardView
@@ -29,10 +20,10 @@
         style="@style/CardBG"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="1000dp"
+        app:cardCornerRadius="0dp"
         android:elevation="8dp"
         app:strokeColor="@color/light_gray"
-        app:strokeWidth="1dp">
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,12 +33,24 @@
             android:padding="4dp"
             tools:ignore="UseSwitchCompatOrMaterialXml">
 
-            <ImageView
-                android:id="@+id/nav_icon"
-                android:layout_width="58dp"
-                android:layout_height="58dp"
-                android:rotation="45"
-                android:src="@drawable/ic_nav" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                app:cardCornerRadius="1000dp"
+                app:strokeWidth="0dp"
+                android:layout_marginLeft="15dp"
+                android:backgroundTint="@color/green"
+                android:id="@+id/location_card"
+                android:padding="10dp">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:rotation="45"
+                    app:tint="@color/white"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav" />
+            </com.google.android.material.card.MaterialCardView>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -280,6 +283,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
+                    android:textStyle="bold"
                     android:layout_marginTop="15dp"
                     android:text="Earnings"
                     style="@style/TextBG"/>
@@ -296,12 +300,13 @@
                     <com.google.android.material.card.MaterialCardView
                         style="@style/CardBG"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="130dp"
                         android:layout_weight="1"
-                        android:layout_marginRight="3dp"
-                        android:backgroundTint="@color/white"
+                        app:cardCornerRadius="10dp"
+                        android:backgroundTint="@color/green"
+                        android:layout_marginRight="10dp"
                         android:elevation="4dp"
-                        app:strokeWidth="1dp">
+                        app:strokeWidth="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -311,20 +316,20 @@
                             android:gravity="center">
 
                             <TextView
-                                style="@style/TextBG"
+                                android:textColor="@color/white"
                                 android:id="@+id/today_earning"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="16sp"
+                                android:textSize="30sp"
                                 android:textStyle="bold" />
 
                             <TextView
-                                style="@style/TextBG"
+                                android:textColor="@color/white"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Today's Earn"
-                                android:textSize="10sp"/>
+                                android:textSize="15sp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -332,12 +337,13 @@
                     <com.google.android.material.card.MaterialCardView
                         style="@style/CardBG"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="130dp"
                         android:layout_weight="1"
+                        app:cardCornerRadius="10dp"
+                        android:backgroundTint="@color/green"
                         android:layout_marginRight="3dp"
-                        android:backgroundTint="@color/white"
                         android:elevation="4dp"
-                        app:strokeWidth="1dp">
+                        app:strokeWidth="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -347,20 +353,20 @@
                             android:gravity="center">
 
                             <TextView
-                                style="@style/TextBG"
+                                android:textColor="@color/white"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/weekly_earning"
                                 android:text="0"
-                                android:textSize="16sp"
+                                android:textSize="30sp"
                                 android:textStyle="bold" />
 
                             <TextView
-                                style="@style/TextBG"
+                                android:textColor="@color/white"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Weekly Earn"
-                                android:textSize="10sp"/>
+                                android:textSize="15sp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -377,14 +383,14 @@
 
                     <!-- Today's Count -->
                     <com.google.android.material.card.MaterialCardView
-                        style="@style/CardBG"
+                        android:backgroundTint="@color/blue"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="130dp"
                         android:layout_weight="1"
-                        android:layout_marginRight="3dp"
-                        android:backgroundTint="@color/white"
+                        app:cardCornerRadius="10dp"
+                        android:layout_marginRight="10dp"
                         android:elevation="4dp"
-                        app:strokeWidth="1dp">
+                        app:strokeWidth="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -394,33 +400,33 @@
                             android:gravity="center">
 
                             <TextView
-                                style="@style/TextBG"
+                                android:textColor="@color/white"
                                 android:id="@+id/today_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="16sp"
+                                android:textSize="30sp"
                                 android:textStyle="bold" />
 
                             <TextView
-                                style="@style/TextBG"
+                                android:textColor="@color/white"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Today's Count"
-                                android:textSize="10sp"/>
+                                android:textSize="15sp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                     <!-- Weekly Count -->
                     <com.google.android.material.card.MaterialCardView
-                        style="@style/CardBG"
+                        android:backgroundTint="@color/blue"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="130dp"
                         android:layout_weight="1"
                         android:layout_marginRight="3dp"
-                        android:backgroundTint="@color/white"
                         android:elevation="4dp"
-                        app:strokeWidth="1dp">
+                        app:cardCornerRadius="10dp"
+                        app:strokeWidth="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -435,15 +441,17 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/weekly_count"
                                 android:text="0"
-                                android:textSize="16sp"
+                                android:textColor="@color/white"
+                                android:textSize="30sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 style="@style/TextBG"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
                                 android:text="Weekly Count"
-                                android:textSize="10sp"/>
+                                android:textSize="15sp"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -459,7 +467,6 @@
                 android:id="@+id/activeJobStatus"
                 android:layout_marginTop="10dp"
                 app:strokeWidth="0dp"
-                android:layout_marginLeft="8dp"
                 app:strokeColor="@android:color/darker_gray"
                 style="@style/CardBG">
 
@@ -472,7 +479,6 @@
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:layout_gravity="center_vertical"
-                        style="@style/MainBG"
                         android:gravity="center"
                         app:cornerRadius="8dp">
 
@@ -511,6 +517,7 @@
                 android:textSize="16sp"
                 android:layout_marginTop="5dp"
                 android:text="Profile"
+                android:textStyle="bold"
                 style="@style/TextBG"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -702,15 +709,16 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray"
-                android:alpha="0.2"/>
+                android:alpha="0.2"
+                android:background="@android:color/darker_gray" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 android:layout_marginTop="5dp"
                 android:text="Activities"
                 style="@style/TextBG"/>
@@ -848,6 +856,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 android:layout_marginTop="5dp"
                 android:text="Application"
                 style="@style/TextBG"/>
@@ -986,6 +995,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 android:layout_marginTop="5dp"
                 android:text="Reports"
                 style="@style/TextBG"/>

@@ -5,12 +5,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +34,7 @@ import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textview.MaterialTextView;
 
 import org.w3c.dom.Text;
 
@@ -74,21 +77,35 @@ public class JobModal {
         fullScreenDialog.setContentView(R.layout.job_offer);
         fullScreenDialog.setCancelable(false);
 
-        TextView pickup_address = fullScreenDialog.findViewById(R.id.pickup_address);
-        TextView destination_address = fullScreenDialog.findViewById(R.id.destination_address);
-        TextView fairy_price = fullScreenDialog.findViewById(R.id.price);
-        TextView pickupDateAndTime = fullScreenDialog.findViewById(R.id.pickup_date);
-        TextView passenger_name = fullScreenDialog.findViewById(R.id.passenger_name);
-        TextView timer = fullScreenDialog.findViewById(R.id.timer);
-        Button acceptButton = fullScreenDialog.findViewById(R.id.accept_button);
-        Button rejectBooking = fullScreenDialog.findViewById(R.id.reject_button);
+        MaterialTextView pickup_address = fullScreenDialog.findViewById(R.id.pickup_address);
+        MaterialTextView destination_address = fullScreenDialog.findViewById(R.id.destination_address);
+        MaterialTextView fairy_price = fullScreenDialog.findViewById(R.id.price);
+        MaterialTextView pickupDateAndTime = fullScreenDialog.findViewById(R.id.pickup_date);
+        MaterialTextView passenger_name = fullScreenDialog.findViewById(R.id.passenger_name);
+        MaterialTextView timer = fullScreenDialog.findViewById(R.id.timer);
+        MaterialButton acceptButton = fullScreenDialog.findViewById(R.id.accept_button);
+        MaterialButton rejectBooking = fullScreenDialog.findViewById(R.id.reject_button);
+        MaterialTextView tripfare = fullScreenDialog.findViewById(R.id.trip_fare);
+        MaterialTextView passengerCount = fullScreenDialog.findViewById(R.id.passenger_count);
 
+        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+        getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
+            @Override
+            public void onSuccess(GetBookingInfo bookingInfo) {
+                passengerCount.setText(bookingInfo.getPassengers()+" Passengers");
+            }
+
+            @Override
+            public void onfailer(String error) {
+
+            }
+        });
         pickup_address.setText(pickupAddress);
         destination_address.setText(destinationAddress);
         fairy_price.setText(String.format("£%.2f", price));
+        tripfare.setText(String.format("£%.2f", price));
         pickupDateAndTime.setText(pickupDate);
         passenger_name.setText(passengerName);
-
         JobResponseApi jobResponseApi = new JobResponseApi(context);
         Handler handler = new Handler(Looper.getMainLooper());
         final boolean[] isResponded = {false};
@@ -203,20 +220,6 @@ public class JobModal {
         alertDialog.show();
     }
 
-    public void JobRead() {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.read_message, null);
-        AlertDialog alertDialog = createAlertDialog(dialogView, false);
-
-        TextView message = dialogView.findViewById(R.id.tvMessage);
-        NotificationModalSession notificationModalSession = new NotificationModalSession(context);
-        String notificationMessage = notificationModalSession.getLatestMessage();
-        message.setText(notificationMessage != null && !notificationMessage.isEmpty() ? notificationMessage : "No new notifications.");
-        Log.d("NotificationDebug", "Read Message: " + notificationMessage);
-
-        setupCloseButton(dialogView, alertDialog, R.id.btnRead);
-        alertDialog.show();
-    }
 
     public void JobReadNotificationClick(String messages, String date) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -237,135 +240,7 @@ public class JobModal {
         alertDialog.show();
     }
 
-    public void JobViewForTodayJob(int bookingId) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.job_view, null);
-        AlertDialog alertDialog = createAlertDialog(dialogView, true);
-        setupJobView(dialogView, bookingId, alertDialog, true);
-        alertDialog.show();
-    }
 
-    public void JobViewForFutureAndHistory(int bookingId) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.job_view, null);
-        AlertDialog alertDialog = createAlertDialog(dialogView, true);
-        setupJobView(dialogView, bookingId, alertDialog, false);
-        alertDialog.show();
-    }
-
-    private void setupJobView(View dialogView, int bookingId, AlertDialog dialog, boolean showCompleteButton) {
-        TextView pickupAddress = dialogView.findViewById(R.id.pickup_address);
-        TextView destinationAddress = dialogView.findViewById(R.id.destination_address);
-        TextView pickupdate = dialogView.findViewById(R.id.pickup_date);
-        TextView bookingprice = dialogView.findViewById(R.id.price);
-        TextView customerName = dialogView.findViewById(R.id.passenger_name);
-        TextView jobId = dialogView.findViewById(R.id.job_id);
-        TextView payment_status = dialogView.findViewById(R.id.payment_status);
-        TextView distance_duration = dialogView.findViewById(R.id.distance_duration);
-        TextView notes = dialogView.findViewById(R.id.notes);
-        TextView account_status = dialogView.findViewById(R.id.account_status);
-        TextView passenger_email = dialogView.findViewById(R.id.passenger_email);
-        TextView passengers_count = dialogView.findViewById(R.id.passengers_count);
-        MaterialCardView payment_card = dialogView.findViewById(R.id.payment_status_card);
-        MaterialCardView cardView = dialogView.findViewById(R.id.card_view);
-        MaterialButton complete_button = dialogView.findViewById(R.id.complete_button);
-        TextView job_status_change = dialogView.findViewById(R.id.change_status);
-        TextView set_job_status = dialogView.findViewById(R.id.set_job_status);
-        LinearLayout status_controller_layout = dialogView.findViewById(R.id.status_controller_layout);
-        job_status_change.setOnClickListener(v -> {
-            JobStatusModal jobStatusModal = new JobStatusModal(context);
-            dialog.dismiss();
-            jobStatusModal.openModal(bookingId);
-        });
-        CurrentBookingSession currentBookingSession = new CurrentBookingSession(context);
-        String shift = currentBookingSession.getBookingShift();
-
-        try {
-            if(bookingId == Integer.parseInt(currentBookingSession.getBookingId())){
-                status_controller_layout.setVisibility(View.VISIBLE);
-            }else{
-                status_controller_layout.setVisibility(View.GONE);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            status_controller_layout.setVisibility(View.GONE);
-        }
-
-        switch (shift) {
-            case "3003":
-                set_job_status.setText("On Route");
-                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.red));
-                break;
-            case "3004":
-                set_job_status.setText("At Pickup");
-                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.blue));
-                break;
-            case "3005":
-                set_job_status.setText("POB");
-                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.green));
-                break;
-            case "3006":
-                set_job_status.setText("STC");
-                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.orange));
-                break;
-//            case "3007":
-//                set_job_status.setText("On Route");
-//                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.red));
-//                break;
-            case "3008":
-                set_job_status.setText("No job");
-                set_job_status.setTextColor(ContextCompat.getColor(context,R.color.black));
-                break;
-            default:
-                // Optional: Log unknown status for debugging
-                break;
-        }
-
-        if (!showCompleteButton) complete_button.setVisibility(View.GONE);
-
-        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
-        getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
-            @Override
-            public void onSuccess(GetBookingInfo bookingInfo) {
-                pickupAddress.setText(bookingInfo.getPickupAddress());
-                destinationAddress.setText(bookingInfo.getDestinationAddress());
-                pickupdate.setText(bookingInfo.getPickupDateTime());
-                customerName.setText(String.valueOf(bookingInfo.getPassengerName()));
-                bookingprice.setText(String.format("£%.2f", bookingInfo.getPrice()));
-                jobId.setText(String.valueOf(bookingInfo.getBookingId()));
-                payment_status.setText(bookingInfo.getPaymentStatusText());
-                distance_duration.setText(bookingInfo.getDurationMinutes() + " minutes");
-                notes.setText(bookingInfo.getDetails());
-                passenger_email.setText(bookingInfo.getEmail());
-                passengers_count.setText(" X " + bookingInfo.getPassengers());
-                account_status.setText(bookingInfo.getScopeText());
-
-                if ("Cash".equals(bookingInfo.getScopeText())) {
-                    payment_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.green));
-                    cardView.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.green));
-                }
-                if ("Unpaid".equals(bookingInfo.getPaymentStatusText())) {
-                    payment_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.red));
-                }
-                if ("Account".equals(bookingInfo.getScopeText())) {
-                    payment_card.setVisibility(View.GONE);
-                    bookingprice.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onfailer(String error) {
-                Log.e(TAG, "Failed to get booking info: " + error);
-            }
-        });
-
-        TextView closeBtn = dialogView.findViewById(R.id.close_dialog);
-        closeBtn.setOnClickListener(v -> dialog.dismiss());
-        complete_button.setOnClickListener(v -> {
-            dialog.dismiss();
-            jobCompleteBooking(bookingId);
-        });
-    }
 
     public void jobUnallocated(int jobId, String passenger, String date) {
         LayoutInflater inflater = LayoutInflater.from(context);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_home" android:icon="@drawable/ic_home" android:title="Home"/>
-    <item android:id="@+id/nav_job" android:icon="@drawable/ic_activity" android:title="Jobs" />
+    <item android:id="@+id/nav_job" android:icon="@drawable/ic_ace_car" android:title="Bookings" />
     <item android:id="@+id/nav_availability" android:icon="@drawable/ic_future" android:title="Availability" />
     <item android:id="@+id/nav_report" android:icon="@drawable/ic_stat" android:title="Report" />
     <item android:id="@+id/nav_profile" android:icon="@drawable/ic_profile" android:title="Profile" />

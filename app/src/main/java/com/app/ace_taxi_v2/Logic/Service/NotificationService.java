@@ -97,14 +97,6 @@ public class NotificationService extends FirebaseMessagingService {
             intent.putExtra("navId", navId);
 
             switch (navId) {
-//                case "1":
-//                    try {
-//                        int bookingId = Integer.parseInt(jobId);
-//                        new NotificationJobDialogResponse(this).getBookingDetails(bookingId);
-//                    } catch (NumberFormatException e) {
-//                        Log.e(TAG, "Invalid jobId format: " + jobId, e);
-//                    }
-//                    break;
                 case "5":
                     intent.putExtra("message", message);
                     break;
@@ -113,6 +105,7 @@ public class NotificationService extends FirebaseMessagingService {
                     break;
             }
             startActivity(intent);
+            Log.d(TAG,"Start Activity launch with "+navId+" "+jobId+" "+datetime+" "+passenger);
         });
     }
 

@@ -63,25 +63,30 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView customerTextView;
         private final TextView mainAddressTextView;
         private final TextView subAddressTextView;
         private final MaterialButton viewButton;
         private final MaterialButton startButton;
         private final TextView price;
-        private final TextView pickupAddress, destinationAddress;
+        private final TextView pickupTime,destinationTime,pickpu_location;
+        private final TextView pickupAddress, destinationAddress,distance_duration,pickup_datetime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            customerTextView = itemView.findViewById(R.id.customer);
             mainAddressTextView = itemView.findViewById(R.id.mainAddressTextView);
             subAddressTextView = itemView.findViewById(R.id.subAddressTextView);
             viewButton = itemView.findViewById(R.id.viewButton);
             startButton = itemView.findViewById(R.id.startButton);
             price = itemView.findViewById(R.id.price);
             pickupAddress = itemView.findViewById(R.id.pickupAddress);
+            distance_duration = itemView.findViewById(R.id.distance_duration);
             destinationAddress = itemView.findViewById(R.id.destinationAddress);
+            pickup_datetime = itemView.findViewById(R.id.pickup_datetime);
+            pickupTime = itemView.findViewById(R.id.pickup_time);
+            pickpu_location = itemView.findViewById(R.id.pickup_location);
+            destinationTime = itemView.findViewById(R.id.destination_time);
+
         }
 
         public void bind(TodayBooking job, OnItemClickListener listener, int position) { // Added position parameter
@@ -99,13 +104,14 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                 String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() + (job.getDestinationPostCode() != null ? job.getDestinationPostCode() : "")
                         : (job.getDestinationPostCode() != null ? job.getDestinationPostCode() : "");
 
-                // Set basic UI elements
-                customerTextView.setText(String.valueOf(job.getPassengers()));
                 mainAddressTextView.setText(firstPickup);
                 subAddressTextView.setText(firstDestination);
                 price.setText("£" + job.getPrice());
                 pickupAddress.setText(lastPickup);
                 destinationAddress.setText(lastDestination);
+                distance_duration.setText(job.getDurationMinutes() + " mins");
+                pickup_datetime.setText(job.getPickupDateTime());
+                pickpu_location.setText(firstPickup);
 
                 BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
 
@@ -124,22 +130,18 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
                             if (job.getBookingId() == bookingId) {
                                 startButton.setText("Started");
-                                startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.dark_green));
                             }
                             if("4".equals(job.getStatus())){
                                 startButton.setText("TimeOut");
-                                startButton.setBackgroundColor(ContextCompat.getColor(context,R.color.red));
                             }
                             String status = job.getStatus();
                             if ("3".equals(status)) {
                                 bookingStartStatus.clearBookingId();
                                 startButton.setText("Completed");
-                                startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
                                 startButton.setEnabled(false);
                             } else if ("2".equals(status)) {
                                 bookingStartStatus.clearBookingId();
                                 startButton.setText("Rejected");
-                                startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.primaryColor));
                                 startButton.setEnabled(false);
                             } else if ("1".equals(status)) {
                                 startButton.setText("Start");
@@ -148,7 +150,6 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                                             Integer.parseInt(bookingStartStatus.getBookingId()) : -1;
                                     if (statusBookingId == job.getBookingId()) {
                                         startButton.setText("Active");
-                                        startButton.setBackgroundColor(ContextCompat.getColor(context, R.color.dark_blue));
                                     }
                                 } catch (NumberFormatException e) {
                                     Log.e("TodayJobAdapter", "Invalid booking ID format", e);

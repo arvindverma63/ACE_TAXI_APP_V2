@@ -24,7 +24,7 @@
     </style>
 
     <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
-        <item name="background">@color/primaryDark</item>
+        <item name="android:backgroundTint">@color/primaryDark</item>
         <item name="tabBackground">@drawable/tab_background_night</item>
     </style>
 
@@ -64,5 +64,8 @@
     <style name="NavMenuTextStyle">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/font_urban</item>
+    </style>
+    <style name="TablLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="backgroundTint">@color/primaryDark</item>
     </style>
 </resources>

@@ -47,6 +47,7 @@ public class GetBookingById {
                         return;
                     }
 
+                    Log.d("opening job modal : ","opening job dialog : bookingId: "+bookingId);
                     JobModal jobModal = new JobModal(context);
                     jobModal.jobOfferModal(
                             booking.getPickupAddress(),

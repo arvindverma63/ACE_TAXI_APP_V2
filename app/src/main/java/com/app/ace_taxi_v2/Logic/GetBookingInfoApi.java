@@ -31,26 +31,31 @@ public class GetBookingInfoApi {
         sentryUser.setId(String.valueOf(userId));
         Sentry.setUser(sentryUser);
 
-        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.bookingInfo(token,bookingId).enqueue(new Callback<GetBookingInfo>() {
-            @Override
-            public void onResponse(Call<GetBookingInfo> call, Response<GetBookingInfo> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body());
-                } else {
-                    Log.e("GetBookingInfoApi", "API Response Error: " + response.code() + " - " + response.message());
-                    Sentry.captureMessage("GetBookingInfoApi Error: HTTP " + response.code() + " - " + response.message());
-                    callback.onfailer("Failed to fetch booking info. Server error.");
+        try {
+            ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+            apiService.bookingInfo(token,bookingId).enqueue(new Callback<GetBookingInfo>() {
+                @Override
+                public void onResponse(Call<GetBookingInfo> call, Response<GetBookingInfo> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        Log.e("GetBookingInfoApi", "API Response Error: " + response.code() + " - " + response.message());
+                        Sentry.captureMessage("GetBookingInfoApi Error: HTTP " + response.code() + " - " + response.message());
+                        callback.onfailer("Failed to fetch booking info. Server error.");
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<GetBookingInfo> call, Throwable t) {
-                Log.e("GetBookingInfoApi", "API Call Failed", t);
-                Sentry.captureException(t);
-                callback.onfailer("Server not responding");
-            }
-        });
+                @Override
+                public void onFailure(Call<GetBookingInfo> call, Throwable t) {
+                    Log.e("GetBookingInfoApi", "API Call Failed", t);
+                    Sentry.captureException(t);
+                    callback.onfailer("Server not responding");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public interface BookingCallback{

@@ -22,6 +22,7 @@ public class TodayBooking {
     private int scope;
     private int paymentStatus;
     private int passengers;
+    private String durationMinutes;
 
     public String getStatus() {
         return status != null ? status : "";
@@ -201,5 +202,9 @@ public class TodayBooking {
             }
         }
         return dateTimeStr;
+    }
+
+    public String getDurationMinutes() {
+        return durationMinutes;
     }
 }

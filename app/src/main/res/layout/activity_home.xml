@@ -42,21 +42,6 @@
                         android:contentDescription="Notification Icon"
                         android:src="@drawable/ic_shift" />
 
-                    <!-- Notification Count Badge -->
-                    <TextView
-                        android:id="@+id/shift_color"
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:layout_gravity="end|top"
-                        android:background="@drawable/circular_badge"
-                        android:gravity="center"
-                        android:minWidth="16dp"
-                        android:minHeight="16dp"
-                        android:padding="2dp"
-                        android:text=""
-                        android:textColor="@android:color/white"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
                 </FrameLayout>
                 <!-- Centered Title -->
                 <TextView
@@ -124,7 +109,6 @@
         android:layout_height="wrap_content"
         style="@style/bottomNav"
         app:elevation="20dp"
-        android:background="#FFFFFF"
         app:menu="@menu/bottom_navigation_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

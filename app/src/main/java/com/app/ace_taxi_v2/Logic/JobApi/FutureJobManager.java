@@ -15,6 +15,7 @@ import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.FutureJobAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.JobModals.JobModal;
+import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Models.Jobs.Booking;
 import com.app.ace_taxi_v2.Models.Jobs.FutureJobResponse;
@@ -70,7 +71,7 @@ public class FutureJobManager {
                     adapter = new FutureJobAdapter(bookingList, context, new FutureJobAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(Booking booking) {
-                            JobModal jobModal = new JobModal(context);
+                            JobViewDialog jobModal = new JobViewDialog(context);
                             jobModal.JobViewForFutureAndHistory(booking.getBookingId());
                         }
 

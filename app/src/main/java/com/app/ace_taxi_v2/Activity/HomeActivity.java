@@ -3,6 +3,8 @@ package com.app.ace_taxi_v2.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,10 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.app.ace_taxi_v2.Activity.HomeActivityHelper.BaseActivity;
@@ -32,6 +36,7 @@ import com.app.ace_taxi_v2.Logic.Service.ConfigSessionManager;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 
 import io.sentry.android.core.SentryAndroid;
 
@@ -45,7 +50,6 @@ public class HomeActivity extends BaseActivity {
     private static final int TAP_THRESHOLD = 2;
     private static final int TIMEOUT = 2000;
     private final Handler handlerBack = new Handler();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +62,9 @@ public class HomeActivity extends BaseActivity {
         setupToolbar();
         setupNavigation();
         setupClickListeners();
+        getNotificationData();
 
-        // Handle notifications based on Android version
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getNotificationData();
-        }
+
 
         if (savedInstanceState == null) {
             navigationHandler.loadFragment(new HomeFragment());
@@ -251,5 +253,9 @@ public class HomeActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         permissionHelper.handlePermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void updateShiftIcon(){
+
     }
 }

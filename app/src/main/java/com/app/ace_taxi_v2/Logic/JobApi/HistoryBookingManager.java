@@ -15,6 +15,7 @@ import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.HistoryAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.JobModals.JobModal;
+import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Models.Jobs.HistoryBooking;
 
@@ -71,12 +72,13 @@ public class HistoryBookingManager {
                     recyclerView.setAdapter(new HistoryAdapter(bookingList, context,new HistoryAdapter.OnItemClickListener() {
                         @Override
                         public void onViewClick(HistoryBooking booking) {
+                            JobViewDialog jobModal = new JobViewDialog(context);
+                            jobModal.JobViewForFutureAndHistory(booking.getBookingId());
                         }
 
                         @Override
                         public void onStartClick(HistoryBooking booking) {
-                            JobModal jobModal = new JobModal(context);
-                            jobModal.JobViewForFutureAndHistory(booking.getBookingId());
+
                         }
                     }));
                 } else {

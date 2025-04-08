@@ -4,7 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#616161</color>
     <color name="primaryColor">#cd1a21</color>
-    <color name="light_gray">#D8D8D8</color>
+    <color name="light_gray">#F5F5F5</color>
     <color name="light_green">#D7282F</color>
     <color name="nav_text_color">#000000</color> <!-- Black -->
     <color name="nav_icon_color">#66BB6A</color> <!-- Green -->
@@ -12,7 +12,7 @@
     <color name="primaryDark">#181a20</color>
     <color name="green">#4CAF50</color>
     <color name="blue">#2196F3</color>
-    <color name="red">#AF0000</color>
+    <color name="red">#E31D1C</color>
     <color name="darkCard">#1F222A</color>
     <color name="trans">#00FFFFFF</color>
     <color name="dark_blue">#0D5C83</color>
@@ -29,4 +29,8 @@
     <color name="light_purple">#A374FF</color>
     <color name="light_yellow">#A9A16D</color>
 
+    <color name="start_shift">#3B82F6</color>
+    <color name="finish_shift">#6B7280</color>
+    <color name="on_break">#164E63</color>
+    <color name="finish_break">#22C55E</color>
 </resources>

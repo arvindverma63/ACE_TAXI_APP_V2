@@ -1,10 +1,14 @@
 package com.app.ace_taxi_v2.Components;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -34,8 +38,10 @@ public class ShiftChangeModal {
     }
 
     public void openModal() {
-        // Initialize Material AlertDialog
+        // Inflate custom layout
         View dialogView = LayoutInflater.from(context).inflate(R.layout.update_shift_status, null);
+
+        // Initialize Material AlertDialog
         alertDialog = new MaterialAlertDialogBuilder(context, R.style.CustomMaterialAlertDialog)
                 .setView(dialogView)
                 .setBackground(new ColorDrawable(android.graphics.Color.TRANSPARENT))
@@ -43,6 +49,15 @@ public class ShiftChangeModal {
 
         alertDialog.show();
 
+        // Set dialog position at top-left corner
+        Window window = alertDialog.getWindow();
+        if (window != null) {
+            window.setGravity(Gravity.TOP | Gravity.START);
+            window.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            window.setWindowAnimations(R.style.DialogAnimation); // Apply custom animation
+        }
+
+        // Initialize UI elements
         UpdateDriverShiftApi updateDriverShiftApi = new UpdateDriverShiftApi(context);
 
         startShift = dialogView.findViewById(R.id.btn_start_shift);
@@ -90,8 +105,8 @@ public class ShiftChangeModal {
 
         // Ensure UI reflects current status
         updateStatus();
-
     }
+
 
     // Open BookingFragment safely
     private void openBookingFragment() {
@@ -116,7 +131,6 @@ public class ShiftChangeModal {
     public void updateStatus() {
         CurrentShiftStatus currentShiftStatus = new CurrentShiftStatus(context);
         String current_status = currentShiftStatus.getStatus();
-
         if (current_status == null) {
             Log.w("ShiftChangeModal", "No shift status found.");
             return;
@@ -124,20 +138,20 @@ public class ShiftChangeModal {
 
         switch (current_status) {
             case "onShift":
-                start_shift_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.red));
-                start_shift_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_red));
+                start_shift_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.start_shift));
+                start_shift_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_blue));
                 break;
             case "onBreak":
-                on_break_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.green));
-                on_break_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.green_light));
+                on_break_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.on_break));
+                on_break_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_blue));
                 break;
             case "onFinish":
-                finish_shift_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.blue));
-                finish_shift_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_blue));
+                finish_shift_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.finish_shift));
+                finish_shift_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_gray));
                 break;
             case "onBreakFinish":
-                finish_break_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.orange));
-                finish_break_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.light_orange));
+                finish_break_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.finish_break));
+                finish_break_card.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.green_light));
                 break;
             default:
                 rank_pickup_card.setStrokeColor(ContextCompat.getColorStateList(context, R.color.darkCard));
