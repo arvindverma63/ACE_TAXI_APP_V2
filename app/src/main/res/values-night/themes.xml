@@ -14,6 +14,9 @@
     <style name="CardBG">
         <item name="android:backgroundTint">@color/darkCard</item>
     </style>
+    <style name="CardBGMenu">
+        <item name="android:backgroundTint">@color/darkCard</item>
+    </style>
     <style name="TextBG">
         <item name="android:textColor">@color/white</item>
     </style>

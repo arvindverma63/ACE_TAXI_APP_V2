@@ -4,12 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/gradient_background"
+    android:background="@color/red"
     android:gravity="center">
 
 
-<pl.droidsonroids.gif.GifImageView
-    android:layout_width="1400dp"
-    android:layout_height="1000dp"
-    android:src="@drawable/ic_splash_screen"/>
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:contentDescription="Profile Image"
+            android:src="@drawable/ic_app_logo"
+            android:scaleType="centerCrop" />
+
+    <!-- App Name -->
+
+    <!-- Progress Spinner -->
+    <ProgressBar
+        android:id="@+id/progress_spinner"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:indeterminateDrawable="@drawable/circle_progress_light"
+        android:layout_marginTop="200dp" />
 </LinearLayout>

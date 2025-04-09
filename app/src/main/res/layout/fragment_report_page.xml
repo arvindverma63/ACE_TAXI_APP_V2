@@ -32,8 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
+            app:strokeWidth="0dp"
             android:id="@+id/earning_report"
-            style="@style/CardBG">
+            style="@style/CardBGMenu">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,7 +70,8 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/CardBG"
+            style="@style/CardBGMenu"
+            app:strokeWidth="0dp"
             android:id="@+id/statement_report"
             app:cardCornerRadius="12dp">
 
