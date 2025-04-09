@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
+import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
@@ -25,14 +27,18 @@ import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 public class JobViewDialog {
     private static final String TAG = "JobViewDialog";
     private final WeakReference<Context> contextRef;
-
+    CurrentBookingSession bookingSession;
+    BookingStartStatus bookingStatus;
     public JobViewDialog(Context context) {
         this.contextRef = new WeakReference<>(context);
+        bookingSession = new CurrentBookingSession(context);
+        bookingStatus = new BookingStartStatus(context);
     }
 
     public void JobViewForTodayJob(int bookingId) {
@@ -87,11 +93,7 @@ public class JobViewDialog {
             closeBtn.setOnClickListener(v -> dialog.dismiss());
 
             job_status_change.setContentDescription("Change job status");
-            job_status_change.setOnClickListener(v -> {
-                dialog.dismiss();
-                JobStatusModal jobStatusModal = new JobStatusModal(context);
-                jobStatusModal.openModal(bookingId);
-            });
+
 
             CurrentBookingSession bookingSession = new CurrentBookingSession(context);
             if (bookingSession.getBookingId().equals(String.valueOf(bookingId))) {
@@ -108,11 +110,7 @@ public class JobViewDialog {
                 jobModal.jobCompleteBooking(bookingId);
             });
 
-            start_button.setOnClickListener(v -> {
-                dialog.dismiss();
-                Toast.makeText(context, "Starting job for booking " + bookingId, Toast.LENGTH_SHORT).show();
-                // Add start job logic here
-            });
+
             if(!showCompleteButton){
                 complete_button.setVisibility(View.GONE);
                 start_button.setVisibility(View.GONE);
@@ -149,7 +147,16 @@ public class JobViewDialog {
                     destination_subaddress.setText(lastDestination.isEmpty() ? "N/A" : lastDestination);
                     destinationAddress.setText(firstDestination.isEmpty() ? "N/A" : firstDestination);
                     passenger_count.setText(bookingInfo.getPassengers() + " Passengers");
+                    start_button.setOnClickListener(v -> {
+                        dialog.dismiss();
+                        startBooking(context,bookingInfo);
+                    });
 
+                    job_status_change.setOnClickListener(v -> {
+                        if (bookingSession.getBookingId().equals(String.valueOf(bookingInfo.getBookingId()))) {
+                            new JobStatusModal(context).openModal(bookingId);
+                        }
+                    });
                 }
 
                 @Override
@@ -163,5 +170,33 @@ public class JobViewDialog {
             e.printStackTrace();
         }
 
+    }
+
+    public void startBooking(Context context, GetBookingInfo job) {  // Change List to single object
+        try {
+
+
+            int activeBookingId = -1;
+            String currentBookingId = bookingStatus.getBookingId();
+
+            if (currentBookingId != null && !currentBookingId.isEmpty()) {
+                activeBookingId = Integer.parseInt(currentBookingId);
+            }
+
+
+            if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
+                Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (currentBookingId == null && "1".equals(job.getStatus())) {
+                bookingStatus.setBookingId(String.valueOf(job.getBookingId()));
+                bookingSession.saveBookingId(job.getBookingId());
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error starting booking", e);
+            Toast.makeText(context, "Error starting job", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -35,11 +35,13 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
     private final OnItemClickListener listener;
     private final Context context;
     int statusBookingId = 0;
+    CurrentBookingSession currentBookingSession;
 
     public TodayJobAdapter(Context context, List<TodayBooking> jobList, OnItemClickListener listener) {
         this.context = context;
         this.jobList = jobList;
         this.listener = listener;
+        currentBookingSession = new CurrentBookingSession(context);
     }
 
     @NonNull
@@ -195,6 +197,8 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
                         if (bookingStartStatus.getBookingId() == null && "1".equals(job.getStatus())) {
                             bookingStartStatus.setBookingId(String.valueOf(job.getBookingId()));
+                            currentBookingSession.saveBookingId(job.getBookingId());
+
                         }
 
                         // Set booking ID and start job if no active booking exists
