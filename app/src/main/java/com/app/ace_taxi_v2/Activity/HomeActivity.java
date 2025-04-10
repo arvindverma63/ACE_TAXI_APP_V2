@@ -1,4 +1,3 @@
-// HomeActivity.java
 package com.app.ace_taxi_v2.Activity;
 
 import android.annotation.SuppressLint;
@@ -50,10 +49,16 @@ public class HomeActivity extends BaseActivity {
     private static final int TAP_THRESHOLD = 2;
     private static final int TIMEOUT = 2000;
     private final Handler handlerBack = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        try {
+            setContentView(R.layout.activity_home);
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error setting content view", e);
+            return;
+        }
 
         initializeViews();
         setupSession();
@@ -64,166 +69,222 @@ public class HomeActivity extends BaseActivity {
         setupClickListeners();
         getNotificationData();
 
-
-
-        if (savedInstanceState == null) {
-            navigationHandler.loadFragment(new HomeFragment());
-            navigationHandler.setSelectedItem(R.id.nav_home);
+        try {
+            if (savedInstanceState == null) {
+                navigationHandler.loadFragment(new HomeFragment());
+                navigationHandler.setSelectedItem(R.id.nav_home);
+            }
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error loading initial fragment", e);
         }
     }
 
     private void initializeViews() {
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        hamMenu = findViewById(R.id.ham_menu);
-//        phoneIcon = findViewById(R.id.phone_icon);
-//        messageIcon = findViewById(R.id.message_icon);
+        try {
+            bottomNavigationView = findViewById(R.id.bottom_navigation);
+            hamMenu = findViewById(R.id.ham_menu);
+//            phoneIcon = findViewById(R.id.phone_icon);
+//            messageIcon = findViewById(R.id.message_icon);
 
-        notificationHandler = new NotificationHandler(this,
-                findViewById(R.id.notificationIcon),
-                findViewById(R.id.notificationCount));
+            notificationHandler = new NotificationHandler(this,
+                    findViewById(R.id.notificationIcon),
+                    findViewById(R.id.notificationCount));
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error initializing views", e);
+        }
     }
 
     private void setupSession() {
-        SessionManager sessionManager = new SessionManager(this);
-        if (!sessionManager.isLoggedIn()) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+        try {
+            SessionManager sessionManager = new SessionManager(this);
+            if (!sessionManager.isLoggedIn()) {
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            }
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error setting up session", e);
         }
     }
 
     private void initializeHelpers() {
-        permissionHelper = new BackgroundPermissionHelper(this);
-        permissionHelper.requestLocationPermissions();
+        try {
+            permissionHelper = new BackgroundPermissionHelper(this);
+            permissionHelper.requestLocationPermissions();
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error initializing helpers", e);
+        }
     }
 
     private void setupSentry() {
-        SentryAndroid.init(this, options -> {
-            options.setDsn("https://aa346bb12052028e902fac3576466b52@o4508856621858816.ingest.us.sentry.io/4508856623038464");
-            options.setBeforeSend((event, hint) ->
-                    event.getLevel() == io.sentry.SentryLevel.DEBUG ? null : event);
-        });
+        try {
+            SentryAndroid.init(this, options -> {
+                options.setDsn("https://aa346bb12052028e902fac3576466b52@o4508856621858816.ingest.us.sentry.io/4508856623038464");
+                options.setBeforeSend((event, hint) ->
+                        event.getLevel() == io.sentry.SentryLevel.DEBUG ? null : event);
+            });
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error setting up Sentry", e);
+        }
     }
 
     private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(""); // Using custom title from XML
+        try {
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(""); // Using custom title from XML
+            }
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error setting up toolbar", e);
         }
     }
 
     private void setupNavigation() {
-        navigationHandler = new NavigationHandler(this, bottomNavigationView);
+        try {
+            navigationHandler = new NavigationHandler(this, bottomNavigationView);
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error setting up navigation", e);
+        }
     }
 
     private void setupClickListeners() {
-        hamMenu.setOnClickListener(v -> new ShiftChangeModal(this, getSupportFragmentManager()).openModal());
-//        setupPhoneButton();
-//        setupMessageButton();
+        try {
+            hamMenu.setOnClickListener(v -> new ShiftChangeModal(this, getSupportFragmentManager()).openModal());
+//            setupPhoneButton();
+//            setupMessageButton();
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error setting up click listeners", e);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu, menu);
-        return true;
+        try {
+            getMenuInflater().inflate(R.menu.options_menu, menu);
+            return true;
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error creating options menu", e);
+            return false;
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.action_logout) {
-            navigationHandler.handleLogout();
-            return true;
-        } else if (itemId == R.id.action_settings) {
-            loadFragment(new SettingFragment());
-            return true;
+        try {
+            int itemId = item.getItemId();
+            if (itemId == R.id.action_logout) {
+                navigationHandler.handleLogout();
+                return true;
+            } else if (itemId == R.id.action_settings) {
+                loadFragment(new SettingFragment());
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error handling options item selected", e);
+            return false;
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void loadFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+        try {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error loading fragment", e);
+        }
     }
 
     @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        try {
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-            return;
-        }
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+                return;
+            }
 
-        if (!(currentFragment instanceof HomeFragment)) {
-            navigationHandler.loadFragment(new HomeFragment());
-            navigationHandler.setSelectedItem(R.id.nav_home);
-            return;
-        }
+            if (!(currentFragment instanceof HomeFragment)) {
+                navigationHandler.loadFragment(new HomeFragment());
+                navigationHandler.setSelectedItem(R.id.nav_home);
+                return;
+            }
 
-        tapCount++;
-        if (tapCount == TAP_THRESHOLD) {
-            finishAffinity();
-        } else {
-            Toast.makeText(this, "Tap again to exit", Toast.LENGTH_SHORT).show();
-            handlerBack.postDelayed(() -> tapCount = 0, TIMEOUT);
+            tapCount++;
+            if (tapCount == TAP_THRESHOLD) {
+                finishAffinity();
+            } else {
+                Toast.makeText(this, "Tap again to exit", Toast.LENGTH_SHORT).show();
+                handlerBack.postDelayed(() -> tapCount = 0, TIMEOUT);
+            }
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error handling back press", e);
         }
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
-        notificationHandler.startNotificationUpdates();
+        try {
+            super.onResume();
+            notificationHandler.startNotificationUpdates();
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error in onResume", e);
+        }
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
-        notificationHandler.stopNotificationUpdates();
+        try {
+            super.onPause();
+            notificationHandler.stopNotificationUpdates();
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error in onPause", e);
+        }
     }
 
     @SuppressLint("NewApi")
     private void getNotificationData() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return; // Early return for pre-Oreo devices
-        }
-
-        Intent intent = getIntent();
-        int navId = -1, jobId = -1;
-        String message = intent.getStringExtra("message") != null ? intent.getStringExtra("message") : "";
-        String passenger = "";
-        String dateTime = intent.getStringExtra("datetime");
-        String pickupAddress = intent.getStringExtra("pickupAddress");
-        boolean accepted = intent.getBooleanExtra("accepted", false);
-        boolean rejected = intent.getBooleanExtra("rejected", false);
-
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            try {
-                Object navIdObj = extras.get("navId");
-                if (navIdObj != null) {
-                    navId = Integer.parseInt(navIdObj.toString());
-                }
-
-                Object jobIdObj = extras.get("jobId");
-                if (jobIdObj != null) {
-                    jobId = Integer.parseInt(jobIdObj.toString());
-                }
-
-                passenger = extras.getString("passenger", "");
-                message = extras.getString("message", message);
-            } catch (NumberFormatException e) {
-                Log.e("HomeActivity", "Invalid number format in intent extras", e);
-            }
-        }
-
-        Log.d("HomeActivity Intent Data", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message + ", DateTime: " + dateTime);
-
         try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                return; // Early return for pre-Oreo devices
+            }
+
+            Intent intent = getIntent();
+            int navId = -1, jobId = -1;
+            String message = intent.getStringExtra("message") != null ? intent.getStringExtra("message") : "";
+            String passenger = "";
+            String dateTime = intent.getStringExtra("datetime");
+            String pickupAddress = intent.getStringExtra("pickupAddress");
+            boolean accepted = intent.getBooleanExtra("accepted", false);
+            boolean rejected = intent.getBooleanExtra("rejected", false);
+
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                try {
+                    Object navIdObj = extras.get("navId");
+                    if (navIdObj != null) {
+                        navId = Integer.parseInt(navIdObj.toString());
+                    }
+
+                    Object jobIdObj = extras.get("jobId");
+                    if (jobIdObj != null) {
+                        jobId = Integer.parseInt(jobIdObj.toString());
+                    }
+
+                    passenger = extras.getString("passenger", "");
+                    message = extras.getString("message", message);
+                } catch (NumberFormatException e) {
+                    Log.e("HomeActivity", "Invalid number format in intent extras", e);
+                }
+            }
+
+            Log.d("HomeActivity Intent Data", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message + ", DateTime: " + dateTime);
+
             if (jobId > 0 && navId == 1) {
                 new GetBookingById(this).getBookingDetails(jobId);
             }
@@ -249,13 +310,22 @@ public class HomeActivity extends BaseActivity {
             Log.e("HomeActivity", "Error processing notification data", e);
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        permissionHelper.handlePermissionsResult(requestCode, permissions, grantResults);
+        try {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            permissionHelper.handlePermissionsResult(requestCode, permissions, grantResults);
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error handling permission result", e);
+        }
     }
 
-    public void updateShiftIcon(){
-
+    public void updateShiftIcon() {
+        try {
+            // Add implementation if needed
+        } catch (Exception e) {
+            Log.e("HomeActivity", "Error updating shift icon", e);
+        }
     }
 }

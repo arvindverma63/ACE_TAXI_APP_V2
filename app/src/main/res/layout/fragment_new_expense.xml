@@ -144,11 +144,12 @@
             android:layout_height="wrap_content"
             android:text="VIEW"
             android:textColor="@color/green"
+            app:strokeWidth="1dp"
             app:strokeColor="@color/green"
             app:cornerRadius="1000dp"
             android:padding="14dp"
             android:layout_marginStart="8dp"
-            android:backgroundTint="@color/light_gray"
+            android:backgroundTint="@color/white"
             android:elevation="4dp"/>
     </LinearLayout>
 

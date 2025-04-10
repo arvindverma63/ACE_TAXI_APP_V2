@@ -17,19 +17,19 @@
 
 
     <style name="MainBG">
-        <item name="android:background">#FFFFFF</item>
+        <item name="android:background">#F5F5F5</item>
     </style>
     <style name="CardBG">
         <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="CardBGMenu">
-        <item name="android:backgroundTint">@color/light_gray</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="TextBG">
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">@color/light_gray</item>
         <item name="tabBackground">@drawable/tab_background</item>
     </style>
     <style name="TableTheme">
