@@ -133,6 +133,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        style="@style/IconTint"
                         android:src="@drawable/ic_arrow_forward"
                         android:layout_gravity="center"/>
 
@@ -186,6 +187,7 @@
                         android:layout_weight="1"/>
                     <ImageView
                         android:layout_width="40dp"
+                        style="@style/IconTint"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_arrow_forward"
                         android:layout_gravity="center"/>
@@ -210,9 +212,9 @@
                 style="@style/CardBG"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="2dp"
                 app:cardCornerRadius="12dp"
-                android:visibility="gone"
                 app:strokeColor="@color/green"
                 app:strokeWidth="1dp">
 
@@ -231,7 +233,7 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.card.MaterialCardView
-                            android:layout_width="wrap_content"
+                            android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/purple"
                             android:padding="10dp"
@@ -244,6 +246,7 @@
                                 android:padding="10dp"
                                 android:layout_gravity="center"
                                 android:text="Card"
+                                android:textAllCaps="true"
                                 android:id="@+id/scope_text"
                                 android:textColor="@color/white" />
                         </com.google.android.material.card.MaterialCardView>
@@ -253,28 +256,36 @@
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/green"
                             android:padding="10dp"
+                            android:layout_gravity="center"
                             app:cardCornerRadius="1000dp"
                             android:layout_marginLeft="10dp"
                             app:strokeWidth="0dp">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:padding="10dp"
                                 android:layout_gravity="center"
                                 android:text="Paid"
+                                android:textAllCaps="true"
+                                android:gravity="center"
                                 android:id="@+id/payment_status"
                                 android:textColor="@color/white" />
                         </com.google.android.material.card.MaterialCardView>
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="@integer/material_motion_duration_long_1"/>
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:id="@+id/job_action"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_bar"/>
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="10dp"
-                        android:alpha="0.2"
-                        android:background="@android:color/darker_gray" />
+
 
                     <!-- Pickup Section -->
                     <LinearLayout
@@ -332,6 +343,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="end"
+                            android:id="@+id/pickup_time"
                             android:textStyle="bold"
                             android:text="16:20" />
                     </LinearLayout>
@@ -340,10 +352,75 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginVertical="7dp"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginTop="0dp"
                         android:alpha="0.2"
                         android:background="@android:color/darker_gray" />
 
+                    <!-- Replace or add after the original vias layout -->
+                    <LinearLayout
+                        android:id="@+id/vias_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_below="@id/destination_subaddress" />
+
+                    <!-- Original vias layout (optional, can be removed if not needed) -->
+                    <LinearLayout
+                        android:id="@+id/vias"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+                        <!-- Existing content, kept hidden -->
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_marginEnd="12dp"
+                            app:tint="@color/blue"
+                            android:contentDescription="Destination Location"
+                            android:src="@drawable/ic_destination" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/vias_address"
+                                style="@style/TextBG"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/vias_code"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginTop="0dp"
+                        android:alpha="0.2"
+                        android:background="@android:color/darker_gray" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -392,7 +469,22 @@
 
                         </LinearLayout>
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:id="@+id/destination_time"
+                            android:text="16:20" />
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="7dp"
+                        android:alpha="0.2"
+                        android:background="@android:color/darker_gray" />
+
+
 
                     <!-- Footer Section -->
                     <LinearLayout
@@ -582,6 +674,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                style="@style/IconTint"
                                 android:src="@drawable/ic_arrow_forward"/>
 
                         </LinearLayout>
@@ -610,6 +703,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                style="@style/IconTint"
                                 android:src="@drawable/ic_arrow_forward"/>
 
                         </LinearLayout>
@@ -636,6 +730,7 @@
                                 android:layout_weight="1"/>
                             <ImageView
                                 android:layout_width="wrap_content"
+                                style="@style/IconTint"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_arrow_forward"/>
 

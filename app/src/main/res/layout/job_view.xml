@@ -102,7 +102,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/current_price"
+                    android:id="@+id/pickup_time"
                     style="@style/TextBG"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -133,6 +133,71 @@
             </LinearLayout>
 
 
+            <!-- Replace or add after the original vias layout -->
+            <LinearLayout
+                android:id="@+id/vias_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/destination_subaddress" />
+
+            <!-- Original vias layout (optional, can be removed if not needed) -->
+            <LinearLayout
+                android:id="@+id/vias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <!-- Existing content, kept hidden -->
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginEnd="12dp"
+                    app:tint="@color/blue"
+                    android:contentDescription="Destination Location"
+                    android:src="@drawable/ic_destination" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/vias_address"
+                        style="@style/TextBG"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/vias_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="0dp"
+                android:alpha="0.2"
+                android:background="@android:color/darker_gray" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,7 +245,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/current_passenger_count"
+                        android:id="@+id/destination_time"
                         style="@style/TextBG"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

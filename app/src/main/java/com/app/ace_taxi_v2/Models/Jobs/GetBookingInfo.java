@@ -37,7 +37,7 @@ public class GetBookingInfo {
     private String pickupPostCode;
     private String destinationAddress;
     private String destinationPostCode;
-    private List<String> vias;
+    private List<Vias> vias;
     private String recurrenceException;
     private String recurrenceID;
     private String recurrenceRule;
@@ -126,7 +126,23 @@ public class GetBookingInfo {
     public void setDurationText(String durationText) { this.durationText = durationText; }
     public String getDetails() { return details; }
     public void setDetails(String details) { this.details = details; }
-    public String getEndTime() { return endTime; }
+    public String getEndTime() {
+        // Example input: "2025-04-14T20:32:00"
+        LocalDateTime dateTime = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            dateTime = LocalDateTime.parse(endTime);
+        }
+
+        // Format to 12-hour time with AM/PM
+        DateTimeFormatter formatter = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            formatter = DateTimeFormatter.ofPattern("hh:mm a");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return dateTime.format(formatter);
+        }
+        return dateTime.toString();
+    }
     public void setEndTime(String endTime) { this.endTime = endTime; }
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
@@ -140,8 +156,7 @@ public class GetBookingInfo {
     public void setUpdatedByName(String updatedByName) { this.updatedByName = updatedByName; }
     public boolean isCancelled() { return cancelled; }
     public void setCancelled(boolean cancelled) { this.cancelled = cancelled; }
-    public List<String> getVias() { return vias; }
-    public void setVias(List<String> vias) { this.vias = vias; }
+    public List<Vias> getVias() { return vias; }
     public int getAccountNumber() { return accountNumber; }
     public void setAccountNumber(int accountNumber) { this.accountNumber = accountNumber; }
 

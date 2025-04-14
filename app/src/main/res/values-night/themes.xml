@@ -19,6 +19,7 @@
     </style>
     <style name="TextBG">
         <item name="android:textColor">@color/white</item>
+        <item name="android:drawableTint">@color/white</item>
     </style>
 
     <style name="ActionBar" parent="Widget.Material3.Toolbar">
@@ -71,4 +72,18 @@
     <style name="TablLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="backgroundTint">@color/primaryDark</item>
     </style>
+    <style name="ButtonAvail" parent="Widget.Material3.Button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:backgroundTint">@color/darkCard</item>
+        <item name="strokeColor">@color/gray</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:padding">15dp</item>
+    </style>
+    <style name="profileField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxBackgroundColor">@color/darkCard</item>
+    </style>
+
 </resources>

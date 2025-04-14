@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.PorterDuff;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,21 +22,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
-import com.app.ace_taxi_v2.Components.ShiftChangeModal;
-import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ActivitiesHelper;
-import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.DashboardHelper;
-import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ApplicationsHelper;
-import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ProfileHelper;
-import com.app.ace_taxi_v2.Fragments.HomeFragmentHelpers.ReportsHelper;
-import com.app.ace_taxi_v2.JobModals.JobModal;
+import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
-import com.app.ace_taxi_v2.Logic.dashboard.DashboardTotalApi;
-import com.app.ace_taxi_v2.Models.Dashtotal;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
+import com.app.ace_taxi_v2.Models.Jobs.Vias;
 import com.app.ace_taxi_v2.Models.UserProfileResponse;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
@@ -58,12 +47,15 @@ public class HomeFragment extends Fragment {
     private MaterialButton viewBtn;
     public ImageView sideMenu;
     private MaterialSwitch locationSwitch;
-    private TextView onlineStatusLabel,set_job_status,payment_status,scope_text;
+    private TextView onlineStatusLabel, set_job_status, payment_status, scope_text;
     private LocationPermissions locationPermissions;
-    private TextView pickup_address,driver_name, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
-    private MaterialCardView current_job_card,userProfile;
-    private MaterialCardView activeJobStatus,location_card,add_expenses;
-    private LinearLayout notification_btn,report_btn,logout_btn;
+    private TextView pickup_address, driver_name, destination_address, pickup_subaddress, destination_subaddress, date, price, passenger_count, passenger_name;
+    private MaterialCardView current_job_card, userProfile;
+    private MaterialCardView activeJobStatus, location_card, add_expenses;
+    private LinearLayout notification_btn, report_btn, logout_btn, vias_layout;
+    private LinearLayout vias_container; // New container for vias
+    private TextView vias_address, vias_code,pickup_time,destination_time;
+    private ImageView job_action;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,6 +85,24 @@ public class HomeFragment extends Fragment {
             logout_btn = view.findViewById(R.id.logout_btn);
             payment_status = view.findViewById(R.id.payment_status);
             scope_text = view.findViewById(R.id.scope_text);
+            vias_layout = view.findViewById(R.id.vias);
+            vias_address = view.findViewById(R.id.vias_address);
+            vias_code = view.findViewById(R.id.vias_code);
+            vias_container = view.findViewById(R.id.vias_container); // Try to find container
+            pickup_time = view.findViewById(R.id.pickup_time);
+            job_action = view.findViewById(R.id.job_action);
+            destination_time = view.findViewById(R.id.destination_time);
+
+            // If vias_container doesn't exist, create one programmatically
+            if (vias_container == null) {
+                vias_container = new LinearLayout(getContext());
+                vias_container.setId(View.generateViewId());
+                vias_container.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                vias_container.setOrientation(LinearLayout.VERTICAL);
+                ((ViewGroup) vias_layout.getParent()).addView(vias_container);
+            }
 
             if (getActivity() == null) return view;
             SessionManager sessionManager = new SessionManager(getActivity());
@@ -181,14 +191,11 @@ public class HomeFragment extends Fragment {
             // Update the status label text
             onlineStatusLabel.setText(isOnline ? "Send Location On" : "Send Location Off");
 
-            // Define colorsMeshes
+            // Define colors
             int trackColor = ContextCompat.getColor(getContext(), isOnline ? R.color.green : R.color.light_gray);
             int thumbColor = ContextCompat.getColor(getContext(), isOnline ? R.color.white : R.color.gray);
-            int iconColor = ContextCompat.getColor(getContext(), isOnline ? R.color.green : R.color.red);
 
-            location_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),isOnline ? R.color.green : R.color.red));
-
-            // Apply colors to switch and icon
+            // Apply colors to switch
             locationSwitch.setTrackTintList(ColorStateList.valueOf(trackColor));
             locationSwitch.setThumbTintList(ColorStateList.valueOf(thumbColor));
         } catch (Exception e) {
@@ -199,7 +206,7 @@ public class HomeFragment extends Fragment {
     public void getCurrentBooking() {
         try {
             BookingStartStatus bookingStartStatus = new BookingStartStatus(getContext());
-            int bookingId = 0; // Default to -1 if no booking exists
+            int bookingId = 0; // Default to 0 if no booking exists
 
             try {
                 String bookingIdStr = bookingStartStatus.getBookingId();
@@ -220,49 +227,84 @@ public class HomeFragment extends Fragment {
                         for (TodayBooking booking : list) {
                             String status = booking.getStatus();
                             if ("1".equals(status) && booking.getBookingId() == finalBookingId) {
+                                // Pickup address handling
                                 String pickup = booking.getPickupAddress();
                                 String[] pickupParts = pickup != null ? pickup.split(",") : new String[]{""};
                                 String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
-                                String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() + booking.getPickupPostCode() : booking.getPickupPostCode();
+                                String lastPickup = pickupParts.length > 1 ? pickupParts[pickupParts.length - 1].trim() + " " + booking.getPickupPostCode() : booking.getPickupPostCode();
 
+                                // Destination address handling
                                 String destination = booking.getDestinationAddress();
                                 String[] destinationParts = destination != null ? destination.split(",") : new String[]{""};
                                 String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
-                                String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() + booking.getDestinationPostCode() : booking.getDestinationPostCode();
+                                String lastDestination = destinationParts.length > 1 ? destinationParts[destinationParts.length - 1].trim() + " " + booking.getDestinationPostCode() : booking.getDestinationPostCode();
 
+                                // Vias handling
+                                vias_layout.setVisibility(View.GONE); // Hide original vias layout
+                                vias_container.removeAllViews(); // Clear previous via views
+                                List<Vias> vias = booking.getVias();
+                                if (vias != null && !vias.isEmpty()) {
+                                    vias_container.setVisibility(View.VISIBLE);
+                                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                                    for (Vias via : vias) {
+                                        View viaView = inflater.inflate(R.layout.layout_via_item, vias_container, false);
+                                        TextView viaAddress = viaView.findViewById(R.id.via_address);
+                                        TextView viaCode = viaView.findViewById(R.id.via_code);
+
+                                        String viaAddressText = via.getAddress() != null ? via.getAddress() : "";
+                                        String viaPostCode = via.getPostCode() != null ? via.getPostCode() : "";
+                                        String[] viaParts = viaAddressText.split(",");
+                                        String firstVia = viaParts.length > 0 ? viaParts[0].trim() : "";
+                                        String lastVia = viaParts.length > 1 ? viaParts[viaParts.length - 1].trim() : "";
+
+                                        viaAddress.setText(firstVia);
+                                        viaCode.setText(lastVia + (viaPostCode.isEmpty() ? "" : " " + viaPostCode));
+
+                                        vias_container.addView(viaView);
+                                    }
+                                } else {
+                                    vias_container.setVisibility(View.GONE);
+                                }
+
+                                // Set UI elements
                                 pickup_address.setText(firstPickup);
                                 pickup_subaddress.setText(lastPickup);
                                 destination_address.setText(firstDestination);
                                 destination_subaddress.setText(lastDestination);
                                 price.setText("£" + booking.getPrice());
-                                date.setText(booking.getPickupDateTime());
-                                passenger_count.setText(String.valueOf(booking.getPassengers())+" Passengers");
+                                date.setText(booking.getFormattedDateTime());
+                                destination_time.setText(booking.getEndTime());
+                                passenger_count.setText(String.valueOf(booking.getPassengers()) + " Passengers");
                                 passenger_name.setText(booking.getPassengerName());
                                 payment_status.setText(booking.getPaymentStatusText());
                                 scope_text.setText(booking.getScopeText());
+                                String pickupTime = booking.getPickupDateTime();
+                                String[] parts = pickupTime.split(",");
+                                pickup_time.setText(parts[parts.length - 1]);
+
+                                job_action.setOnClickListener(v -> {
+                                    JobStatusModal jobStatusModal = new JobStatusModal(getContext());
+                                    jobStatusModal.openModal(finalBookingId);
+                                });
 
                                 try {
-                                    if("Account".equals(booking.getScopeText())){
+                                    if ("Account".equals(booking.getScopeText())) {
                                         price.setText("ACC");
-                                        price.setTextColor(ContextCompat.getColor(getContext(),R.color.red));
+                                        price.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
-                                current_job_card.setOnClickListener(v -> {
-                                    JobViewDialog jobModal = new JobViewDialog(getContext());
-                                    jobModal.JobViewForTodayJob(finalBookingId1);
-                                });
                                 viewBtn.setOnClickListener(view -> {
                                     JobViewDialog jobModal = new JobViewDialog(getContext());
                                     jobModal.JobViewForTodayJob(finalBookingId1);
                                 });
-                                Log.e("current Job card vissble ","visiable");
-                                current_job_card.setVisibility(getView().VISIBLE);
+                                Log.e("current Job card vissble ", "visiable");
+                                current_job_card.setVisibility(View.VISIBLE);
                                 set_job_status.setText("Active Booking");
-                                viewBtn.setVisibility(getView().VISIBLE);
-                                activeJobStatus.setVisibility(getView().GONE);
+                                viewBtn.setVisibility(View.VISIBLE);
+                                activeJobStatus.setVisibility(View.GONE);
                             }
                         }
                     } catch (Exception e) {
@@ -318,14 +360,14 @@ public class HomeFragment extends Fragment {
                 return false;
             }
 
-            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            android.location.LocationManager locationManager = (android.location.LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
             if (locationManager == null) {
                 Log.e(TAG, "LocationManager is null");
                 return false;
             }
 
-            boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            boolean gpsEnabled = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+            boolean networkEnabled = locationManager.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER);
             return gpsEnabled || networkEnabled;
         } catch (Exception e) {
             Log.e(TAG, "Error checking location status", e);
@@ -333,7 +375,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public void updateDash(){
+    public void updateDash() {
         try {
             LoginManager loginManager = new LoginManager(getContext());
             loginManager.getProfile(new LoginManager.ProfileCallback() {
@@ -362,7 +404,7 @@ public class HomeFragment extends Fragment {
                 replaceFragment(new MessageFragment());
             });
             report_btn.setOnClickListener(view -> {
-                replaceFragment(new ReportFragment());
+                replaceFragment(new ReportPageFragment());
             });
             sideMenu.setOnClickListener(view -> {
                 replaceFragment(new SettingFragment());
@@ -371,7 +413,7 @@ public class HomeFragment extends Fragment {
                 try {
                     SessionManager sessionManager = new SessionManager(getContext());
                     sessionManager.clearSession();
-                    Intent intent = new Intent(getContext(),LoginActivity.class);
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
                 } catch (Exception e) {
                     Log.e(TAG, "Error during logout", e);

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
+import com.app.ace_taxi_v2.Models.Jobs.Vias;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 
@@ -29,6 +31,8 @@ import java.lang.ref.WeakReference;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+
+import io.sentry.android.core.internal.threaddump.Line;
 
 public class JobViewDialog {
     private static final String TAG = "JobViewDialog";
@@ -87,6 +91,12 @@ public class JobViewDialog {
             TextView trip_fare = dialogView.findViewById(R.id.trip_fare);
             MaterialButton cancel_button = dialogView.findViewById(R.id.cancel_button);
             TextView passenger_count = dialogView.findViewById(R.id.passenger_count);
+            TextView pickupTime = dialogView.findViewById(R.id.pickup_time);
+            TextView destinationTime = dialogView.findViewById(R.id.destination_time);
+            TextView vias_address = dialogView.findViewById(R.id.vias_address);
+            TextView vias_code = dialogView.findViewById(R.id.vias_code);
+            LinearLayout vias_container = dialogView.findViewById(R.id.vias_container); // Try to find container
+            LinearLayout vias_layout = dialogView.findViewById(R.id.vias);
 
 
             closeBtn.setContentDescription("Close dialog");
@@ -125,8 +135,41 @@ public class JobViewDialog {
                     customerName.setText(bookingInfo.getPassengerName());
                     bookingprice.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
                     trip_fare.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
-                    distance_duration.setText(bookingInfo.getDurationMinutes() + " minutes");
+                    distance_duration.setText(formatDuration(bookingInfo.getDurationMinutes()));
 
+                    String pickupTimeText = bookingInfo.getPickupDateTime();
+                    String[] timeParts = pickupTimeText.split(",");
+                    if (timeParts.length > 1) {
+                        pickupTime.setText(timeParts[timeParts.length-1]);
+                    }
+
+                    destinationTime.setText(bookingInfo.getEndTime());
+
+                    vias_layout.setVisibility(View.GONE); // Hide original vias layout
+                    vias_container.removeAllViews(); // Clear previous via views
+                    List<Vias> vias = bookingInfo.getVias();
+                    if (vias != null && !vias.isEmpty()) {
+                        vias_container.setVisibility(View.VISIBLE);
+                        LayoutInflater inflater = LayoutInflater.from(context);
+                        for (Vias via : vias) {
+                            View viaView = inflater.inflate(R.layout.layout_via_item, vias_container, false);
+                            TextView viaAddress = viaView.findViewById(R.id.via_address);
+                            TextView viaCode = viaView.findViewById(R.id.via_code);
+
+                            String viaAddressText = via.getAddress() != null ? via.getAddress() : "";
+                            String viaPostCode = via.getPostCode() != null ? via.getPostCode() : "";
+                            String[] viaParts = viaAddressText.split(",");
+                            String firstVia = viaParts.length > 0 ? viaParts[0].trim() : "";
+                            String lastVia = viaParts.length > 1 ? viaParts[viaParts.length - 1].trim() : "";
+
+                            viaAddress.setText(firstVia);
+                            viaCode.setText(lastVia + (viaPostCode.isEmpty() ? "" : " " + viaPostCode));
+
+                            vias_container.addView(viaView);
+                        }
+                    } else {
+                        vias_container.setVisibility(View.GONE);
+                    }
                     String pickup = bookingInfo.getPickupAddress() != null ? bookingInfo.getPickupAddress() : "";
                     String[] pickupParts = pickup.split(",");
                     String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
@@ -199,4 +242,26 @@ public class JobViewDialog {
             Toast.makeText(context, "Error starting job", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public String formatDuration(int totalMinutes) {
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
+
+        StringBuilder result = new StringBuilder();
+        if (hours > 0) {
+            result.append(hours).append(" Hr");
+        }
+        if (minutes > 0) {
+            if (result.length() > 0) {
+                result.append(", ");
+            }
+            result.append(minutes).append(" min");
+        }
+        if (result.length() == 0) {
+            return "0 min"; // fallback if duration is 0
+        }
+
+        return result.toString();
+    }
+
 }

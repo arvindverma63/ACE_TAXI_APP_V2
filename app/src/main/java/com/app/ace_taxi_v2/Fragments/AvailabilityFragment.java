@@ -34,7 +34,7 @@ import java.util.Locale;
 public class AvailabilityFragment extends Fragment {
 
     private MaterialCardView dateButton;
-    private MaterialCardView custom_button;
+    private MaterialButton custom_button;
     private Calendar selectedDate = Calendar.getInstance();
     private SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
     private SimpleDateFormat displayDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.getDefault());
@@ -42,7 +42,7 @@ public class AvailabilityFragment extends Fragment {
     public RecyclerView recyclerView;
     private TextView dateText;
     public SessionManager sessionManager;
-    public MaterialCardView am_school_button,pm_school_button,am_pm_school_button,unavailable_button,view_all;
+    public MaterialButton am_school_button,pm_school_button,am_pm_school_button,unavailable_button,view_all;
     public Button close;
 
     @Override
@@ -53,7 +53,6 @@ public class AvailabilityFragment extends Fragment {
         dateButton = rootView.findViewById(R.id.date_button);
         dateButton.setOnClickListener(v -> showDatePicker());
         custom_button = rootView.findViewById(R.id.custom_button);
-        recyclerView = rootView.findViewById(R.id.recyclar_view);
         am_school_button = rootView.findViewById(R.id.am_school_button);
         unavailable_button = rootView.findViewById(R.id.unavailable_button);
         pm_school_button = rootView.findViewById(R.id.pm_school_button);
@@ -66,152 +65,204 @@ public class AvailabilityFragment extends Fragment {
         am_pm_school_button.setOnClickListener(v -> bothOnly());
         close = rootView.findViewById(R.id.btnClose);
         close.setOnClickListener(v -> {
-            Fragment selected = new HomeFragment();
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, selected);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commitAllowingStateLoss();
+            try {
+                Fragment selected = new HomeFragment();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, selected);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commitAllowingStateLoss();
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Error navigating to Home: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
         view_all.setOnClickListener(v -> {
-            Fragment selected = new ListAvailabillity();
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, selected);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commitAllowingStateLoss();
+            try {
+                Fragment selected = new ListAvailabillity();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, selected);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commitAllowingStateLoss();
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Error navigating to List: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
+        try {
+            sessionManager = new SessionManager(getContext());
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error initializing session: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
-        sessionManager = new SessionManager(getContext());
-
-       renderList();
+        try {
+            renderList();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error rendering list: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
         // Navigate to Customer Form
         custom_button.setOnClickListener(view -> {
-            Fragment selected = new CustomerForm();
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, selected);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commitAllowingStateLoss();
+            try {
+                Fragment selected = new CustomerForm();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, selected);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commitAllowingStateLoss();
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "Error navigating to Customer Form: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
-        updateDateButtonText(); // Set default date on button
+        try {
+            updateDateButtonText(); // Set default date on button
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error updating date: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
         return rootView;
     }
 
     public void renderList(){
-        AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
-        availabilitiesApi.getAvailabilities(recyclerView,getView());
+        try {
+            AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
+            availabilitiesApi.getAvailabilities(recyclerView, getView());
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error fetching availabilities: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Show Date Picker and then Time Picker
     private void showDatePicker() {
-        new DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
-            selectedDate.set(year, month, dayOfMonth);
-            showTimePicker(); // After selecting date, open time picker
-        }, selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH)).show();
+        try {
+            new DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
+                selectedDate.set(year, month, dayOfMonth);
+                showTimePicker(); // After selecting date, open time picker
+            }, selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH)).show();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error showing date picker: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Show Time Picker
     private void showTimePicker() {
-        new TimePickerDialog(requireContext(), (view, hourOfDay, minute) -> {
-            selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            selectedDate.set(Calendar.MINUTE, minute);
-            selectedDate.set(Calendar.SECOND, 0);
-            selectedDate.set(Calendar.MILLISECOND, 0);
+        try {
+            new TimePickerDialog(requireContext(), (view, hourOfDay, minute) -> {
+                selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                selectedDate.set(Calendar.MINUTE, minute);
+                selectedDate.set(Calendar.SECOND, 0);
+                selectedDate.set(Calendar.MILLISECOND, 0);
 
-            updateDateButtonText(); // Update button with formatted date
-        }, selectedDate.get(Calendar.HOUR_OF_DAY), selectedDate.get(Calendar.MINUTE), true).show();
+                updateDateButtonText(); // Update button with formatted date
+            }, selectedDate.get(Calendar.HOUR_OF_DAY), selectedDate.get(Calendar.MINUTE), true).show();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error showing time picker: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Update button text (Readable format) and store API-formatted date
     private void updateDateButtonText() {
-        selectedDateStringForAPI = apiDateFormat.format(selectedDate.getTime()); // API Format
-        dateText.setText(displayDateFormat.format(selectedDate.getTime())); // Display Format
+        try {
+            selectedDateStringForAPI = apiDateFormat.format(selectedDate.getTime()); // API Format
+            dateText.setText(displayDateFormat.format(selectedDate.getTime())); // Display Format
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error updating date text: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Send formatted date to API
     public void amSchoolOnly() {
-        int userId = sessionManager.getUserId();
-
-        if (selectedDateStringForAPI == null) {
-            Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 2, "Am only");
-
         try {
-            Thread.sleep(2000);
-            renderList();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+            int userId = sessionManager.getUserId();
 
+            if (selectedDateStringForAPI == null) {
+                Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 2, "Am only");
+
+            try {
+                Thread.sleep(2000);
+                renderList();
+            } catch (InterruptedException e) {
+                Toast.makeText(getContext(), "Error in delay: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error adding AM availability: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void bothOnly(){
-        int userId = sessionManager.getUserId();
-
-        if (selectedDateStringForAPI == null) {
-            Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 2, "PM only");
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 2, "Am only");
-
         try {
-            Thread.sleep(2000);
-            renderList();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            int userId = sessionManager.getUserId();
+
+            if (selectedDateStringForAPI == null) {
+                Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 2, "PM only");
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 2, "Am only");
+
+            try {
+                Thread.sleep(2000);
+                renderList();
+            } catch (InterruptedException e) {
+                Toast.makeText(getContext(), "Error in delay: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error adding AM/PM availability: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public void pmSchoolOnly(){
-        int userId = sessionManager.getUserId();
-
-        if (selectedDateStringForAPI == null) {
-            Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 2, "PM only");
-
         try {
-            Thread.sleep(2000);
-            renderList();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            int userId = sessionManager.getUserId();
+
+            if (selectedDateStringForAPI == null) {
+                Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 2, "PM only");
+
+            try {
+                Thread.sleep(2000);
+                renderList();
+            } catch (InterruptedException e) {
+                Toast.makeText(getContext(), "Error in delay: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error adding PM availability: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public void setUnavailable(){
-        int userId = sessionManager.getUserId();
-
-        if (selectedDateStringForAPI == null) {
-            Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-        availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "00:00", "23:59", true, 2, "Unavailable All Day");
-
-        Toast.makeText(getContext(), "added successfully!", Toast.LENGTH_SHORT).show();
         try {
-            Thread.sleep(2000);
-            renderList();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            int userId = sessionManager.getUserId();
+
+            if (selectedDateStringForAPI == null) {
+                Toast.makeText(getContext(), "Please select a date first!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "00:00", "23:59", true, 2, "Unavailable All Day");
+
+            Toast.makeText(getContext(), "added successfully!", Toast.LENGTH_SHORT).show();
+            try {
+                Thread.sleep(2000);
+                renderList();
+            } catch (InterruptedException e) {
+                Toast.makeText(getContext(), "Error in delay: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Error setting unavailable: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
 }
-

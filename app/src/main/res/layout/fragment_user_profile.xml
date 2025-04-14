@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/ActionBar"
-            app:title="Personal Info"
+            app:title="User Profile"
             app:titleCentered="true"
             android:id="@+id/toolbar_header"
             app:navigationIcon="@drawable/ic_back_arrow"
@@ -26,71 +26,117 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
+            android:gravity="center">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                style="@style/IconTint"
                 android:src="@drawable/ic_profile"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Material3.Circle" />
-
-
+                style="@style/IconTint"/>
         </LinearLayout>
 
-        <!-- Detail Fields -->
+        <!-- Username Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Name"
+            android:textSize="14sp"
+            style="@style/TextBG"
+            android:layout_marginBottom="4dp" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Full Name">
+            android:layout_marginBottom="16dp"
+            style="@style/profileField"
+            app:startIconDrawable="@drawable/ic_profile"
+            app:endIconMode="none">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/fullname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:enabled="false"
-                android:text="Peter Farrell" />
+                android:text="Full Name"
+                android:background="@null" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Username Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Telephone"
+            android:textSize="14sp"
+            style="@style/TextBG"
+            android:layout_marginBottom="4dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Telephone">
+            android:layout_marginBottom="16dp"
+            style="@style/profileField"
+            app:startIconDrawable="@drawable/ic_tel"
+            app:endIconMode="none">
+
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/telephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Telephone"
                 android:enabled="false"
-                android:text="+123 456 789" />
+                android:background="@null" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Username Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textSize="14sp"
+            style="@style/TextBG"
+            android:layout_marginBottom="4dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Email">
+            android:layout_marginBottom="16dp"
+            style="@style/profileField"
+            app:startIconDrawable="@drawable/ic_email"
+            app:endIconMode="none">
+
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:enabled="false"
-                android:text="peter.farrell@example.com" />
+                android:text="Email"
+                android:background="@null" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Username Input -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vehicle Model"
+            android:textSize="14sp"
+            style="@style/TextBG"
+            android:layout_marginBottom="4dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Vehicle">
+            android:layout_marginBottom="16dp"
+            style="@style/profileField"
+            app:startIconDrawable="@drawable/ic_car_model"
+            app:endIconMode="none">
+
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/vehicle_model"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:id="@+id/vehicle_model"
-                android:text="Mercedes Benz – E220" />
+                android:paddingStart="40dp"
+                android:text="Vehicle Model"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Vehicle Registration and Color -->
@@ -100,45 +146,106 @@
             android:orientation="horizontal"
             android:layout_marginTop="16dp">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Vehicle Reg">
-                <com.google.android.material.textfield.TextInputEditText
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vehicle Registration No."
+                    android:textSize="14sp"
+                    style="@style/TextBG"
+                    android:layout_marginBottom="4dp" />
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/vehicle_reg"
-                    android:enabled="false"
-                    android:text="V21 PTR" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginBottom="16dp"
+                    style="@style/profileField"
+                    app:startIconDrawable="@drawable/ic_reg"
+                    app:endIconMode="none">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/vehicle_reg"
+                        android:enabled="false"
+                        android:text="V21 PTR" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Colour"
-                android:layout_marginStart="8dp">
-                <com.google.android.material.textfield.TextInputEditText
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vehicle Color"
+                    android:textSize="14sp"
+                    style="@style/TextBG"
+                    android:layout_marginBottom="4dp" />
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/vehicle_color"
-                    android:enabled="false"
-                    android:text="Black" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginBottom="16dp"
+                    style="@style/profileField"
+                    app:startIconDrawable="@drawable/ic_car_model"
+                    app:endIconMode="none">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:id="@+id/vehicle_color"
+                        android:text="V21 PTR" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:hint="FCM">-->
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:id="@+id/fcm"-->
-<!--                android:text="123255454568" />-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="0dp"
+            android:layout_gravity="center"
+            app:strokeWidth="0dp"
+            android:padding="20dp"
+            style="@style/CardBG">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Upload Document"
+                    android:id="@+id/upload_document"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:padding="15dp"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/green"
+                    android:gravity="center"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="View Expenses"
+                    android:id="@+id/view_expenses"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:padding="15dp"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/red"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
 
     </LinearLayout>
 </ScrollView>

@@ -10,16 +10,19 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Models.UserProfileResponse;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class UserProfileFragment extends Fragment {
 
     public TextInputEditText fullname,email,phoneNumber,vehicle_model,vehicle_reg,vehicle_color;
+    public MaterialButton upload_document,view_expenses;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,18 +34,27 @@ public class UserProfileFragment extends Fragment {
         vehicle_model = view.findViewById(R.id.vehicle_model);
         vehicle_reg = view.findViewById(R.id.vehicle_reg);
         vehicle_color = view.findViewById(R.id.vehicle_color);
+        upload_document = view.findViewById(R.id.upload_document);
+        view_expenses = view.findViewById(R.id.view_expenses);
         setDetails();
+
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment selectedFragment = new ProfileFragment();
+                Fragment selectedFragment = new HomeFragment();
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container,selectedFragment);
                 fragmentTransaction.commit();
             }
+        });
+        upload_document.setOnClickListener(v -> {
+            replaceFragment(new UploadDocumentFragment());
+        });
+        view_expenses.setOnClickListener(v -> {
+            replaceFragment(new ViewExpenses());
         });
 
         return view;
@@ -66,5 +78,12 @@ public class UserProfileFragment extends Fragment {
 
             }
         });
+    }
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

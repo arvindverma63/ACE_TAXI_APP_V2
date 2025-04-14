@@ -14,6 +14,7 @@ import com.app.ace_taxi_v2.Fragments.HomeFragment;
 import com.app.ace_taxi_v2.Fragments.JobFragment;
 import com.app.ace_taxi_v2.Fragments.ProfileFragment;
 import com.app.ace_taxi_v2.Fragments.ReportPageFragment;
+import com.app.ace_taxi_v2.Fragments.UserProfileFragment;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -50,9 +51,7 @@ public class NavigationHandler {
         } else if (itemId == R.id.nav_availability) {
             fragment = new AvailabilityFragment();
         } else if (itemId == R.id.nav_profile) {
-            fragment = new ProfileFragment();
-        } else if (itemId == R.id.nav_report) {
-            fragment = new ReportPageFragment();
+            fragment = new UserProfileFragment();
         }
 
         if (fragment != null) {
