@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Fragments.Adapters.ViewPagerAdapterJob;
@@ -96,4 +97,5 @@ public class JobFragment extends Fragment {
             ((TodayFragment) fragment).refreshData();
         }
     }
+
 }

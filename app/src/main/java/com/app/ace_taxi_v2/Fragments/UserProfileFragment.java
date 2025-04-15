@@ -39,17 +39,7 @@ public class UserProfileFragment extends Fragment {
         setDetails();
 
 
-        MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment selectedFragment = new HomeFragment();
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container,selectedFragment);
-                fragmentTransaction.commit();
-            }
-        });
+
         upload_document.setOnClickListener(v -> {
             replaceFragment(new UploadDocumentFragment());
         });

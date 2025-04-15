@@ -1,251 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/light_gray"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:orientation="vertical"
+        android:background="@color/light_gray"
+        android:padding="16dp">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_back_arrow"
-            android:id="@+id/close_btn"
-            android:contentDescription="Back" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Booking Details"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/font_urban" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:id="@+id/change_status"
-            android:layout_height="19dp"
-            android:contentDescription="Menu"
-            android:src="@drawable/ic_bar" />
-    </LinearLayout>
-
-    <!-- Address Section -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/current_job_card"
-        style="@style/CardBG"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="10dp"
-        app:cardCornerRadius="12dp"
-        app:strokeColor="@android:color/darker_gray"
-        app:strokeWidth="0dp">
-
+        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-            <!-- Pickup Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_back_arrow"
+                android:id="@+id/close_btn"
+                android:contentDescription="Back" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Booking Details"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/font_urban" />
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="12dp"
-                    android:contentDescription="Pickup Location"
-                    android:src="@drawable/ic_pickup" />
+            <ImageView
+                android:layout_width="24dp"
+                android:id="@+id/change_status"
+                android:layout_height="19dp"
+                android:contentDescription="Menu"
+                android:src="@drawable/ic_bar" />
+        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/pickup_address"
-                        style="@style/TextBG"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="No Current Active Jobs"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/pickup_subaddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text=""
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/pickup_time"
-                    style="@style/TextBG"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="00:00"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+        <!-- Address Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/current_job_card"
+            style="@style/CardBG"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="@android:color/darker_gray"
+            app:strokeWidth="0dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/ic_line"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="4dp"/>
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="12dp"
-                    android:layout_marginLeft="10dp"
-                    android:alpha="0.2"
-                    android:background="@android:color/darker_gray" />
-            </LinearLayout>
-
-
-            <!-- Replace or add after the original vias layout -->
-            <LinearLayout
-                android:id="@+id/vias_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_below="@id/destination_subaddress" />
+                android:padding="16dp">
 
-            <!-- Original vias layout (optional, can be removed if not needed) -->
-            <LinearLayout
-                android:id="@+id/vias"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone">
-                <!-- Existing content, kept hidden -->
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="12dp"
-                    app:tint="@color/blue"
-                    android:contentDescription="Destination Location"
-                    android:src="@drawable/ic_destination" />
-
+                <!-- Pickup Section -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/vias_address"
-                        style="@style/TextBG"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/vias_code"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal" />
-            </LinearLayout>
-            <!-- Divider -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="7dp"
-                android:layout_marginTop="0dp"
-                android:alpha="0.2"
-                android:background="@android:color/darker_gray" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="12dp"
-                    android:contentDescription="Destination Location"
-                    android:src="@drawable/ic_destination" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/destination_address"
-                        style="@style/TextBG"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text=""
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/destination_subaddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text=""
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Pickup Location"
+                        android:src="@drawable/ic_pickup" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/pickup_address"
+                            style="@style/TextBG"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="No Current Active Jobs"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pickup_subaddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text=""
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
                     <TextView
-                        android:id="@+id/destination_time"
+                        android:id="@+id/pickup_time"
                         style="@style/TextBG"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -254,253 +115,392 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <!-- Footer Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/pickup_date"
-                    style="@style/TextBG"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="14sp" />
-                <Space
-                    android:layout_width="wrap_content"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_line"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="4dp"/>
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="12dp"
+                        android:layout_marginLeft="10dp"
+                        android:alpha="0.2"
+                        android:background="@android:color/darker_gray" />
+                </LinearLayout>
+
+                <!-- Replace or add after the original vias layout -->
+                <LinearLayout
+                    android:id="@+id/vias_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="@integer/material_motion_duration_long_1"/>
-                <TextView
-                    android:id="@+id/distance_duration"
-                    style="@style/TextBG"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                    android:orientation="vertical"
+                    android:layout_below="@id/destination_subaddress" />
 
+                <!-- Original vias layout (optional, can be removed if not needed) -->
+                <LinearLayout
+                    android:id="@+id/vias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <!-- Existing content, kept hidden -->
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/blue"
+                        android:contentDescription="Destination Location"
+                        android:src="@drawable/ic_destination" />
 
-    <!-- Passenger Info -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:strokeWidth="0dp"
-        android:backgroundTint="@color/white"
-        app:cardCornerRadius="8dp"
-        android:layout_marginBottom="16dp">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+                        <TextView
+                            android:id="@+id/vias_address"
+                            style="@style/TextBG"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/vias_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="@color/red"
-                    app:cardCornerRadius="20dp"
-                    app:strokeWidth="0dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginTop="0dp"
+                    android:alpha="0.2"
+                    android:background="@android:color/darker_gray" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Destination Location"
+                        android:src="@drawable/ic_destination" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/destination_address"
+                            style="@style/TextBG"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text=""
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/destination_subaddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text=""
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_profile"
-                        android:contentDescription="Passenger"
-                        app:tint="@color/white" />
-                </com.google.android.material.card.MaterialCardView>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/destination_time"
+                            style="@style/TextBG"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Footer Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/pickup_date"
+                        style="@style/TextBG"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="14sp" />
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@integer/material_motion_duration_long_1"/>
+                    <TextView
+                        android:id="@+id/distance_duration"
+                        style="@style/TextBG"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Passenger Info -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:strokeWidth="0dp"
+            android:backgroundTint="@color/white"
+            app:cardCornerRadius="8dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/passenger_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Theo Holland"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/font_urban" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/passenger_count"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:backgroundTint="@color/red"
+                        app:cardCornerRadius="20dp"
+                        app:strokeWidth="0dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_profile"
+                            android:contentDescription="Passenger"
+                            app:tint="@color/white" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="2 Passengers"
-                        android:textColor="@color/gray"
-                        android:layout_marginStart="12dp"
-                        android:textSize="12sp"
-                        android:fontFamily="@font/font_urban" />
+                        android:orientation="vertical">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/passenger_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="Theo Holland"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/font_urban" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/passenger_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2 Passengers"
+                            android:textColor="@color/gray"
+                            android:layout_marginStart="12dp"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/font_urban" />
+                    </LinearLayout>
                 </LinearLayout>
 
-            </LinearLayout>
+                <!-- Chat and Call Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
 
-            <!-- Chat and Call Buttons -->
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Chat"
+                        app:strokeWidth="1dp"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@color/light_gray"
+                        android:textSize="14sp"
+                        app:strokeColor="@color/gray"
+                        app:cornerRadius="8000dp"
+                        android:layout_marginEnd="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Call"
+                        app:strokeWidth="1dp"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@color/light_gray"
+                        android:textSize="14sp"
+                        app:strokeColor="@color/gray"
+                        app:cornerRadius="8000dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Fare Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:strokeWidth="0dp"
+            android:backgroundTint="@color/white"
+            app:cardCornerRadius="8dp"
+            android:layout_marginBottom="16dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Chat"
-                    app:strokeWidth="1dp"
-                    android:textColor="@color/black"
-                    app:backgroundTint="@color/light_gray"
-                    android:textSize="14sp"
-                    app:strokeColor="@color/gray"
-                    app:cornerRadius="8000dp"
-                    android:layout_marginEnd="8dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="0dp"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Trip Fare"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/font_urban" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/trip_fare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="£20.00"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/font_urban" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="8dp"
+                    android:alpha="0.2"
+                    android:background="@android:color/darker_gray" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Call"
-                    app:strokeWidth="1dp"
-                    android:textColor="@color/black"
-                    app:backgroundTint="@color/light_gray"
-                    android:textSize="14sp"
-                    app:strokeColor="@color/gray"
-                    app:cornerRadius="8000dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Total Paid"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/font_urban" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="£20.00"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/font_urban" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
 
-    <!-- Fare Section -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:strokeWidth="0dp"
-        android:backgroundTint="@color/white"
-        app:cardCornerRadius="8dp"
-        android:layout_marginBottom="16dp">
-
+        <!-- Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_marginTop="16dp">
 
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/start_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:text="Start Booking"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/red"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="8000dp"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Trip Fare"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/font_urban" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/trip_fare"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="£20.00"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/font_urban" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="8dp"
-                android:alpha="0.2"
-                android:background="@android:color/darker_gray" />
-
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/complete_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:text="Complete Booking"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/red"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="8000dp"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Total Paid"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/font_urban" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="£20.00"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/font_urban" />
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancel Booking"
+                android:textColor="@color/gray"
+                app:backgroundTint="@color/light_gray"
+                app:strokeColor="@color/gray"
+                app:strokeWidth="1dp"
+                android:textSize="16sp"
+                app:cornerRadius="800dp"
+                android:padding="12dp" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/start_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start Booking"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/red"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:cornerRadius="8000dp"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/complete_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Complete Booking"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/red"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:cornerRadius="8000dp"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cancel Booking"
-            android:textColor="@color/gray"
-            app:backgroundTint="@color/light_gray"
-            app:strokeColor="@color/gray"
-            app:strokeWidth="1dp"
-            android:textSize="16sp"
-            app:cornerRadius="800dp"
-            android:padding="12dp" />
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

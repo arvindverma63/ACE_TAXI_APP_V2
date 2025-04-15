@@ -271,7 +271,7 @@ public class HomeFragment extends Fragment {
                                 pickup_subaddress.setText(lastPickup);
                                 destination_address.setText(firstDestination);
                                 destination_subaddress.setText(lastDestination);
-                                price.setText("£" + booking.getPrice());
+                                price.setText(String.format("£%.2f", booking.getPrice()));
                                 date.setText(booking.getFormattedDateTime());
                                 destination_time.setText(booking.getEndTime());
                                 passenger_count.setText(String.valueOf(booking.getPassengers()) + " Passengers");

@@ -61,7 +61,7 @@ public class NewExpense extends Fragment {
         // Toolbar Navigation
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
         toolbar.setNavigationOnClickListener(v -> {
-            Fragment selectedFragment = new ProfileFragment();
+            Fragment selectedFragment = new HomeFragment();
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, selectedFragment);

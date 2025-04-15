@@ -63,11 +63,12 @@
 
     <style name="ButtonAvail" parent="Widget.Material3.Button">
         <item name="android:textStyle">bold</item>
-        <item name="android:backgroundTint">@color/light_gray</item>
+        <item name="android:backgroundTint">#D5D4D4</item>
         <item name="strokeColor">@color/gray</item>
         <item name="strokeWidth">1dp</item>
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:padding">15dp</item>
+        <item name="iconTint">@color/black</item>
     </style>
 
     <style name="profileField" parent="Widget.Material3.TextInputLayout.OutlinedBox">

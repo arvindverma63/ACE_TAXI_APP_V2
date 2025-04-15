@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="14dp"
+        android:layout_margin="16dp"
         style="@style/MainBG">
 
         <ImageView
@@ -212,9 +213,9 @@
                 style="@style/CardBG"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginTop="2dp"
                 app:cardCornerRadius="12dp"
+                android:visibility="gone"
                 app:strokeColor="@color/green"
                 app:strokeWidth="1dp">
 
@@ -233,20 +234,20 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.card.MaterialCardView
-                            android:layout_width="80dp"
+                            android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/purple"
-                            android:padding="10dp"
+                            android:layout_gravity="center"
                             app:cardCornerRadius="1000dp"
                             app:strokeWidth="0dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="10dp"
+                                android:layout_height="25dp"
                                 android:layout_gravity="center"
                                 android:text="Card"
                                 android:textAllCaps="true"
+                                android:gravity="center"
                                 android:id="@+id/scope_text"
                                 android:textColor="@color/white" />
                         </com.google.android.material.card.MaterialCardView>
@@ -255,16 +256,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/green"
-                            android:padding="10dp"
                             android:layout_gravity="center"
                             app:cardCornerRadius="1000dp"
                             android:layout_marginLeft="10dp"
                             app:strokeWidth="0dp">
 
                             <TextView
-                                android:layout_width="80dp"
-                                android:layout_height="wrap_content"
-                                android:padding="10dp"
+                                android:layout_width="60dp"
+                                android:layout_height="25dp"
                                 android:layout_gravity="center"
                                 android:text="Paid"
                                 android:textAllCaps="true"
@@ -291,7 +290,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -348,14 +346,26 @@
                             android:text="16:20" />
                     </LinearLayout>
 
-                    <!-- Divider -->
-                    <View
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="7dp"
-                        android:layout_marginTop="0dp"
-                        android:alpha="0.2"
-                        android:background="@android:color/darker_gray" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="2dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/ic_line"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginBottom="4dp"/>
+                        <!-- Divider -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="12dp"
+                            android:layout_marginLeft="10dp"
+                            android:alpha="0.2"
+                            android:background="@android:color/darker_gray" />
+                    </LinearLayout>
 
                     <!-- Replace or add after the original vias layout -->
                     <LinearLayout
