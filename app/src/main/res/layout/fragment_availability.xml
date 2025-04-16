@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="7dp">
 
             <!-- Unavailable Card -->
             <com.google.android.material.card.MaterialCardView
@@ -126,6 +126,10 @@
                     android:layout_height="wrap_content"
                     android:text="Unavailable All Day"
                     android:textSize="14sp"
+                    app:strokeColor="@color/red"
+                    android:backgroundTint="@color/red"
+                    android:textColor="@color/white"
+                    app:iconTint="@color/white"
                     android:gravity="center"
                     style="@style/ButtonAvail"
                     app:icon="@drawable/ic_unavail"
@@ -155,12 +159,19 @@
                         android:id="@+id/am_school_button"
                         android:text="AM School Only"
                         style="@style/ButtonAvail"
+                        app:strokeColor="@color/green"
+                        android:backgroundTint="@color/green"
+                        android:textColor="@color/white"
+                        app:iconTint="@color/white"
                         app:icon="@drawable/ic_am"
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         android:gravity="center"/>
                 </com.google.android.material.card.MaterialCardView>
 
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"/>
                 <!-- PM Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
@@ -177,6 +188,10 @@
                         android:id="@+id/pm_school_button"
                         android:text="PM School Only"
                         style="@style/ButtonAvail"
+                        app:strokeColor="@color/green"
+                        android:backgroundTint="@color/green"
+                        android:textColor="@color/white"
+                        app:iconTint="@color/white"
                         app:icon="@drawable/ic_pm"
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
@@ -201,15 +216,19 @@
                 style="@style/CardBGAvail">
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/am_pm_school_button"
+                    style="@style/ButtonAvail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    app:strokeColor="@color/green"
+                    android:backgroundTint="@color/green"
+                    android:textColor="@color/white"
+                    app:iconTint="@color/white"
                     android:text="AM-PM School Only"
                     app:icon="@drawable/ic_am"
                     app:iconGravity="textStart"
-                    app:iconPadding="8dp"
-                    style="@style/ButtonAvail"
-                    android:gravity="center"/>
+                    app:iconPadding="8dp" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
@@ -232,6 +251,10 @@
                     android:layout_height="wrap_content"
                     android:text="Custom Set Manually"
                     android:id="@+id/custom_button"
+                    app:strokeColor="@color/green"
+                    android:backgroundTint="@color/green"
+                    android:textColor="@color/white"
+                    app:iconTint="@color/white"
                     style="@style/ButtonAvail"
                     app:icon="@drawable/ic_custom"
                     app:iconGravity="textStart"

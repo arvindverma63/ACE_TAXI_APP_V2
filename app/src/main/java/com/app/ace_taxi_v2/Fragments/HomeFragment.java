@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.Components.HamMenu;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.LoginManager;
@@ -92,6 +93,11 @@ public class HomeFragment extends Fragment {
             pickup_time = view.findViewById(R.id.pickup_time);
             job_action = view.findViewById(R.id.job_action);
             destination_time = view.findViewById(R.id.destination_time);
+
+            sideMenu.setOnClickListener(v -> {
+                HamMenu hamMenu = new HamMenu(getContext(),getActivity());
+                hamMenu.openMenu(sideMenu);
+            });
 
             // If vias_container doesn't exist, create one programmatically
             if (vias_container == null) {
@@ -405,9 +411,6 @@ public class HomeFragment extends Fragment {
             });
             report_btn.setOnClickListener(view -> {
                 replaceFragment(new ReportPageFragment());
-            });
-            sideMenu.setOnClickListener(view -> {
-                replaceFragment(new SettingFragment());
             });
             logout_btn.setOnClickListener(view -> {
                 try {

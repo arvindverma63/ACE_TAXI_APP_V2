@@ -2,11 +2,13 @@ package com.app.ace_taxi_v2.Fragments;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Components.HamMenu;
 import com.app.ace_taxi_v2.Logic.AvailabilitiesApi;
 import com.app.ace_taxi_v2.Logic.AvailabilityAddApi;
 import com.app.ace_taxi_v2.Logic.SessionManager;
@@ -37,6 +40,7 @@ public class CustomerForm extends Fragment {
     public Button add_ava, add_un,unavailable_all_day;
     public MaterialCheckBox give_or_take;
     public RecyclerView recyclerView;
+    public ImageView sideMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +61,12 @@ public class CustomerForm extends Fragment {
         add_un = view.findViewById(R.id.add_un);
         give_or_take = view.findViewById(R.id.give_or_take);
         unavailable_all_day = view.findViewById(R.id.unavailable_all_day);
+        sideMenu = view.findViewById(R.id.sideMenu);
+
+        sideMenu.setOnClickListener(v -> {
+            HamMenu hamMenu = new HamMenu(getContext(),getActivity());
+            hamMenu.openMenu(sideMenu);
+        });
 
         add_ava.setOnClickListener(v -> addAvailability());
         add_un.setOnClickListener(v -> unAvailability());

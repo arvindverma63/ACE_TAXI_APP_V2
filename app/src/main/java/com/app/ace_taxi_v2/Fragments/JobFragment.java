@@ -10,9 +10,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
+import com.app.ace_taxi_v2.Components.HamMenu;
 import com.app.ace_taxi_v2.Fragments.Adapters.ViewPagerAdapterJob;
 import com.app.ace_taxi_v2.Fragments.JobFragments.TodayFragment; // Add this import
 import com.app.ace_taxi_v2.Logic.SessionManager;
@@ -25,6 +26,7 @@ public class JobFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager2 viewPager2;
     ViewPagerAdapterJob viewPagerAdapterJob;
+    public ImageView sideMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +46,7 @@ public class JobFragment extends Fragment {
 
         tabLayout = view.findViewById(R.id.job_tab_layout);
         viewPager2 = view.findViewById(R.id.pageView);
+        sideMenu = view.findViewById(R.id.sideMenu);
 
         // Initialize adapter with the correct context
         viewPagerAdapterJob = new ViewPagerAdapterJob(requireActivity());
@@ -86,6 +89,10 @@ public class JobFragment extends Fragment {
                 }
                 // Add similar checks for FutureFragment and HistoryFragment if they exist
             }
+        });
+        sideMenu.setOnClickListener(v -> {
+            HamMenu popupMenu = new HamMenu(getContext(),getActivity());
+            popupMenu.openMenu(sideMenu);
         });
     }
 

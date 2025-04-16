@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Components.HamMenu;
 import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
 import com.app.ace_taxi_v2.Logic.AvailabilitiesApi;
 import com.app.ace_taxi_v2.Logic.AvailabilityAddApi;
@@ -44,6 +46,7 @@ public class AvailabilityFragment extends Fragment {
     public SessionManager sessionManager;
     public MaterialButton am_school_button,pm_school_button,am_pm_school_button,unavailable_button,view_all;
     public Button close;
+    public ImageView sideMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +66,11 @@ public class AvailabilityFragment extends Fragment {
         am_school_button.setOnClickListener(v -> amSchoolOnly());
         unavailable_button.setOnClickListener(v -> setUnavailable());
         am_pm_school_button.setOnClickListener(v -> bothOnly());
+        sideMenu = rootView.findViewById(R.id.sideMenu);
+        sideMenu.setOnClickListener(v -> {
+            HamMenu hamMenu = new HamMenu(getContext(),getActivity());
+            hamMenu.openMenu(sideMenu);
+        });
         close = rootView.findViewById(R.id.btnClose);
         close.setOnClickListener(v -> {
             try {
@@ -182,7 +190,7 @@ public class AvailabilityFragment extends Fragment {
             }
 
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 2, "Am only");
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 1, "Am only");
 
             try {
                 Thread.sleep(2000);
@@ -205,8 +213,8 @@ public class AvailabilityFragment extends Fragment {
             }
 
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 2, "PM only");
-            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 2, "Am only");
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 1, "PM only");
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "07:30", "09:15", true, 1, "Am only");
 
             try {
                 Thread.sleep(2000);
@@ -229,7 +237,7 @@ public class AvailabilityFragment extends Fragment {
             }
 
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(getContext());
-            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 2, "PM only");
+            availabilityAddApi.addAvailability(userId, selectedDateStringForAPI, "14:30", "16:15", true, 1, "PM only");
 
             try {
                 Thread.sleep(2000);

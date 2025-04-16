@@ -10,8 +10,10 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.app.ace_taxi_v2.Components.HamMenu;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Models.UserProfileResponse;
 import com.app.ace_taxi_v2.R;
@@ -23,6 +25,7 @@ public class UserProfileFragment extends Fragment {
 
     public TextInputEditText fullname,email,phoneNumber,vehicle_model,vehicle_reg,vehicle_color;
     public MaterialButton upload_document,view_expenses;
+    public ImageView sideMenu;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,10 +39,16 @@ public class UserProfileFragment extends Fragment {
         vehicle_color = view.findViewById(R.id.vehicle_color);
         upload_document = view.findViewById(R.id.upload_document);
         view_expenses = view.findViewById(R.id.view_expenses);
+        sideMenu = view.findViewById(R.id.sideMenu);
         setDetails();
 
 
 
+        sideMenu.setOnClickListener(v -> {
+            HamMenu hamMenu = new HamMenu(getContext(),getActivity());
+            hamMenu.openMenu(sideMenu);
+
+        });
         upload_document.setOnClickListener(v -> {
             replaceFragment(new UploadDocumentFragment());
         });

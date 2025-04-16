@@ -77,7 +77,6 @@
             android:text="History" />
     </com.google.android.material.tabs.TabLayout>
 
-
     <androidx.viewpager2.widget.ViewPager2
         android:layout_marginTop="125dp"
         android:layout_width="match_parent"
