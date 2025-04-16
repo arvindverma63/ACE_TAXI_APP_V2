@@ -24,6 +24,8 @@ import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.HamMenu;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
+import com.app.ace_taxi_v2.GoogleMap.JobMapsFragment;
+import com.app.ace_taxi_v2.GoogleMap.LocationCordinates;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
@@ -33,6 +35,7 @@ import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.Models.Jobs.Vias;
 import com.app.ace_taxi_v2.Models.UserProfileResponse;
 import com.app.ace_taxi_v2.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -256,6 +259,9 @@ public class HomeFragment extends Fragment {
                                         View viaView = inflater.inflate(R.layout.layout_via_item, vias_container, false);
                                         TextView viaAddress = viaView.findViewById(R.id.via_address);
                                         TextView viaCode = viaView.findViewById(R.id.via_code);
+                                        viaAddress.setOnClickListener(v -> {
+                                            updateMap(via.getAddress());
+                                        });
 
                                         String viaAddressText = via.getAddress() != null ? via.getAddress() : "";
                                         String viaPostCode = via.getPostCode() != null ? via.getPostCode() : "";
@@ -287,6 +293,13 @@ public class HomeFragment extends Fragment {
                                 String pickupTime = booking.getPickupDateTime();
                                 String[] parts = pickupTime.split(",");
                                 pickup_time.setText(parts[parts.length - 1]);
+
+                                pickup_address.setOnClickListener(v -> {
+                                   updateMap(booking.getPickupAddress());
+                                });
+                                destination_address.setOnClickListener(v -> {
+                                   updateMap(booking.getDestinationAddress());
+                                });
 
                                 job_action.setOnClickListener(v -> {
                                     JobStatusModal jobStatusModal = new JobStatusModal(getContext());
@@ -437,5 +450,11 @@ public class HomeFragment extends Fragment {
         } catch (Exception e) {
             Log.e(TAG, "Error replacing fragment", e);
         }
+    }
+    private void updateMap(String address){
+        LocationCordinates locationCordinates = new LocationCordinates(getContext());
+        LatLng latLng = locationCordinates.getCoordinatesFromAddress(address);
+        JobMapsFragment jobMapsFragment = JobMapsFragment.newInstance(latLng.latitude, latLng.longitude, address);
+        jobMapsFragment.show(getParentFragmentManager(), "JobMapsFragment");
     }
 }

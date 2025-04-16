@@ -8,8 +8,4 @@
         android:id="@+id/action_shift"
         android:icon="@drawable/ic_car_model"
         android:title="Shift"/>
-    <item
-        android:id="@+id/action_logout"
-        android:icon="@drawable/ic_logout"
-        android:title="Logout"/>
 </menu>

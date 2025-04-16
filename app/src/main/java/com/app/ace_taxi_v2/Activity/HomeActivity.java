@@ -168,23 +168,23 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        try {
-            int itemId = item.getItemId();
-            if (itemId == R.id.action_logout) {
-                navigationHandler.handleLogout();
-                return true;
-            } else if (itemId == R.id.action_settings) {
-                loadFragment(new SettingFragment());
-                return true;
-            }
-            return super.onOptionsItemSelected(item);
-        } catch (Exception e) {
-            Log.e("HomeActivity", "Error handling options item selected", e);
-            return false;
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        try {
+//            int itemId = item.getItemId();
+//            if (itemId == R.id.action_logout) {
+//                navigationHandler.handleLogout();
+//                return true;
+//            } else if (itemId == R.id.action_settings) {
+//                loadFragment(new SettingFragment());
+//                return true;
+//            }
+//            return super.onOptionsItemSelected(item);
+//        } catch (Exception e) {
+//            Log.e("HomeActivity", "Error handling options item selected", e);
+//            return false;
+//        }
+//    }
 
     private void loadFragment(Fragment fragment) {
         try {

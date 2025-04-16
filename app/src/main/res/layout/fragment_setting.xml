@@ -42,13 +42,11 @@
                     style="@style/TextBG"
                     android:layout_width="106dp"
                     android:layout_height="wrap_content"
-                    android:text="version 4.4"
+                    android:text="version 4.6"
                     android:textSize="12dp" />
 
             </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
-
-
 
 
     <LinearLayout

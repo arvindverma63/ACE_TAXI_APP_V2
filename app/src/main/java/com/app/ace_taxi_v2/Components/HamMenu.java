@@ -44,7 +44,8 @@ public class HamMenu {
                 ShiftChangeModal shiftChangeModal = new ShiftChangeModal(context, activity.getSupportFragmentManager());
                 shiftChangeModal.openModal();
                 return true;
-            } else {
+            }
+            else {
 
                 return false;
             }
