@@ -19,7 +19,7 @@ public class GetBookingById {
     private final Context context;
 
     public GetBookingById(Context context) {
-        this.context = context;
+        this.context = (Context) context;
     }
 
     public void getBookingDetails(int bookingId) {

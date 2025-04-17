@@ -17,6 +17,7 @@ import com.app.ace_taxi_v2.Models.FcmResponse;
 import com.app.ace_taxi_v2.Models.GPSRequest;
 import com.app.ace_taxi_v2.Models.GPSResponse;
 import com.app.ace_taxi_v2.Models.ImageUploadResponse;
+import com.app.ace_taxi_v2.Models.JobOfferNoticationResponse;
 import com.app.ace_taxi_v2.Models.JobResponse;
 import com.app.ace_taxi_v2.Models.JobStatusModel;
 import com.app.ace_taxi_v2.Models.Jobs.ArrivedResponse;
@@ -151,6 +152,10 @@ public interface ApiService {
 
     @GET("/api/DriverApp/DashTotals")
     Call<Dashtotal> getDashTotal(@Header("Authorization") String token);
+
+    @GET("/api/DriverApp/RetrieveJobOffer")
+    Call<JobOfferNoticationResponse> getJobOffer(@Header("Authorization") String token,
+                                                 @Query("guid") String guid);
 
 
 }

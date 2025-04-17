@@ -30,9 +30,11 @@ import com.app.ace_taxi_v2.Fragments.SettingFragment;
 import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
+import com.app.ace_taxi_v2.Logic.JobApi.JobOfferNotification;
 import com.app.ace_taxi_v2.Logic.Service.BackgroundPermissionHelper;
 import com.app.ace_taxi_v2.Logic.Service.ConfigSessionManager;
 import com.app.ace_taxi_v2.Logic.SessionManager;
+import com.app.ace_taxi_v2.Models.JobOfferNoticationResponse;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
@@ -255,13 +257,14 @@ public class HomeActivity extends BaseActivity {
             }
 
             Intent intent = getIntent();
-            int navId = -1, jobId = -1;
+            int navId = -1;
             String message = intent.getStringExtra("message") != null ? intent.getStringExtra("message") : "";
             String passenger = "";
             String dateTime = intent.getStringExtra("datetime");
             String pickupAddress = intent.getStringExtra("pickupAddress");
             boolean accepted = intent.getBooleanExtra("accepted", false);
             boolean rejected = intent.getBooleanExtra("rejected", false);
+            String guid = intent.getStringExtra("guid");
 
             Bundle extras = intent.getExtras();
             if (extras != null) {
@@ -270,12 +273,6 @@ public class HomeActivity extends BaseActivity {
                     if (navIdObj != null) {
                         navId = Integer.parseInt(navIdObj.toString());
                     }
-
-                    Object jobIdObj = extras.get("jobId");
-                    if (jobIdObj != null) {
-                        jobId = Integer.parseInt(jobIdObj.toString());
-                    }
-
                     passenger = extras.getString("passenger", "");
                     message = extras.getString("message", message);
                 } catch (NumberFormatException e) {
@@ -283,22 +280,46 @@ public class HomeActivity extends BaseActivity {
                 }
             }
 
-            Log.d("HomeActivity Intent Data", "NavId: " + navId + ", JobId: " + jobId + ", Message: " + message + ", DateTime: " + dateTime);
+            Log.d("HomeActivity Intent Data", "NavId: " + navId + ", Message: " + message + ", DateTime: " + dateTime);
 
-            if (jobId > 0 && navId == 1) {
-                new GetBookingById(this).getBookingDetails(jobId);
+            if (guid != null) {
+                JobOfferNotification jobOfferNotification = new JobOfferNotification(this);
+                int finalNavId = navId;
+                jobOfferNotification.getResponse(guid, new JobOfferNotification.jobOfferCallback() {
+                    @Override
+                    public void onJobOfferResponse(JobOfferNoticationResponse response) {
+                        try {
+                            int bookingId = Integer.parseInt(response.getBookingId());
+                            Log.d("HomeActivity", "Booking ID: " + bookingId);
+                            if (finalNavId == 1) {
+                                GetBookingById getBookingById = new GetBookingById(HomeActivity.this);
+                                getBookingById.getBookingDetails(bookingId);
+                            }
+                        } catch (NumberFormatException e) {
+                            Log.e("HomeActivity", "Invalid bookingId format", e);
+                            Toast.makeText(HomeActivity.this, "Error processing booking ID", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        Log.e("HomeActivity", "Job offer notification error: " + errorMessage);
+                        Toast.makeText(HomeActivity.this, "Failed to fetch job details", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
+
             if (navId == 5 || navId == 6) {
                 new JobModal(this).JobReadNotificationClick(message, dateTime);
             }
             if (navId == 2) {
-                new JobModal(this).jobUnallocated(jobId, passenger, dateTime);
+                new JobModal(this).jobUnallocated(-1, passenger, dateTime);
             }
             if (navId == 3) {
-                new JobModal(this).jobAmenedment(String.valueOf(jobId), passenger, dateTime);
+                new JobModal(this).jobAmenedment("-1", passenger, dateTime);
             }
             if (navId == 4) {
-                new JobModal(this).jobCancel(String.valueOf(jobId), passenger, dateTime);
+                new JobModal(this).jobCancel("-1", passenger, dateTime);
             }
             if (accepted) {
                 new BottomSheetDialogs(this).openJobAccepted(passenger, pickupAddress);
@@ -308,6 +329,7 @@ public class HomeActivity extends BaseActivity {
             }
         } catch (Exception e) {
             Log.e("HomeActivity", "Error processing notification data", e);
+            Toast.makeText(this, "Error processing notification", Toast.LENGTH_SHORT).show();
         }
     }
 

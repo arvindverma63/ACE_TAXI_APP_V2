@@ -62,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"
+        android:visibility="gone"
         android:fontFamily="@font/font_urban"
         android:padding="8dp"
         android:text="12s"

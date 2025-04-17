@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
+import com.app.ace_taxi_v2.Logic.JobApi.JobOfferNotification;
 import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
 
 public class NotificationDialogController {

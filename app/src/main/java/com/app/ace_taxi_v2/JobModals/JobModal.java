@@ -111,37 +111,16 @@ public class JobModal {
         final boolean[] isResponded = {false};
         final int[] timeLeft = {TIMEOUT_SECONDS};
 
-        Runnable timerRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (isResponded[0] || !fullScreenDialog.isShowing()) return;
-                if (timeLeft[0] >= 0) {
-                    timer.setText(timeLeft[0]-- + "s");
-                    handler.postDelayed(this, 1000);
-                } else if (!isResponded[0]) {
-                    isResponded[0] = true;
-                    jobResponseApi.timeOut(bookingId);
-                    Log.d("Job Offer", "Timed out for booking: " + bookingId);
-                    startHomeActivity();
-                    fullScreenDialog.dismiss();
-                }
-            }
-        };
 
-        handler.post(timerRunnable);
 
-        acceptButton.setOnClickListener(v -> handleResponse(true, jobResponseApi, bookingId, fullScreenDialog, handler, timerRunnable, isResponded, passengerName, pickupAddress));
-        rejectBooking.setOnClickListener(v -> handleResponse(false, jobResponseApi, bookingId, fullScreenDialog, handler, timerRunnable, isResponded));
-        fullScreenDialog.setOnDismissListener(d -> handler.removeCallbacks(timerRunnable));
+        acceptButton.setOnClickListener(v -> handleResponse(true, jobResponseApi, bookingId, fullScreenDialog, handler, isResponded, passengerName, pickupAddress));
+        rejectBooking.setOnClickListener(v -> handleResponse(false, jobResponseApi, bookingId, fullScreenDialog, handler, isResponded));
         fullScreenDialog.show();
     }
 
     private void handleResponse(boolean accept, JobResponseApi jobResponseApi, int bookingId, Dialog dialog,
-                                Handler handler, Runnable timerRunnable, boolean[] isResponded,
+                                Handler handler, boolean[] isResponded,
                                 String... extras) {
-        if (isResponded[0]) return;
-        isResponded[0] = true;
-        handler.removeCallbacks(timerRunnable);
 
         if (accept) {
             jobResponseApi.acceptResponse(bookingId);

@@ -63,7 +63,7 @@ public class NotificationService extends FirebaseMessagingService {
         String message = remoteMessage.getData().getOrDefault("message", "No additional information.");
         String passenger = remoteMessage.getData().getOrDefault("passenger", "");
         String datetime = remoteMessage.getData().getOrDefault("datetime", "");
-
+        String guid = remoteMessage.getData().getOrDefault("guid","");
         Log.d(TAG, "Data Payload: Title=" + title + ", Body=" + body + ", JobId=" + jobId + ", NavId=" + navId+" datetime: "+datetime+" message : "+message);
 
         // Save notification details in SharedPreferences
@@ -82,10 +82,10 @@ public class NotificationService extends FirebaseMessagingService {
 
 
         showNotification(title, body, jobId, navId, passenger, datetime);
-        handleNavigation(navId, jobId, message, passenger, datetime);
+        handleNavigation(navId, jobId, message, passenger, datetime,guid);
     }
 
-    private void handleNavigation(String navId, String jobId, String message, String passenger, String datetime) {
+    private void handleNavigation(String navId, String jobId, String message, String passenger, String datetime,String guid) {
         if ("N/A".equals(navId)) return;
 
         new Handler(Looper.getMainLooper()).post(() -> {
@@ -95,6 +95,8 @@ public class NotificationService extends FirebaseMessagingService {
             intent.putExtra("passenger", passenger);
             intent.putExtra("jobId", jobId);
             intent.putExtra("navId", navId);
+            intent.putExtra("guid",guid);
+
 
             switch (navId) {
                 case "5":
