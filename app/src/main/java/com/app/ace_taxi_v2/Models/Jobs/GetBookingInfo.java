@@ -2,9 +2,11 @@ package com.app.ace_taxi_v2.Models.Jobs;
 
 import android.os.Build;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class GetBookingInfo {
     private String regNo;
@@ -262,5 +264,48 @@ public class GetBookingInfo {
 
     public boolean isASAP() {
         return isASAP;
+    }
+    public String getFormattedDateTime() {
+        return formatDate(pickupDateTime).toString();
+    }
+    private String formatDate(String dateTimeStr) {
+        if (dateTimeStr == null) return "";
+
+        try {
+            String result;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr);
+                LocalDate today = LocalDate.now();
+
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+
+                if (dateTime.toLocalDate().isEqual(today)) {
+                    result = "Today, " + dateTime.format(dateFormatter);
+                } else {
+                    result = dateTime.format(dateFormatter);
+                }
+            } else {
+                java.text.SimpleDateFormat inputFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("MMM dd yyyy", Locale.getDefault());
+
+                java.util.Date date = inputFormat.parse(dateTimeStr);
+
+                java.text.SimpleDateFormat todayCheckFormat = new java.text.SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                String todayStr = todayCheckFormat.format(new java.util.Date());
+                String dateStr = todayCheckFormat.format(date);
+
+                if (dateStr.equals(todayStr)) {
+                    result = "Today, " + outputFormat.format(date);
+                } else {
+                    result = outputFormat.format(date);
+                }
+            }
+
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return dateTimeStr;
+        }
     }
 }

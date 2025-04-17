@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -41,6 +43,8 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HomeFragment extends Fragment {
 
@@ -60,6 +64,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout vias_container; // New container for vias
     private TextView vias_address, vias_code,pickup_time,destination_time;
     private ImageView job_action;
+    private MaterialCardView status_card,payment_card;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,6 +101,8 @@ public class HomeFragment extends Fragment {
             pickup_time = view.findViewById(R.id.pickup_time);
             job_action = view.findViewById(R.id.job_action);
             destination_time = view.findViewById(R.id.destination_time);
+            payment_card = view.findViewById(R.id.payment_card);
+            status_card = view.findViewById(R.id.scope_card);
 
             sideMenu.setOnClickListener(v -> {
                 HamMenu hamMenu = new HamMenu(getContext(),getActivity());
@@ -310,6 +317,9 @@ public class HomeFragment extends Fragment {
                                     if ("Account".equals(booking.getScopeText())) {
                                         price.setText("ACC");
                                         price.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+                                        scope_text.setText("ACC");
+                                        status_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.red));
+                                        payment_card.setVisibility(View.GONE);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -451,10 +461,30 @@ public class HomeFragment extends Fragment {
             Log.e(TAG, "Error replacing fragment", e);
         }
     }
-    private void updateMap(String address){
-        LocationCordinates locationCordinates = new LocationCordinates(getContext());
-        LatLng latLng = locationCordinates.getCoordinatesFromAddress(address);
-        JobMapsFragment jobMapsFragment = JobMapsFragment.newInstance(latLng.latitude, latLng.longitude, address);
-        jobMapsFragment.show(getParentFragmentManager(), "JobMapsFragment");
+    private void updateMap(String address) {
+        if (address == null || address.trim().isEmpty()) {
+            Toast.makeText(getContext(), "Please enter a valid address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            LocationCordinates locationCordinates = new LocationCordinates(getContext());
+            LatLng latLng = locationCordinates.getCoordinatesFromAddress(address.trim());
+
+            handler.post(() -> {
+                if (latLng != null) {
+                    Log.d("Geocoding", "Address: " + address + " -> LatLng: " + latLng.latitude + ", " + latLng.longitude);
+                    JobMapsFragment jobMapsFragment = JobMapsFragment.newInstance(latLng.latitude, latLng.longitude, address);
+                    jobMapsFragment.show(getParentFragmentManager(), "JobMapsFragment");
+                } else {
+                    Toast.makeText(getContext(), "Unable to get location for address: " + address, Toast.LENGTH_LONG).show();
+                }
+            });
+        });
     }
+
+
 }

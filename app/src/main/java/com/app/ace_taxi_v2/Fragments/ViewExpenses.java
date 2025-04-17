@@ -73,7 +73,7 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
     }
 
     private void navigateToProfile() {
-        Fragment selectedFragment = new ProfileFragment();
+        Fragment selectedFragment = new UserProfileFragment();
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, selectedFragment);

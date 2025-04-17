@@ -283,23 +283,4 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="@integer/material_motion_duration_long_1"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnClose"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Close"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        app:backgroundTint="#E6EFFF"
-        android:paddingVertical="12dp"
-        android:fontFamily="@font/font_urban"
-        app:strokeColor="@color/trans"
-        app:strokeWidth="1dp"
-        android:textColor="@color/dark_blue"
-        app:cornerRadius="1000dp"
-        android:letterSpacing="0.02"/>
 </LinearLayout>

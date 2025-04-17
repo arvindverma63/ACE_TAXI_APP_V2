@@ -237,6 +237,7 @@
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/purple"
+                            android:id="@+id/scope_card"
                             android:layout_gravity="center"
                             app:cardCornerRadius="1000dp"
                             app:strokeWidth="0dp">
@@ -255,6 +256,7 @@
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/payment_card"
                             android:backgroundTint="@color/green"
                             android:layout_gravity="center"
                             app:cardCornerRadius="1000dp"
@@ -478,13 +480,26 @@
                             android:orientation="horizontal">
 
                         </LinearLayout>
-
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:id="@+id/destination_time"
-                            android:text="16:20" />
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                style="@style/TextBG"
+                                android:textStyle="bold"
+                                android:text="Arrived By" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:layout_gravity="end"
+                                android:id="@+id/destination_time"
+                                android:text="16:20" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                     <View

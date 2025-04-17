@@ -45,7 +45,6 @@ public class AvailabilityFragment extends Fragment {
     private TextView dateText;
     public SessionManager sessionManager;
     public MaterialButton am_school_button,pm_school_button,am_pm_school_button,unavailable_button,view_all;
-    public Button close;
     public ImageView sideMenu;
 
     @Override
@@ -70,19 +69,6 @@ public class AvailabilityFragment extends Fragment {
         sideMenu.setOnClickListener(v -> {
             HamMenu hamMenu = new HamMenu(getContext(),getActivity());
             hamMenu.openMenu(sideMenu);
-        });
-        close = rootView.findViewById(R.id.btnClose);
-        close.setOnClickListener(v -> {
-            try {
-                Fragment selected = new HomeFragment();
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, selected);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commitAllowingStateLoss();
-            } catch (Exception e) {
-                Toast.makeText(getContext(), "Error navigating to Home: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
         });
 
         view_all.setOnClickListener(v -> {

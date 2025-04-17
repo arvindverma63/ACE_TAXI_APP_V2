@@ -131,7 +131,7 @@ public class JobViewDialog {
             getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
                 @Override
                 public void onSuccess(GetBookingInfo bookingInfo) {
-                    pickupdate.setText(bookingInfo.getPickupDateTime());
+                    pickupdate.setText(bookingInfo.getFormattedDateTime());
                     customerName.setText(bookingInfo.getPassengerName());
                     bookingprice.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
                     trip_fare.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
