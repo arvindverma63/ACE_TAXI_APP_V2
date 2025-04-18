@@ -70,7 +70,7 @@ public class TodayJobManager {
                     List<TodayBooking> bookingList = response.body().getBookings();
 
                     if (bookingList == null || bookingList.isEmpty()) {
-                        Toast.makeText(context, "No jobs available for today", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "No jobs available for today", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     BookingStartStatus bookingStartStatus = new BookingStartStatus(context);

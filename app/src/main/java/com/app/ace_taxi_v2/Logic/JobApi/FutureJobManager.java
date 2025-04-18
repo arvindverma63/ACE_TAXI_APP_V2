@@ -62,7 +62,7 @@ public class FutureJobManager {
                 List<Booking> bookingList = response.body().getBookings();
 
                 if (bookingList == null || bookingList.isEmpty()) {
-                    showToast("No future jobs available");
+//                    showToast("No future jobs available");
                     return;
                 }
 

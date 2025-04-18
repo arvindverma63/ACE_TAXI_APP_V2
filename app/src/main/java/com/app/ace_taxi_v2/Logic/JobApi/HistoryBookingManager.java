@@ -63,7 +63,7 @@ public class HistoryBookingManager {
                     List<HistoryBooking> bookingList = response.body();
 
                     if (bookingList == null || bookingList.isEmpty()) {
-                        Toast.makeText(context, "No past bookings available", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "No past bookings available", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

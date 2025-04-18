@@ -36,7 +36,7 @@ public class JobResponseApi {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-                    Toast.makeText(context, "Job Accept Successfully", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(context, "Job Accept Successfully", Toast.LENGTH_LONG).show();
                 } else {
                     String errorMessage = "JobResponseApi Accept Error: HTTP " + response.code() + " - " + response.message();
                     Sentry.captureMessage(errorMessage);

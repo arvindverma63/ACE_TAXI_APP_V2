@@ -87,12 +87,25 @@ public class JobModal {
         MaterialButton rejectBooking = fullScreenDialog.findViewById(R.id.reject_button);
         MaterialTextView tripfare = fullScreenDialog.findViewById(R.id.trip_fare);
         MaterialTextView passengerCount = fullScreenDialog.findViewById(R.id.passenger_count);
+        MaterialTextView pickupTime = fullScreenDialog.findViewById(R.id.pickup_time);
+        MaterialTextView destinationTime = fullScreenDialog.findViewById(R.id.destination_time);
+
+
 
         GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
         getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
             @Override
             public void onSuccess(GetBookingInfo bookingInfo) {
                 passengerCount.setText(bookingInfo.getPassengers()+" Passengers");
+                String pickupTimeText = bookingInfo.getPickupDateTime();
+                String[] parts = pickupTimeText.split(",");
+                pickupTime.setText(parts[parts.length - 1]);
+                if(bookingInfo.getArriveBy()== null){
+                    destinationTime.setVisibility(View.GONE);
+                }else {
+                    destinationTime.setText(bookingInfo.getArriveBy());
+                }
+                pickupDateAndTime.setText(bookingInfo.getFormattedDateTime());
             }
 
             @Override
@@ -104,12 +117,10 @@ public class JobModal {
         destination_address.setText(destinationAddress);
         fairy_price.setText(String.format("£%.2f", price));
         tripfare.setText(String.format("£%.2f", price));
-        pickupDateAndTime.setText(pickupDate);
         passenger_name.setText(passengerName);
         JobResponseApi jobResponseApi = new JobResponseApi(context);
         Handler handler = new Handler(Looper.getMainLooper());
         final boolean[] isResponded = {false};
-        final int[] timeLeft = {TIMEOUT_SECONDS};
 
 
 
