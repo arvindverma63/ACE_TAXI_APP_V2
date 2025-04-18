@@ -6,14 +6,12 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +19,10 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-
 import com.app.ace_taxi_v2.Components.ConfigModal;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Logic.LoginManager;
+import com.app.ace_taxi_v2.Logic.Service.ScreenOnOffManager;
 import com.app.ace_taxi_v2.Models.UserProfileResponse;
 import com.app.ace_taxi_v2.R;
 import com.app.ace_taxi_v2.SettingsPermission.CheckPermission;
@@ -38,19 +36,44 @@ public class SettingFragment extends Fragment {
     private static final String KEY_DARK_MODE = "dark_mode";
     private TextView theme_switch_text, gps_switch_text, notification_switch_text, url_text, keep_alive_switch_text;
     private Switch switch_dark_mode, notification_swtich, gps_switch, sms_switch, keep_alive_switch;
-    public Button config;
-    Permission permission;
-    public MaterialTextView driver_name, driver_email;
+    private Button config;
+    private Permission permission;
+    private MaterialTextView driver_name, driver_email;
+    private ScreenOnOffManager screenOnOffManager;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = null;
         try {
-            // Inflate the layout for this fragment
             view = inflater.inflate(R.layout.fragment_setting, container, false);
 
-            // Initialize views
+            try {
+                screenOnOffManager = new ScreenOnOffManager(requireContext(), requireActivity().getWindow());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                initializeViews(view);
+                initializePermissions();
+                setupPermissionChecks();
+                setDriverDetails();
+                setupKeepAliveSwitch();
+                setupSwitchListeners();
+                setupToolbar(view);
+                setupDarkModeSwitch();
+                configBtn();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return view;
+    }
+
+    private void initializeViews(View view) {
+        try {
             theme_switch_text = view.findViewById(R.id.theme_switch_text);
             switch_dark_mode = view.findViewById(R.id.switch_dark_mode);
             notification_swtich = view.findViewById(R.id.notification_swtich);
@@ -58,30 +81,86 @@ public class SettingFragment extends Fragment {
             sms_switch = view.findViewById(R.id.sms_switch);
             keep_alive_switch = view.findViewById(R.id.keep_alive_switch);
             config = view.findViewById(R.id.config);
-            permission = new Permission(getContext());
             driver_email = view.findViewById(R.id.driver_email);
             driver_name = view.findViewById(R.id.driver_name);
-
             notification_switch_text = view.findViewById(R.id.notification_switch_text);
             gps_switch_text = view.findViewById(R.id.gps_switch_text);
             keep_alive_switch_text = view.findViewById(R.id.keep_alive_switch_text);
             url_text = view.findViewById(R.id.url_text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Check permissions
+    private void initializePermissions() {
+        try {
+            permission = new Permission(getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setupPermissionChecks() {
+        try {
             CheckPermission checkPermission = new CheckPermission(getContext());
             checkPermission.notificationPermission(notification_swtich);
             checkPermission.gpsPermission(gps_switch);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Set driver details
-            setDriverDetails();
+    private void setupKeepAliveSwitch() {
+        try {
+            boolean isScreenOnEnabled = screenOnOffManager.isScreenOnEnabled();
+            keep_alive_switch.setChecked(isScreenOnEnabled);
+            keepAliveSwitch(isScreenOnEnabled);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Set listeners
-            notification_swtich.setOnCheckedChangeListener((compoundButton, b) -> notificationSwitch(b));
-            gps_switch.setOnCheckedChangeListener((compoundButton, b) -> gpsSwitch(b));
-            sms_switch.setOnCheckedChangeListener((compoundButton, b) -> smsSwitch(b));
-            keep_alive_switch.setOnCheckedChangeListener((compoundButton, b) -> keepAliveSwitch(b));
+    private void setupSwitchListeners() {
+        try {
+            notification_swtich.setOnCheckedChangeListener((compoundButton, b) -> {
+                try {
+                    notificationSwitch(b);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
 
-            // Toolbar setup
+            gps_switch.setOnCheckedChangeListener((compoundButton, b) -> {
+                try {
+                    gpsSwitch(b);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            sms_switch.setOnCheckedChangeListener((compoundButton, b) -> {
+                try {
+                    smsSwitch(b);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            keep_alive_switch.setOnCheckedChangeListener((compoundButton, b) -> {
+                try {
+                    keepAliveSwitch(b);
+                    screenOnOffManager.applyScreenOnBasedOnView(null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setupToolbar(View view) {
+        try {
             MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
             toolbar.setNavigationOnClickListener(v -> {
                 try {
@@ -93,38 +172,57 @@ public class SettingFragment extends Fragment {
                     fragmentTransaction.commit();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    // Optionally show a toast or log the error
                 }
             });
-
-            // Initialize dark mode switch
-            try {
-                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-                boolean isDarkMode = sharedPreferences.getBoolean(KEY_DARK_MODE, false);
-                switch_dark_mode.setChecked(isDarkMode);
-                updateThemeText(isDarkMode);
-
-                switch_dark_mode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    try {
-                        AppCompatDelegate.setDefaultNightMode(isChecked
-                                ? AppCompatDelegate.MODE_NIGHT_YES
-                                : AppCompatDelegate.MODE_NIGHT_NO);
-                        updateThemeText(isChecked);
-                        sharedPreferences.edit().putBoolean(KEY_DARK_MODE, isChecked).apply();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            configBtn();
         } catch (Exception e) {
             e.printStackTrace();
-            // Optionally return a fallback view or handle the error
         }
-        return view;
+    }
+
+    private void setupDarkModeSwitch() {
+        try {
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            boolean isDarkMode = sharedPreferences.getBoolean(KEY_DARK_MODE, false);
+            switch_dark_mode.setChecked(isDarkMode);
+            updateThemeText(isDarkMode);
+
+            switch_dark_mode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                try {
+                    AppCompatDelegate.setDefaultNightMode(isChecked
+                            ? AppCompatDelegate.MODE_NIGHT_YES
+                            : AppCompatDelegate.MODE_NIGHT_NO);
+                    updateThemeText(isChecked);
+                    sharedPreferences.edit().putBoolean(KEY_DARK_MODE, isChecked).apply();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            boolean isScreenOnEnabled = screenOnOffManager.isScreenOnEnabled();
+            keep_alive_switch.setChecked(isScreenOnEnabled);
+            keepAliveSwitch(isScreenOnEnabled);
+            screenOnOffManager.applyScreenOnBasedOnView(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            screenOnOffManager.disableScreenOn();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateThemeText(boolean isDarkMode) {
@@ -156,7 +254,7 @@ public class SettingFragment extends Fragment {
             return new InsetDrawable(drawable, 0, 0, marginInPx, 0);
         } catch (Exception e) {
             e.printStackTrace();
-            return drawable; // Return original drawable as fallback
+            return drawable;
         }
     }
 
@@ -211,11 +309,15 @@ public class SettingFragment extends Fragment {
     private void keepAliveSwitch(boolean isOn) {
         try {
             if (isOn) {
+                screenOnOffManager.enableScreenOn();
                 keep_alive_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
                 keep_alive_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
+                keep_alive_switch_text.setText("Screen On");
             } else {
+                screenOnOffManager.disableScreenOn();
                 keep_alive_switch.setTrackTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
                 keep_alive_switch.setThumbTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
+                keep_alive_switch_text.setText("Screen Off");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -244,8 +346,10 @@ public class SettingFragment extends Fragment {
                 @Override
                 public void onSuccess(UserProfileResponse userProfileResponse) {
                     try {
-                        driver_email.setText(userProfileResponse.getEmail());
-                        driver_name.setText(userProfileResponse.getFullname());
+                        if (userProfileResponse != null) {
+                            driver_email.setText(userProfileResponse.getEmail());
+                            driver_name.setText(userProfileResponse.getFullname());
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -253,7 +357,11 @@ public class SettingFragment extends Fragment {
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    // Optionally handle failure (e.g., show a toast)
+                    try {
+                        // Optionally show error to user
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } catch (Exception e) {

@@ -50,8 +50,6 @@
     </LinearLayout>
 
 
-
-    <!-- Scrolling Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -120,7 +118,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Peter Farrel"
+                        android:text="---- -----"
                         android:layout_gravity="center"
                         android:id="@+id/driver_name"
                         style="@style/TextBG"
@@ -214,8 +212,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                app:cardCornerRadius="12dp"
                 android:visibility="gone"
+                app:cardCornerRadius="12dp"
                 app:strokeColor="@color/green"
                 app:strokeWidth="1dp">
 
@@ -344,6 +342,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="end"
                             android:id="@+id/pickup_time"
+                            android:layout_marginRight="10dp"
                             android:textStyle="bold"
                             android:text="16:20" />
                     </LinearLayout>
@@ -489,6 +488,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="end"
                                 style="@style/TextBG"
+                                android:layout_marginRight="10dp"
                                 android:textStyle="bold"
                                 android:text="Arrived By" />
                             <TextView
@@ -496,6 +496,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="end"
                                 android:layout_gravity="end"
+                                android:layout_marginRight="10dp"
                                 android:id="@+id/destination_time"
                                 android:text="16:20" />
                         </LinearLayout>

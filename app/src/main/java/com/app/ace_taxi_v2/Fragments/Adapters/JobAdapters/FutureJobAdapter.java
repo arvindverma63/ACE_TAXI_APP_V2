@@ -68,6 +68,7 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
         private final MaterialButton startButton;
         private final TextView price,datetime;
         private final TextView pickupAddress, destinationAddress,pickup_location;
+        private final TextView pickupTime,destinationTime,distance_duration;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +82,9 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
             destinationAddress = itemView.findViewById(R.id.destinationAddress);
             pickup_location = itemView.findViewById(R.id.pickup_location);
             datetime = itemView.findViewById(R.id.pickup_datetime);
+            pickupTime = itemView.findViewById(R.id.pickup_time);
+            destinationTime = itemView.findViewById(R.id.destination_time);
+            distance_duration = itemView.findViewById(R.id.distance_duration);
         }
 
         public void bind(Booking job, FutureJobAdapter.OnItemClickListener listener, Context context) {
@@ -92,6 +96,15 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
                 String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() : "";
                 if (job.getPickupPostCode() != null) {
                     lastPickup += " " + job.getPickupPostCode();
+                }
+                distance_duration.setText(job.getMileage() + " Miles");
+                String pickupTimeText = job.getPickupDateTime();
+                String[] parts = pickupTimeText.split(",");
+                pickupTime.setText(parts[parts.length - 1]);
+                if(job.getArriveBy()== null){
+                    destinationTime.setVisibility(View.GONE);
+                }else {
+                    destinationTime.setText(job.getArriveBy());
                 }
                 mainAddressTextView.setText(firstPickup.isEmpty() ? "N/A" : firstPickup);
                 pickupAddress.setText(lastPickup.isEmpty() ? "N/A" : lastPickup);
@@ -108,7 +121,7 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
                 pickup_location.setText(firstPickup);
 
                 Log.d(TAG,"pickupdatetime history jobs: "+job.getPickupDateTime());
-                datetime.setText(job.getPickupDateTime());
+                datetime.setText(job.getFormattedDateTime());
                 NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.UK);
                 price.setText("Account".equals(job.getScopeText()) ? "ACC" : formatter.format(job.getPrice()));
                 if ("Account".equals(job.getScopeText())) {

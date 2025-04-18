@@ -31,6 +31,7 @@ import com.app.ace_taxi_v2.GoogleMap.LocationCordinates;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
+import com.app.ace_taxi_v2.Logic.Service.ScreenOnOffManager;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
@@ -64,6 +65,8 @@ public class HomeFragment extends Fragment {
     private LinearLayout vias_container; // New container for vias
     private TextView vias_address, vias_code,pickup_time,destination_time;
     private ImageView job_action;
+    private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
+    private ScreenOnOffManager screenOnOffManager;
     private MaterialCardView status_card,payment_card;
 
     @Override
@@ -103,6 +106,8 @@ public class HomeFragment extends Fragment {
             destination_time = view.findViewById(R.id.destination_time);
             payment_card = view.findViewById(R.id.payment_card);
             status_card = view.findViewById(R.id.scope_card);
+            // Initialize ScreenOnOffManager
+            screenOnOffManager = new ScreenOnOffManager(requireContext(), requireActivity().getWindow());
 
             sideMenu.setOnClickListener(v -> {
                 HamMenu hamMenu = new HamMenu(getContext(),getActivity());

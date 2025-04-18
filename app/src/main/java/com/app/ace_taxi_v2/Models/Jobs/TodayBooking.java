@@ -28,6 +28,8 @@ public class TodayBooking {
     private int passengers;
     private String durationMinutes;
     private List<Vias> vias;
+    private String mileage;
+    private String arriveBy;
 
     public String getStatus() {
         return status != null ? status : "";
@@ -286,4 +288,11 @@ public class TodayBooking {
         }
     }
 
+    public String getMileage() {
+        return mileage;
+    }
+
+    public String getArriveBy() {
+        return arriveBy;
+    }
 }

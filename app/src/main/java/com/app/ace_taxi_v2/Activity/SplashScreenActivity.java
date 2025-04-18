@@ -27,6 +27,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         String message = "";
         String passenger = "";
         String datetime = "";
+        String guid = "";
         if (getIntent().getExtras() != null) {
             for (String key : getIntent().getExtras().keySet()) {
                 Object value = getIntent().getExtras().get(key);
@@ -51,6 +52,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                     passenger = value.toString();
                 }else if("datetime".equals(key.toString()) && value!=null){
                     datetime = value.toString();
+                }else if("guid".equals(key.toString()) && value!= null){
+                    guid = value.toString();
                 }
             }
         }
@@ -61,6 +64,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         String finalMessage = message;
         String finalPassenger = passenger;
         String finalDatetime = datetime;
+        String finalGuid = guid;
         new Handler().postDelayed(() -> {
                 Intent homeIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
                 homeIntent.putExtra("navId", finalNavId);
@@ -68,6 +72,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 homeIntent.putExtra("message", finalMessage);
                 homeIntent.putExtra("passenger", finalPassenger);
                 homeIntent.putExtra("datetime", finalDatetime);
+                homeIntent.putExtra("guid", finalGuid);
                 startActivity(homeIntent);
             finish();
         }, 1000);

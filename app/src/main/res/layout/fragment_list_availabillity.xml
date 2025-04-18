@@ -92,26 +92,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclar_view"
             android:layout_width="match_parent"
-            android:layout_height="393dp"
+            android:layout_height="423dp"
             android:clipToPadding="false"
             android:padding="8dp" />
     </LinearLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnClose"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Close"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        android:layout_marginTop="10dp"
-        app:backgroundTint="#E6EFFF"
-        android:paddingVertical="12dp"
-        android:fontFamily="@font/font_urban"
-        app:strokeColor="@color/trans"
-        app:strokeWidth="1dp"
-        android:textColor="@color/dark_blue"
-        app:cornerRadius="1000dp"
-        android:letterSpacing="0.02"/>
 
 </LinearLayout>

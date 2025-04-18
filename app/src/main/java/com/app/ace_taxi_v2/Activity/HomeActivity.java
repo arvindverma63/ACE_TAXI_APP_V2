@@ -265,6 +265,7 @@ public class HomeActivity extends BaseActivity {
             boolean accepted = intent.getBooleanExtra("accepted", false);
             boolean rejected = intent.getBooleanExtra("rejected", false);
             String guid = intent.getStringExtra("guid");
+            Log.d("guid","guid: "+guid);
 
             Bundle extras = intent.getExtras();
             if (extras != null) {

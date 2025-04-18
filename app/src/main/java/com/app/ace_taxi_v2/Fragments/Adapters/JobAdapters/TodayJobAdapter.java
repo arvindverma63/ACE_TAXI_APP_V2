@@ -27,7 +27,9 @@ import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHolder> {
 
@@ -108,12 +110,21 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
                 mainAddressTextView.setText(firstPickup);
                 subAddressTextView.setText(firstDestination);
-                price.setText("£" + job.getPrice());
+                price.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(job.getPrice()));
                 pickupAddress.setText(lastPickup);
                 destinationAddress.setText(lastDestination);
-                distance_duration.setText(job.getDurationMinutes() + " mins");
-                pickup_datetime.setText(job.getPickupDateTime());
+                distance_duration.setText(job.getMileage() + " Miles");
+                pickup_datetime.setText(job.getFormattedDateTime());
                 pickpu_location.setText(firstPickup);
+                String pickupTimeText = job.getPickupDateTime();
+                String[] parts = pickupTimeText.split(",");
+                pickupTime.setText(parts[parts.length - 1]);
+                if(job.getArriveBy()== null){
+                    destinationTime.setVisibility(View.GONE);
+                }else {
+                    destinationTime.setText(job.getArriveBy());
+                }
+
 
                 BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
 

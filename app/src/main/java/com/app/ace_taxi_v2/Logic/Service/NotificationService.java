@@ -81,7 +81,7 @@ public class NotificationService extends FirebaseMessagingService {
         }
 
 
-        showNotification(title, body, jobId, navId, passenger, datetime);
+//        showNotification(title, body, jobId, navId, passenger, datetime);
         handleNavigation(navId, jobId, message, passenger, datetime,guid);
     }
 

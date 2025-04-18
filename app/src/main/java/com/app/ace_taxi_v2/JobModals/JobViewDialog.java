@@ -133,8 +133,16 @@ public class JobViewDialog {
                 public void onSuccess(GetBookingInfo bookingInfo) {
                     pickupdate.setText(bookingInfo.getFormattedDateTime());
                     customerName.setText(bookingInfo.getPassengerName());
-                    bookingprice.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
-                    trip_fare.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
+                    if("Account".equals(bookingInfo.getScopeText())){
+                        bookingprice.setText("ACC");
+                        bookingprice.setTextColor(ContextCompat.getColor(context, R.color.red));
+                        trip_fare.setText("ACC");
+                        trip_fare.setTextColor(ContextCompat.getColor(context,R.color.red));
+                    }else{
+                        bookingprice.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
+                        trip_fare.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
+                    }
+
                     distance_duration.setText(formatDuration(bookingInfo.getDurationMinutes()));
 
                     String pickupTimeText = bookingInfo.getPickupDateTime();
@@ -142,7 +150,6 @@ public class JobViewDialog {
                     if (timeParts.length > 1) {
                         pickupTime.setText(timeParts[timeParts.length-1]);
                     }
-
                     destinationTime.setText(bookingInfo.getEndTime());
 
                     vias_layout.setVisibility(View.GONE); // Hide original vias layout

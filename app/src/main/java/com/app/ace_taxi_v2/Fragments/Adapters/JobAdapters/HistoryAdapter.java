@@ -66,6 +66,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         private final TextView subAddressTextView;
         private final MaterialButton viewButton;
         private final TextView price;
+        private final TextView pickupTime,destinationTime,distance_duration;
         private final TextView pickupAddress, destinationAddress, pickup_location, datetime;
 
         public ViewHolder(@NonNull View itemView) {
@@ -78,6 +79,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             destinationAddress = itemView.findViewById(R.id.destinationAddress);
             pickup_location = itemView.findViewById(R.id.pickup_location);
             datetime = itemView.findViewById(R.id.pickup_datetime);
+            pickupTime = itemView.findViewById(R.id.pickup_time);
+            destinationTime = itemView.findViewById(R.id.destination_time);
+            distance_duration = itemView.findViewById(R.id.distance_duration);
         }
 
         public void bind(HistoryBooking job, OnItemClickListener listener) {
@@ -103,16 +107,27 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 if (job.getDestinationPostCode() != null) {
                     lastDestination += " " + job.getDestinationPostCode();
                 }
+
+                distance_duration.setText(job.getMileage() + " Miles");
+                String pickupTimeText = job.getPickupDateTime();
+                String[] parts = pickupTimeText.split(",");
+                pickupTime.setText(parts[parts.length - 1]);
+                if(job.getArriveBy()== null){
+                    destinationTime.setVisibility(View.GONE);
+                }else {
+                    destinationTime.setText(job.getArriveBy());
+                }
                 destinationAddress.setText(lastDestination.isEmpty() ? "N/A" : lastDestination);
                 subAddressTextView.setText(firstDestination.isEmpty() ? "N/A" : firstDestination);
                 pickup_location.setText(firstPickup);
 
                 Log.d(TAG,"pickupdatetime history jobs: "+job.getPickupDateTime());
-                datetime.setText(job.getPickupDateTime());
+                datetime.setText(job.getFormattedDateTime());
                 NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.UK);
                 price.setText("Account".equals(job.getScopeText()) ? "ACC" : formatter.format(job.getPrice()));
                 if ("Account".equals(job.getScopeText())) {
                     price.setTextColor(ContextCompat.getColor(context, R.color.red));
+                    price.setText("ACC");
                 }
 
                 viewButton.setOnClickListener(v -> {

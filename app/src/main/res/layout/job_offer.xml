@@ -114,7 +114,7 @@
                     android:layout_gravity="end"
                     android:fontFamily="@font/font_urban"
                     android:text="00:00 AM"
-                    android:textColor="@color/gray"
+                    style="@style/TextBG"
                     android:textSize="14sp" />
             </LinearLayout>
 
