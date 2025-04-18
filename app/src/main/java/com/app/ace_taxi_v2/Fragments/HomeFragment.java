@@ -33,6 +33,7 @@ import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.Service.ScreenOnOffManager;
 import com.app.ace_taxi_v2.Logic.SessionManager;
+import com.app.ace_taxi_v2.Logic.UpdateDriverShiftApi;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.Models.Jobs.Vias;
@@ -68,10 +69,12 @@ public class HomeFragment extends Fragment {
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
     private ScreenOnOffManager screenOnOffManager;
     private MaterialCardView status_card,payment_card;
+    UpdateDriverShiftApi updateDriverShiftApi;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        updateDriverShiftApi = new UpdateDriverShiftApi(getContext());
 
         try {
             // Initialize UI components
@@ -188,6 +191,7 @@ public class HomeFragment extends Fragment {
                         locationPermissions.startLocationService();
                         locationPermissions.setSwitchState(true);
                         updateStatusLabel(true);
+                        updateDriverShiftApi.updateStatus(1000);
                     } else {
                         locationPermissions.requestLocationPermissions();
                         locationPermissions.setSwitchState(false);
@@ -201,6 +205,7 @@ public class HomeFragment extends Fragment {
                 locationPermissions.setSwitchState(false);
                 locationPermissions.stopLocationService();
                 updateStatusLabel(false);
+                updateDriverShiftApi.updateStatus(1001);
             }
         } catch (Exception e) {
             Log.e(TAG, "Error in handleSwitchToggle", e);

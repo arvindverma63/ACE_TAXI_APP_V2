@@ -7,5 +7,6 @@
     <item
         android:id="@+id/action_shift"
         android:icon="@drawable/ic_car_model"
+        android:visible="false"
         android:title="Shift"/>
 </menu>
