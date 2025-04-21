@@ -1,200 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@android:color/white"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Complete Job Title -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Complete Job"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal" />
-
-    <!-- Success Icon -->
-    <ImageView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_check_yellow" />
-
-    <!-- Price Details Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:strokeWidth="1dp"
-        android:padding="10dp"
-        style="@style/CardBG"
-        app:cardCornerRadius="8dp">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Payment"
-        android:padding="12dp"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@color/light_gray" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp"
-        app:cardCornerRadius="12dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/light_gray"
-        app:cardBackgroundColor="@color/white">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
-
-            <!-- Price Field -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Price"
-                android:textColorHint="@color/gray"
-                android:paddingBottom="6dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:inputType="numberDecimal"
-                    android:textSize="16sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/black"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Waiting Time Field -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Waiting Time"
-                android:textColorHint="@color/gray"
-                android:paddingBottom="6dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etWaitingTime"
-                    android:inputType="numberDecimal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="16sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/black"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Parking Field -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Parking"
-                android:textColorHint="@color/gray"
-                android:paddingBottom="6dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etParking"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:inputType="numberDecimal"
-                    android:textSize="16sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/black"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Tip Field -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tip"
-                android:textColorHint="@color/gray"
-                android:paddingBottom="6dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etTip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="0.00"
-                    android:textSize="16sp"
-                    android:inputType="numberDecimal"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/black"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-
-    <!-- Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="bottom"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:background="@android:color/white"
+        android:padding="16dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSubmit"
-            android:layout_width="match_parent"
+        <!-- Complete Job Title -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/gradient_green"
-            android:fontFamily="@font/font_urban"
-            app:backgroundTint="@null"
-            android:text="Submit"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textAllCaps="false"
+            android:text="Complete Job"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginBottom="5dp"
-            app:cornerRadius="20dp"
-            app:elevation="6dp" />
+            android:layout_gravity="center_horizontal" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnClose"
+        <!-- Success Icon -->
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_check_yellow" />
+
+        <!-- Price Details Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Close"
-            android:textSize="16sp"
-            android:textAllCaps="false"
-            app:backgroundTint="#E6EFFF"
-            android:paddingVertical="12dp"
-            android:fontFamily="@font/font_urban"
-            app:strokeColor="@color/trans"
+            android:layout_marginTop="16dp"
             app:strokeWidth="1dp"
-            android:textColor="@color/dark_blue"
-            app:cornerRadius="1000dp"
-            android:letterSpacing="0.02"/>
+            android:padding="10dp"
+            style="@style/CardBG"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Payment"
+                android:padding="12dp"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@color/light_gray" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="12dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/light_gray"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <!-- Price Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Price"
+                    android:textColorHint="@color/gray"
+                    android:paddingBottom="6dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:inputType="numberDecimal"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/black"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Waiting Time Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Waiting Time"
+                    android:textColorHint="@color/gray"
+                    android:paddingBottom="6dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etWaitingTime"
+                        android:inputType="numberDecimal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/black"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Parking Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Parking"
+                    android:textColorHint="@color/gray"
+                    android:paddingBottom="6dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etParking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:inputType="numberDecimal"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/black"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Tip Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tip"
+                    android:textColorHint="@color/gray"
+                    android:paddingBottom="6dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textSize="16sp"
+                        android:inputType="numberDecimal"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="@color/black"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
+                android:fontFamily="@font/font_urban"
+                app:backgroundTint="@null"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:padding="17dp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                app:cornerRadius="2000dp"
+                app:elevation="6dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Close"
+                android:padding="17dp"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/light_gray"
+                android:paddingVertical="12dp"
+                android:fontFamily="@font/font_urban"
+                app:strokeColor="@color/red"
+                app:strokeWidth="1dp"
+                android:textColor="@color/red"
+                app:cornerRadius="1000dp"
+                android:letterSpacing="0.02"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
