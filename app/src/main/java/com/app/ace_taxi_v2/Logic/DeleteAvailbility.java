@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 
 import io.sentry.Sentry;
@@ -36,7 +37,8 @@ public class DeleteAvailbility {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-                    Toast.makeText(context, "Deleted successfull", Toast.LENGTH_LONG).show();
+                    CustomToast customToast = new CustomToast(context);
+                    customToast.showCustomToast("Availability Deleted");
                     Log.d(TAG, "Availability deleted successfully. ID: " + id);
                 } else {
                     String errorMessage = "DeleteAvailbility API Error: HTTP " + response.code() + " - " + response.message();

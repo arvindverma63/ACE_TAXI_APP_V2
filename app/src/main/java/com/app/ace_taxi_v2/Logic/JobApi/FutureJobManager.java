@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,11 +32,13 @@ public class FutureJobManager {
     private final SwipeRefreshLayout swipeRefreshLayout;
     private final SessionManager sessionManager;
     private FutureJobAdapter adapter;
+    private TextView noBookingTextView;
 
-    public FutureJobManager(Context context, SwipeRefreshLayout swipeRefreshLayout) {
+    public FutureJobManager(Context context, SwipeRefreshLayout swipeRefreshLayout,TextView noBookingTextView) {
         this.context = context;
         this.swipeRefreshLayout = swipeRefreshLayout;
         this.sessionManager = new SessionManager(context);
+        this.noBookingTextView = noBookingTextView;
     }
 
     public void fetchJob(View view, RecyclerView recyclerView) {
@@ -62,7 +65,8 @@ public class FutureJobManager {
                 List<Booking> bookingList = response.body().getBookings();
 
                 if (bookingList == null || bookingList.isEmpty()) {
-//                    showToast("No future jobs available");
+                    recyclerView.setVisibility(View.GONE);
+                    noBookingTextView.setVisibility(View.VISIBLE);
                     return;
                 }
 

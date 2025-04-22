@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.JobResponse;
 
@@ -36,7 +37,8 @@ public class JobResponseApi {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-//                    Toast.makeText(context, "Job Accept Successfully", Toast.LENGTH_LONG).show();
+                    CustomToast customToast = new CustomToast(context);
+                    customToast.showCustomToast("Job Accepted Successfully");
                 } else {
                     String errorMessage = "JobResponseApi Accept Error: HTTP " + response.code() + " - " + response.message();
                     Sentry.captureMessage(errorMessage);
@@ -65,7 +67,8 @@ public class JobResponseApi {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-                    Toast.makeText(context, "Job Reject Successfully", Toast.LENGTH_LONG).show();
+                    CustomToast customToast = new CustomToast(context);
+                    customToast.showCustomToast("Job Rejected Successfully");
                 } else {
                     String errorMessage = "JobResponseApi Reject Error: HTTP " + response.code() + " - " + response.message();
                     Sentry.captureMessage(errorMessage);

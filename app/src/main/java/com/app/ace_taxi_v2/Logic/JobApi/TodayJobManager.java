@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
@@ -35,11 +36,13 @@ public class TodayJobManager {
     private final Context context;
     private final FragmentManager fragmentManager;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView noBookingTextView;
 
-    public TodayJobManager(Context context, FragmentManager fragmentManager, SwipeRefreshLayout swipeRefreshLayout) {
+    public TodayJobManager(Context context, FragmentManager fragmentManager, SwipeRefreshLayout swipeRefreshLayout,TextView noBookingTextView) {
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.swipeRefreshLayout = swipeRefreshLayout;
+        this.noBookingTextView = noBookingTextView;
     }
 
     public void getTodayJobs(View view, RecyclerView recyclerView) {
@@ -70,7 +73,8 @@ public class TodayJobManager {
                     List<TodayBooking> bookingList = response.body().getBookings();
 
                     if (bookingList == null || bookingList.isEmpty()) {
-//                        Toast.makeText(context, "No jobs available for today", Toast.LENGTH_SHORT).show();
+                        recyclerView.setVisibility(View.GONE);
+                        noBookingTextView.setVisibility(View.VISIBLE);
                         return;
                     }
                     BookingStartStatus bookingStartStatus = new BookingStartStatus(context);

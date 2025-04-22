@@ -11,6 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.HistoryAdapter;
 import com.app.ace_taxi_v2.JobModals.JobModal;
@@ -27,6 +28,7 @@ public class HistoryFragment extends Fragment {
     private RecyclerView recyclerView;
     public SwipeRefreshLayout swipeRefreshLayout;
     public HistoryBookingManager historyBookingManager;
+    public TextView noBookingTextView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -36,9 +38,10 @@ public class HistoryFragment extends Fragment {
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.recyclar_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        noBookingTextView = view.findViewById(R.id.noBookingTextView);
 
-        historyBookingManager = new HistoryBookingManager(getContext(),swipeRefreshLayout);
+        historyBookingManager = new HistoryBookingManager(getContext(),swipeRefreshLayout,noBookingTextView);
         historyBookingManager.getHistoryBookings(view,recyclerView);
 
         swipeRefreshLayout.setOnRefreshListener(()->{

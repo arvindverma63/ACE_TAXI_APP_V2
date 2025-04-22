@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,10 +29,12 @@ import retrofit2.Response;
 public class HistoryBookingManager {
     private final Context context;
     public SwipeRefreshLayout swipeRefreshLayout;
+    public TextView noBookingTextView;
 
-    public HistoryBookingManager(Context context,SwipeRefreshLayout swipeRefreshLayout) { // Fixed constructor visibility
+    public HistoryBookingManager(Context context,SwipeRefreshLayout swipeRefreshLayout,TextView noBookingTextView) { // Fixed constructor visibility
         this.context = context;
         this.swipeRefreshLayout = swipeRefreshLayout;
+        this.noBookingTextView = noBookingTextView;
     }
 
     public void getHistoryBookings(View view, RecyclerView recyclerView) {
@@ -63,7 +66,8 @@ public class HistoryBookingManager {
                     List<HistoryBooking> bookingList = response.body();
 
                     if (bookingList == null || bookingList.isEmpty()) {
-//                        Toast.makeText(context, "No past bookings available", Toast.LENGTH_SHORT).show();
+                        recyclerView.setVisibility(View.GONE);
+                        noBookingTextView.setVisibility(View.VISIBLE);
                         return;
                     }
 

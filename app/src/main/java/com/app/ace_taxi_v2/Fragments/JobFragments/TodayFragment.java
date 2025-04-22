@@ -9,6 +9,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.app.ace_taxi_v2.JobModals.JobModal;
@@ -28,6 +29,7 @@ public class TodayFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private TodayJobManager todayJobManager;
     private View fragmentView; // Store the view for later use
+    private TextView noBookingTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,9 +38,11 @@ public class TodayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
         fragmentView = view; // Store the view
 
-        recyclerView = view.findViewById(R.id.recyclar_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        todayJobManager = new TodayJobManager(getContext(), getActivity().getSupportFragmentManager(), swipeRefreshLayout);
+        noBookingTextView = view.findViewById(R.id.noBookingTextView);
+
+        todayJobManager = new TodayJobManager(getContext(), getActivity().getSupportFragmentManager(), swipeRefreshLayout,noBookingTextView);
 
         // Initial load
         todayJobManager.getTodayJobs(view, recyclerView);

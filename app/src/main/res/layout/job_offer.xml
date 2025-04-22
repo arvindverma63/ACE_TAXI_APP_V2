@@ -44,7 +44,7 @@
             android:fontFamily="@font/font_urban"
             android:gravity="center"
             android:padding="12dp"
-            android:text="Accept Booking"
+            android:text="Job Offer"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -54,6 +54,17 @@
             android:layout_height="23dp"
             android:src="@drawable/ic_bar" />
     </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="#12345"
+            android:id="@+id/bookingId"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/red"/>
 
     <!-- Timer -->
     <com.google.android.material.textview.MaterialTextView
@@ -106,6 +117,27 @@
                     android:text="70 Washington Square S, New York, NY 10012, USA"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:id="@+id/asap_card"
+                    android:backgroundTint="@color/green"
+                    android:layout_marginRight="4dp"
+                    android:visibility="gone"
+                    android:layout_gravity="top"
+                    app:cardCornerRadius="1000dp"
+                    android:layout_marginLeft="10dp"
+                    app:strokeWidth="0dp">
+
+                    <TextView
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:text="ASAP"
+                        android:textAllCaps="true"
+                        android:gravity="center"
+                        android:textColor="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/pickup_time"
@@ -167,14 +199,30 @@
                 android:layout_marginBottom="10dp"
                 android:background="@android:color/darker_gray" />
             <!-- Pickup Date and Duration -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/pickup_date"
-                style="@style/TextBG"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Today, Dec 22, 2024 (102 mins estimated)"
-                android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pickup_date"
+                    style="@style/TextBG"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Today, Dec 22, 2024"
+                    android:textColor="@color/gray"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@integer/material_motion_duration_long_1"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/distance_duration"
+                    android:text="33 miles"/>
+            </LinearLayout>
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -248,35 +296,68 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:strokeWidth="0dp"
+        android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/white">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical">
             <!-- Payment Method -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="horizontal">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/font_urban"
-                    android:text="Payment Method"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:backgroundTint="@color/purple"
+                    android:id="@+id/scope_card"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="1000dp"
+                    app:strokeWidth="0dp">
 
-                <ImageView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:text="Card"
+                        android:layout_marginHorizontal="20dp"
+                        android:textAllCaps="true"
+                        android:gravity="center"
+                        android:id="@+id/scope_text"
+                        android:textColor="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:id="@+id/payment_card"
+                    android:backgroundTint="@color/green"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="1000dp"
+                    android:layout_marginLeft="10dp"
+                    app:strokeWidth="0dp">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:text="Paid"
+                        android:textAllCaps="true"
+                        android:gravity="center"
+                        android:id="@+id/payment_status"
+                        android:textColor="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
+                <Space
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:tint="@color/gray"
-                    android:src="@drawable/ic_arrow_forward" />
+                    android:layout_weight="@integer/material_motion_duration_long_1"/>
+
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -305,16 +386,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/font_urban"
-                    android:text="Trip Fare"
+                    android:text="Booked By"
                     android:textColor="@color/gray"
                     android:textSize="14sp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/trip_fare"
+                    android:id="@+id/bookerName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_urban"
-                    android:text="£161.00"
+                    android:text="--- ---"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />

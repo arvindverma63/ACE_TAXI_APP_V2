@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
 import com.app.ace_taxi_v2.Models.AvailabilityRequest;
@@ -45,8 +46,10 @@ public class AvailabilityAddApi {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-                    BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
-                    bottomSheetDialogs.addAvail();
+//                    BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
+//                    bottomSheetDialogs.addAvail();
+                    CustomToast customToast = new CustomToast(context);
+                    customToast.showCustomToast("Availability Updated");
                     customDialog.dismissProgressDialog();
                 } else {
                     String errorMessage = "Availability API Error: HTTP " + response.code() + " - " + response.message();
@@ -63,8 +66,6 @@ public class AvailabilityAddApi {
                 String failureMessage = "Availability API Call Failed: " + t.getMessage();
                 Log.e(TAG, failureMessage, t);
                 Sentry.captureException(t);
-                BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
-                bottomSheetDialogs.alreadyAdd();
                 customDialog.dismissProgressDialog();
             }
         });

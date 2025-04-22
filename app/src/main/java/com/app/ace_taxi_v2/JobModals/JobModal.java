@@ -85,10 +85,17 @@ public class JobModal {
         MaterialTextView timer = fullScreenDialog.findViewById(R.id.timer);
         MaterialButton acceptButton = fullScreenDialog.findViewById(R.id.accept_button);
         MaterialButton rejectBooking = fullScreenDialog.findViewById(R.id.reject_button);
-        MaterialTextView tripfare = fullScreenDialog.findViewById(R.id.trip_fare);
+        MaterialTextView tripfare = fullScreenDialog.findViewById(R.id.bookerName);
+        MaterialTextView jobId = fullScreenDialog.findViewById(R.id.bookingId);
         MaterialTextView passengerCount = fullScreenDialog.findViewById(R.id.passenger_count);
         MaterialTextView pickupTime = fullScreenDialog.findViewById(R.id.pickup_time);
         MaterialTextView destinationTime = fullScreenDialog.findViewById(R.id.destination_time);
+        MaterialTextView distance_duration = fullScreenDialog.findViewById(R.id.distance_duration);
+        MaterialTextView scopeText = fullScreenDialog.findViewById(R.id.scope_text);
+        MaterialCardView scopeCard = fullScreenDialog.findViewById(R.id.scope_card);
+        MaterialTextView payment_status = fullScreenDialog.findViewById(R.id.payment_status);
+        MaterialCardView paymentCard = fullScreenDialog.findViewById(R.id.payment_card);
+        MaterialCardView asap_card = fullScreenDialog.findViewById(R.id.asap_card);
 
 
 
@@ -96,16 +103,49 @@ public class JobModal {
         getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
             @Override
             public void onSuccess(GetBookingInfo bookingInfo) {
-                passengerCount.setText(bookingInfo.getPassengers()+" Passengers");
-                String pickupTimeText = bookingInfo.getPickupDateTime();
-                String[] parts = pickupTimeText.split(",");
-                pickupTime.setText(parts[parts.length - 1]);
-                if(bookingInfo.getArriveBy()== null){
-                    destinationTime.setVisibility(View.GONE);
-                }else {
-                    destinationTime.setText(bookingInfo.getArriveBy());
+                try{
+                    passengerCount.setText(bookingInfo.getPassengers()+" Passengers");
+                    jobId.setText("#"+bookingInfo.getBookingId());
+                    distance_duration.setText(bookingInfo.getMileage()+" Miles");
+                    String pickupTimeText = bookingInfo.getPickupDateTime();
+                    String[] parts = pickupTimeText.split(",");
+                    pickupTime.setText(parts[parts.length - 1]);
+                    if(bookingInfo.isASAP()){
+                        asap_card.setVisibility(View.VISIBLE);
+                    }
+                    if(bookingInfo.getArriveBy()== null){
+                        destinationTime.setVisibility(View.GONE);
+                    }else {
+                        destinationTime.setText(bookingInfo.getArriveBy());
+                    }
+                    pickupDateAndTime.setText(bookingInfo.getFormattedDateTime());
+                    if(bookingInfo.getScopeText().equals("Account")){
+                        scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
+                        scopeText.setText(bookingInfo.getAccountNumber()+"");
+                        paymentCard.setVisibility(View.GONE);
+                        fairy_price.setText("ACC");
+                        fairy_price.setTextColor(ContextCompat.getColor(context,R.color.red));
+                    }else if(bookingInfo.getScopeText().equals("Card")){
+                        if(bookingInfo.getPaymentStatusText().equals("Unpaid")){
+                            paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
+                            payment_status.setText("UNPAID");
+                        }else if(bookingInfo.getPaymentStatusText().equals("Paid")){
+                            paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                            payment_status.setText("PAID");
+                        }
+                    }else if(bookingInfo.getScopeText().equals("Cash")){
+                        paymentCard.setVisibility(View.GONE);
+                        scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                        scopeText.setText("CASH");
+                    }else if(bookingInfo.getScopeText().equals("Rank")){
+                        paymentCard.setVisibility(View.GONE);
+                        scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.purple));
+                        scopeText.setText("RANK");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                pickupDateAndTime.setText(bookingInfo.getFormattedDateTime());
+
             }
 
             @Override
@@ -115,9 +155,9 @@ public class JobModal {
         });
         pickup_address.setText(pickupAddress);
         destination_address.setText(destinationAddress);
-        fairy_price.setText(String.format("£%.2f", price));
-        tripfare.setText(String.format("£%.2f", price));
+        tripfare.setText(passengerName);
         passenger_name.setText(passengerName);
+        fairy_price.setText(String.format("£%.2f", price));
         JobResponseApi jobResponseApi = new JobResponseApi(context);
         Handler handler = new Handler(Looper.getMainLooper());
         final boolean[] isResponded = {false};
@@ -136,14 +176,10 @@ public class JobModal {
         if (accept) {
             jobResponseApi.acceptResponse(bookingId);
             Log.d("Accept Job", "Booking ID: " + bookingId);
-            Intent intent = new Intent(context, HomeActivity.class)
-                    .putExtra("accepted", true)
-                    .putExtra("passenger", extras[0])
-                    .putExtra("pickupAddress", extras[1]);
-            context.startActivity(intent);
+            dialog.dismiss();
         } else {
             jobResponseApi.rejectBooking(bookingId);
-            startHomeActivity();
+            dialog.dismiss();
         }
         dialog.dismiss();
     }
