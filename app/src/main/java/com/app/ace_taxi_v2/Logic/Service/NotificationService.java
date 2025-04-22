@@ -17,6 +17,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.Logic.JobApi.NotificationJobDialogResponse;
+import com.app.ace_taxi_v2.Models.Guid;
 import com.app.ace_taxi_v2.Models.NotificationModel;
 import com.app.ace_taxi_v2.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -66,6 +67,8 @@ public class NotificationService extends FirebaseMessagingService {
         String guid = remoteMessage.getData().getOrDefault("guid","");
         Log.d(TAG, "Data Payload: Title=" + title + ", Body=" + body + ", JobId=" + jobId + ", NavId=" + navId+" datetime: "+datetime+" message : "+message);
 
+        Guid guid1 = new Guid(this);
+        guid1.setGuid(guid);
         // Save notification details in SharedPreferences
         editor.putString("notification_payload", body);
         editor.putString("notification_title", title);

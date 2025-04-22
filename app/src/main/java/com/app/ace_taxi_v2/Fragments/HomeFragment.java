@@ -303,8 +303,12 @@ public class HomeFragment extends Fragment {
                                 destination_subaddress.setText(lastDestination);
                                 price.setText(String.format("£%.2f", booking.getPrice()));
                                 date.setText(booking.getFormattedDateTime());
-                                destination_time.setText(booking.getEndTime());
-                                passenger_count.setText(String.valueOf(booking.getPassengers()) + " Passengers");
+                                if(booking.getPassengers()>1){
+                                    passenger_count.setText(String.valueOf(booking.getPassengers()) + " Passengers");
+                                }else{
+                                    passenger_count.setText(String.valueOf(booking.getPassengers()) + " Passenger");
+                                }
+
                                 passenger_name.setText(booking.getPassengerName());
                                 payment_status.setText(booking.getPaymentStatusText());
                                 scope_text.setText(booking.getScopeText());
@@ -319,6 +323,12 @@ public class HomeFragment extends Fragment {
                                    updateMap(booking.getDestinationAddress());
                                 });
 
+                                if(booking.getArriveBy()!=null){
+                                    destination_time.setText(booking.getArriveBy());
+                                }else {
+                                    destination_time.setVisibility(View.GONE);
+                                }
+
                                 job_action.setOnClickListener(v -> {
                                     JobStatusModal jobStatusModal = new JobStatusModal(getContext());
                                     jobStatusModal.openModal(finalBookingId);
@@ -326,11 +336,10 @@ public class HomeFragment extends Fragment {
 
                                 try {
                                     if ("Account".equals(booking.getScopeText())) {
-                                        price.setText("ACC");
-                                        price.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-                                        scope_text.setText("ACC");
+                                        scope_text.setText("ACCOUNT");
                                         status_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.red));
-                                        payment_card.setVisibility(View.GONE);
+                                        payment_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.red));
+                                        payment_status.setText(booking.getAccountNumber()+"");
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();

@@ -211,8 +211,8 @@
                 style="@style/CardBG"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:visibility="gone"
+                android:layout_marginTop="2dp"
                 app:cardCornerRadius="12dp"
                 app:strokeColor="@color/green"
                 app:strokeWidth="1dp">
@@ -232,7 +232,7 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.card.MaterialCardView
-                            android:layout_width="60dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/purple"
                             android:id="@+id/scope_card"
@@ -245,6 +245,7 @@
                                 android:layout_height="25dp"
                                 android:layout_gravity="center"
                                 android:text="Card"
+                                android:layout_marginHorizontal="20dp"
                                 android:textAllCaps="true"
                                 android:gravity="center"
                                 android:id="@+id/scope_text"
@@ -262,10 +263,11 @@
                             app:strokeWidth="0dp">
 
                             <TextView
-                                android:layout_width="60dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="25dp"
                                 android:layout_gravity="center"
                                 android:text="Paid"
+                                android:layout_marginHorizontal="20dp"
                                 android:textAllCaps="true"
                                 android:gravity="center"
                                 android:id="@+id/payment_status"
@@ -425,13 +427,13 @@
                             android:layout_gravity="center"
                             android:orientation="horizontal" />
                     </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="7dp"
-                        android:layout_marginTop="0dp"
-                        android:alpha="0.2"
-                        android:background="@android:color/darker_gray" />
+<!--                    <View-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="1dp"-->
+<!--                        android:layout_marginBottom="7dp"-->
+<!--                        android:layout_marginTop="0dp"-->
+<!--                        android:alpha="0.2"-->
+<!--                        android:background="@android:color/darker_gray" />-->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -483,14 +485,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="end"
-                                style="@style/TextBG"
-                                android:layout_marginRight="10dp"
-                                android:textStyle="bold"
-                                android:text="Arrived By" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:gravity="end"-->
+<!--                                style="@style/TextBG"-->
+<!--                                android:layout_marginRight="10dp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                android:text="Arrived By" />-->
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

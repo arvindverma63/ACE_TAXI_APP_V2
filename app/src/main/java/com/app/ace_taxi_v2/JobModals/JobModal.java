@@ -122,9 +122,8 @@ public class JobModal {
                     if(bookingInfo.getScopeText().equals("Account")){
                         scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
                         scopeText.setText(bookingInfo.getAccountNumber()+"");
-                        paymentCard.setVisibility(View.GONE);
-                        fairy_price.setText("ACC");
-                        fairy_price.setTextColor(ContextCompat.getColor(context,R.color.red));
+                        paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
+                        payment_status.setText("ACCOUNT");
                     }else if(bookingInfo.getScopeText().equals("Card")){
                         if(bookingInfo.getPaymentStatusText().equals("Unpaid")){
                             paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));

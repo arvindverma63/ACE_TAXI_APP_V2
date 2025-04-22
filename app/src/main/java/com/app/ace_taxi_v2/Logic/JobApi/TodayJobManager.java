@@ -34,13 +34,11 @@ import retrofit2.Response;
 
 public class TodayJobManager {
     private final Context context;
-    private final FragmentManager fragmentManager;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView noBookingTextView;
 
-    public TodayJobManager(Context context, FragmentManager fragmentManager, SwipeRefreshLayout swipeRefreshLayout,TextView noBookingTextView) {
+    public TodayJobManager(Context context, SwipeRefreshLayout swipeRefreshLayout,TextView noBookingTextView) {
         this.context = context;
-        this.fragmentManager = fragmentManager;
         this.swipeRefreshLayout = swipeRefreshLayout;
         this.noBookingTextView = noBookingTextView;
     }
@@ -159,7 +157,7 @@ public class TodayJobManager {
             @Override
             public void onSuccess(GetBookingInfo bookingInfo) {
                 Log.e("Booking Status", "Status: " + bookingInfo.getStatus());
-
+                swipeRefreshLayout.setRefreshing(true);
                 if (bookingInfo.getStatus() == "0") {
                     JobModal jobModal = new JobModal(context);
                     jobModal.jobOfferModalForTodayJob(

@@ -14,16 +14,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
+import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
+import com.app.ace_taxi_v2.Fragments.JobFragment;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
+import com.app.ace_taxi_v2.Logic.JobApi.TodayJobManager;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
+import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.Models.Jobs.Vias;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.textview.MaterialTextView;
 
 import org.w3c.dom.Text;
 
@@ -88,7 +97,7 @@ public class JobViewDialog {
             MaterialButton start_button = dialogView.findViewById(R.id.start_button);
             ImageView job_status_change = dialogView.findViewById(R.id.change_status);
             ImageView closeBtn = dialogView.findViewById(R.id.close_btn);
-            TextView trip_fare = dialogView.findViewById(R.id.trip_fare);
+            TextView bookerName = dialogView.findViewById(R.id.bookerName);
             MaterialButton cancel_button = dialogView.findViewById(R.id.cancel_button);
             TextView passenger_count = dialogView.findViewById(R.id.passenger_count);
             TextView pickupTime = dialogView.findViewById(R.id.pickup_time);
@@ -97,6 +106,16 @@ public class JobViewDialog {
             TextView vias_code = dialogView.findViewById(R.id.vias_code);
             LinearLayout vias_container = dialogView.findViewById(R.id.vias_container); // Try to find container
             LinearLayout vias_layout = dialogView.findViewById(R.id.vias);
+            TextView jobId = dialogView.findViewById(R.id.bookingId);
+            MaterialTextView scopeText = dialogView.findViewById(R.id.scope_text);
+            MaterialCardView scopeCard = dialogView.findViewById(R.id.scope_card);
+            MaterialTextView payment_status = dialogView.findViewById(R.id.payment_status);
+            MaterialCardView paymentCard = dialogView.findViewById(R.id.payment_card);
+            MaterialCardView asap_card = dialogView.findViewById(R.id.asap_card);
+            TextView distance = dialogView.findViewById(R.id.distance);
+
+
+            jobId.setText("#"+bookingId);
 
 
             closeBtn.setContentDescription("Close dialog");
@@ -108,6 +127,7 @@ public class JobViewDialog {
             CurrentBookingSession bookingSession = new CurrentBookingSession(context);
             if (bookingSession.getBookingId().equals(String.valueOf(bookingId))) {
                 start_button.setVisibility(View.GONE);
+                cancel_button.setVisibility(View.GONE);
             }else{
                 complete_button.setVisibility(View.GONE);
             }
@@ -121,26 +141,63 @@ public class JobViewDialog {
             });
 
 
+            View todayjobView = LayoutInflater.from(context).inflate(R.layout.fragment_today,null);
+            SwipeRefreshLayout swipeRefreshLayout = todayjobView.findViewById(R.id.swipeRefreshLayout);
+            TextView noBookingTextView = todayjobView.findViewById(R.id.noBookingTextView);
+            RecyclerView recyclerView = todayjobView.findViewById(R.id.recycler_view);
+
+
             if(!showCompleteButton){
                 complete_button.setVisibility(View.GONE);
                 start_button.setVisibility(View.GONE);
                 cancel_button.setVisibility(View.GONE);
             }
 
+            cancel_button.setOnClickListener(view -> {
+                dialog.dismiss();
+                bookingSession.saveBookingId(bookingId);
+                BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
+                bookingStartStatus.setBookingId(bookingId+"");
+                TodayJobManager todayJobManager = new TodayJobManager(context,swipeRefreshLayout,noBookingTextView);
+                todayJobManager.getTodayJobs(todayjobView,recyclerView);
+
+            });
+
             GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
             getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
                 @Override
                 public void onSuccess(GetBookingInfo bookingInfo) {
+
+                    distance.setText(bookingInfo.getMileage()+" Miles");
+                    if(bookingInfo.isASAP()){
+                        asap_card.setVisibility(View.VISIBLE);
+                    }
                     pickupdate.setText(bookingInfo.getFormattedDateTime());
                     customerName.setText(bookingInfo.getPassengerName());
-                    if("Account".equals(bookingInfo.getScopeText())){
-                        bookingprice.setText("ACC");
-                        bookingprice.setTextColor(ContextCompat.getColor(context, R.color.red));
-                        trip_fare.setText("ACC");
-                        trip_fare.setTextColor(ContextCompat.getColor(context,R.color.red));
+                    bookerName.setText(bookingInfo.getFullname());
+                    if(bookingInfo.getScopeText().equals("Account")){
+                        scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
+                        scopeText.setText("ACCOUNT");
+                        paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
+                        payment_status.setText(bookingInfo.getAccountNumber()+"");
+                    }else if(bookingInfo.getScopeText().equals("Card")){
+                        if(bookingInfo.getPaymentStatusText().equals("Unpaid")){
+                            paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
+                            payment_status.setText("UNPAID");
+                        }else if(bookingInfo.getPaymentStatusText().equals("Paid")){
+                            paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                            payment_status.setText("PAID");
+                        }
+                    }else if(bookingInfo.getScopeText().equals("Cash")){
+                        paymentCard.setVisibility(View.GONE);
+                        scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
+                        scopeText.setText("CASH");
+                    }else if(bookingInfo.getScopeText().equals("Rank")){
+                        paymentCard.setVisibility(View.GONE);
+                        scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.purple));
+                        scopeText.setText("RANK");
                     }else{
                         bookingprice.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
-                        trip_fare.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
                     }
 
                     distance_duration.setText(formatDuration(bookingInfo.getDurationMinutes()));
@@ -150,7 +207,12 @@ public class JobViewDialog {
                     if (timeParts.length > 1) {
                         pickupTime.setText(timeParts[timeParts.length-1]);
                     }
-                    destinationTime.setText(bookingInfo.getEndTime());
+                    if(bookingInfo.getArriveBy() != null){
+                        destinationTime.setText(bookingInfo.getArriveBy());
+                    }else {
+                        destinationTime.setVisibility(View.GONE);
+                    }
+
 
                     vias_layout.setVisibility(View.GONE); // Hide original vias layout
                     vias_container.removeAllViews(); // Clear previous via views
@@ -234,15 +296,15 @@ public class JobViewDialog {
             }
 
 
-            if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
-                Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
-                return;
-            }
+//            if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
+//                Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
+//                return;
+//            }
 
-            if (currentBookingId == null && "1".equals(job.getStatus())) {
+//            if (currentBookingId == null && "1".equals(job.getStatus())) {
                 bookingStatus.setBookingId(String.valueOf(job.getBookingId()));
                 bookingSession.saveBookingId(job.getBookingId());
-            }
+//            }
 
         } catch (Exception e) {
             Log.e(TAG, "Error starting booking", e);

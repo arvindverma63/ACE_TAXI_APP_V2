@@ -34,6 +34,7 @@ import com.app.ace_taxi_v2.Logic.JobApi.JobOfferNotification;
 import com.app.ace_taxi_v2.Logic.Service.BackgroundPermissionHelper;
 import com.app.ace_taxi_v2.Logic.Service.ConfigSessionManager;
 import com.app.ace_taxi_v2.Logic.SessionManager;
+import com.app.ace_taxi_v2.Models.Guid;
 import com.app.ace_taxi_v2.Models.JobOfferNoticationResponse;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -266,6 +267,8 @@ public class HomeActivity extends BaseActivity {
             boolean rejected = intent.getBooleanExtra("rejected", false);
             String guid = intent.getStringExtra("guid");
             Log.d("guid","guid: "+guid);
+            Guid guid1 = new Guid(this);
+            guid1.setGuid(guid);
 
             Bundle extras = intent.getExtras();
             if (extras != null) {

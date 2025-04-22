@@ -65,7 +65,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     style="@style/IconTint"
-                    android:src="@drawable/ic_calender" />
+                    android:src="@drawable/ic_clock" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

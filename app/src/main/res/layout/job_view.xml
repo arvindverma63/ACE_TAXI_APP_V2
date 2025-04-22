@@ -46,6 +46,16 @@
                 android:src="@drawable/ic_bar" />
         </LinearLayout>
 
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="#12345"
+            android:id="@+id/bookingId"
+            android:gravity="center"
+            android:layout_margin="10dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/red"/>
         <!-- Address Section -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/current_job_card"
@@ -104,7 +114,27 @@
                             android:textColor="@android:color/darker_gray"
                             android:textSize="14sp" />
                     </LinearLayout>
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:id="@+id/asap_card"
+                        android:backgroundTint="@color/green"
+                        android:layout_marginRight="4dp"
+                        android:visibility="gone"
+                        android:layout_gravity="top"
+                        app:cardCornerRadius="1000dp"
+                        android:layout_marginLeft="10dp"
+                        app:strokeWidth="0dp">
 
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:text="ASAP"
+                            android:textAllCaps="true"
+                            android:gravity="center"
+                            android:textColor="@color/white" />
+                    </com.google.android.material.card.MaterialCardView>
                     <TextView
                         android:id="@+id/pickup_time"
                         style="@style/TextBG"
@@ -198,6 +228,7 @@
                     android:layout_height="1dp"
                     android:layout_marginBottom="7dp"
                     android:layout_marginTop="0dp"
+                    android:visibility="gone"
                     android:alpha="0.2"
                     android:background="@android:color/darker_gray" />
                 <LinearLayout
@@ -244,16 +275,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
+
 
                         <TextView
                             android:id="@+id/destination_time"
-                            style="@style/TextBG"
+                            android:textColor="@color/gray"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="00:00"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textSize="14sp" />
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -275,11 +307,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="@integer/material_motion_duration_long_1"/>
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="---"
+                            android:id="@+id/distance"/>
+                        <TextView
                         android:id="@+id/distance_duration"
                         style="@style/TextBG"
+                            android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -358,29 +401,113 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Chat"
-                        app:strokeWidth="1dp"
-                        android:textColor="@color/black"
-                        app:backgroundTint="@color/light_gray"
+                        android:text="Arrived"
                         android:textSize="14sp"
-                        app:strokeColor="@color/gray"
+                        android:textColor="@color/blue"
+                        android:layout_marginEnd="8dp"
+                        app:icon="@drawable/ic_message"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconTint="@color/blue"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="@color/blue"
                         app:cornerRadius="8000dp"
-                        android:layout_marginEnd="8dp" />
+                        app:backgroundTint="@color/light_gray" />
+
 
                     <com.google.android.material.button.MaterialButton
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Call"
-                        app:strokeWidth="1dp"
-                        android:textColor="@color/black"
-                        app:backgroundTint="@color/light_gray"
                         android:textSize="14sp"
-                        app:strokeColor="@color/gray"
-                        app:cornerRadius="8000dp" />
+                        android:textColor="@color/green"
+                        android:layout_marginEnd="8dp"
+                        app:icon="@drawable/ic_phone"
+                        app:iconTint="@color/green"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="@color/green"
+                        app:cornerRadius="8000dp"
+                        app:backgroundTint="@color/light_gray" />
+
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:strokeWidth="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/white">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+                <!-- Payment Method -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:backgroundTint="@color/purple"
+                        android:id="@+id/scope_card"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="1000dp"
+                        app:strokeWidth="0dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:text="Card"
+                            android:layout_marginHorizontal="20dp"
+                            android:textAllCaps="true"
+                            android:gravity="center"
+                            android:id="@+id/scope_text"
+                            android:textColor="@color/white" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:id="@+id/payment_card"
+                        android:backgroundTint="@color/green"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="1000dp"
+                        android:layout_marginLeft="10dp"
+                        app:strokeWidth="0dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:layout_marginHorizontal="20dp"
+                            android:text="Paid"
+                            android:textAllCaps="true"
+                            android:gravity="center"
+                            android:id="@+id/payment_status"
+                            android:textColor="@color/white" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@integer/material_motion_duration_long_1"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
 
         <!-- Fare Section -->
         <com.google.android.material.card.MaterialCardView
@@ -400,6 +527,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
@@ -407,19 +535,20 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Trip Fare"
+                        android:fontFamily="@font/font_urban"
+                        android:text="Booked By"
                         android:textColor="@color/gray"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/font_urban" />
+                        android:textSize="14sp" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/trip_fare"
+                        android:id="@+id/bookerName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="£20.00"
+                        android:fontFamily="@font/font_urban"
+                        android:text="--- ---"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/font_urban" />
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <View
@@ -493,7 +622,7 @@
                 android:id="@+id/cancel_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cancel Booking"
+                android:text="Make Active Booking"
                 android:textColor="@color/gray"
                 app:backgroundTint="@color/light_gray"
                 app:strokeColor="@color/gray"

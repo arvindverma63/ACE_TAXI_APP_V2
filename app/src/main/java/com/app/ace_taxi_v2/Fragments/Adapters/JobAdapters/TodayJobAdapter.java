@@ -201,16 +201,17 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                         }
 
 
-                        if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
-                            Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        if (bookingStartStatus.getBookingId() == null && "1".equals(job.getStatus())) {
+//                        if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
+//                            Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
+//                            return;
+//                        }
+                            notifyItemChanged(position);
+//                        if (bookingStartStatus.getBookingId() == null && "1".equals(job.getStatus())) {
                             bookingStartStatus.setBookingId(String.valueOf(job.getBookingId()));
                             currentBookingSession.saveBookingId(job.getBookingId());
 
-                        }
+
+//                        }
 
                         // Set booking ID and start job if no active booking exists
                         if (activeBookingId == job.getBookingId()) {

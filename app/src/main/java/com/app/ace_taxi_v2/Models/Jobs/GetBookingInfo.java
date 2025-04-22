@@ -2,9 +2,12 @@ package com.app.ace_taxi_v2.Models.Jobs;
 
 import android.os.Build;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -215,7 +218,22 @@ public class GetBookingInfo {
     }
 
     public String getArriveBy() {
-        return arriveBy;
+        if (arriveBy == null || arriveBy.isEmpty()) {
+            return null; // Or return an empty string "" if preferred
+        }
+
+        try {
+            // Parse the input format: 2025-04-23T01:17:00
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+            Date date = inputFormat.parse(arriveBy);
+
+            // Format to output: HH:mm (e.g., 01:17)
+            SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm a", Locale.getDefault());
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return arriveBy; // Fallback to original value if parsing fails
+        }
     }
 
     public String getRecurrenceException() {
@@ -278,7 +296,7 @@ public class GetBookingInfo {
                 LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr);
                 LocalDate today = LocalDate.now();
 
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy");
 
                 if (dateTime.toLocalDate().isEqual(today)) {
                     result = "Today, " + dateTime.format(dateFormatter);
@@ -287,7 +305,7 @@ public class GetBookingInfo {
                 }
             } else {
                 java.text.SimpleDateFormat inputFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-                java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("MMM dd yyyy", Locale.getDefault());
+                java.text.SimpleDateFormat outputFormat = new java.text.SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault());
 
                 java.util.Date date = inputFormat.parse(dateTimeStr);
 

@@ -42,7 +42,7 @@ public class TodayFragment extends Fragment {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         noBookingTextView = view.findViewById(R.id.noBookingTextView);
 
-        todayJobManager = new TodayJobManager(getContext(), getActivity().getSupportFragmentManager(), swipeRefreshLayout,noBookingTextView);
+        todayJobManager = new TodayJobManager(getContext(), swipeRefreshLayout,noBookingTextView);
 
         // Initial load
         todayJobManager.getTodayJobs(view, recyclerView);

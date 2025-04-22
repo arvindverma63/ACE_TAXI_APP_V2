@@ -85,7 +85,8 @@ public interface ApiService {
     @GET("/api/DriverApp/JobOfferReply")
     Call<Void> sendJobResponse(@Header("Authorization") String token,
                                       @Query("jobno") int jobId,
-                                      @Query("response") int response);
+                                      @Query("response") int response,
+                                      @Query("guid") String guid);
 
     @GET("/api/DriverApp/DriverShift")
     Call<Void> driverShift(@Header("Authorization") String token,
