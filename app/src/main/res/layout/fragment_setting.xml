@@ -42,7 +42,7 @@
                     style="@style/TextBG"
                     android:layout_width="106dp"
                     android:layout_height="wrap_content"
-                    android:text="version 5.3"
+                    android:text="version 5.5"
                     android:textSize="12dp" />
 
             </LinearLayout>

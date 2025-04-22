@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import com.app.ace_taxi_v2.Logic.AvailabilitiesApi;
 import com.app.ace_taxi_v2.R;
+import com.google.android.material.appbar.MaterialToolbar;
 
 
 public class ListAvailabillity extends Fragment {
@@ -31,7 +32,14 @@ public class ListAvailabillity extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list_availabillity, container, false);
 
         recyclerView = view.findViewById(R.id.recyclar_view);
-
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
+        toolbar.setNavigationOnClickListener(v -> {
+            Fragment selectedFragment = new AvailabilityFragment();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, selectedFragment);
+            fragmentTransaction.commit();
+        });
 
         // Pass 'view' instead of 'getView()'
         AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
