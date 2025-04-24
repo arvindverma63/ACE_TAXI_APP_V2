@@ -46,7 +46,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -329,11 +331,27 @@ public class HomeFragment extends Fragment {
                                 });
 
                                 try {
-                                    if ("Account".equals(booking.getScopeText())) {
-                                        scope_text.setText("ACCOUNT");
+                                    if(booking.getScopeText().equals("Account")){
                                         status_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.red));
+                                        scope_text.setText("ACCOUNT");
                                         payment_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.red));
                                         payment_status.setText(booking.getAccountNumber()+"");
+                                    }else if(booking.getScopeText().equals("Card")){
+                                        if(booking.getPaymentStatusText().equals("Unpaid")){
+                                            payment_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.red));
+                                            payment_status.setText("UNPAID");
+                                        }else if(booking.getPaymentStatusText().equals("Paid")){
+                                            payment_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.green));
+                                            payment_status.setText("PAID");
+                                        }
+                                    }else if(booking.getScopeText().equals("Cash")){
+                                        payment_card.setVisibility(View.GONE);
+                                        status_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.green));
+                                        scope_text.setText("CASH");
+                                    }else if(booking.getScopeText().equals("Rank")){
+                                        payment_card.setVisibility(View.GONE);
+                                        status_card.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.purple));
+                                        scope_text.setText("RANK");
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
