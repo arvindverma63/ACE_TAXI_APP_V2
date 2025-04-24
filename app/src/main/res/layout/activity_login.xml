@@ -35,8 +35,8 @@
                 android:layout_height="wrap_content"
                 android:text="Let's Get Started!"
                 android:textSize="25sp"
+                style="@style/TextBG"
                 android:textStyle="bold"
-                android:textColor="@color/black"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp" />
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="Username"
                 android:textSize="14sp"
-                android:textColor="#000000"
+                style="@style/TextBG"
                 android:layout_marginBottom="4dp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -67,7 +67,7 @@
                 android:layout_marginBottom="16dp"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeColor="#B0BEC5"
-                app:boxBackgroundColor="#F5F5F5"
+                style="@style/InputBg"
                 app:boxStrokeWidth="0dp"
                 app:startIconDrawable="@drawable/ic_profile"
                 app:endIconMode="none">
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:text="Password"
             android:textSize="14sp"
-            android:textColor="#000000"
+            style="@style/TextBG"
             android:layout_marginBottom="4dp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="#B0BEC5"
-            app:boxBackgroundColor="#F5F5F5"
+            style="@style/InputBg"
             app:boxStrokeWidth="0dp"
             android:layout_marginBottom="30dp"
             app:startIconDrawable="@drawable/ic_lock">

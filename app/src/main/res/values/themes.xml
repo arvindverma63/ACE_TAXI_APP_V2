@@ -22,6 +22,10 @@
     <style name="CardBG">
         <item name="android:backgroundTint">@color/white</item>
     </style>
+    <style name="InputBg">
+        <item name="boxBackgroundColor">#F5F5F5</item>
+    </style>
+
 
 
     <style name="CardBGMenu">

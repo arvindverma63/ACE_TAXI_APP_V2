@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/light_gray"
+        style="@style/MainBG"
         android:padding="16dp">
 
         <!-- Header -->
@@ -25,6 +25,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_back_arrow"
                 android:id="@+id/close_btn"
+                style="@style/IconTint"
                 android:contentDescription="Back" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -33,7 +34,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Booking Details"
-                android:textColor="@color/black"
+                style="@style/TextBG"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/font_urban" />
@@ -332,8 +333,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:strokeWidth="0dp"
-            android:backgroundTint="@color/white"
             app:cardCornerRadius="8dp"
+            style="@style/CardBG"
             android:layout_marginBottom="16dp">
 
             <LinearLayout
@@ -372,9 +373,9 @@
                             android:id="@+id/passenger_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            style="@style/TextBG"
                             android:layout_marginStart="12dp"
                             android:text="Theo Holland"
-                            android:textColor="@color/black"
                             android:textSize="16sp"
                             android:fontFamily="@font/font_urban" />
 
@@ -443,7 +444,7 @@
             android:layout_marginBottom="10dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:backgroundTint="@color/white">
+            style="@style/CardBG">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -514,7 +515,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:strokeWidth="0dp"
-            android:backgroundTint="@color/white"
+            style="@style/CardBG"
             app:cardCornerRadius="8dp"
             android:layout_marginBottom="16dp">
 
@@ -546,7 +547,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/font_urban"
                         android:text="--- ---"
-                        android:textColor="@color/black"
+                        style="@style/TextBG"
                         android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -578,7 +579,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="£20.00"
-                        android:textColor="@color/black"
+                        style="@style/TextBG"
                         android:textSize="14sp"
                         android:fontFamily="@font/font_urban" />
                 </LinearLayout>
