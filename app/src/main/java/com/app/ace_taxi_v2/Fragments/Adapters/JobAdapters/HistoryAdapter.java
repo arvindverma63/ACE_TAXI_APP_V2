@@ -124,10 +124,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 Log.d(TAG,"pickupdatetime history jobs: "+job.getPickupDateTime());
                 datetime.setText(job.getFormattedDateTime());
                 NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.UK);
-                price.setText("Account".equals(job.getScopeText()) ? "ACC" : formatter.format(job.getPrice()));
+                price.setText(formatter.format(job.getPrice()));
                 if ("Account".equals(job.getScopeText())) {
-                    price.setTextColor(ContextCompat.getColor(context, R.color.red));
-                    price.setText("ACC");
+
                 }
 
                 viewButton.setOnClickListener(v -> {
