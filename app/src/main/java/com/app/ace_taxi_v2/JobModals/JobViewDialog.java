@@ -2,8 +2,10 @@ package com.app.ace_taxi_v2.JobModals;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -118,8 +123,21 @@ public class JobViewDialog {
             jobId.setText("#"+bookingId);
 
 
+
             closeBtn.setContentDescription("Close dialog");
-            closeBtn.setOnClickListener(v -> dialog.dismiss());
+            closeBtn.setOnClickListener(v ->{
+                dialog.dismiss();
+//                if (context instanceof FragmentActivity) {
+//                    FragmentActivity activity = (FragmentActivity) context;
+//                    FragmentManager fragmentManager = activity.getSupportFragmentManager();
+//
+//                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                    transaction.replace(R.id.fragment_container, new JobFragment());
+//                    transaction.addToBackStack(null);
+//                    transaction.commit();
+//                }
+
+            });
 
             job_status_change.setContentDescription("Change job status");
 
@@ -158,8 +176,15 @@ public class JobViewDialog {
                 bookingSession.saveBookingId(bookingId);
                 BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
                 bookingStartStatus.setBookingId(bookingId+"");
-                TodayJobManager todayJobManager = new TodayJobManager(context,swipeRefreshLayout,noBookingTextView);
-                todayJobManager.getTodayJobs(todayjobView,recyclerView);
+                if (context instanceof FragmentActivity) {
+                    FragmentActivity activity = (FragmentActivity) context;
+                    FragmentManager fragmentManager = activity.getSupportFragmentManager();
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.fragment_container, new JobFragment());
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
 
             });
 
@@ -167,7 +192,8 @@ public class JobViewDialog {
             getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
                 @Override
                 public void onSuccess(GetBookingInfo bookingInfo) {
-
+                    pickupAddress.setOnClickListener(v -> openGoogleMaps(bookingInfo.getPickupAddress()));
+                    destinationAddress.setOnClickListener(v -> openGoogleMaps(bookingInfo.getDestinationAddress()));
                     distance.setText(bookingInfo.getMileage()+" Miles");
                     if(bookingInfo.isASAP()){
                         asap_card.setVisibility(View.VISIBLE);
@@ -331,6 +357,35 @@ public class JobViewDialog {
         }
 
         return result.toString();
+    }
+
+    private void openGoogleMaps(String address) {
+        Context context = contextRef.get();
+        if (context == null) return;
+        if (address == null || address.trim().isEmpty()) {
+            Toast.makeText(context, "Invalid address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Encode the address to handle spaces and special characters
+        String encodedAddress = Uri.encode(address);
+        // Create a geo URI for the address
+        String geoUri = "geo:0,0?q=" + encodedAddress;
+
+        // Create an Intent to open Google Maps
+        Uri gmmIntentUri = Uri.parse(geoUri);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps"); // Restrict to Google Maps
+
+        // Check if Google Maps is installed
+        if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(mapIntent);
+        } else {
+            // Fallback: Open the address in a browser
+            String mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodedAddress;
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapsUrl));
+            context.startActivity(browserIntent);
+        }
     }
 
 }

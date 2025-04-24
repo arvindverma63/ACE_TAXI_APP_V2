@@ -106,17 +106,33 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_pickup" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/pickup_address"
-                    style="@style/TextBG"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/font_urban"
-                    android:text="70 Washington Square S, New York, NY 10012, USA"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/pickup_address"
+                        style="@style/TextBG"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="No Current Active Jobs"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/pickup_subaddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text=""
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+                </LinearLayout>
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
@@ -170,17 +186,33 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_destination" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/destination_address"
-                    style="@style/TextBG"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/font_urban"
-                    android:text="27 W Main St, Larchmont, NY 10538, USA"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/destination_address"
+                        style="@style/TextBG"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text=""
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/destination_subaddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text=""
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/destination_time"
@@ -249,6 +281,7 @@
                     android:layout_height="50dp"
                     android:backgroundTint="@color/red"
                     app:cardCornerRadius="1000dp"
+                    android:layout_marginRight="20dp"
                     app:strokeWidth="0dp">
                     <ImageView
                         android:layout_width="32dp"
@@ -262,15 +295,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:orientation="vertical">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/passenger_name"
                         style="@style/TextBG"
-                        android:layout_width="272dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/font_urban"
                         android:text="Theo Holland"
@@ -279,9 +310,8 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/passenger_count"
-                        android:layout_width="244dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:fontFamily="@font/font_urban"
                         android:text="2 Passengers"
                         android:textColor="@color/gray"

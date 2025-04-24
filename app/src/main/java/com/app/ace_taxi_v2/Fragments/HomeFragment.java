@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -277,9 +278,6 @@ public class HomeFragment extends Fragment {
                                         View viaView = inflater.inflate(R.layout.layout_via_item, vias_container, false);
                                         TextView viaAddress = viaView.findViewById(R.id.via_address);
                                         TextView viaCode = viaView.findViewById(R.id.via_code);
-                                        viaAddress.setOnClickListener(v -> {
-                                            updateMap(via.getAddress());
-                                        });
 
                                         String viaAddressText = via.getAddress() != null ? via.getAddress() : "";
                                         String viaPostCode = via.getPostCode() != null ? via.getPostCode() : "";
@@ -297,6 +295,8 @@ public class HomeFragment extends Fragment {
                                 }
 
                                 // Set UI elements
+                                pickup_address.setOnClickListener(v -> openGoogleMaps(booking.getPickupAddress()));
+                                destination_address.setOnClickListener(v -> openGoogleMaps(booking.getDestinationAddress()));
                                 pickup_address.setText(firstPickup);
                                 pickup_subaddress.setText(lastPickup);
                                 destination_address.setText(firstDestination);
@@ -316,12 +316,6 @@ public class HomeFragment extends Fragment {
                                 String[] parts = pickupTime.split(",");
                                 pickup_time.setText(parts[parts.length - 1]);
 
-                                pickup_address.setOnClickListener(v -> {
-                                   updateMap(booking.getPickupAddress());
-                                });
-                                destination_address.setOnClickListener(v -> {
-                                   updateMap(booking.getDestinationAddress());
-                                });
 
                                 if(booking.getArriveBy()!=null){
                                     destination_time.setText(booking.getArriveBy());
@@ -505,6 +499,35 @@ public class HomeFragment extends Fragment {
             });
         });
     }
+    private void openGoogleMaps(String address) {
+        Context context = getContext();
+        if (context == null) return;
+        if (address == null || address.trim().isEmpty()) {
+            Toast.makeText(context, "Invalid address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Encode the address to handle spaces and special characters
+        String encodedAddress = Uri.encode(address);
+        // Create a geo URI for the address
+        String geoUri = "geo:0,0?q=" + encodedAddress;
+
+        // Create an Intent to open Google Maps
+        Uri gmmIntentUri = Uri.parse(geoUri);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps"); // Restrict to Google Maps
+
+        // Check if Google Maps is installed
+        if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(mapIntent);
+        } else {
+            // Fallback: Open the address in a browser
+            String mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodedAddress;
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapsUrl));
+            context.startActivity(browserIntent);
+        }
+    }
+
 
 
 }

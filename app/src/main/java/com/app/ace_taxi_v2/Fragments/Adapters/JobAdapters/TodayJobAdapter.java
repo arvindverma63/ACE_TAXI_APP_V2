@@ -201,17 +201,11 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                         }
 
 
-//                        if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
-//                            Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
-//                            return;
-//                        }
-                            notifyItemChanged(position);
-//                        if (bookingStartStatus.getBookingId() == null && "1".equals(job.getStatus())) {
+                        notifyDataSetChanged();
                             bookingStartStatus.setBookingId(String.valueOf(job.getBookingId()));
                             currentBookingSession.saveBookingId(job.getBookingId());
 
 
-//                        }
 
                         // Set booking ID and start job if no active booking exists
                         if (activeBookingId == job.getBookingId()) {
@@ -219,7 +213,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                             listener.onStartClick(job);
                         }
 
-                        notifyItemChanged(position); // Rerender this item after start button click
+                        notifyDataSetChanged(); // Rerender this item after start button click
 
                     } catch (Exception e) {
                         Log.e("TodayJobAdapter", "Error handling start button click", e);

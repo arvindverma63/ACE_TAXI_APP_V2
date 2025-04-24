@@ -79,6 +79,8 @@ public class JobModal {
 
         MaterialTextView pickup_address = fullScreenDialog.findViewById(R.id.pickup_address);
         MaterialTextView destination_address = fullScreenDialog.findViewById(R.id.destination_address);
+        MaterialTextView pickup_subAddress = fullScreenDialog.findViewById(R.id.pickup_subaddress);
+        MaterialTextView destination_subAddress = fullScreenDialog.findViewById(R.id.destination_subaddress);
         MaterialTextView fairy_price = fullScreenDialog.findViewById(R.id.price);
         MaterialTextView pickupDateAndTime = fullScreenDialog.findViewById(R.id.pickup_date);
         MaterialTextView passenger_name = fullScreenDialog.findViewById(R.id.passenger_name);
@@ -104,6 +106,28 @@ public class JobModal {
             @Override
             public void onSuccess(GetBookingInfo bookingInfo) {
                 try{
+
+                    String pickup = bookingInfo.getPickupAddress() != null ? bookingInfo.getPickupAddress() : "";
+                    String[] pickupParts = pickup.split(",");
+                    String firstPickup = pickupParts.length > 0 ? pickupParts[0].trim() : "";
+                    String lastPickup = pickupParts.length > 1 ? pickupParts[1].trim() : "";
+                    if (bookingInfo.getPickupPostCode() != null) {
+                        lastPickup += " " + bookingInfo.getPickupPostCode();
+                    }
+                    pickup_subAddress.setText(lastPickup.isEmpty() ? "N/A" : lastPickup);
+                    pickup_address.setText(firstPickup.isEmpty() ? "N/A" : firstPickup);
+
+                    String destination = bookingInfo.getDestinationAddress() != null ? bookingInfo.getDestinationAddress() : "";
+                    String[] destinationParts = destination.split(",");
+                    String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
+                    String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() : "";
+                    if (bookingInfo.getDestinationPostCode() != null) {
+                        lastDestination += " " + bookingInfo.getDestinationPostCode();
+                    }
+                    destination_subAddress.setText(lastDestination.isEmpty() ? "N/A" : lastDestination);
+                    destination_address.setText(firstDestination.isEmpty() ? "N/A" : firstDestination);
+
+
                     passengerCount.setText(bookingInfo.getPassengers()+" Passengers");
                     jobId.setText("#"+bookingInfo.getBookingId());
                     distance_duration.setText(bookingInfo.getMileage()+" Miles");
@@ -152,8 +176,6 @@ public class JobModal {
 
             }
         });
-        pickup_address.setText(pickupAddress);
-        destination_address.setText(destinationAddress);
         tripfare.setText(passengerName);
         passenger_name.setText(passengerName);
         fairy_price.setText(String.format("£%.2f", price));
