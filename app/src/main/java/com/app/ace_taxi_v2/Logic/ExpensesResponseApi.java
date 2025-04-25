@@ -3,11 +3,7 @@ package com.app.ace_taxi_v2.Logic;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.app.ace_taxi_v2.ApiService.ApiService;
-import com.app.ace_taxi_v2.Fragments.Adapters.ExpenseAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.Expense;
 
@@ -27,7 +23,7 @@ public class ExpensesResponseApi {
         this.context = context;
     }
 
-    public void getExpenses(String startDate, String endDate, RecyclerView recyclerView, OnExpensesFetchedListener listener) {
+    public void getExpenses(String startDate, String endDate, OnExpensesFetchedListener listener) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
         int userId = sessionManager.getUserId();
@@ -44,19 +40,13 @@ public class ExpensesResponseApi {
             public void onResponse(Call<List<Expense>> call, Response<List<Expense>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Expense> expenses = response.body();
-
-                    if (expenses != null && !expenses.isEmpty()) {
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new ExpenseAdapter(context, expenses));
-                        listener.onExpensesFetched(response.body());
-                    } else {
-                        Log.w(TAG, "No expenses found.");
-                        Sentry.captureMessage("ExpensesResponseApi: No expenses found for user ID: " + userId);
-                    }
+                    Log.d(TAG, "Expenses fetched: " + expenses.size());
+                    listener.onExpensesFetched(expenses);
                 } else {
                     String errorMessage = "Expenses API Error: HTTP " + response.code() + " - " + response.message();
                     Log.e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
+                    listener.onExpensesFetched(null);
                 }
             }
 
@@ -65,6 +55,7 @@ public class ExpensesResponseApi {
                 String failureMessage = "ExpensesResponse API Call Failed: " + t.getMessage();
                 Log.e(TAG, failureMessage, t);
                 Sentry.captureException(t);
+                listener.onExpensesFetched(null);
             }
         });
     }

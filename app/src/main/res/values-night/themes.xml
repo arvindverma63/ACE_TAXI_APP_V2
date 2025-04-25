@@ -20,6 +20,9 @@
     <style name="CardBGMenu">
         <item name="android:backgroundTint">@color/darkCard</item>
     </style>
+    <style name="NotificaionCard">
+        <item name="android:backgroundTint">@color/darkCard</item>
+    </style>
     <style name="TextBG">
         <item name="android:textColor">@color/white</item>
         <item name="android:drawableTint">@color/white</item>
@@ -29,7 +32,11 @@
         <item name="titleTextColor">@color/white</item>
         <item name="navigationIconTint">@color/white</item>
     </style>
-
+    <style name="Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="background">@color/white</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="navigationIconTint">@color/white</item>
+    </style>
     <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="android:backgroundTint">@color/primaryDark</item>
         <item name="tabBackground">@drawable/tab_background_night</item>
@@ -89,5 +96,12 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxBackgroundColor">@color/darkCard</item>
     </style>
-
+    <style name="ExpenseField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxBackgroundColor">@color/darkCard</item>
+    </style>
+    <style name="dropdown" parent="ThemeOverlay.Material3.AutoCompleteTextView">
+        <item name="android:background">@color/darkCard</item>
+    </style>
 </resources>

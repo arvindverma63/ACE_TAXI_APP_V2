@@ -39,10 +39,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         holder.title.setText(model.getTitle());
         holder.message.setText(model.getMessage());
         holder.notificationNumber.setText("NOTIF-" + model.getNotificationNumber());
-        holder.cardView.setOnClickListener(v -> {
-            JobModal jobModal = new JobModal(v.getContext());
-            jobModal.readMessage(messages.get(position).getMessage(),messages.get(position).getDatetime());
-        });
+        holder.datetime.setText(model.getDatetime());
+//        holder.cardView.setOnClickListener(v -> {
+//            JobModal jobModal = new JobModal(v.getContext());
+//            jobModal.readMessage(messages.get(position).getMessage(),messages.get(position).getDatetime());
+//        });
     }
 
     @Override
@@ -61,7 +62,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title, message, notificationNumber;
+        TextView title, message, notificationNumber,datetime;
         MaterialCardView cardView;
 
         ViewHolder(View itemView) {
@@ -70,6 +71,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             message = itemView.findViewById(R.id.notification_message);
             notificationNumber = itemView.findViewById(R.id.notification_number);
             cardView = itemView.findViewById(R.id.card_view);
+            datetime = itemView.findViewById(R.id.datetime);
         }
     }
 }

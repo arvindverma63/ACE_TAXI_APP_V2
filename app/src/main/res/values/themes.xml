@@ -74,13 +74,22 @@
         <item name="android:padding">15dp</item>
         <item name="iconTint">@color/black</item>
     </style>
-
+    <style name="NotificaionCard">
+        <item name="android:backgroundTint">#DEDDDD</item>
+    </style>
     <style name="profileField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxBackgroundMode">outline</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxBackgroundColor">#DEDDDD</item>
     </style>
 
+    <style name="ExpenseField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxBackgroundColor">#EDEDED</item>
+    </style>
 
-
+    <style name="dropdown" parent="ThemeOverlay.Material3.AutoCompleteTextView">
+        <item name="android:background">#EDEDED</item>
+    </style>
 </resources>

@@ -67,7 +67,8 @@ public class MessageFragment extends Fragment {
         List<NotificationModel> filteredMessages = getFilteredMessages();
         adapter = new MessageAdapter(filteredMessages);
         recyclerView.setAdapter(adapter);
-
+        adapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(adapter.getItemCount() - 1);
         setupSwipeToDelete();
 
         toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());

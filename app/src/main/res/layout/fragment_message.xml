@@ -9,10 +9,21 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
+        style="@style/Toolbar"
         android:layout_height="?attr/actionBarSize"
-        app:title="Messages"
         app:navigationIcon="@drawable/ic_back_arrow"
-        app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+        app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message"
+            android:textSize="20sp"
+            style="@style/TextBG"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+    </com.google.android.material.appbar.MaterialToolbar>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
