@@ -74,7 +74,7 @@ public class EarningResponseApi {
                     earningCallback.onSuccess(earningsList);
 
                     if (earningsList.isEmpty()) {
-                        Toast.makeText(context, "No earnings data available for the selected period.", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "No earnings data available for the selected period.", Toast.LENGTH_SHORT).show();
                         Sentry.captureMessage("EarningResponseApi: No earnings data available for user ID: " + userId);
                     } else {
                         // Calculate totals for pie chart
