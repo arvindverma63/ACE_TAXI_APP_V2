@@ -98,6 +98,7 @@ public class JobModal {
         MaterialTextView payment_status = fullScreenDialog.findViewById(R.id.payment_status);
         MaterialCardView paymentCard = fullScreenDialog.findViewById(R.id.payment_card);
         MaterialCardView asap_card = fullScreenDialog.findViewById(R.id.asap_card);
+        MaterialTextView distance = fullScreenDialog.findViewById(R.id.distance);
 
 
 
@@ -116,6 +117,10 @@ public class JobModal {
                     }
                     pickup_subAddress.setText(lastPickup.isEmpty() ? "N/A" : lastPickup);
                     pickup_address.setText(firstPickup.isEmpty() ? "N/A" : firstPickup);
+                    distance.setText(bookingInfo.getMileage()+" Miles");
+                    if(bookingInfo.isASAP()){
+                        asap_card.setVisibility(View.VISIBLE);
+                    }
 
                     String destination = bookingInfo.getDestinationAddress() != null ? bookingInfo.getDestinationAddress() : "";
                     String[] destinationParts = destination.split(",");
@@ -126,11 +131,11 @@ public class JobModal {
                     }
                     destination_subAddress.setText(lastDestination.isEmpty() ? "N/A" : lastDestination);
                     destination_address.setText(firstDestination.isEmpty() ? "N/A" : firstDestination);
-
+                    tripfare.setText(bookingInfo.getBookedByName());
 
                     passengerCount.setText(bookingInfo.getPassengers()+" Passengers");
                     jobId.setText("#"+bookingInfo.getBookingId());
-                    distance_duration.setText(bookingInfo.getMileage()+" Miles");
+                    distance_duration.setText(formatDuration(bookingInfo.getDurationMinutes()));
                     String pickupTimeText = bookingInfo.getPickupDateTime();
                     String[] parts = pickupTimeText.split(",");
                     pickupTime.setText(parts[parts.length - 1]);
@@ -176,7 +181,7 @@ public class JobModal {
 
             }
         });
-        tripfare.setText(passengerName);
+
         passenger_name.setText(passengerName);
         fairy_price.setText(String.format("£%.2f", price));
         JobResponseApi jobResponseApi = new JobResponseApi(context);
@@ -396,6 +401,25 @@ public class JobModal {
         backIcon.setOnClickListener(v -> fullScreenDialog.dismiss());
         fullScreenDialog.show();
     }
+    public String formatDuration(int totalMinutes) {
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
 
+        StringBuilder result = new StringBuilder();
+        if (hours > 0) {
+            result.append(hours).append(" Hr");
+        }
+        if (minutes > 0) {
+            if (result.length() > 0) {
+                result.append(", ");
+            }
+            result.append(minutes).append(" min");
+        }
+        if (result.length() == 0) {
+            return "0 min"; // fallback if duration is 0
+        }
+
+        return result.toString();
+    }
 
 }

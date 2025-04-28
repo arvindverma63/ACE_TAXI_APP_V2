@@ -17,11 +17,6 @@
     <style name="CustomPopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:backgroundTint">#FFFFFF</item>
     </style>
-    <!-- Custom Theme for Material DatePicker -->
-    <style name="CustomDatePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <!-- Background color for the calendar dialog -->
-        <item name="materialCalendarStyle">@style/CustomMaterialCalendarStyle</item>
-    </style>
 
     <!-- Custom Style for MaterialCalendar -->
     <style name="CustomMaterialCalendarStyle" parent="Widget.MaterialComponents.MaterialCalendar">
@@ -92,7 +87,14 @@
         <item name="android:windowEnterAnimation">@anim/dialog_slide_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
+    <style name="CustomDatePickerTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="materialCalendarStyle">@style/CustomMaterialCalendar</item>
+        <item name="android:background">@color/white</item> <!-- Optional: for dialog background -->
+    </style>
 
+    <style name="CustomMaterialCalendar" parent="Widget.MaterialComponents.MaterialCalendar">
+        <item name="android:background">@color/white</item>
+    </style>
 
 
 </resources>

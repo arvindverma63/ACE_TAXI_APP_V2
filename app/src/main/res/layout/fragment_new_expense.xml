@@ -63,15 +63,16 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:hint="Select Category">
 
         <AutoCompleteTextView
             android:id="@+id/categoryDropdown"
+            style="@style/dropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
             android:padding="12dp"
-            style="@style/dropdown"
             android:textColor="@android:color/black"
             android:textColorHint="@color/light_gray" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -81,7 +82,7 @@
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_marginTop="16dp"
-        android:text="Ammount"
+        android:text="Amount"
         style="@style/TextBG"/>
     <!-- Amount -->
     <com.google.android.material.textfield.TextInputLayout

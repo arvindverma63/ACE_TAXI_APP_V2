@@ -231,24 +231,37 @@ public class NewExpense extends Fragment {
 
 
     public void setDataToAdapter() {
-        // Define your categories array
         String[] categories = new String[] {
-                "Fuel",         // 0
-                "Parts",        // 1
+                "Fuel",
+                "Part",
                 "Insurance",
                 "MOT",
                 "DBS",
                 "Vehicle Badge",
                 "Maintenance",
                 "Certification",
-                "Other"
+                "Others"
         };
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 categories
         );
+
         categoryDropdown.setAdapter(adapter);
+
+        // Set a default selection
+        categoryDropdown.setText(categories[0], false); // Set "Fuel" as default
+
+        // Handle item selection
+        categoryDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedCategory = (String) parent.getItemAtPosition(position);
+            // Update the AutoCompleteTextView with the selected category
+            categoryDropdown.setText(selectedCategory, false); // Update the text
+            // Dismiss the dropdown to ensure the UI updates
+            categoryDropdown.dismissDropDown();
+        });
     }
     public String convertToISO8601(String inputDate) {
         // Define the input format (for example, if input is "01/02/2025")

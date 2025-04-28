@@ -10,11 +10,10 @@
     <!-- Card Container -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/jobAmendmentCard"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        android:layout_margin="16dp"
         app:cardBackgroundColor="@android:color/white"
         android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,11 +28,6 @@
             android:padding="16dp"
             android:gravity="center_horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_job_amend"/>
-
             <!-- Job ID -->
             <TextView
                 android:layout_width="wrap_content"
@@ -44,7 +38,24 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="8dp"/>
-
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_job_amend"/>
+            <!-- Message -->
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/font_urban"
+                android:text="Your booking for the above journey has been amended."
+                android:textSize="14sp"
+                android:gravity="center" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="3dp"
+                android:background="@color/red" />
             <!-- Job ID -->
             <TextView
                 android:id="@+id/tvBookingId"
@@ -52,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="bookingId"
                 android:textSize="18sp"
+                android:visibility="gone"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
 
@@ -63,6 +75,7 @@
                 android:fontFamily="@font/font_urban"
                 android:text="passenger name"
                 android:textSize="16sp"
+                android:layout_marginVertical="3dp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
@@ -76,16 +89,7 @@
                 android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Message -->
-            <TextView
-                android:id="@+id/tvMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/font_urban"
-                android:text="Your booking for the above journey has been amended."
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
+
 
             <!-- Close Button -->
             <com.google.android.material.button.MaterialButton
@@ -95,12 +99,12 @@
                 android:text="Close"
                 android:textSize="16sp"
                 android:textAllCaps="false"
-                app:backgroundTint="#E6EFFF"
+                app:backgroundTint="@color/red"
                 android:paddingVertical="12dp"
                 android:fontFamily="@font/font_urban"
                 app:strokeColor="@color/trans"
                 app:strokeWidth="1dp"
-                android:textColor="@color/dark_blue"
+                android:textColor="@color/white"
                 app:cornerRadius="1000dp"
                 android:letterSpacing="0.02"/>
         </LinearLayout>

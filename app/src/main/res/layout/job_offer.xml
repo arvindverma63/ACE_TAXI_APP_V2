@@ -45,7 +45,7 @@
             android:gravity="center"
             android:padding="12dp"
             android:text="Job Offer"
-            android:textSize="18sp"
+            android:textSize="21sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -248,11 +248,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="@integer/material_motion_duration_long_1"/>
-                <com.google.android.material.textview.MaterialTextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/distance_duration"
-                    android:text="33 miles"/>
+                    android:orientation="vertical">
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="---"
+                        android:id="@+id/distance"/>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/distance_duration"
+                        style="@style/TextBG"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -450,7 +460,7 @@
                     android:fontFamily="@font/font_urban"
                     android:text="Journey Price"
                     android:textColor="@color/gray"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/price"
@@ -459,7 +469,7 @@
                     android:fontFamily="@font/font_urban"
                     android:text="£161.00"
                     style="@style/TextBG"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>

@@ -27,44 +27,60 @@
         android:padding="16dp">
 
         <!-- Theme Option -->
+        <!-- Theme Option -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/earning_report"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
             app:strokeWidth="0dp"
-            android:id="@+id/earning_report"
             style="@style/CardBGMenu">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:gravity="center_vertical">
 
+                <!-- Circular Icon -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:strokeWidth="0dp"
+                    app:cardCornerRadius="25dp"
+                    android:backgroundTint="@color/red"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_earning"
+                        app:tint="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Text -->
                 <TextView
+                    style="@style/TextBG"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginStart="16dp"
                     android:text="Earning Report"
-                    android:textSize="16sp"
-                    style="@style/TextBG"/>
+                    android:textSize="16sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Earning"
-                    android:textSize="16sp"
-                    android:textColor="#757575"
-                    android:layout_marginEnd="8dp" />
-
+                <!-- Arrow Icon -->
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_forward"
                     app:tint="#757575" />
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
+
 
         <!-- Language Option -->
         <com.google.android.material.card.MaterialCardView
@@ -81,25 +97,36 @@
                 android:orientation="horizontal"
                 android:padding="16dp">
 
+                <!-- Circular Icon -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:strokeWidth="0dp"
+                    app:cardCornerRadius="25dp"
+                    android:backgroundTint="@color/red"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_statements_report"
+                        app:tint="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Statement Report"
+                    android:text="Your Statements"
+                    android:layout_marginStart="16dp"
+                    android:layout_gravity="center"
                     android:textSize="16sp"
                     style="@style/TextBG"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Statements"
-                    android:textSize="16sp"
-                    android:textColor="#757575"
-                    android:layout_marginEnd="8dp" />
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_gravity="center"
                     android:src="@drawable/ic_arrow_forward"
                     app:tint="#757575" />
             </LinearLayout>

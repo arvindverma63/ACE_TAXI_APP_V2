@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -113,21 +114,22 @@ public class ReportFragment extends Fragment {
         builder.setCalendarConstraints(constraintsBuilder.build());
 
         MaterialDatePicker<androidx.core.util.Pair<Long, Long>> datePicker = builder.build();
+        datePicker.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDatePickerTheme);
         datePicker.show(getParentFragmentManager(), "DATE_PICKER");
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            androidx.core.util.Pair<Long, Long> dateRange = selection;
-            if (dateRange != null) {
-                startDate = isoDateFormat.format(dateRange.first);
-                endDate = isoDateFormat.format(dateRange.second);
+            try {
+                startDate = isoDateFormat.format(selection.first);
+                endDate = isoDateFormat.format(selection.second);
 
                 SimpleDateFormat displayFormat = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
-                String displayStartDate = displayFormat.format(dateRange.first);
-                String displayEndDate = displayFormat.format(dateRange.second);
+                String displayStartDate = displayFormat.format(selection.first);
+                String displayEndDate = displayFormat.format(selection.second);
 
                 date_range_button.setText(displayStartDate + " - " + displayEndDate);
-
                 updateData(startDate, endDate);
+            } catch (Exception e) {
+                Log.e("DatePicker", "Error formatting dates", e);
             }
         });
     }
