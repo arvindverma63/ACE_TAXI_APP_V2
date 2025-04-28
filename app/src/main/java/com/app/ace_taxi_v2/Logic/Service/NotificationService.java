@@ -7,10 +7,13 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Switch;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -90,6 +93,7 @@ public class NotificationService extends FirebaseMessagingService {
 
     private void handleNavigation(String navId, String jobId, String message, String passenger, String datetime,String guid) {
         if ("N/A".equals(navId)) return;
+        notificationSound(navId);
 
         new Handler(Looper.getMainLooper()).post(() -> {
             Intent intent = new Intent(this, HomeActivity.class);
@@ -172,5 +176,46 @@ public class NotificationService extends FirebaseMessagingService {
         int notificationId = (int) System.currentTimeMillis();
         notificationManagerCompat.notify(notificationId, notificationBuilder.build());
         Log.d(TAG, "Notification posted with ID: " + notificationId);
+    }
+
+    public void notificationSound(String navId) {
+        MediaPlayer mediaPlayer = new MediaPlayer();
+
+        try {
+            Uri soundUri;
+
+            switch (navId) {
+                case "1":
+                    soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.new_job_offer);
+                    break;
+                case "6":
+                    soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.new_message);
+                    break;
+                case "5":
+                    soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.new_message);
+                    break;
+                case "4":
+                    soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.job_cancelled);
+                    break;
+                case "3":
+                    soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.job_amednded);
+                    break;
+                default:
+                    soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.new_message);
+                    break;
+            }
+
+            mediaPlayer.setDataSource(this, soundUri);
+            mediaPlayer.setOnPreparedListener(MediaPlayer::start);
+            mediaPlayer.setOnCompletionListener(mp -> {
+                mp.reset();
+                mp.release();
+            });
+
+            mediaPlayer.prepareAsync();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
