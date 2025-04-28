@@ -29,6 +29,7 @@
             android:layout_margin="12dp"
             style="@style/profileField"
             android:layout_height="wrap_content"
+            app:endIconDrawable="@drawable/ic_calender"
             app:endIconMode="custom">
 
             <com.google.android.material.textfield.TextInputEditText
