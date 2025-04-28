@@ -21,17 +21,20 @@ import com.app.ace_taxi_v2.Logic.GetStatementsApi;
 import com.app.ace_taxi_v2.Models.Reports.StatementItem;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class StatementReportFragment extends Fragment {
 
     private TextView totalEarn;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private MaterialTextView noDataText;
     private List<StatementItem> statementList = new ArrayList<>();
-    private StatementAdapter statementAdapter; // Add adapter as a field
+    private StatementAdapter statementAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,57 +50,69 @@ public class StatementReportFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         totalEarn = view.findViewById(R.id.totalAmount);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        noDataText = view.findViewById(R.id.no_data_text);
         MaterialToolbar toolbar = view.findViewById(R.id.header_toolbar);
 
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        statementAdapter = new StatementAdapter(getContext(),statementList); // Initialize adapter
-        recyclerView.setAdapter(statementAdapter); // Set adapter
+        statementAdapter = new StatementAdapter(getContext(), statementList);
+        recyclerView.setAdapter(statementAdapter);
 
         // Set up SwipeRefreshLayout
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            fetchStatements(view); // Refresh data when swiped
-        });
+        swipeRefreshLayout.setOnRefreshListener(this::fetchStatements);
+
+        // Set toolbar navigation
+        toolbar.setNavigationOnClickListener(v -> navigateToReportPage());
 
         // Load Data Initially
-        fetchStatements(view);
-
-        // Toolbar Navigation Click Listener
-        toolbar.setNavigationOnClickListener(v -> navigateToReportPage());
+        fetchStatements();
     }
 
-    private void fetchStatements(View view) {
-        swipeRefreshLayout.setRefreshing(true); // Show refresh indicator
+    private void fetchStatements() {
+        swipeRefreshLayout.setRefreshing(true);
 
         GetStatementsApi getStatementsApi = new GetStatementsApi(getContext());
-        getStatementsApi.getStatements(view, recyclerView, new GetStatementsApi.statementListener() {
+        getStatementsApi.getStatements(new GetStatementsApi.statementListener() {
             @Override
             public void onSuccess(List<StatementItem> items) {
-                if (items != null && !items.isEmpty()) {
-                    statementList.clear();
-                    statementList.addAll(items);
-                    statementAdapter.notifyDataSetChanged(); // Update adapter
-                    calculateTotalEarnings(items);
-                } else {
+                statementAdapter.updateData(items);
+                calculateTotalEarnings(items);
+                updateEmptyView();
+                if (items == null || items.isEmpty()) {
                     Toast.makeText(getContext(), "No statements found", Toast.LENGTH_SHORT).show();
                 }
-                swipeRefreshLayout.setRefreshing(false); // Hide refresh indicator
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFail(String error) {
                 Toast.makeText(getContext(), "Failed to fetch statements: " + error, Toast.LENGTH_SHORT).show();
-                swipeRefreshLayout.setRefreshing(false); // Hide refresh indicator on failure
+                statementAdapter.updateData(null);
+                calculateTotalEarnings(null);
+                updateEmptyView();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
     private void calculateTotalEarnings(List<StatementItem> items) {
         double total = 0;
-        for (StatementItem item : items) {
-            total += item.getTotalEarned();
+        if (items != null) {
+            for (StatementItem item : items) {
+                total += item.getTotalEarned();
+            }
         }
-        totalEarn.setText(String.format("Total: £%.2f", total));
+        totalEarn.setText(String.format(Locale.getDefault(), "£%.2f", total));
+    }
+
+    private void updateEmptyView() {
+        if (statementAdapter.getItemCount() == 0) {
+            recyclerView.setVisibility(View.GONE);
+            noDataText.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            noDataText.setVisibility(View.GONE);
+        }
     }
 
     private void navigateToReportPage() {

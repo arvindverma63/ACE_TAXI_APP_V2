@@ -569,7 +569,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Total Paid"
+                        android:text="Journey Price"
                         android:textColor="@color/gray"
                         android:textSize="14sp"
                         android:fontFamily="@font/font_urban" />

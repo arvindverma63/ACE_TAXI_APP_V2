@@ -11,31 +11,16 @@ import com.app.ace_taxi_v2.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class EarningStatementDialog {
     private final Context context;
     private AlertDialog dialog;
-
-    // Data model (you could also create a separate class for this)
-    private static class EarningData {
-        String date;
-        int userId;
-        double cashTotal;
-        double accTotal;
-        double rankTotal;
-        double commsTotal;
-        double grossTotal;
-        double netTotal;
-        int cashJobsCount;
-        int accJobsCount;
-        int rankJobsCount;
-        double cashMilesCount;
-        double accMilesCount;
-        double rankMilesCount;
-    }
+    private final SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+    private final SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
+    private final SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     public EarningStatementDialog(Context context) {
         this.context = context;
@@ -53,14 +38,13 @@ public class EarningStatementDialog {
         // Formatters
         DecimalFormat currencyFormat = new DecimalFormat("£#,##0.00");
         DecimalFormat milesFormat = new DecimalFormat("#,##0.0");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
 
         // Find and populate views
         try {
             // Date
             TextView dateView = view.findViewById(R.id.date);
-            Date parsedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
-            dateView.setText("Date: " + dateFormat.format(parsedDate));
+            String formattedDate = formatDate(date);
+            dateView.setText("Date: " + formattedDate);
 
             // User ID
             TextView userIdView = view.findViewById(R.id.userId);
@@ -131,6 +115,23 @@ public class EarningStatementDialog {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
+    }
+
+    private String formatDate(String dateStr) {
+        if (dateStr != null && !dateStr.isEmpty()) {
+            try {
+                // Try parsing as dd/MM/yy (from EarningsAdapter)
+                return displayDateFormat.format(inputDateFormat.parse(dateStr));
+            } catch (ParseException e) {
+                try {
+                    // Fallback to parsing as yyyy-MM-dd'T'HH:mm:ss (raw API format)
+                    return displayDateFormat.format(apiDateFormat.parse(dateStr));
+                } catch (ParseException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        }
+        return "N/A";
     }
 
     // Example usage method with your sample data

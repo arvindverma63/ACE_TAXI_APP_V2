@@ -17,17 +17,21 @@ import com.google.android.material.button.MaterialButton;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class EarningsAdapter extends RecyclerView.Adapter<EarningsAdapter.EarningsViewHolder> {
     private final List<EarningResponse> earningsList;
     private final SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-    private final SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+    private final SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
     private final DecimalFormat currencyFormat = new DecimalFormat("£#,##0.00");
 
     public EarningsAdapter(List<EarningResponse> earningsList) {
-        this.earningsList = earningsList;
+        this.earningsList = new ArrayList<>();
+        if (earningsList != null) {
+            this.earningsList.addAll(earningsList);
+        }
     }
 
     @NonNull
@@ -55,7 +59,7 @@ public class EarningsAdapter extends RecyclerView.Adapter<EarningsAdapter.Earnin
         holder.action.setOnClickListener(v -> {
             EarningStatementDialog dialog = new EarningStatementDialog(v.getContext());
             dialog.openDialog(
-                    earning.getDate(),
+                    formatDate(earning.getDate()), // Format date as dd/MM/yy
                     earning.getUserId(),
                     earning.getCashTotal(),
                     earning.getAccTotal(),
@@ -75,7 +79,7 @@ public class EarningsAdapter extends RecyclerView.Adapter<EarningsAdapter.Earnin
 
     @Override
     public int getItemCount() {
-        return earningsList != null ? earningsList.size() : 0;
+        return earningsList.size();
     }
 
     public static class EarningsViewHolder extends RecyclerView.ViewHolder {
@@ -102,12 +106,11 @@ public class EarningsAdapter extends RecyclerView.Adapter<EarningsAdapter.Earnin
         return "N/A";
     }
 
-    // Method to update data
-    public void updateEarnings(List<EarningResponse> newEarnings) {
-        if (earningsList != null) {
-            earningsList.clear();
+    public void updateData(List<EarningResponse> newEarnings) {
+        earningsList.clear();
+        if (newEarnings != null) {
             earningsList.addAll(newEarnings);
-            notifyDataSetChanged();
         }
+        notifyDataSetChanged();
     }
 }

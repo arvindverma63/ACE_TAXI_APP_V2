@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Job Details"
+            android:text="Breakdown"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="?attr/colorOnSurface"
@@ -41,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="User ID: 0"
+            android:visibility="gone"
             android:textSize="16sp"
             android:textColor="?attr/colorOnSurface"
             android:paddingBottom="16dp"/>
@@ -180,6 +181,7 @@
             android:layout_height="wrap_content"
             android:text="Miles"
             android:textSize="18sp"
+            android:visibility="gone"
             android:textStyle="bold"
             android:textColor="?attr/colorOnSurface"
             android:paddingBottom="8dp"/>
@@ -188,6 +190,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:paddingBottom="16dp">
 
             <TextView

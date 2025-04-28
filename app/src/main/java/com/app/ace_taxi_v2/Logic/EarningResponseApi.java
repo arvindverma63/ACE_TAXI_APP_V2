@@ -2,6 +2,7 @@ package com.app.ace_taxi_v2.Logic;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -34,18 +35,18 @@ public class EarningResponseApi {
         configureWebView();
     }
 
-    public void getResponse(String from, String to, RecyclerView recyclerView,EarningCallback earningCallback) {
+    public void getResponse(String from, String to, RecyclerView recyclerView, EarningCallback earningCallback) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
-        int userId = sessionManager.getUserId(); // Assuming session manager provides the user ID
+        int userId = sessionManager.getUserId();
 
         if (token == null || token.isEmpty()) {
             Toast.makeText(context, "Authentication token missing", Toast.LENGTH_SHORT).show();
             Sentry.captureMessage("EarningResponseApi Error: Missing authentication token for user ID: " + userId);
+            earningCallback.onError("Missing authentication token");
             return;
         }
 
-        // Attach user details to Sentry
         User sentryUser = new User();
         sentryUser.setId(String.valueOf(userId));
         Sentry.setUser(sentryUser);
@@ -60,15 +61,22 @@ public class EarningResponseApi {
                     List<EarningResponse> earningsList = response.body();
                     Log.d(TAG, "Earnings Report Response: " + earningsList);
 
+                    // Update or set adapter
+                    EarningsAdapter adapter = (EarningsAdapter) recyclerView.getAdapter();
+                    if (adapter == null) {
+                        adapter = new EarningsAdapter(earningsList);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        adapter.updateData(earningsList); // Update existing adapter
+                    }
+
                     earningCallback.onSuccess(earningsList);
 
                     if (earningsList.isEmpty()) {
                         Toast.makeText(context, "No earnings data available for the selected period.", Toast.LENGTH_SHORT).show();
                         Sentry.captureMessage("EarningResponseApi: No earnings data available for user ID: " + userId);
                     } else {
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new EarningsAdapter(earningsList));
-
                         // Calculate totals for pie chart
                         double cashTotal = 0.0, epaymentsTotal = 0.0, accountTotal = 0.0;
                         for (EarningResponse earning : earningsList) {
@@ -76,7 +84,6 @@ public class EarningResponseApi {
                             epaymentsTotal += earning.getAccTotal();
                             accountTotal += earning.getRankTotal();
                         }
-
                         googlePieChart(cashTotal, epaymentsTotal, accountTotal);
                     }
                 } else {
@@ -85,6 +92,7 @@ public class EarningResponseApi {
                     Log.e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
                     Toast.makeText(context, "Error fetching data. Status Code: " + statusCode, Toast.LENGTH_SHORT).show();
+                    earningCallback.onError(errorMessage);
                 }
             }
 
@@ -94,6 +102,7 @@ public class EarningResponseApi {
                 Log.e(TAG, failureMessage, t);
                 Sentry.captureException(t);
                 Toast.makeText(context, "Failed to fetch data. Please check your internet connection.", Toast.LENGTH_LONG).show();
+                earningCallback.onError(failureMessage);
             }
         });
     }
@@ -148,7 +157,7 @@ public class EarningResponseApi {
         }
     }
 
-    public interface EarningCallback{
+    public interface EarningCallback {
         void onSuccess(List<EarningResponse> responses);
         void onError(String error);
     }

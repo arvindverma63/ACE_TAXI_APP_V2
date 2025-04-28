@@ -448,7 +448,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/font_urban"
-                    android:text="Total"
+                    android:text="Journey Price"
                     android:textColor="@color/gray"
                     android:textSize="14sp" />
 

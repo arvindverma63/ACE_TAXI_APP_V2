@@ -1,6 +1,5 @@
 package com.app.ace_taxi_v2.Fragments.Adapters;
 
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.app.ace_taxi_v2.Models.Reports.StatementItem;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.StatementViewHolder> {
@@ -24,7 +24,10 @@ public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.Stat
 
     public StatementAdapter(Context context, List<StatementItem> statementList) {
         this.context = context;
-        this.statementList = statementList;
+        this.statementList = new ArrayList<>();
+        if (statementList != null) {
+            this.statementList.addAll(statementList);
+        }
     }
 
     @NonNull
@@ -36,38 +39,34 @@ public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.Stat
 
     @Override
     public void onBindViewHolder(@NonNull StatementViewHolder holder, int position) {
-        if (statementList == null || statementList.isEmpty()) return;
-
         StatementItem item = statementList.get(position);
 
-        // ✅ Fix: Convert int to String to avoid NotFoundException
+        // Bind data
         holder.statementNumber.setText(String.valueOf(item.getStatementId()));
-
-        // Format date safely
-        if (item.getDateCreated() != null) {
-            holder.date.setText(item.getDateCreated());
-        } else {
-            holder.date.setText("N/A");
-        }
-
-        // Format earnings safely
+        holder.date.setText(item.getDateCreated() != null ? item.getDateCreated() : "N/A");
         holder.amount.setText(String.format("£%.2f", item.getTotalEarned()));
 
         // Handle button click
         holder.viewButton.setOnClickListener(v -> {
             StatementDialog statementDialog = new StatementDialog();
-            statementDialog.showStatementDialog(context,item);
+            statementDialog.showStatementDialog(context, item);
         });
     }
-
 
     @Override
     public int getItemCount() {
         return statementList.size();
     }
 
-    static class StatementViewHolder extends RecyclerView.ViewHolder {
+    public void updateData(List<StatementItem> newStatements) {
+        statementList.clear();
+        if (newStatements != null) {
+            statementList.addAll(newStatements);
+        }
+        notifyDataSetChanged();
+    }
 
+    static class StatementViewHolder extends RecyclerView.ViewHolder {
         TextView statementNumber, date, amount;
         MaterialButton viewButton;
 

@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     style="@style/MainBG">
 
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/header_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        style="@style/ActionBar"
+        app:title="Earning Report"
+        app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:navigationIcon="@drawable/ic_back_arrow"
+        app:navigationContentDescription="Back Button" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/header_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/ActionBar"
-            app:title="Earning Report"
-            app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:navigationIcon="@drawable/ic_back_arrow"
-            app:navigationContentDescription="Back Button" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -49,71 +46,80 @@
                 app:cornerRadius="10dp"
                 android:paddingHorizontal="16dp"
                 android:gravity="center" />
-            <!-- Spacer -->
-
         </LinearLayout>
-
     </LinearLayout>
+
+    <!-- Table Section -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:cardCornerRadius="0dp"
+        app:strokeWidth="0dp"
+        android:backgroundTint="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
 
+            <!-- No Data TextView -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/no_data_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Data Found"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:layout_margin="16dp" />
 
-        <!-- Table Section -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="0dp"
-            app:strokeWidth="0dp"
-            android:backgroundTint="@color/white">
-
+            <!-- RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 style="@style/MainBG"
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
+                android:layout_height="match_parent" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
+    <!-- Bottom Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="160dp"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/red">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
             android:orientation="vertical">
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                app:cardCornerRadius="1000dp"
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/total_cash"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:backgroundTint="@color/green">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:orientation="vertical">
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/total_cash"
-                        android:layout_gravity="center"
-                        android:textSize="18sp"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:text="Total Cash"/>
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/total_epay"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"
-                        android:text="Total E-Pay"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="Total Cash: £0.00" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/total_epay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text="Total ACC: £0.00" />
+
         </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>
