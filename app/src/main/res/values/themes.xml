@@ -95,6 +95,7 @@
     <style name="dropdown" parent="ThemeOverlay.Material3.AutoCompleteTextView">
         <item name="android:background">#EDEDED</item>
         <item name="android:itemBackground">@color/white</item>
+        <item name="android:popupBackground">@color/white</item>
     </style>
 
     <style name="ThemeOverlay.App.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
