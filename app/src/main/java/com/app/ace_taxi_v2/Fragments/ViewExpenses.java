@@ -30,6 +30,8 @@ import com.google.android.material.datepicker.DateValidatorPointBackward;
 import androidx.core.util.Pair;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -128,6 +130,24 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
         }
 
         updateTotalAmount();
+
+        Calendar calendar = Calendar.getInstance();
+        Date endDate = calendar.getTime(); // today
+        calendar.add(Calendar.DAY_OF_YEAR, -30);
+        Date startDate = calendar.getTime(); // 15 days ago
+
+        SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+        apiDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+        String startDateInternal = apiDateFormat.format(startDate);
+        String endDateInternal = apiDateFormat.format(endDate);
+        String startDateDisplay = displayDateFormat.format(startDate);
+        String endDateDisplay = displayDateFormat.format(endDate);
+
+        dateRangeEditText.setText(startDateDisplay + " – " + endDateDisplay);
+        fetchExpenses(startDateInternal, endDateInternal);
     }
 
     private void navigateToProfile() {
@@ -139,7 +159,7 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
     }
 
     private void showDateRangePicker() {
-        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker().setTheme(R.style.ThemeOverlay_App_MaterialCalendar);
         builder.setTitleText("Select Date Range");
 
         CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();

@@ -91,12 +91,12 @@ public class ReportFragment extends Fragment {
 
     private void setDefaultDateRange() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -2);
+        calendar.add(Calendar.DAY_OF_YEAR, -15);
 
         startDate = isoDateFormat.format(calendar.getTime());
         endDate = isoDateFormat.format(Calendar.getInstance().getTime());
 
-        SimpleDateFormat displayFormat = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
+        SimpleDateFormat displayFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String displayStartDate = displayFormat.format(calendar.getTime());
         String displayEndDate = displayFormat.format(Calendar.getInstance().getTime());
 
@@ -107,7 +107,7 @@ public class ReportFragment extends Fragment {
     }
 
     private void showDateRangePicker() {
-        MaterialDatePicker.Builder<androidx.core.util.Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        MaterialDatePicker.Builder<androidx.core.util.Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker().setTheme(R.style.ThemeOverlay_App_MaterialCalendar);
         builder.setTitleText("Select Date Range");
 
         CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder();

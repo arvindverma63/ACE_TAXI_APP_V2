@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- res/values/arrays.xml -->
+    <string-array name="categories">
+        <item>Fuel</item>
+        <item>Part</item>
+        <item>Insurance</item>
+        <item>MOT</item>
+        <item>DBS</item>
+        <item>Vehicle Badge</item>
+        <item>Maintenance</item>
+        <item>Certification</item>
+        <item>Others</item>
+    </string-array>
+</resources>

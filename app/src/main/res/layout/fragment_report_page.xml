@@ -46,8 +46,8 @@
 
                 <!-- Circular Icon -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     app:strokeWidth="0dp"
                     app:cardCornerRadius="25dp"
                     android:backgroundTint="@color/red"
@@ -99,8 +99,8 @@
 
                 <!-- Circular Icon -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     app:strokeWidth="0dp"
                     app:cardCornerRadius="25dp"
                     android:backgroundTint="@color/red"

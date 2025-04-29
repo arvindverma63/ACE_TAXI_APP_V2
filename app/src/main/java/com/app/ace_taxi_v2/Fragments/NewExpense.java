@@ -1,5 +1,6 @@
 package com.app.ace_taxi_v2.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +27,6 @@ import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialDatePicker.Builder;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 
@@ -39,10 +41,9 @@ public class NewExpense extends Fragment {
 
     private EditText dateEditText;
     private EditText descriptionEditText;
-    private EditText amout;
-    private Button recordButton,view_button;
+    private EditText amountEditText;
+    private Button recordButton, viewButton;
     private AutoCompleteTextView categoryDropdown;
-
 
     @Nullable
     @Override
@@ -56,6 +57,7 @@ public class NewExpense extends Fragment {
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
             requireActivity().finish();
+            return view;
         }
 
         // Toolbar Navigation
@@ -68,8 +70,9 @@ public class NewExpense extends Fragment {
             fragmentTransaction.commit();
         });
 
-        view_button = view.findViewById(R.id.view_button);
-        view_button.setOnClickListener(v -> {
+        // View Expenses Button
+        viewButton = view.findViewById(R.id.view_button);
+        viewButton.setOnClickListener(v -> {
             Fragment selectedFragment = new ViewExpenses();
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -80,7 +83,7 @@ public class NewExpense extends Fragment {
         // Initialize Views
         dateEditText = view.findViewById(R.id.dateEditText);
         descriptionEditText = view.findViewById(R.id.descriptionEditText);
-        amout = view.findViewById(R.id.amountEditText);
+        amountEditText = view.findViewById(R.id.amountEditText);
         recordButton = view.findViewById(R.id.recordButton);
         categoryDropdown = view.findViewById(R.id.categoryDropdown);
 
@@ -107,7 +110,7 @@ public class NewExpense extends Fragment {
                 .setValidator(DateValidatorPointForward.now());
 
         // Initialize MaterialDatePicker
-        MaterialDatePicker<Long> datePicker = Builder.datePicker()
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select a Date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // Default to today
                 .setCalendarConstraints(constraintsBuilder.build())
@@ -124,10 +127,10 @@ public class NewExpense extends Fragment {
         });
     }
 
-    public void addRecord() {
+    private void addRecord() {
         // Get values from input fields
         String originalDate = dateEditText.getText().toString().trim();
-        String amountText = amout.getText().toString().trim();
+        String amountText = amountEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
         String selectedCategory = categoryDropdown.getText().toString().trim();
 
@@ -147,8 +150,8 @@ public class NewExpense extends Fragment {
 
         // Validate Amount
         if (amountText.isEmpty()) {
-            amout.setError("Amount is required");
-            amout.requestFocus();
+            amountEditText.setError("Amount is required");
+            amountEditText.requestFocus();
             return;
         }
 
@@ -156,16 +159,15 @@ public class NewExpense extends Fragment {
         try {
             amount = Double.parseDouble(amountText);
             if (amount <= 0) {
-                amout.setError("Enter a valid amount");
-                amout.requestFocus();
+                amountEditText.setError("Enter a valid amount");
+                amountEditText.requestFocus();
                 return;
             }
         } catch (NumberFormatException e) {
-            amout.setError("Invalid number format");
-            amout.requestFocus();
+            amountEditText.setError("Invalid number format");
+            amountEditText.requestFocus();
             return;
         }
-
 
         // Validate Category
         if (selectedCategory.isEmpty() || getCategoryId(selectedCategory) == -1) {
@@ -184,9 +186,14 @@ public class NewExpense extends Fragment {
                 if (ok) {
                     Toast.makeText(getContext(), "Expense recorded successfully", Toast.LENGTH_SHORT).show();
                     // Clear input fields
-                    amout.setText("");
+                    amountEditText.setText("");
                     descriptionEditText.setText("");
-                    categoryDropdown.setText("");
+                    categoryDropdown.setText("", false);
+                    // Reset dropdown to default
+                    if (categoryDropdown.getAdapter() instanceof CustomAdapter) {
+                        ((CustomAdapter) categoryDropdown.getAdapter()).setSelectedPosition(0);
+                        categoryDropdown.setText(getResources().getStringArray(R.array.categories)[0], false);
+                    }
                 }
             }
 
@@ -197,17 +204,14 @@ public class NewExpense extends Fragment {
         });
     }
 
-
-
     /**
      * Maps the selected category string to its corresponding category ID.
      */
     private int getCategoryId(String category) {
-        // Adjust the mapping as needed.
         switch (category) {
             case "Fuel":
                 return 0;
-            case "Parts":
+            case "Part":
                 return 1;
             case "Insurance":
                 return 2;
@@ -221,62 +225,89 @@ public class NewExpense extends Fragment {
                 return 6;
             case "Certification":
                 return 7;
-            case "Other":
+            case "Others":
                 return 8;
             default:
-                // Return a default or invalid id if the category is not recognized.
                 return -1;
         }
     }
 
+    public class CustomAdapter extends ArrayAdapter<String> {
+        private int selectedPosition = -1;
 
-    public void setDataToAdapter() {
-        String[] categories = new String[] {
-                "Fuel",
-                "Part",
-                "Insurance",
-                "MOT",
-                "DBS",
-                "Vehicle Badge",
-                "Maintenance",
-                "Certification",
-                "Others"
-        };
+        public CustomAdapter(Context context, int resource, String[] objects) {
+            super(context, resource, objects);
+        }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                categories
-        );
+        public void setSelectedPosition(int position) {
+            selectedPosition = position;
+            notifyDataSetChanged();
+        }
 
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.dropdown_item, parent, false);
+                holder = new ViewHolder();
+                holder.textView = convertView.findViewById(R.id.textView);
+                holder.checkMark = convertView.findViewById(R.id.checkMark);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            String item = getItem(position);
+            holder.textView.setText(item != null ? item : "");
+            holder.checkMark.setVisibility(position == selectedPosition ? View.VISIBLE : View.GONE);
+
+            return convertView;
+        }
+
+        @Override
+        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            return getView(position, convertView, parent); // Reuse getView for dropdown items
+        }
+
+        class ViewHolder {
+            TextView textView;
+            ImageView checkMark;
+        }
+    }
+
+    private void setDataToAdapter() {
+        Context context = getContext();
+        if (context == null) return;
+
+        // Load categories from resources
+        String[] categories = context.getResources().getStringArray(R.array.categories);
+
+        // Use CustomAdapter
+        CustomAdapter adapter = new CustomAdapter(context, R.layout.dropdown_item, categories);
         categoryDropdown.setAdapter(adapter);
 
-        // Set a default selection
-        categoryDropdown.setText(categories[0], false); // Set "Fuel" as default
+        // Set default selection
+        if (categories.length > 0) {
+            categoryDropdown.setText(categories[0], false); // Set "Fuel" as default
+            adapter.setSelectedPosition(0); // Show checkmark for default
+        }
 
         // Handle item selection
         categoryDropdown.setOnItemClickListener((parent, view, position, id) -> {
             String selectedCategory = (String) parent.getItemAtPosition(position);
-            // Update the AutoCompleteTextView with the selected category
-            categoryDropdown.setText(selectedCategory, false); // Update the text
-            // Dismiss the dropdown to ensure the UI updates
-            categoryDropdown.dismissDropDown();
+            categoryDropdown.setText(selectedCategory, false);
+            ((CustomAdapter) parent.getAdapter()).setSelectedPosition(position);
         });
     }
-    public String convertToISO8601(String inputDate) {
-        // Define the input format (for example, if input is "01/02/2025")
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-        // Define the output ISO 8601 format.
-        // The pattern "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" produces an output like "2025-02-01T06:16:21.793Z"
+    private String convertToISO8601(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-        // Set timezone to UTC so that the 'Z' (Zulu time) is correct.
         outputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         try {
-            // Parse the input date
             Date date = inputFormat.parse(inputDate);
-            // Format the date into ISO 8601 string
             return outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
