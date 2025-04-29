@@ -266,6 +266,7 @@ public class HomeActivity extends BaseActivity {
             boolean accepted = intent.getBooleanExtra("accepted", false);
             boolean rejected = intent.getBooleanExtra("rejected", false);
             String guid = intent.getStringExtra("guid");
+            String body = intent.getStringExtra("body");
             Log.d("guid","guid: "+guid);
             Guid guid1 = new Guid(this);
             guid1.setGuid(guid);
@@ -320,7 +321,7 @@ public class HomeActivity extends BaseActivity {
                 new JobModal(this).jobUnallocated(-1, passenger, dateTime);
             }
             if (navId == 3) {
-                new JobModal(this).jobAmenedment("-1", passenger, dateTime);
+                new JobModal(this).jobAmenedment(body, passenger, dateTime);
             }
             if (navId == 4) {
                 new JobModal(this).jobCancel("-1", passenger, dateTime);

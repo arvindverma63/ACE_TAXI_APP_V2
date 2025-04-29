@@ -21,13 +21,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash_screen);
-
         int navId = -1;
         int jobId = -1;
         String message = "";
         String passenger = "";
         String datetime = "";
         String guid = "";
+        String body = "";
+
         if (getIntent().getExtras() != null) {
             for (String key : getIntent().getExtras().keySet()) {
                 Object value = getIntent().getExtras().get(key);
@@ -54,6 +55,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                     datetime = value.toString();
                 }else if("guid".equals(key.toString()) && value!= null){
                     guid = value.toString();
+                }else if("body".equals(key.toString()) && value!=null){
+                     body = value.toString();
                 }
             }
         }
@@ -65,6 +68,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         String finalPassenger = passenger;
         String finalDatetime = datetime;
         String finalGuid = guid;
+        String finalBody = body;
         new Handler().postDelayed(() -> {
                 Intent homeIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
                 homeIntent.putExtra("navId", finalNavId);
@@ -72,11 +76,10 @@ public class SplashScreenActivity extends AppCompatActivity {
                 homeIntent.putExtra("message", finalMessage);
                 homeIntent.putExtra("passenger", finalPassenger);
                 homeIntent.putExtra("datetime", finalDatetime);
+                homeIntent.putExtra("body", finalBody);
                 homeIntent.putExtra("guid", finalGuid);
                 startActivity(homeIntent);
             finish();
         }, 1000);
     }
-
-
 }

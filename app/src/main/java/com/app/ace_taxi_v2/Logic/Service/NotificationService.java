@@ -88,10 +88,10 @@ public class NotificationService extends FirebaseMessagingService {
 
 
 //        showNotification(title, body, jobId, navId, passenger, datetime);
-        handleNavigation(navId, jobId, message, passenger, datetime,guid);
+        handleNavigation(navId, jobId, message, passenger, datetime,guid,body);
     }
 
-    private void handleNavigation(String navId, String jobId, String message, String passenger, String datetime,String guid) {
+    private void handleNavigation(String navId, String jobId, String message, String passenger, String datetime,String guid,String body) {
         if ("N/A".equals(navId)) return;
         notificationSound(navId);
 
@@ -100,6 +100,7 @@ public class NotificationService extends FirebaseMessagingService {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra("datetime", datetime);
             intent.putExtra("passenger", passenger);
+            intent.putExtra("body",body);
             intent.putExtra("jobId", jobId);
             intent.putExtra("navId", navId);
             intent.putExtra("guid",guid);

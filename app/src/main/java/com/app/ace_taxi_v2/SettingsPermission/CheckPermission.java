@@ -18,8 +18,8 @@ public class CheckPermission {
     public CheckPermission(Context context) {
         this.context = context;
     }
-
     // Check notification permission
+
     public void notificationPermission(Switch notificationSwitch) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
@@ -55,5 +55,4 @@ public class CheckPermission {
             Log.d("PermissionCheck", "GPS permission is not enabled");
         }
     }
-
 }

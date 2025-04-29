@@ -19,6 +19,9 @@
     <style name="MainBG">
         <item name="android:background">#F5F5F5</item>
     </style>
+    <style name="MainCardBG">
+        <item name="android:background">@color/white</item>
+    </style>
     <style name="CardBG">
         <item name="android:backgroundTint">@color/white</item>
     </style>

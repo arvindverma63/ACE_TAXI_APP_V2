@@ -5,9 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="android:fontFamily">@font/font_roborto</item>
     </style>
-
     <style name="Theme.ACE_TAXI_V2" parent="Base.Theme.ACE_TAXI_V2"/>
-
     <style name="MainBG">
         <item name="android:background">@color/primaryDark</item>
     </style>
@@ -113,5 +111,9 @@
         <item name="colorSurfaceBright">@color/darkCard</item>
         <item name="backgroundColor">@color/darkCard</item>
 
+    </style>
+
+    <style name="MainCardBG">
+        <item name="android:background">@color/darkCard</item>
     </style>
 </resources>
