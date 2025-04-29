@@ -28,13 +28,6 @@
             android:orientation="vertical"
             android:padding="16dp"
             android:gravity="center_horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_read_message"/>
-
-            <!-- Job ID -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,6 +37,14 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="8dp"/>
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/ic_read_message"/>
+
+            <!-- Job ID -->
+
 
 
 
@@ -80,12 +81,12 @@
                 android:text="Read"
                 android:textSize="16sp"
                 android:textAllCaps="false"
-                app:backgroundTint="#E6EFFF"
+                app:backgroundTint="@color/red"
                 android:paddingVertical="12dp"
                 android:fontFamily="@font/font_urban"
                 app:strokeColor="@color/trans"
                 app:strokeWidth="1dp"
-                android:textColor="@color/dark_blue"
+                android:textColor="@color/white"
                 app:cornerRadius="1000dp"
                 android:letterSpacing="0.02"/>
         </LinearLayout>

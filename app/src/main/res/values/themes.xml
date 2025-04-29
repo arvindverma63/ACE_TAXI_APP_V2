@@ -94,6 +94,14 @@
         <item name="android:itemBackground">@color/white</item>
     </style>
 
+    <style name="ThemeOverlay.App.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- Override main colors -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/gray</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorSurfaceBright">@color/white</item>
+        <item name="backgroundColor">@color/white</item>
 
+    </style>
 
 </resources>

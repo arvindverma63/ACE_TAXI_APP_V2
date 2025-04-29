@@ -95,13 +95,7 @@
     <style name="CustomMaterialCalendar" parent="Widget.MaterialComponents.MaterialCalendar">
         <item name="android:background">@color/white</item>
     </style>
-    <style name="ThemeOverlay.App.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <!-- just override the colors used in the default style -->
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimary">@color/red</item>
-        <item name="colorSurface">@color/white</item>
-        <item name="colorSurfaceBright">@color/white</item>
-        <item name="textColorAlertDialogListItem">@color/black</item>
-    </style>
+
+
 
 </resources>
