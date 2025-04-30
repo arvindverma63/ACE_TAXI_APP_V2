@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
     tools:context=".MainActivity">
 
     <!-- Card Container -->
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white"
+        style="@style/CardBG"
         android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +35,7 @@
                 android:textSize="20sp"
                 android:fontFamily="@font/font_urban"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                style="@style/TextBG"
                 android:layout_marginBottom="8dp"/>
             <ImageView
                 android:layout_width="wrap_content"
@@ -48,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/font_urban"
+                style="@style/TextBG"
                 android:text="Your booking for the above journey has been amended."
                 android:textSize="14sp"
                 android:gravity="center" />
@@ -75,6 +75,7 @@
                 android:fontFamily="@font/font_urban"
                 android:text="passenger name"
                 android:textSize="16sp"
+                style="@style/TextBG"
                 android:layout_marginVertical="3dp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -87,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:text="dd/mm/yyyy – HH:mm"
                 android:textSize="12sp"
+                style="@style/TextBG"
                 android:layout_marginBottom="8dp" />
 
 

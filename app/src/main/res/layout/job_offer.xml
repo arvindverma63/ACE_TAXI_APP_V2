@@ -131,7 +131,6 @@
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:text=""
-                        android:textColor="@android:color/darker_gray"
                         android:textSize="14sp" />
                 </LinearLayout>
                 <com.google.android.material.card.MaterialCardView
@@ -211,7 +210,6 @@
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:text=""
-                        android:textColor="@android:color/darker_gray"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -222,7 +220,6 @@
                     android:layout_gravity="end"
                     android:fontFamily="@font/font_urban"
                     android:text="00:00 AM"
-                    android:textColor="@color/gray"
                     android:textSize="14sp" />
             </LinearLayout>
             <View
@@ -242,7 +239,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Today, Dec 22, 2024"
-                    android:textColor="@color/gray"
                     android:textSize="14sp" />
 
                 <View
@@ -324,7 +320,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/font_urban"
                         android:text="2 Passengers"
-                        android:textColor="@color/gray"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -427,7 +422,6 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/font_urban"
                     android:text="Booked By"
-                    android:textColor="@color/gray"
                     android:textSize="14sp" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -460,7 +454,6 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/font_urban"
                     android:text="Journey Price"
-                    android:textColor="@color/gray"
                     android:textSize="16sp" />
 
                 <com.google.android.material.textview.MaterialTextView

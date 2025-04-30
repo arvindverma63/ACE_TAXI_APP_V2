@@ -3,6 +3,7 @@ package com.app.ace_taxi_v2.JobModals;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -29,6 +30,7 @@ import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.JobResponseApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Logic.Service.NotificationModalSession;
+import com.app.ace_taxi_v2.Logic.Service.NotificationService;
 import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -63,7 +65,15 @@ public class JobModal {
     // Reusable method to set up dialog dismissal with close button
     private void setupCloseButton(View dialogView, Dialog dialog, int buttonId) {
         Button closeBtn = dialogView.findViewById(buttonId);
-        closeBtn.setOnClickListener(v -> dialog.dismiss());
+        closeBtn.setOnClickListener(v -> {
+            NotificationService service = NotificationService.getInstance();
+            if (service != null) {
+                service.stopSound();
+            }
+
+            Intent intent = new Intent(context,HomeActivity.class);
+            context.startActivity(intent);
+        });
     }
 
     public void jobOfferModal(String pickupAddress, String destinationAddress, double price,
@@ -206,6 +216,10 @@ public class JobModal {
         } else {
             jobResponseApi.rejectBooking(bookingId);
             dialog.dismiss();
+        }
+        NotificationService service = NotificationService.getInstance();
+        if (service != null) {
+            service.stopSound();
         }
         dialog.dismiss();
     }
@@ -373,6 +387,8 @@ public class JobModal {
                 }
             });
 
+            Intent intent = new Intent(context,HomeActivity.class);
+            context.startActivity(intent);
             fullScreenDialog.dismiss();
         });
 

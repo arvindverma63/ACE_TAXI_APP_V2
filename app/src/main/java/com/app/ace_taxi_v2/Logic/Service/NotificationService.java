@@ -32,10 +32,16 @@ public class NotificationService extends FirebaseMessagingService {
     private static final String SHARED_PREF_NAME = "fcm_preferences";
     private static final String FCM_TOKEN_KEY = "fcm_token";
     private NotificationModalSession notificationModalSession;
+    public MediaPlayer mediaPlayer;
+    private static NotificationService instance;
 
+    public static NotificationService getInstance() {
+        return instance;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         notificationModalSession = new NotificationModalSession(this);
     }
 
@@ -205,7 +211,7 @@ public class NotificationService extends FirebaseMessagingService {
     }
 
     private void playSoundThreeTimes(Uri soundUri) {
-        MediaPlayer mediaPlayer = new MediaPlayer();
+         mediaPlayer = new MediaPlayer();
         final int[] playCount = {0};
 
         try {
@@ -228,6 +234,17 @@ public class NotificationService extends FirebaseMessagingService {
             e.printStackTrace();
         }
     }
+    public void stopSound() {
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
 
 
 }

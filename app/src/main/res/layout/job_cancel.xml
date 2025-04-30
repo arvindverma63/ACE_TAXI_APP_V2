@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
+    style="@style/CardBG"
     tools:context=".MainActivity">
 
     <!-- Card Container -->
@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
+        style="@style/CardBG"
         android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/white"
         android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +37,7 @@
                 android:textSize="20sp"
                 android:fontFamily="@font/font_urban"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                style="@style/TextBG"
                 android:layout_marginBottom="8dp"/>
             <ImageView
                 android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:text="Your booking for the above journey has been canceled."
                 android:textSize="14sp"
-                android:textColor="@android:color/black"
+                style="@style/TextBG"
                 android:fontFamily="@font/font_urban"
                 android:gravity="center" />
 
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="passenger name"
-                android:textColor="@color/black"
+                style="@style/TextBG"
                 android:fontFamily="@font/font_urban"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -93,7 +93,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="dd/mm/yyyy - HH:mm"
                 android:fontFamily="@font/font_urban"
-                android:textColor="@color/black"
+                style="@style/TextBG"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 

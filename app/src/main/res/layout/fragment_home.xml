@@ -583,6 +583,7 @@
                 android:backgroundTint="@color/red"
                 android:layout_marginTop="10dp"
                 android:visibility="gone"
+                android:textColor="@color/white"
                 android:padding="15dp"
                 android:text="VIEW BOOKING"/>
 

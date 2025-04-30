@@ -385,7 +385,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="2 Passengers"
-                            android:textColor="@color/gray"
                             android:layout_marginStart="12dp"
                             android:textSize="12sp"
                             android:fontFamily="@font/font_urban" />
@@ -540,7 +539,6 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/font_urban"
                         android:text="Booked By"
-                        android:textColor="@color/gray"
                         android:textSize="14sp" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -572,7 +570,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Journey Price"
-                        android:textColor="@color/gray"
                         android:textSize="14sp"
                         android:fontFamily="@font/font_urban" />
 
