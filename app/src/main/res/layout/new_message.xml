@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,8 +16,8 @@
 
         <ImageView
             android:id="@+id/close_dialog"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:src="@drawable/ic_back_arrow"
             android:contentDescription="Back"
             style="@style/IconTint"
@@ -28,20 +29,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Message"
-            android:textSize="18sp"
+            android:textSize="23sp"
             android:textStyle="bold"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 
     <!-- Effective Date -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/datetime"
-        android:text="Effective Date: December 20, 2024"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"/>
+
 
     <!-- Scrollable Terms Text -->
     <ScrollView
@@ -50,12 +44,112 @@
         android:layout_weight="1"
         android:layout_marginTop="8dp">
 
-        <TextView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tvMessage"
-            android:text="----------"
-            android:textSize="14sp"/>
+            app:cardCornerRadius="8dp"
+            android:id="@+id/card_view"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/green"
+            app:strokeWidth="0dp"
+            app:cardElevation="0dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/icon_"
+                    android:layout_width="63dp"
+                    android:layout_height="68dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_read_message"/>
+                <!-- Foreground content -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/notification_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Title"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"/>
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_back_arrow"
+                            android:rotation="180"
+                            style="@style/IconTint"
+                            />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tvMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Message"
+                        android:textSize="16sp"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/datetime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="12sp"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="4dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/notification_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Notification #: "
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <!-- Swipe background -->
+                <FrameLayout
+                    android:id="@+id/swipe_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/red"
+                    android:visibility="gone">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Delete"
+                        android:drawableStart="@drawable/ic_delete"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
     </ScrollView>
 
     <!-- Back Button -->

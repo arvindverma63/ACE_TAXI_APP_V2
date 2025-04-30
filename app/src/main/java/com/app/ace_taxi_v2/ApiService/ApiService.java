@@ -158,5 +158,9 @@ public interface ApiService {
     Call<JobOfferNoticationResponse> getJobOffer(@Header("Authorization") String token,
                                                  @Query("guid") String guid);
 
+    @POST("/api/DriverApp/SetActiveJob")
+    Call<Void> setActiveJob(@Header("Authorization") String token,
+                            @Query("bookingId") int bookingId);
+
 
 }

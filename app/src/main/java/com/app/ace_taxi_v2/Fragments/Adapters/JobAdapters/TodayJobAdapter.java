@@ -22,6 +22,7 @@ import com.app.ace_taxi_v2.Components.ShiftChangeModal;
 import com.app.ace_taxi_v2.GoogleMap.StringtoMap;
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
+import com.app.ace_taxi_v2.Logic.JobApi.SetActiveJob;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
@@ -137,6 +138,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
 
 
                 BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
+                SetActiveJob setActiveJob = new SetActiveJob(context);
 
 
                         try {
@@ -211,6 +213,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                         }
 
 
+                        setActiveJob.setActiveJob(job.getBookingId());
                         notifyDataSetChanged();
                             bookingStartStatus.setBookingId(String.valueOf(job.getBookingId()));
                             currentBookingSession.saveBookingId(job.getBookingId());

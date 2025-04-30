@@ -119,4 +119,9 @@
     <style name="MainCardBG">
         <item name="android:background">@color/darkCard</item>
     </style>
+
+    <style name="LightTextBg">
+        <item name="android:textColor">@color/light_gray</item>
+        <item name="android:drawableTint">@color/white</item>
+    </style>
 </resources>

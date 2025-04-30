@@ -119,6 +119,7 @@ public class JobViewDialog {
             MaterialCardView asap_card = dialogView.findViewById(R.id.asap_card);
             TextView distance = dialogView.findViewById(R.id.distance);
             MaterialButton callBtn = dialogView.findViewById(R.id.callBtn);
+            MaterialButton arrivedBtn = dialogView.findViewById(R.id.arrived_btn);
 
 
             jobId.setText("#"+bookingId);
@@ -171,6 +172,7 @@ public class JobViewDialog {
                 start_button.setVisibility(View.GONE);
                 cancel_button.setVisibility(View.GONE);
                 callBtn.setVisibility(View.GONE);
+                arrivedBtn.setVisibility(View.GONE);
             }
 
             cancel_button.setOnClickListener(view -> {
@@ -260,6 +262,7 @@ public class JobViewDialog {
                             String lastVia = viaParts.length > 1 ? viaParts[viaParts.length - 1].trim() : "";
 
                             viaAddress.setText(firstVia);
+                            viaAddress.setOnClickListener(v -> openGoogleMaps(viaAddressText));
                             viaCode.setText(lastVia + (viaPostCode.isEmpty() ? "" : " " + viaPostCode));
 
                             vias_container.addView(viaView);

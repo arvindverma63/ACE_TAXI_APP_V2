@@ -301,6 +301,10 @@ public class JobModal {
         Button closeBtn = dialogView.findViewById(R.id.btnRead);
         closeBtn.setOnClickListener(v -> {
             alertDialog.dismiss();
+            NotificationService service = NotificationService.getInstance();
+            if (service != null) {
+                service.stopSound();
+            }
             readMessage(messages, date);
         });
         alertDialog.show();
@@ -410,7 +414,7 @@ public class JobModal {
         ImageView backIcon = dialogView.findViewById(R.id.close_dialog);
         Button closeBtn = dialogView.findViewById(R.id.btnBack);
 
-        datetime.setText("Effective Date: " + date);
+        datetime.setText("" + date);
         tvMessage.setText(message);
 
         closeBtn.setOnClickListener(v -> fullScreenDialog.dismiss());

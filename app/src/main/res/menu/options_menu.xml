@@ -3,6 +3,7 @@
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
+        android:iconTint="@color/gray"
         android:title="Settings"/>
     <item
         android:id="@+id/action_shift"

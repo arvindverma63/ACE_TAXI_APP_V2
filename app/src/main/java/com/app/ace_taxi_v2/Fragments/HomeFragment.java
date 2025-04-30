@@ -289,6 +289,7 @@ public class HomeFragment extends Fragment {
 
                                         viaAddress.setText(firstVia);
                                         viaCode.setText(lastVia + (viaPostCode.isEmpty() ? "" : " " + viaPostCode));
+                                        viaView.setOnClickListener(v -> openGoogleMaps(via.getAddress()));
 
                                         vias_container.addView(viaView);
                                     }

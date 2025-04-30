@@ -211,8 +211,8 @@
                 style="@style/CardBG"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginTop="2dp"
+                android:visibility="gone"
                 app:cardCornerRadius="12dp"
                 app:strokeColor="@color/green"
                 app:strokeWidth="1dp">
@@ -281,6 +281,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:id="@+id/job_action"
+                            style="@style/IconTint"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_bar"/>
 
@@ -333,7 +334,7 @@
                                 android:ellipsize="end"
                                 android:maxLines="2"
                                 android:text="askjf kdf s kdfjs sldkf"
-                                android:textColor="@android:color/darker_gray"
+                                style="@style/LightTextBg"
                                 android:textSize="14sp" />
                         </LinearLayout>
 
@@ -470,7 +471,7 @@
                                 android:ellipsize="end"
                                 android:maxLines="2"
                                 android:text="jkfksd  fkjsdf jf"
-                                android:textColor="@android:color/darker_gray"
+                                style="@style/LightTextBg"
                                 android:textSize="14sp" />
                         </LinearLayout>
 

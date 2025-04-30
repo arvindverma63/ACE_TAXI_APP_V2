@@ -57,8 +57,7 @@
         app:tabIndicator="@drawable/tab_indicator"
         app:tabMode="fixed"
         app:tabRippleColor="@null"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/gray">
+        app:tabSelectedTextColor="@color/white">
 
         <!-- Tabs -->
         <com.google.android.material.tabs.TabItem

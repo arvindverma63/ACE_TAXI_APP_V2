@@ -42,7 +42,7 @@
                     style="@style/TextBG"
                     android:layout_width="106dp"
                     android:layout_height="wrap_content"
-                    android:text="version 7.0"
+                    android:text="version 7.3"
                     android:textSize="12dp" />
 
             </LinearLayout>
@@ -73,6 +73,7 @@
                 <ImageView
                     android:layout_width="38dp"
                     android:layout_height="38dp"
+                    style="@style/IconTint"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_profile"/>
 

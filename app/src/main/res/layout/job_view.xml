@@ -404,6 +404,7 @@
                         android:layout_weight="1"
                         android:text="Arrived"
                         android:textSize="14sp"
+                        android:id="@+id/arrived_btn"
                         android:textColor="@color/blue"
                         android:layout_marginEnd="8dp"
                         app:icon="@drawable/ic_message"
