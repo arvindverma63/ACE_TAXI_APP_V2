@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@android:color/white"
+        style="@style/MainCardBG"
         android:padding="16dp">
 
         <!-- Complete Job Title -->
@@ -56,7 +56,7 @@
             app:cardCornerRadius="12dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/light_gray"
-            app:cardBackgroundColor="@color/white">
+            style="@style/CardBG">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,7 +85,7 @@
                         android:inputType="numberDecimal"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/black"/>
+                        style="@style/TextBG"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Waiting Time Field -->
@@ -108,7 +108,7 @@
                         android:text="0"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/black"/>
+                        style="@style/TextBG"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Parking Field -->
@@ -131,7 +131,7 @@
                         android:inputType="numberDecimal"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/black"/>
+                        style="@style/TextBG"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Tip Field -->
@@ -154,7 +154,7 @@
                         android:textSize="16sp"
                         android:inputType="numberDecimal"
                         android:fontFamily="sans-serif-medium"
-                        android:textColor="@color/black"/>
+                        style="@style/TextBG"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

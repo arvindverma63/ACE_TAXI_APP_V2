@@ -102,6 +102,8 @@
     <style name="dropdown" parent="ThemeOverlay.Material3.AutoCompleteTextView">
         <item name="android:background">@color/darkCard</item>
         <item name="android:popupBackground">@color/darkCard</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="color">@color/white</item>
     </style>
 
     <style name="ThemeOverlay.App.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">

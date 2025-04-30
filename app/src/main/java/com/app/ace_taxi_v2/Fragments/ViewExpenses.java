@@ -98,6 +98,7 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
             button.setLayoutParams(params);
 
             button.setBackgroundTintList(ContextCompat.getColorStateList(getContext(), R.color.red));
+            button.setTextColor(ContextCompat.getColor(getContext(),R.color.white));
 
             button.setOnClickListener(v -> {
                 Log.d(TAG, "Category button clicked: " + category);

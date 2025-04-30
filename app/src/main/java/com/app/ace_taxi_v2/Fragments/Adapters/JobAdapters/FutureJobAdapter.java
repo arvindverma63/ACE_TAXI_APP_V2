@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.Components.DeleteDialog;
+import com.app.ace_taxi_v2.GoogleMap.StringtoMap;
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Models.Jobs.Booking;
@@ -31,11 +32,13 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
     private final List<Booking> bookingList;
     private final OnItemClickListener listener;
     public Context context;
+    public static StringtoMap openmap;
     // Constructor
     public FutureJobAdapter(List<Booking> bookingList,Context context, OnItemClickListener listener) {
         this.bookingList = bookingList;
         this.context = context;
         this.listener = listener;
+        openmap = new StringtoMap(context);
     }
 
     @NonNull
@@ -127,7 +130,12 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
                 if ("Account".equals(job.getScopeText())) {
 
                 }
-
+                mainAddressTextView.setOnClickListener(v -> {
+                    openmap.openGoogleMaps(job.getPickupAddress());
+                });
+                subAddressTextView.setOnClickListener(v -> {
+                    openmap.openGoogleMaps(job.getDestinationAddress());
+                });
                 viewButton.setOnClickListener(v -> {
                     if (listener != null) listener.onViewClick(job);
                     JobViewDialog jobModal = new JobViewDialog(context);

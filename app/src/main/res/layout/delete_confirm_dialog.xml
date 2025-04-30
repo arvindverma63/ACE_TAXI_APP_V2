@@ -8,8 +8,7 @@
     style="@style/MainBG"
     android:padding="24dp"
     android:maxWidth="280dp"
-    android:layout_gravity="center"
-    android:background="@drawable/dialog_background">
+    android:layout_gravity="center">
 
     <!-- Title -->
     <com.google.android.material.textview.MaterialTextView
@@ -18,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="Delete item?"
         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-        android:textColor="@android:color/black"
+        style="@style/TextBG"
         android:layout_marginBottom="16dp"/>
 
     <!-- Message -->
@@ -55,8 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
-            app:backgroundTint="?attr/colorError"
-            android:textColor="?attr/colorOnError"/>
+            app:backgroundTint="@color/red"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

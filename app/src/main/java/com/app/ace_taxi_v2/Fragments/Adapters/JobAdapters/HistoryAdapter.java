@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.GoogleMap.StringtoMap;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
@@ -34,11 +35,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     private final List<HistoryBooking> jobList;
     private final OnItemClickListener listener;
     private static WeakReference<Context> contextRef;
+    public static StringtoMap openmap;
 
     public HistoryAdapter(List<HistoryBooking> jobList, Context context, OnItemClickListener listener) {
         this.jobList = jobList;
         this.contextRef = new WeakReference<>(context);
         this.listener = listener;
+        openmap = new StringtoMap(context);
     }
 
     @NonNull
@@ -108,6 +111,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                     lastDestination += " " + job.getDestinationPostCode();
                 }
 
+                mainAddressTextView.setOnClickListener(v -> {
+                    openmap.openGoogleMaps(job.getPickupAddress());
+                });
+                subAddressTextView.setOnClickListener(v -> {
+                    openmap.openGoogleMaps(job.getDestinationAddress());
+                });
                 distance_duration.setText(job.getMileage() + " Miles");
                 String pickupTimeText = job.getPickupDateTime();
                 String[] parts = pickupTimeText.split(",");

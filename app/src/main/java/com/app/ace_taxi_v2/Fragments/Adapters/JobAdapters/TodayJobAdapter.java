@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.ace_taxi_v2.Activity.JobOfferDialogActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.ShiftChangeModal;
+import com.app.ace_taxi_v2.GoogleMap.StringtoMap;
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
@@ -38,12 +39,14 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
     private final Context context;
     int statusBookingId = 0;
     CurrentBookingSession currentBookingSession;
+    public StringtoMap openmap;
 
     public TodayJobAdapter(Context context, List<TodayBooking> jobList, OnItemClickListener listener) {
         this.context = context;
         this.jobList = jobList;
         this.listener = listener;
         currentBookingSession = new CurrentBookingSession(context);
+        openmap = new StringtoMap(context);
     }
 
     @NonNull
@@ -107,6 +110,13 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                 String firstDestination = destinationParts.length > 0 ? destinationParts[0].trim() : "";
                 String lastDestination = destinationParts.length > 1 ? destinationParts[1].trim() + (job.getDestinationPostCode() != null ? job.getDestinationPostCode() : "")
                         : (job.getDestinationPostCode() != null ? job.getDestinationPostCode() : "");
+
+                mainAddressTextView.setOnClickListener(v -> {
+                    openmap.openGoogleMaps(job.getPickupAddress());
+                });
+                subAddressTextView.setOnClickListener(v -> {
+                    openmap.openGoogleMaps(job.getDestinationAddress());
+                });
 
                 mainAddressTextView.setText(firstPickup);
                 subAddressTextView.setText(firstDestination);

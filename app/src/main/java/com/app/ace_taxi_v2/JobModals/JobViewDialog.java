@@ -118,6 +118,7 @@ public class JobViewDialog {
             MaterialCardView paymentCard = dialogView.findViewById(R.id.payment_card);
             MaterialCardView asap_card = dialogView.findViewById(R.id.asap_card);
             TextView distance = dialogView.findViewById(R.id.distance);
+            MaterialButton callBtn = dialogView.findViewById(R.id.callBtn);
 
 
             jobId.setText("#"+bookingId);
@@ -169,6 +170,7 @@ public class JobViewDialog {
                 complete_button.setVisibility(View.GONE);
                 start_button.setVisibility(View.GONE);
                 cancel_button.setVisibility(View.GONE);
+                callBtn.setVisibility(View.GONE);
             }
 
             cancel_button.setOnClickListener(view -> {
