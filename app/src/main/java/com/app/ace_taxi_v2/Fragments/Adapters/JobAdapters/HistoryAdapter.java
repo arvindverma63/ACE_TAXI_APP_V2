@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.GoogleMap.StringtoMap;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
+import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
@@ -118,13 +119,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                     openmap.openGoogleMaps(job.getDestinationAddress());
                 });
                 distance_duration.setText(job.getMileage() + " Miles");
-                String pickupTimeText = job.getPickupDateTime();
-                String[] parts = pickupTimeText.split(",");
-                pickupTime.setText(parts[parts.length - 1]);
+                HHMMFormater formater = new HHMMFormater();
+                pickupTime.setText(formater.formatDateTime(job.getPickupDateTime()));
                 if(job.getArriveBy()== null){
                     destinationTime.setVisibility(View.GONE);
                 }else {
-                    destinationTime.setText(job.getArriveBy());
+                    destinationTime.setText(formater.formatDateTime(job.getArriveBy()));
                 }
                 destinationAddress.setText(lastDestination.isEmpty() ? "N/A" : lastDestination);
                 subAddressTextView.setText(firstDestination.isEmpty() ? "N/A" : firstDestination);

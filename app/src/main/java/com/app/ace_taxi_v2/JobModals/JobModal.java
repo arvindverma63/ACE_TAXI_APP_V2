@@ -26,6 +26,7 @@ import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Logic.ArrivedJobApi;
 import com.app.ace_taxi_v2.Logic.BookingCompleteApi;
+import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.JobResponseApi;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
@@ -146,16 +147,15 @@ public class JobModal {
                     passengerCount.setText(bookingInfo.getPassengers()+" Passengers");
                     jobId.setText("#"+bookingInfo.getBookingId());
                     distance_duration.setText(formatDuration(bookingInfo.getDurationMinutes()));
-                    String pickupTimeText = bookingInfo.getPickupDateTime();
-                    String[] parts = pickupTimeText.split(",");
-                    pickupTime.setText(parts[parts.length - 1]);
+                    HHMMFormater formater = new HHMMFormater();
+                    pickupTime.setText(formater.formatDateTime(bookingInfo.getPickupDateTime()));
                     if(bookingInfo.isASAP()){
                         asap_card.setVisibility(View.VISIBLE);
                     }
                     if(bookingInfo.getArriveBy()== null){
                         destinationTime.setVisibility(View.GONE);
                     }else {
-                        destinationTime.setText(bookingInfo.getArriveBy());
+                        destinationTime.setText(formater.formatDateTime(bookingInfo.getArriveBy()));
                     }
                     pickupDateAndTime.setText(bookingInfo.getFormattedDateTime());
                     if(bookingInfo.getScopeText().equals("Account")){

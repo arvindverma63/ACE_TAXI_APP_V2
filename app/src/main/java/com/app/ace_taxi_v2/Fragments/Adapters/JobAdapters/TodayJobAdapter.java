@@ -21,6 +21,7 @@ import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.ShiftChangeModal;
 import com.app.ace_taxi_v2.GoogleMap.StringtoMap;
 import com.app.ace_taxi_v2.JobModals.JobModal;
+import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.JobApi.SetActiveJob;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
@@ -118,7 +119,7 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                 subAddressTextView.setOnClickListener(v -> {
                     openmap.openGoogleMaps(job.getDestinationAddress());
                 });
-
+                HHMMFormater formater = new HHMMFormater();
                 mainAddressTextView.setText(firstPickup);
                 subAddressTextView.setText(firstDestination);
                 price.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(job.getPrice()));
@@ -127,13 +128,11 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                 distance_duration.setText(job.getMileage() + " Miles");
                 pickup_datetime.setText(job.getFormattedDateTime());
                 pickpu_location.setText(firstPickup);
-                String pickupTimeText = job.getPickupDateTime();
-                String[] parts = pickupTimeText.split(",");
-                pickupTime.setText(parts[parts.length - 1]);
+                pickupTime.setText(formater.formatDateTime(job.getPickupDateTime()));
                 if(job.getArriveBy()== null){
                     destinationTime.setVisibility(View.GONE);
                 }else {
-                    destinationTime.setText(job.getArriveBy());
+                    destinationTime.setText(formater.formatDateTime(job.getArriveBy()));
                 }
 
 

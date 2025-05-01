@@ -18,6 +18,7 @@ import com.app.ace_taxi_v2.Components.DeleteDialog;
 import com.app.ace_taxi_v2.GoogleMap.StringtoMap;
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
+import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Models.Jobs.Booking;
 import com.app.ace_taxi_v2.Models.Jobs.HistoryBooking;
 import com.app.ace_taxi_v2.R;
@@ -101,13 +102,12 @@ public class FutureJobAdapter extends RecyclerView.Adapter<FutureJobAdapter.View
                     lastPickup += " " + job.getPickupPostCode();
                 }
                 distance_duration.setText(job.getMileage() + " Miles");
-                String pickupTimeText = job.getPickupDateTime();
-                String[] parts = pickupTimeText.split(",");
-                pickupTime.setText(parts[parts.length - 1]);
+                HHMMFormater formater = new HHMMFormater();
+                pickupTime.setText(formater.formatDateTime(job.getPickupDateTime()));
                 if(job.getArriveBy()== null){
                     destinationTime.setVisibility(View.GONE);
                 }else {
-                    destinationTime.setText(job.getArriveBy());
+                    destinationTime.setText(formater.formatDateTime(job.getArriveBy()));
                 }
                 mainAddressTextView.setText(firstPickup.isEmpty() ? "N/A" : firstPickup);
                 pickupAddress.setText(lastPickup.isEmpty() ? "N/A" : lastPickup);

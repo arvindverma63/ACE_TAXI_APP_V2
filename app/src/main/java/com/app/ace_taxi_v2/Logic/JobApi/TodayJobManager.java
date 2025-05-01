@@ -151,29 +151,29 @@ public class TodayJobManager {
     }
 
     private void handleJobStart(TodayBooking booking) {
-        JobStatusModal jobStatusModal = new JobStatusModal(context);
-        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
-        getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {
-            @Override
-            public void onSuccess(GetBookingInfo bookingInfo) {
-                Log.e("Booking Status", "Status: " + bookingInfo.getStatus());
-                swipeRefreshLayout.setRefreshing(true);
-                if (bookingInfo.getStatus() == "0") {
-                    JobModal jobModal = new JobModal(context);
-                    jobModal.jobOfferModalForTodayJob(
-                            booking.getBookingId()
-                    );
-                } else if ("3".equals(bookingInfo.getStatus())) {
-                    Toast.makeText(context, "Job already completed", Toast.LENGTH_SHORT).show();
-                } else {
-                    jobStatusModal.openModal(booking.getBookingId());
-                }
-            }
-
-            @Override
-            public void onfailer(String error) {
-                Toast.makeText(context, "Failed to update job status.", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        JobStatusModal jobStatusModal = new JobStatusModal(context);
+//        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+//        getBookingInfoApi.getInfo(booking.getBookingId(), new GetBookingInfoApi.BookingCallback() {
+//            @Override
+//            public void onSuccess(GetBookingInfo bookingInfo) {
+//                Log.e("Booking Status", "Status: " + bookingInfo.getStatus());
+//                swipeRefreshLayout.setRefreshing(true);
+//                if (bookingInfo.getStatus() == "0") {
+//                    JobModal jobModal = new JobModal(context);
+//                    jobModal.jobOfferModalForTodayJob(
+//                            booking.getBookingId()
+//                    );
+//                } else if ("3".equals(bookingInfo.getStatus())) {
+//                    Toast.makeText(context, "Job already completed", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    jobStatusModal.openModal(booking.getBookingId());
+//                }
+//            }
+//
+//            @Override
+//            public void onfailer(String error) {
+//                Toast.makeText(context, "Failed to update job status.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }

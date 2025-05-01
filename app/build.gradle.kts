@@ -11,8 +11,8 @@ android {
         applicationId = "com.app.ace_taxi_v2"
         minSdk = 24
         targetSdk = 34
-        versionCode = 63
-        versionName = "7.3"
+        versionCode = 65
+        versionName = "7.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

@@ -235,14 +235,19 @@ public class NotificationService extends FirebaseMessagingService {
         }
     }
     public void stopSound() {
-        if (mediaPlayer != null) {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.stop();
+        try{
+            if (mediaPlayer != null) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                }
+                mediaPlayer.reset();
+                mediaPlayer.release();
+                mediaPlayer = null;
             }
-            mediaPlayer.reset();
-            mediaPlayer.release();
-            mediaPlayer = null;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
 

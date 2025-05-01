@@ -30,7 +30,7 @@ public class StatementItem {
     private int userId;
     private String identifier;
     private String colorCode;
-    private List<Job> jobs; // Use custom Job class instead of kotlinx.coroutines.Job
+//    private List<Job> jobs; // Use custom Job class instead of kotlinx.coroutines.Job
 
     // Existing getters and setters remain unchanged
     public int getAccountJobsTotalCount() { return accountJobsTotalCount; }
@@ -91,8 +91,8 @@ public class StatementItem {
     public void setIdentifier(String identifier) { this.identifier = identifier; }
     public String getColorCode() { return colorCode; }
     public void setColorCode(String colorCode) { this.colorCode = colorCode; }
-    public List<Job> getJobs() { return jobs; }
-    public void setJobs(List<Job> jobs) { this.jobs = jobs; }
+//    public List<Job> getJobs() { return jobs; }
+//    public void setJobs(List<Job> jobs) { this.jobs = jobs; }
 }
 
 // Define the Job class to match your JSON structure

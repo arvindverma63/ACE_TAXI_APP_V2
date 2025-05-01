@@ -16,6 +16,7 @@ import com.app.ace_taxi_v2.Models.FcmRequest;
 import com.app.ace_taxi_v2.Models.FcmResponse;
 import com.app.ace_taxi_v2.Models.GPSRequest;
 import com.app.ace_taxi_v2.Models.GPSResponse;
+import com.app.ace_taxi_v2.Models.GetActiveJobResponse;
 import com.app.ace_taxi_v2.Models.ImageUploadResponse;
 import com.app.ace_taxi_v2.Models.JobOfferNoticationResponse;
 import com.app.ace_taxi_v2.Models.JobResponse;
@@ -161,6 +162,9 @@ public interface ApiService {
     @POST("/api/DriverApp/SetActiveJob")
     Call<Void> setActiveJob(@Header("Authorization") String token,
                             @Query("bookingId") int bookingId);
+
+    @GET("/api/DriverApp/GetActiveJob")
+    Call<GetActiveJobResponse> getActiveJob(@Header("Authorization") String token);
 
 
 }

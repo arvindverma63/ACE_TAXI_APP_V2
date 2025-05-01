@@ -27,6 +27,7 @@ import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.app.ace_taxi_v2.Fragments.JobFragment;
+import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.JobApi.TodayJobManager;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
@@ -232,13 +233,10 @@ public class JobViewDialog {
 
                     distance_duration.setText(formatDuration(bookingInfo.getDurationMinutes()));
 
-                    String pickupTimeText = bookingInfo.getPickupDateTime();
-                    String[] timeParts = pickupTimeText.split(",");
-                    if (timeParts.length > 1) {
-                        pickupTime.setText(timeParts[timeParts.length-1]);
-                    }
+                    HHMMFormater formater = new HHMMFormater();
+                    pickupTime.setText(formater.formatDateTime(bookingInfo.getPickupDateTime()));
                     if(bookingInfo.getArriveBy() != null){
-                        destinationTime.setText(bookingInfo.getArriveBy());
+                        destinationTime.setText(formater.formatDateTime(bookingInfo.getArriveBy()));
                     }else {
                         destinationTime.setVisibility(View.GONE);
                     }

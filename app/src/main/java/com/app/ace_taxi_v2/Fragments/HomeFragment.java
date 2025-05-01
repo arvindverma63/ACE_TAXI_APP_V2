@@ -31,6 +31,7 @@ import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.GoogleMap.JobMapsFragment;
 import com.app.ace_taxi_v2.GoogleMap.LocationCordinates;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
+import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Logic.Service.LocationPermissions;
 import com.app.ace_taxi_v2.Logic.Service.ScreenOnOffManager;
@@ -315,13 +316,12 @@ public class HomeFragment extends Fragment {
                                 passenger_name.setText(booking.getPassengerName());
                                 payment_status.setText(booking.getPaymentStatusText());
                                 scope_text.setText(booking.getScopeText());
-                                String pickupTime = booking.getPickupDateTime();
-                                String[] parts = pickupTime.split(",");
-                                pickup_time.setText(parts[parts.length - 1]);
+                                HHMMFormater formater = new HHMMFormater();
+                                pickup_time.setText(formater.formatDateTime(booking.getPickupDateTime()));
 
 
                                 if(booking.getArriveBy()!=null){
-                                    destination_time.setText(booking.getArriveBy());
+                                    destination_time.setText(formater.formatDateTime(booking.getArriveBy()));
                                 }else {
                                     destination_time.setVisibility(View.GONE);
                                 }
