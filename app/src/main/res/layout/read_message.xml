@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
+    style="@style/MainBG"
     tools:context=".MainActivity">
 
     <!-- Card Container -->
@@ -15,7 +15,7 @@
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
         android:layout_margin="16dp"
-        app:cardBackgroundColor="@android:color/white"
+        style="@style/CardBG"
         android:layout_gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +35,7 @@
                 android:textSize="20sp"
                 android:fontFamily="@font/font_urban"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                style="@style/TextBG"
                 android:layout_marginBottom="8dp"/>
 
             <ImageView
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="dd/mm/yyyy - HH:mm"
-                android:textColor="@color/black"
+                style="@style/TextBG"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:text="Message received from office"
                 android:textSize="12sp"
-                android:textColor="@android:color/black"
+                style="@style/TextBG"
                 android:maxLines="1"
                 android:gravity="center"
                 android:layout_marginBottom="16dp" />

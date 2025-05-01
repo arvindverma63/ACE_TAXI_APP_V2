@@ -38,6 +38,8 @@ import com.app.ace_taxi_v2.Logic.Service.ScreenOnOffManager;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Logic.UpdateDriverShiftApi;
 import com.app.ace_taxi_v2.Logic.dashboard.CurrentBooking;
+import com.app.ace_taxi_v2.Logic.dashboard.GetActiveJobApi;
+import com.app.ace_taxi_v2.Models.GetActiveJobResponse;
 import com.app.ace_taxi_v2.Models.Jobs.TodayBooking;
 import com.app.ace_taxi_v2.Models.Jobs.Vias;
 import com.app.ace_taxi_v2.Models.UserProfileResponse;
@@ -247,7 +249,20 @@ public class HomeFragment extends Fragment {
             } catch (NumberFormatException e) {
                 Log.e("getCurrentBooking", "Invalid booking ID", e);
             }
+            final int[] jobId = new int[1];
+            GetActiveJobApi getActiveJobApi = new GetActiveJobApi(getContext());
+            getActiveJobApi.getActiveJob(new GetActiveJobApi.GetActiveJobCallback() {
+                @Override
+                public void onSuccess(int response) {
+                    jobId[0] = response;
+                    Log.e("job id for get Active booking : ",jobId[0]+"response "+response);
+                }
 
+                @Override
+                public void onFailure(Throwable t) {
+
+                }
+            });
             CurrentBooking currentBooking = new CurrentBooking(getContext());
             int finalBookingId = bookingId;
             int finalBookingId1 = bookingId;
@@ -257,7 +272,9 @@ public class HomeFragment extends Fragment {
                     try {
                         for (TodayBooking booking : list) {
                             String status = booking.getStatus();
-                            if ("1".equals(status) && booking.getBookingId() == finalBookingId) {
+
+                            Log.e("bookingId HomeFragment","bookingId : "+booking.getBookingId()+" jobid "+jobId[0]);
+                            if ("1".equals(status) && booking.getBookingId() == finalBookingId || booking.getBookingId() == jobId[0]) {
                                 // Pickup address handling
                                 String pickup = booking.getPickupAddress();
                                 String[] pickupParts = pickup != null ? pickup.split(",") : new String[]{""};
@@ -397,23 +414,6 @@ public class HomeFragment extends Fragment {
         }
     };
 
-    // Start the repeated task
-    private void startRepeatingTask() {
-        try {
-            handler.postDelayed(runnable, 3000);
-        } catch (Exception e) {
-            Log.e(TAG, "Error starting repeating task", e);
-        }
-    }
-
-    // Stop the repeated task (when needed)
-    private void stopRepeatingTask() {
-        try {
-            handler.removeCallbacks(runnable);
-        } catch (Exception e) {
-            Log.e(TAG, "Error stopping repeating task", e);
-        }
-    }
 
     public boolean isLocationEnabled() {
         try {
@@ -493,30 +493,6 @@ public class HomeFragment extends Fragment {
         } catch (Exception e) {
             Log.e(TAG, "Error replacing fragment", e);
         }
-    }
-    private void updateMap(String address) {
-        if (address == null || address.trim().isEmpty()) {
-            Toast.makeText(getContext(), "Please enter a valid address", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
-
-        executor.execute(() -> {
-            LocationCordinates locationCordinates = new LocationCordinates(getContext());
-            LatLng latLng = locationCordinates.getCoordinatesFromAddress(address.trim());
-
-            handler.post(() -> {
-                if (latLng != null) {
-                    Log.d("Geocoding", "Address: " + address + " -> LatLng: " + latLng.latitude + ", " + latLng.longitude);
-                    JobMapsFragment jobMapsFragment = JobMapsFragment.newInstance(latLng.latitude, latLng.longitude, address);
-                    jobMapsFragment.show(getParentFragmentManager(), "JobMapsFragment");
-                } else {
-                    Toast.makeText(getContext(), "Unable to get location for address: " + address, Toast.LENGTH_LONG).show();
-                }
-            });
-        });
     }
     private void openGoogleMaps(String address) {
         Context context = getContext();

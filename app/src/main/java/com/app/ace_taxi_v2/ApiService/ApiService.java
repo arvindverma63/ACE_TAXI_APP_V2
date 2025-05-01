@@ -164,7 +164,7 @@ public interface ApiService {
                             @Query("bookingId") int bookingId);
 
     @GET("/api/DriverApp/GetActiveJob")
-    Call<GetActiveJobResponse> getActiveJob(@Header("Authorization") String token);
+    Call<Integer> getActiveJob(@Header("Authorization") String token);
 
 
 }
