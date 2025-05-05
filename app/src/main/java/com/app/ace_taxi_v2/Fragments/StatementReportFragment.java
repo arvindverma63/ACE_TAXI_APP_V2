@@ -178,8 +178,9 @@ public class StatementReportFragment extends Fragment {
                 }
             }
         }
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.UK);
         totalEarn.setText(currencyFormat.format(total));
+
     }
 
     private void updateEmptyView() {
