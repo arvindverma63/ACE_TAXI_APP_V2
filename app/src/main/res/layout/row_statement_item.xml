@@ -5,60 +5,126 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="0dp"
+    app:cardElevation="4dp"
     style="@style/CardBG">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:weightSum="10">
+        android:orientation="vertical"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tv_statement_number"
-            android:layout_width="0dp"
+        <!-- First Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="11442"
-            android:textColor="@color/primaryColor"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:maxLines="1" />
+            android:weightSum="10">
 
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tv_statement_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="2380"
+                android:textColor="@android:color/holo_red_dark"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="24/01/2025"
+                android:textStyle="bold"
+                style="@style/TextBG"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="£100.25"
+                android:textColor="@color/green"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <!-- Second Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="25/02/25"
-            android:textStyle="bold"
-            style="@style/TextBG"
-            android:textSize="16sp"
-            android:gravity="center" />
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:weightSum="10">
 
-        <TextView
-            android:id="@+id/tv_amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="£121.00"
-            android:textColor="@color/green"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:gravity="center" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Period: "
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        style="@style/TextBG"/>
+                    <TextView
+                        android:id="@+id/tv_period"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="23/01/2025 - 31/01/2025"
+                        android:textSize="12sp"
+                        style="@style/TextBG" />
+                </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_view"
-            android:layout_width="10dp"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:backgroundTint="@color/primaryColor"
-            android:text="View"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:cornerRadius="20dp"
-            android:gravity="center" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Job Count: "
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        style="@style/TextBG"/>
+                    <TextView
+                        android:id="@+id/tv_job_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="236"
+                        style="@style/TextBG"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_view"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
+                android:layout_weight="2"
+                android:text="VIEW"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                app:cornerRadius="20dp"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

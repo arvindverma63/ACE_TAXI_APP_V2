@@ -40,15 +40,15 @@ public class StatementDialog {
 
             // Populate data
             try {
-                tvAccountJobs.setText("Account Jobs: " + statementItem.getAccountJobsTotalCount());
-                tvCashJobs.setText("Cash Jobs: " + statementItem.getCashJobsTotalCount());
-                tvCommission.setText("Commission Due: " + formatter.format(statementItem.getCommissionDue()));
-                tvDateCreated.setText("Date Created: " + (statementItem.getDateCreated() != null ? statementItem.getDateCreated().toString() : "N/A"));
-                tvEarningsAccount.setText("Earnings Account: " + formatter.format(statementItem.getEarningsAccount()));
-                tvEarningsCash.setText("Earnings Cash: " + formatter.format(statementItem.getEarningsCash()));
-                tvPaymentDue.setText("Payment Due: " + formatter.format(statementItem.getPaymentDue()));
-                tvTotalEarned.setText("Total Earned: " + formatter.format(statementItem.getTotalEarned()));
-                tvTotalJobs.setText("Total Jobs: " + statementItem.getTotalJobCount());
+//                tvAccountJobs.setText("Account Jobs: " + statementItem.getAccountJobsTotalCount());
+//                tvCashJobs.setText("Cash Jobs: " + statementItem.getCashJobsTotalCount());
+//                tvCommission.setText("Commission Due: " + formatter.format(statementItem.getCommissionDue()));
+//                tvDateCreated.setText("Date Created: " + (statementItem.getDateCreated() != null ? statementItem.getDateCreated().toString() : "N/A"));
+//                tvEarningsAccount.setText("Earnings Account: " + formatter.format(statementItem.getEarningsAccount()));
+//                tvEarningsCash.setText("Earnings Cash: " + formatter.format(statementItem.getEarningsCash()));
+//                tvPaymentDue.setText("Payment Due: " + formatter.format(statementItem.getPaymentDue()));
+//                tvTotalEarned.setText("Total Earned: " + formatter.format(statementItem.getTotalEarned()));
+//                tvTotalJobs.setText("Total Jobs: " + statementItem.getTotalJobCount());
             } catch (Exception e) {
                 e.printStackTrace();
                 // Fallback values in case of data errors

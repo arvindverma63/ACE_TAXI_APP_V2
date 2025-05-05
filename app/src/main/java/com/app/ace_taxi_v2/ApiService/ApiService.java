@@ -41,6 +41,7 @@ import com.app.ace_taxi_v2.Models.UserProfileResponse;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -116,8 +117,11 @@ public interface ApiService {
                            @Query("From") String From,
                            @Query("To") String To);
 
-    @GET("/api/DriverApp/Statements")
-    Call<List<StatementItem>> getStatements(@Header("Authorization") String token);
+    @GET("/api/DriverApp/GetStatementHeaders")
+    Call<List<StatementItem>> getStatements(@Header("Authorization") String token,
+                                            @Query("from") String from,
+                                            @Query("to") String to,
+                                            @Query("userId") int userId);
 
     @POST("/api/DriverApp/SetAvailability")
     Call<Void> addAvailability(@Header("Authorization") String token,
@@ -165,6 +169,10 @@ public interface ApiService {
 
     @GET("/api/DriverApp/GetActiveJob")
     Call<Integer> getActiveJob(@Header("Authorization") String token);
+
+    @GET("/api/Accounts/DownloadStatement")
+    Call<ResponseBody> downloadStatement(@Header("Authorization") String token,
+                                         @Query("statementId") int statementId);
 
 
 }

@@ -21,8 +21,13 @@ public class GetStatementsApi {
     private static final String TAG = "GetStatementsApi";
     private final Context context;
 
-    public GetStatementsApi(Context context) {
+    public String from , to;
+    public int userId;
+    public GetStatementsApi(Context context,String from,String to,int UserId) {
         this.context = context;
+        this.from = from;
+        this.to = to;
+        this.userId = userId;
     }
 
     public void getStatements(statementListener listener) {
@@ -45,7 +50,7 @@ public class GetStatementsApi {
         customDialog.showProgressDialog(context);
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.getStatements(token).enqueue(new Callback<List<StatementItem>>() {
+        apiService.getStatements(token,from,to,userId).enqueue(new Callback<List<StatementItem>>() {
             @Override
             public void onResponse(Call<List<StatementItem>> call, Response<List<StatementItem>> response) {
                 customDialog.dismissProgressDialog();
