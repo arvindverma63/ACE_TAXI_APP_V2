@@ -58,50 +58,92 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Date"
+            android:text="Date Range"
+            style="@style/TextBG"
             android:textSize="16sp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Date Container with CardView -->
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            android:id="@+id/date_button"
-            style="@style/CardBG"
-            app:cardBackgroundColor="#F5F5F5">
-
-            <LinearLayout
+            android:orientation="horizontal">
+            <!-- Date Container with CardView -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="12dp">
-
-                <TextView
-                    android:layout_width="0dp"
+                app:cardCornerRadius="4dp"
+                style="@style/CardBG"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="#F5F5F5">
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/dateText"
-                    android:text="Dec 22, 2024"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:gravity="start" />
+                    android:layout_gravity="start"
+                    android:padding="10dp"
+                    android:id="@+id/week_prev"
+                    style="@style/IconTint"
+                    android:src="@drawable/ic_back_arrow"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/date_button"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/dateText"
+                        android:text="Dec 22, 2024"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_calender"
+                        android:visibility="gone"
+                        app:tint="?attr/colorControlNormal" />
+                </LinearLayout>
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_calender"
-                    app:tint="?attr/colorControlNormal" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="8dp"
+                    android:padding="10dp"
+                    style="@style/IconTint"
+                    android:id="@+id/week_next"
+                    android:rotationY="180"
+                    android:src="@drawable/ic_back_arrow" />
+            </com.google.android.material.card.MaterialCardView>
 
+        </LinearLayout>
+    </LinearLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:padding="0dp">
+        </LinearLayout>
+
+    </HorizontalScrollView>
     <!-- Options Grid with CardView -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
         style="@style/MainBG"
         android:orientation="vertical">
 
@@ -110,14 +152,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginBottom="7dp">
+            android:gravity="center">
 
             <!-- Unavailable Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="0dp"
                 app:strokeWidth="0dp"
                 style="@style/CardBGAvail">
 
@@ -133,6 +174,8 @@
                     app:iconTint="@color/white"
                     android:gravity="center"
                     style="@style/ButtonAvail"
+                    app:cornerRadius="4dp"
+                    app:strokeWidth="0dp"
                     app:icon="@drawable/ic_unavail"
                     app:iconGravity="textStart"
                     app:iconPadding="8dp"
@@ -146,17 +189,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
-                    android:layout_weight="1"
-                    style="@style/CardBGAvail"
-                    app:strokeWidth="0dp">
-
                     <com.google.android.material.button.MaterialButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:id="@+id/am_school_button"
                         android:text="AM School Only"
                         style="@style/ButtonAvail"
@@ -164,32 +200,23 @@
                         android:backgroundTint="@color/green"
                         android:textColor="@color/white"
                         app:iconTint="@color/white"
+                        android:layout_marginRight="5dp"
+                        app:cornerRadius="4dp"
                         app:icon="@drawable/ic_am"
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         android:gravity="center"/>
-                </com.google.android.material.card.MaterialCardView>
-
-                <Space
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content"/>
-                <!-- PM Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
-                    android:layout_weight="1"
-                    app:strokeWidth="0dp"
-                    style="@style/CardBGAvail"
-                    android:layout_marginEnd="8dp">
 
                     <com.google.android.material.button.MaterialButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:id="@+id/pm_school_button"
+                        android:layout_marginLeft="5dp"
                         android:text="PM School Only"
                         style="@style/ButtonAvail"
                         app:strokeColor="@color/green"
+                        app:cornerRadius="4dp"
                         android:backgroundTint="@color/green"
                         android:textColor="@color/white"
                         app:iconTint="@color/white"
@@ -197,7 +224,6 @@
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         android:gravity="center"/>
-                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
         </LinearLayout>
@@ -212,7 +238,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="00dp"
                 app:strokeWidth="0dp"
                 style="@style/CardBGAvail">
 
@@ -228,6 +254,7 @@
                     app:iconTint="@color/white"
                     android:text="AM-PM School Only"
                     app:icon="@drawable/ic_am"
+                    app:cornerRadius="4dp"
                     app:iconGravity="textStart"
                     app:iconPadding="8dp" />
             </com.google.android.material.card.MaterialCardView>
@@ -244,7 +271,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="0dp"
                 app:strokeWidth="0dp"
                 style="@style/CardBGAvail">
                 <com.google.android.material.button.MaterialButton
@@ -260,6 +287,7 @@
                     app:icon="@drawable/ic_custom"
                     app:iconGravity="textStart"
                     app:iconPadding="8dp"
+                    app:cornerRadius="4dp"
                     android:gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
 
@@ -268,7 +296,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:strokeWidth="0dp"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="0dp"
                 style="@style/CardBGAvail">
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"
@@ -277,11 +305,79 @@
                     style="@style/ButtonAvail"
                     app:icon="@drawable/ic_view"
                     app:iconGravity="textStart"
+                    app:cornerRadius="4dp"
+                    android:visibility="gone"
                     app:iconPadding="8dp"
                     android:id="@+id/view_all"
                     android:gravity="center"/>
             </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Availablities"
+                android:layout_marginVertical="15dp"
+                style="@style/TextBG"
+                android:textStyle="bold"
+                android:textSize="17sp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(dd-mm-yyy)"
+                android:layout_gravity="center"
+                style="@style/TextBG"
+                android:id="@+id/selectDate"
+                android:layout_marginRight="30dp"
+                android:padding="10dp"/>
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="4dp"
+            style="@style/CardBGAvail">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day"
+                    style="@style/TextBG"
+                    android:layout_marginRight="50dp"
+                    android:padding="10dp"/>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status"
+                    style="@style/TextBG"
+                    android:layout_marginRight="40dp"
+                    android:padding="10dp"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextBG"
+                    android:padding="10dp"
+                    android:text="Details" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclar_view"/>
     </LinearLayout>
 
 </LinearLayout>

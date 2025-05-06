@@ -240,4 +240,6 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
     public void onExpenseUpdated() {
         updateTotalAmount();
     }
+
+
 }

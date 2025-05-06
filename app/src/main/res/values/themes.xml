@@ -78,7 +78,6 @@
         <item name="strokeColor">@color/green</item>
         <item name="strokeWidth">1dp</item>
         <item name="android:textColor">@color/green</item>
-        <item name="android:padding">15dp</item>
         <item name="iconTint">@color/black</item>
     </style>
     <style name="NotificaionCard">

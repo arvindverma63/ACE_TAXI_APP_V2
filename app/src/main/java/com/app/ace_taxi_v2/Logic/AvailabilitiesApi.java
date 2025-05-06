@@ -67,22 +67,6 @@ public class AvailabilitiesApi {
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
                         recyclerView.setAdapter(new AvailablitiesAdapter(fullList, context));
 
-                        // Get UI elements
-                        MaterialCardView datePicker = parentView.findViewById(R.id.datePicker);
-                        TextView datetimeText = parentView.findViewById(R.id.datetime_text);
-
-                        // Set default date to today's date (formatted)
-                        if (datetimeText != null) {
-                            String todayDate = displayDateFormat.format(Calendar.getInstance().getTime());
-                            datetimeText.setText(todayDate);
-                        }
-
-                        // Set DatePicker click listener
-                        if (datePicker != null) {
-                            datePicker.setOnClickListener(v -> showDatePicker(recyclerView, datetimeText));
-                        } else {
-                            Log.e(TAG, "datePicker is null, check your layout XML.");
-                        }
                     } else {
                         String errorMessage = "Failed to fetch drivers: HTTP " + response.code() + " - " + response.message();
                         Log.e(TAG, errorMessage);
@@ -120,53 +104,6 @@ public class AvailabilitiesApi {
         });
     }
 
-    // Show Date Picker
-    private void showDatePicker(RecyclerView recyclerView, TextView datetimeText) {
-        Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(context, (DatePicker view, int year, int month, int dayOfMonth) -> {
-            calendar.set(year, month, dayOfMonth);
-            String selectedDate = displayDateFormat.format(calendar.getTime());
-
-            // Update TextView with selected date
-            if (datetimeText != null) {
-                datetimeText.setText(selectedDate);
-            }
-
-            // Filter list based on selected date
-            filterListByDate(selectedDate, recyclerView);
-        },
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-
-        datePickerDialog.show();
-    }
-
-    // Filter the list based on the selected date
-    private void filterListByDate(String selectedDate, RecyclerView recyclerView) {
-        if (fullList == null || fullList.isEmpty()) {
-            showToast("No data available.");
-            return;
-        }
-
-        List<AvailabilityResponse.Driver> filteredList = fullList.stream()
-                .filter(driver -> {
-                    try {
-                        String driverDate = displayDateFormat.format(apiDateFormat.parse(driver.getDate())); // Convert API format to yyyy-MM-dd
-                        return driverDate.equals(selectedDate);
-                    } catch (ParseException e) {
-                        Log.e(TAG, "Date parsing error for: " + driver.getDate(), e);
-                        return false;
-                    }
-                })
-                .collect(Collectors.toList());
-
-        // Update RecyclerView
-        recyclerView.setAdapter(new AvailablitiesAdapter(filteredList, context));
-
-        // Show toast if no data found for selected date
-        if (filteredList.isEmpty()) {
-            showToast("No drivers available for " + selectedDate);
-        }
-    }
 
     // Ensure Toast runs on the main UI thread
     private void showToast(String message) {

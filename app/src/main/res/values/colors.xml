@@ -32,4 +32,21 @@
     <color name="finish_shift">#6B7280</color>
     <color name="on_break">#164E63</color>
     <color name="finish_break">#22C55E</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryLight">#7986CB</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorAvailable">#4CAF50</color>
+    <color name="colorUnavailable">#F44336</color>
+    <color name="colorAllocated">#2196F3</color>
+    <color name="colorError">#F44336</color>
+
+    <color name="colorOptionUnavailableSelected">#F44336</color>
+    <color name="colorOptionUnavailableUnselected">#FFB0AF</color>
+    <color name="colorOptionAvailableSelected">#4CAF50</color>
+    <color name="colorOptionAvailableUnselected">#B7E4B9</color>
+    <color name="colorOptionCustomSelected">#4CAF50</color>
+    <color name="colorOptionCustomUnselected">#B7E4B9</color>
 </resources>
