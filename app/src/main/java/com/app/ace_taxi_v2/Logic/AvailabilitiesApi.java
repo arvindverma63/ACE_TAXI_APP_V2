@@ -107,6 +107,5 @@ public class AvailabilitiesApi {
 
     // Ensure Toast runs on the main UI thread
     private void showToast(String message) {
-//        mainHandler.post(() -> Toast.makeText(context, message, Toast.LENGTH_LONG).show());
     }
 }
