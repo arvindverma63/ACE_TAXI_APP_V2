@@ -32,7 +32,7 @@ import com.google.android.material.textview.MaterialTextView;
 public class AvailabilityFragment extends Fragment {
 
     private LinearLayout dateButton;
-    private MaterialButton customButton, amSchoolButton, pmSchoolButton, amPmSchoolButton, unavailableButton;
+    private MaterialButton customButton, amSchoolButton, pmSchoolButton, amPmSchoolButton, unavailableButton,cancel_button;
     private TextView dateText;
     private ImageView sideMenu;
     private RecyclerView recyclerView;
@@ -63,6 +63,7 @@ public class AvailabilityFragment extends Fragment {
         buttonContainer = rootView.findViewById(R.id.buttonContainer);
         weekPrev = rootView.findViewById(R.id.week_prev);
         weekNext = rootView.findViewById(R.id.week_next);
+        cancel_button = rootView.findViewById(R.id.cancel_button);
         selectedAvailDate = rootView.findViewById(R.id.selectDate);
         customForm = rootView.findViewById(R.id.custom_form);
 
@@ -111,6 +112,7 @@ public class AvailabilityFragment extends Fragment {
         customButton.setOnClickListener(v -> {
             customForm.setVisibility(customForm.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
         });
+        cancel_button.setOnClickListener(v -> customForm.setVisibility(View.GONE));
 
         return rootView;
     }
