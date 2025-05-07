@@ -2,14 +2,23 @@ package com.app.ace_taxi_v2.Fragments.AvailablitiyFragmentAction;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Fragments.Adapters.AvailablitiesAdapter;
 import com.app.ace_taxi_v2.Logic.AvailabilitiesApi;
 import com.app.ace_taxi_v2.Logic.AvailabilityAddApi;
 import com.app.ace_taxi_v2.Logic.SessionManager;
+import com.app.ace_taxi_v2.Logic.Worker.AvailabiltiesApiResponse;
+import com.app.ace_taxi_v2.Models.AvailabilityResponse;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
 
 public class AvailabilityActionHandler {
 
@@ -17,6 +26,7 @@ public class AvailabilityActionHandler {
     private SessionManager sessionManager;
     private RecyclerView recyclerView;
     private DateTimeSelector dateTimeSelector;
+    private final SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-mm-dd", Locale.getDefault());
 
     public AvailabilityActionHandler(Context context, SessionManager sessionManager, RecyclerView recyclerView, DateTimeSelector dateTimeSelector) {
         this.context = context;
@@ -26,12 +36,24 @@ public class AvailabilityActionHandler {
     }
 
     public void renderList(View view) {
-        try {
-            AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(context);
-            availabilitiesApi.getAvailabilities(recyclerView);
-        } catch (Exception e) {
-            Toast.makeText(context, "Error fetching availabilities: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        Log.e("render method call","render "+dateTimeSelector.getSelectedButtonDateForAPI());
+        AvailabiltiesApiResponse availabilitiesApi = new AvailabiltiesApiResponse(context);
+        availabilitiesApi.getAvailabilities(new AvailabiltiesApiResponse.AvailabilityCallback() {
+            @Override
+            public void onSuccess(List<AvailabilityResponse.Driver> drivers) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                AvailablitiesAdapter adapter = new AvailablitiesAdapter(drivers, context);
+                recyclerView.setAdapter(adapter);
+                String date = isoDateFormat.format(dateTimeSelector.getSelectedButtonDateForAPI());
+                Log.d("formated Date : ",date+"formated date");
+                adapter.updateListForDate(isoDateFormat.format(dateTimeSelector.getSelectedButtonDateForAPI()));
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
     }
 
     public void amSchoolOnly() {

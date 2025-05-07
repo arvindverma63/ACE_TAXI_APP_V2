@@ -3,15 +3,20 @@ package com.app.ace_taxi_v2.Fragments.AvailablitiyFragmentAction;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Fragments.Adapters.AvailablitiesAdapter;
 import com.app.ace_taxi_v2.Logic.AvailabilitiesApi;
 import com.app.ace_taxi_v2.Logic.AvailabilityAddApi;
 import com.app.ace_taxi_v2.Logic.SessionManager;
+import com.app.ace_taxi_v2.Logic.Worker.AvailabiltiesApiResponse;
+import com.app.ace_taxi_v2.Models.AvailabilityResponse;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class CustomAvailability implements DateTimeSelector.OnDateSelectedListener {
@@ -79,13 +85,26 @@ public class CustomAvailability implements DateTimeSelector.OnDateSelectedListen
         unavailableButton.setOnClickListener(v -> unavailableAllDay());
     }
 
-    public void updateDate(String date){
-        this.btnSelectDate = date;
-    }
 
-    public void renderList() {
-        AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(context);
-        availabilitiesApi.getAvailabilities(recyclerView);
+    public void renderListAva() {
+        Log.e("render method call","render "+btnSelectDate);
+        AvailabiltiesApiResponse availabilitiesApi = new AvailabiltiesApiResponse(context);
+        availabilitiesApi.getAvailabilities(new AvailabiltiesApiResponse.AvailabilityCallback() {
+            @Override
+            public void onSuccess(List<AvailabilityResponse.Driver> drivers) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                AvailablitiesAdapter adapter = new AvailablitiesAdapter(drivers, context);
+                recyclerView.setAdapter(adapter);
+                String date = isoDateFormat.format(btnSelectDate);
+                Log.d("formated Date : ",date+"formated date");
+                adapter.updateListForDate(isoDateFormat.format(btnSelectDate));
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
     }
 
     private void showTimePicker(final MaterialButton timeEditText) {
@@ -123,6 +142,7 @@ public class CustomAvailability implements DateTimeSelector.OnDateSelectedListen
             int userId = sessionManager.getUserId();
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(context);
             availabilityAddApi.addAvailability(userId, startDate, from, to, giveOrTake, 1, note);
+            renderListAva();
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(context, "Error adding availability: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -130,7 +150,7 @@ public class CustomAvailability implements DateTimeSelector.OnDateSelectedListen
     }
 
     public void unAvailability() {
-        String startDate = isoDateFormat.format(selectedDate.getTime());
+        String startDate = btnSelectDate;
         String from = fromTimeEditText.getText().toString();
         String to = toTimeEditText.getText().toString();
         String note = noteEditText.getText().toString();
@@ -144,6 +164,7 @@ public class CustomAvailability implements DateTimeSelector.OnDateSelectedListen
         int userId = sessionManager.getUserId();
         AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(context);
         availabilityAddApi.addAvailability(userId, startDate, from, to, giveOrTake, 2, note);
+        renderListAva();
     }
 
     public void unavailableAllDay() {

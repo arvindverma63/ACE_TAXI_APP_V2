@@ -156,13 +156,13 @@ public class DateTimeSelector {
 
             MaterialButton button = new MaterialButton(buttonContainer.getContext());
             button.setText(sdf.format(tempCalendar.getTime()));
-            button.setCornerRadius(16);
+            button.setCornerRadius(8);
             button.setStrokeColor(ContextCompat.getColorStateList(buttonContainer.getContext(), R.color.red));
             button.setStrokeWidth(2);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                    160,
+                    120
             );
             params.setMargins(8, 8, 8, 8);
             button.setLayoutParams(params);
@@ -202,7 +202,9 @@ public class DateTimeSelector {
                 }
             });
 
-
+            if (dateSelectedListener != null) {
+                dateSelectedListener.onDateSelected(selectedDateStringForAPI);
+            }
             buttonContainer.addView(button);
         }
     }

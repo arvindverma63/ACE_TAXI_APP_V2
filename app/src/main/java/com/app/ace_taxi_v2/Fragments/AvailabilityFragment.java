@@ -131,7 +131,7 @@ public class AvailabilityFragment extends Fragment {
                     sessionManager,
                     dateTimeSelector
             );
-            customAvailability.renderList();
+//            customAvailability.renderListAva();
         } catch (IllegalStateException e) {
             Toast.makeText(requireContext(), "CustomAvailability initialization error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }

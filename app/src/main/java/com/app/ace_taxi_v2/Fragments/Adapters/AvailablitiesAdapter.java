@@ -198,7 +198,6 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
         updateEmptyState();
         if (list.isEmpty()) {
             Log.w("FilterDebug", "No availabilities found for " + selectedDate);
-            Toast.makeText(context, "No Avilablities", Toast.LENGTH_SHORT).show();
         }
 
         return this;
