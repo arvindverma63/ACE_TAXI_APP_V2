@@ -315,7 +315,6 @@
                         app:strokeWidth="0dp"
                         android:layout_marginTop="10dp"
                         app:cardCornerRadius="0dp"
-                        android:visibility="gone"
                         style="@style/CardBG">
 
                         <LinearLayout
@@ -426,7 +425,14 @@
                                     android:backgroundTint="@color/red"
                                     android:id="@+id/add_un"/>
                             </LinearLayout>
-
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:text="Cancel"
+                                app:cornerRadius="4dp"
+                                android:backgroundTint="@color/purple"
+                                android:id="@+id/cancel_button"/>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
