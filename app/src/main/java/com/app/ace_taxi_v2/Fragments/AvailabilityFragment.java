@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,18 +18,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.Components.HamMenu;
 import com.app.ace_taxi_v2.Fragments.AvailablitiyFragmentAction.AvailabilityActionHandler;
+import com.app.ace_taxi_v2.Fragments.AvailablitiyFragmentAction.CustomAvailability;
 import com.app.ace_taxi_v2.Fragments.AvailablitiyFragmentAction.DateTimeSelector;
 import com.app.ace_taxi_v2.Logic.AvailabilitiesApi;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 public class AvailabilityFragment extends Fragment {
 
     private LinearLayout dateButton;
-    private MaterialButton custom_button, am_school_button, pm_school_button, am_pm_school_button, unavailable_button, view_all;
+    private MaterialButton customButton, amSchoolButton, pmSchoolButton, amPmSchoolButton, unavailableButton;
     private TextView dateText;
     private ImageView sideMenu;
     private RecyclerView recyclerView;
@@ -35,9 +40,11 @@ public class AvailabilityFragment extends Fragment {
     private SessionManager sessionManager;
     private DateTimeSelector dateTimeSelector;
     private AvailabilityActionHandler actionHandler;
-    public ImageView week_prev,week_next;
+    private CustomAvailability customAvailability;
+    public ImageView weekPrev, weekNext;
     public MaterialTextView selectedAvailDate;
     public AvailabilitiesApi availabilitiesApi;
+    public MaterialCardView customForm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,65 +52,97 @@ public class AvailabilityFragment extends Fragment {
 
         // Initialize UI Elements
         dateButton = rootView.findViewById(R.id.date_button);
-        custom_button = rootView.findViewById(R.id.custom_button);
-        am_school_button = rootView.findViewById(R.id.am_school_button);
-        pm_school_button = rootView.findViewById(R.id.pm_school_button);
-        am_pm_school_button = rootView.findViewById(R.id.am_pm_school_button);
-        unavailable_button = rootView.findViewById(R.id.unavailable_button);
+        customButton = rootView.findViewById(R.id.custom_button);
+        amSchoolButton = rootView.findViewById(R.id.am_school_button);
+        pmSchoolButton = rootView.findViewById(R.id.pm_school_button);
+        amPmSchoolButton = rootView.findViewById(R.id.am_pm_school_button);
+        unavailableButton = rootView.findViewById(R.id.unavailable_button);
         dateText = rootView.findViewById(R.id.dateText);
-        view_all = rootView.findViewById(R.id.view_all);
         sideMenu = rootView.findViewById(R.id.sideMenu);
         recyclerView = rootView.findViewById(R.id.recyclar_view);
         buttonContainer = rootView.findViewById(R.id.buttonContainer);
-        week_prev = rootView.findViewById(R.id.week_prev);
-        week_next = rootView.findViewById(R.id.week_next);
+        weekPrev = rootView.findViewById(R.id.week_prev);
+        weekNext = rootView.findViewById(R.id.week_next);
         selectedAvailDate = rootView.findViewById(R.id.selectDate);
+        customForm = rootView.findViewById(R.id.custom_form);
 
-        // Initialize helpers
         try {
-            sessionManager = new SessionManager(getContext());
-            availabilitiesApi = new AvailabilitiesApi(getContext()); // ✅ Moved up
-            dateTimeSelector = new DateTimeSelector(
-                    getContext(), dateText, dateButton, buttonContainer,
-                    week_prev, week_next, selectedAvailDate
+            sessionManager = new SessionManager(requireContext());
+            availabilitiesApi = new AvailabilitiesApi(requireContext());
+            dateTimeSelector = new DateTimeSelector();
+            customAvailability = new CustomAvailability(requireContext());
+
+            // Set the CustomAvailability as the listener
+            dateTimeSelector.init(
+                    requireContext(),
+                    dateText,
+                    dateButton,
+                    buttonContainer,
+                    weekPrev,
+                    weekNext,
+                    selectedAvailDate,
+                    recyclerView,
+                    customAvailability // 🔥 Set the listener here
             );
-            actionHandler = new AvailabilityActionHandler(getContext(), sessionManager, recyclerView, dateTimeSelector);
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Error initializing components: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            actionHandler = new AvailabilityActionHandler(requireContext(), sessionManager, recyclerView, dateTimeSelector);
+            initCustomAvailability(rootView);
+        } catch (IllegalStateException e) {
+            Toast.makeText(requireContext(), "Initialization error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            return rootView;
         }
+
 
         // Set up listeners
         dateButton.setOnClickListener(v -> dateTimeSelector.showDatePicker());
-        pm_school_button.setOnClickListener(v -> actionHandler.pmSchoolOnly());
-        am_school_button.setOnClickListener(v -> actionHandler.amSchoolOnly());
-        unavailable_button.setOnClickListener(v -> actionHandler.setUnavailable());
-        am_pm_school_button.setOnClickListener(v -> actionHandler.bothOnly());
+        pmSchoolButton.setOnClickListener(v -> actionHandler.pmSchoolOnly());
+        amSchoolButton.setOnClickListener(v -> actionHandler.amSchoolOnly());
+        unavailableButton.setOnClickListener(v -> actionHandler.setUnavailable());
+        amPmSchoolButton.setOnClickListener(v -> actionHandler.bothOnly());
 
         sideMenu.setOnClickListener(v -> {
-            HamMenu hamMenu = new HamMenu(getContext(), getActivity());
+            HamMenu hamMenu = new HamMenu(requireContext(), requireActivity());
             hamMenu.openMenu(sideMenu);
         });
 
-        week_prev.setOnClickListener(v -> dateTimeSelector.updateWeekPrev());
-        week_next.setOnClickListener(v -> dateTimeSelector.updateWeekNext());
+        weekPrev.setOnClickListener(v -> dateTimeSelector.updateWeekPrev());
+        weekNext.setOnClickListener(v -> dateTimeSelector.updateWeekNext());
 
-        view_all.setOnClickListener(v -> navigateToFragment(new ListAvailabillity(), "List"));
-        custom_button.setOnClickListener(v -> navigateToFragment(new CustomerForm(), "Customer Form"));
-
-
+        customButton.setOnClickListener(v -> {
+            customForm.setVisibility(customForm.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+        });
 
         return rootView;
     }
 
-    private void navigateToFragment(Fragment fragment, String fragmentName) {
+    private void initCustomAvailability(View view) {
         try {
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commitAllowingStateLoss();
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "Error navigating to " + fragmentName + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            customAvailability.initViews(
+                    view.findViewById(R.id.from_time_edit_text),
+                    view.findViewById(R.id.to_time_edit_text),
+                    dateText,
+                    view.findViewById(R.id.note_edit_text),
+                    view.findViewById(R.id.add_ava),
+                    view.findViewById(R.id.add_un),
+                    view.findViewById(R.id.unavailable_button),
+                    view.findViewById(R.id.give_or_take),
+                    recyclerView,
+                    sideMenu,
+                    sessionManager,
+                    dateTimeSelector
+            );
+            customAvailability.renderList();
+        } catch (IllegalStateException e) {
+            Toast.makeText(requireContext(), "CustomAvailability initialization error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Ensure custom form is initially hidden
+        customForm.setVisibility(View.GONE);
+    }
+
 }

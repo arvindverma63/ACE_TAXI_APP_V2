@@ -3,26 +3,26 @@ package com.app.ace_taxi_v2.Fragments.AvailablitiyFragmentAction;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.media.Image;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.Fragments.Adapters.AvailablitiesAdapter;
-import com.app.ace_taxi_v2.Logic.AvailabilitiesApi;
+import com.app.ace_taxi_v2.Logic.Worker.AvailabiltiesApiResponse;
+import com.app.ace_taxi_v2.Models.AvailabilityResponse;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class DateTimeSelector {
@@ -31,16 +31,29 @@ public class DateTimeSelector {
     public TextView dateText;
     public LinearLayout dateButton;
     public LinearLayout buttonContainer;
-    public Calendar selectedDate = Calendar.getInstance();
+    public Calendar selectedDate;
     public SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-    public SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+    public SimpleDateFormat displayDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     public String selectedDateStringForAPI;
-    public MaterialButton selectedButton = null;
-    public Calendar selectedButtonDate = Calendar.getInstance();
-    public ImageView week_prev,week_next;
+    public MaterialButton selectedButton;
+    public Calendar selectedButtonDate;
+    public ImageView week_prev, week_next;
     public MaterialTextView selectedDateAvail;
+    public RecyclerView recyclerView;
+    private OnDateSelectedListener dateSelectedListener;
 
-    public DateTimeSelector(Context context, TextView dateText, LinearLayout dateButton, LinearLayout buttonContainer, ImageView week_prev, ImageView week_next, MaterialTextView selectedDateAvail                            ) {
+
+    public interface OnDateSelectedListener{
+        void onDateSelected(String selectedDate);
+    }
+
+    public DateTimeSelector() {
+        // Empty constructor
+
+    }
+
+    public void init(Context context, TextView dateText, LinearLayout dateButton, LinearLayout buttonContainer,
+                     ImageView week_prev, ImageView week_next, MaterialTextView selectedDateAvail, RecyclerView recyclerView, OnDateSelectedListener onDateSelectedListener) {
         this.context = context;
         this.dateText = dateText;
         this.dateButton = dateButton;
@@ -48,11 +61,14 @@ public class DateTimeSelector {
         this.week_prev = week_prev;
         this.week_next = week_next;
         this.selectedDateAvail = selectedDateAvail;
-
+        this.recyclerView = recyclerView;
+        this.dateSelectedListener = onDateSelectedListener; // ✅ Set the listener
         selectedDate = Calendar.getInstance();
-        updateDateButtonText();      // show current date/time in TextView
+        selectedButtonDate = Calendar.getInstance();
+        updateDateButtonText();
         buttonController();
     }
+
 
     public void showDatePicker() {
         try {
@@ -119,11 +135,10 @@ public class DateTimeSelector {
         }
     }
 
-
-
     public String getSelectedDateStringForAPI() {
         return selectedDateStringForAPI;
     }
+
     public String getSelectedButtonDateForAPI() {
         return apiDateFormat.format(selectedButtonDate.getTime());
     }
@@ -131,6 +146,9 @@ public class DateTimeSelector {
     public void buttonController() {
         buttonContainer.removeAllViews();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM", Locale.getDefault());
+
+        String displayDate = displayDateFormat.format(selectedButtonDate.getTime());
+        loadAvailablities(displayDate);
         selectedDateAvail.setText(displayDateFormat.format(selectedButtonDate.getTime()));
         for (int i = 0; i < 7; i++) {
             Calendar tempCalendar = (Calendar) selectedDate.clone();
@@ -173,14 +191,40 @@ public class DateTimeSelector {
 
                 selectedButtonDate.setTime(finalTempCalendar.getTime());
                 selectedDateStringForAPI = apiDateFormat.format(selectedButtonDate.getTime());
-                // Log the date selected for debugging
-                Log.d("filter", "Button clicked. Selected date: " + displayDateFormat.format(selectedButtonDate.getTime()));
-                selectedDateAvail.setText(displayDateFormat.format(selectedButtonDate.getTime()));
+                String displayDateupdate = displayDateFormat.format(selectedButtonDate.getTime());
+                Log.d("FilterDebug", "Button clicked. Selected date: " + displayDateupdate);
+                selectedDateAvail.setText(displayDateupdate);
+                loadAvailablities(displayDateupdate);
+
+                // 🔥 Notify the listener
+                if (dateSelectedListener != null) {
+                    dateSelectedListener.onDateSelected(selectedDateStringForAPI);
+                }
             });
+
 
             buttonContainer.addView(button);
         }
     }
 
+    public void loadAvailablities(String displayDate) {
+        AvailabiltiesApiResponse availabiltiesApiResponse = new AvailabiltiesApiResponse(context);
+        availabiltiesApiResponse.getAvailabilities(new AvailabiltiesApiResponse.AvailabilityCallback() {
+            @Override
+            public void onSuccess(List<AvailabilityResponse.Driver> drivers) {
+                Log.d("FilterDebug", "API returned " + drivers.size() + " drivers");
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                AvailablitiesAdapter adapter = new AvailablitiesAdapter(drivers, context);
+                recyclerView.setAdapter(adapter);
+                adapter.updateListForDate(displayDate);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("FilterDebug", "API error: " + errorMessage);
+                Toast.makeText(context, "Failed to load availabilities: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

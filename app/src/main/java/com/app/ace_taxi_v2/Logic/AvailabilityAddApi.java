@@ -46,8 +46,6 @@ public class AvailabilityAddApi {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-//                    BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
-//                    bottomSheetDialogs.addAvail();
                     CustomToast customToast = new CustomToast(context);
                     customToast.showCustomToast("Availability Updated");
                     customDialog.dismissProgressDialog();

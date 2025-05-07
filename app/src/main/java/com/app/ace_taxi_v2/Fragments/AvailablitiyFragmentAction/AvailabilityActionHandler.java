@@ -28,7 +28,7 @@ public class AvailabilityActionHandler {
     public void renderList(View view) {
         try {
             AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(context);
-            availabilitiesApi.getAvailabilities(recyclerView, view);
+            availabilitiesApi.getAvailabilities(recyclerView);
         } catch (Exception e) {
             Toast.makeText(context, "Error fetching availabilities: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }

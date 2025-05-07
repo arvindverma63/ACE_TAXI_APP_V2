@@ -43,7 +43,7 @@ public class ListAvailabillity extends Fragment {
 
         // Pass 'view' instead of 'getView()'
         AvailabilitiesApi availabilitiesApi = new AvailabilitiesApi(getContext());
-        availabilitiesApi.getAvailabilities(recyclerView, view);
+        availabilitiesApi.getAvailabilities(recyclerView);
 
         return view;
     }

@@ -47,7 +47,7 @@ public class AvailabilitiesApi {
         this.context = context;
     }
 
-    public void getAvailabilities(RecyclerView recyclerView, View parentView) {
+    public void getAvailabilities(RecyclerView recyclerView) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
         int userId = sessionManager.getUserId(); // Assuming session manager provides the user ID

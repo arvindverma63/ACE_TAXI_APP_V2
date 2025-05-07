@@ -9,4 +9,8 @@
 
     <string name="default_notification_channel_id">default_channel_id</string>
     <string name="accessibility_service_description">This service helps manage battery optimization for the app.</string>
+    <string name="available">Available</string>
+    <string name="unavailable">UnAvailable</string>
+    <string name="unknown">Unknown</string>
+    <string name="delete_failed">Failed to delete: %1$s</string>
 </resources>
