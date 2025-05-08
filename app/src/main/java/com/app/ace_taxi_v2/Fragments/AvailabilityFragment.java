@@ -35,7 +35,7 @@ public class AvailabilityFragment extends Fragment {
     private MaterialButton customButton, amSchoolButton, pmSchoolButton, amPmSchoolButton, unavailableButton,cancel_button;
     private TextView dateText;
     private ImageView sideMenu;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,recycler_view_all_driver;
     private LinearLayout buttonContainer;
     private SessionManager sessionManager;
     private DateTimeSelector dateTimeSelector;
@@ -45,6 +45,9 @@ public class AvailabilityFragment extends Fragment {
     public MaterialTextView selectedAvailDate;
     public AvailabilitiesApi availabilitiesApi;
     public MaterialCardView customForm;
+    public LinearLayout my_avail_layout,all_driver_layout;
+    public MaterialCardView my_avail_card,all_driver_card;
+    public TextView my_avail_text,all_driver_text,all_driver_selectDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +69,14 @@ public class AvailabilityFragment extends Fragment {
         cancel_button = rootView.findViewById(R.id.cancel_button);
         selectedAvailDate = rootView.findViewById(R.id.selectDate);
         customForm = rootView.findViewById(R.id.custom_form);
+        my_avail_layout = rootView.findViewById(R.id.my_avail_layout);
+        all_driver_layout = rootView.findViewById(R.id.all_driver_layout);
+        my_avail_card = rootView.findViewById(R.id.my_avail_card);
+        all_driver_card = rootView.findViewById(R.id.all_driver_card);
+        my_avail_text = rootView.findViewById(R.id.my_avail_text);
+        all_driver_text = rootView.findViewById(R.id.all_driver_text);
+        recycler_view_all_driver = rootView.findViewById(R.id.recycler_view_all_driver);
+        all_driver_selectDate = rootView.findViewById(R.id.all_driver_selectDate);
 
         try {
             sessionManager = new SessionManager(requireContext());
@@ -83,6 +94,8 @@ public class AvailabilityFragment extends Fragment {
                     weekNext,
                     selectedAvailDate,
                     recyclerView,
+                    recycler_view_all_driver,
+                    all_driver_selectDate,
                     customAvailability // 🔥 Set the listener here
             );
 
@@ -113,7 +126,7 @@ public class AvailabilityFragment extends Fragment {
             customForm.setVisibility(customForm.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
         });
         cancel_button.setOnClickListener(v -> customForm.setVisibility(View.GONE));
-
+        tabLayout();
         return rootView;
     }
 
@@ -138,6 +151,32 @@ public class AvailabilityFragment extends Fragment {
             Toast.makeText(requireContext(), "CustomAvailability initialization error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void tabLayout() {
+        my_avail_layout.setVisibility(View.VISIBLE);
+        all_driver_layout.setVisibility(View.GONE);
+        my_avail_text.setTextColor(getResources().getColor(R.color.white));
+        all_driver_text.setTextColor(getResources().getColor(R.color.gray));
+        my_avail_card.setCardBackgroundColor(getResources().getColor(R.color.gray));
+        all_driver_card.setCardBackgroundColor(getResources().getColor(R.color.white));
+        my_avail_card.setOnClickListener(v -> {
+            my_avail_layout.setVisibility(View.VISIBLE);
+            all_driver_layout.setVisibility(View.GONE);
+            my_avail_text.setTextColor(getResources().getColor(R.color.white));
+            all_driver_text.setTextColor(getResources().getColor(R.color.gray));
+            my_avail_card.setCardBackgroundColor(getResources().getColor(R.color.gray));
+            all_driver_card.setCardBackgroundColor(getResources().getColor(R.color.white));
+        });
+        all_driver_card.setOnClickListener(v -> {
+            my_avail_layout.setVisibility(View.GONE);
+            all_driver_layout.setVisibility(View.VISIBLE);
+            my_avail_text.setTextColor(getResources().getColor(R.color.gray));
+            all_driver_text.setTextColor(getResources().getColor(R.color.white));
+            all_driver_card.setCardBackgroundColor(getResources().getColor(R.color.gray));
+            my_avail_card.setCardBackgroundColor(getResources().getColor(R.color.white));
+        });
+    }
+
 
 
     @Override

@@ -13,14 +13,18 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Fragments.Adapters.AllDriverAvailAdapter;
 import com.app.ace_taxi_v2.Fragments.Adapters.AvailablitiesAdapter;
 import com.app.ace_taxi_v2.Logic.Worker.AvailabiltiesApiResponse;
+import com.app.ace_taxi_v2.Logic.availability.AllDriverAvailApi;
+import com.app.ace_taxi_v2.Models.AllDriverAvailabilityResponse;
 import com.app.ace_taxi_v2.Models.AvailabilityResponse;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -28,7 +32,7 @@ import java.util.Locale;
 public class DateTimeSelector {
 
     public Context context;
-    public TextView dateText;
+    public TextView dateText,all_driver_selectDate;
     public LinearLayout dateButton;
     public LinearLayout buttonContainer;
     public Calendar selectedDate;
@@ -41,19 +45,19 @@ public class DateTimeSelector {
     public MaterialTextView selectedDateAvail;
     public RecyclerView recyclerView;
     private OnDateSelectedListener dateSelectedListener;
+    public RecyclerView recycler_view_all_driver;
+    private AllDriverAvailAdapter allDriverAvailAdapter;
+    private static final String TAG = "DateTimeSelector";
 
-
-    public interface OnDateSelectedListener{
+    public interface OnDateSelectedListener {
         void onDateSelected(String selectedDate);
     }
 
     public DateTimeSelector() {
-        // Empty constructor
-
     }
 
     public void init(Context context, TextView dateText, LinearLayout dateButton, LinearLayout buttonContainer,
-                     ImageView week_prev, ImageView week_next, MaterialTextView selectedDateAvail, RecyclerView recyclerView, OnDateSelectedListener onDateSelectedListener) {
+                     ImageView week_prev, ImageView week_next, MaterialTextView selectedDateAvail, RecyclerView recyclerView, RecyclerView recycler_view_all_driver,TextView all_driver_selectDate, OnDateSelectedListener onDateSelectedListener) {
         this.context = context;
         this.dateText = dateText;
         this.dateButton = dateButton;
@@ -62,13 +66,18 @@ public class DateTimeSelector {
         this.week_next = week_next;
         this.selectedDateAvail = selectedDateAvail;
         this.recyclerView = recyclerView;
-        this.dateSelectedListener = onDateSelectedListener; // ✅ Set the listener
+        this.recycler_view_all_driver = recycler_view_all_driver;
+        this.dateSelectedListener = onDateSelectedListener;
         selectedDate = Calendar.getInstance();
+        this.all_driver_selectDate = all_driver_selectDate;
         selectedButtonDate = Calendar.getInstance();
+        allDriverAvailAdapter = new AllDriverAvailAdapter(context, new ArrayList<>());
+        recycler_view_all_driver.setLayoutManager(new LinearLayoutManager(context));
+        recycler_view_all_driver.setAdapter(allDriverAvailAdapter);
         updateDateButtonText();
         buttonController();
+        Log.d(TAG, "DateTimeSelector initialized");
     }
-
 
     public void showDatePicker() {
         try {
@@ -76,8 +85,10 @@ public class DateTimeSelector {
                 selectedDate.set(year, month, dayOfMonth);
                 showTimePicker();
             }, selectedDate.get(Calendar.YEAR), selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH)).show();
+            Log.d(TAG, "Showing date picker");
         } catch (Exception e) {
             Toast.makeText(context, "Error showing date picker: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Error showing date picker: " + e.getMessage(), e);
         }
     }
 
@@ -90,9 +101,12 @@ public class DateTimeSelector {
                 selectedDate.set(Calendar.MILLISECOND, 0);
                 updateDateButtonText();
                 buttonController();
+                Log.d(TAG, "Time selected: " + hourOfDay + ":" + minute);
             }, selectedDate.get(Calendar.HOUR_OF_DAY), selectedDate.get(Calendar.MINUTE), true).show();
+            Log.d(TAG, "Showing time picker");
         } catch (Exception e) {
             Toast.makeText(context, "Error showing time picker: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Error showing time picker: " + e.getMessage(), e);
         }
     }
 
@@ -106,12 +120,13 @@ public class DateTimeSelector {
 
             dateText.setText(range);
 
-            // Also store selectedButtonDate default as day 1
             selectedButtonDate.setTime(selectedDate.getTime());
 
             selectedDateStringForAPI = apiDateFormat.format(selectedButtonDate.getTime());
+            Log.d(TAG, "Updated date text: " + range + ", API date: " + selectedDateStringForAPI);
         } catch (Exception e) {
             Toast.makeText(context, "Error updating date text: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Error updating date text: " + e.getMessage(), e);
         }
     }
 
@@ -120,8 +135,10 @@ public class DateTimeSelector {
             selectedDate.add(Calendar.DATE, -7);
             updateDateButtonText();
             buttonController();
+            Log.d(TAG, "Moved to previous week: " + displayDateFormat.format(selectedDate.getTime()));
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e(TAG, "Error updating previous week: " + e.getMessage(), e);
         }
     }
 
@@ -130,8 +147,10 @@ public class DateTimeSelector {
             selectedDate.add(Calendar.DATE, 7);
             updateDateButtonText();
             buttonController();
+            Log.d(TAG, "Moved to next week: " + displayDateFormat.format(selectedDate.getTime()));
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e(TAG, "Error updating next week: " + e.getMessage(), e);
         }
     }
 
@@ -146,8 +165,8 @@ public class DateTimeSelector {
     public void buttonController() {
         buttonContainer.removeAllViews();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM", Locale.getDefault());
-
         String displayDate = displayDateFormat.format(selectedButtonDate.getTime());
+        all_driver_selectDate.setText(displayDate);
         loadAvailablities(displayDate);
         selectedDateAvail.setText(displayDateFormat.format(selectedButtonDate.getTime()));
         for (int i = 0; i < 7; i++) {
@@ -194,9 +213,9 @@ public class DateTimeSelector {
                 String displayDateupdate = displayDateFormat.format(selectedButtonDate.getTime());
                 Log.d("FilterDebug", "Button clicked. Selected date: " + displayDateupdate);
                 selectedDateAvail.setText(displayDateupdate);
+                all_driver_selectDate.setText(displayDateupdate);
                 loadAvailablities(displayDateupdate);
 
-                // 🔥 Notify the listener
                 if (dateSelectedListener != null) {
                     dateSelectedListener.onDateSelected(selectedDateStringForAPI);
                 }
@@ -207,6 +226,7 @@ public class DateTimeSelector {
             }
             buttonContainer.addView(button);
         }
+        Log.d(TAG, "Button controller updated with 7 date buttons");
     }
 
     public void loadAvailablities(String displayDate) {
@@ -227,6 +247,20 @@ public class DateTimeSelector {
                 Toast.makeText(context, "Failed to load availabilities: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
-    }
 
+        AllDriverAvailApi allDriverAvailApi = new AllDriverAvailApi(context);
+        allDriverAvailApi.getResponse(displayDate, new AllDriverAvailApi.AllDriverAvailCallback() {
+            @Override
+            public void onResponse(List<AllDriverAvailabilityResponse> response) {
+                Log.d(TAG, "AllDriverAvailApi returned " + response.size() + " records for date: " + displayDate);
+                allDriverAvailAdapter.updateData(response);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, "Failed to load all driver availability: " + t.getMessage(), t);
+                Toast.makeText(context, "Failed to load all driver availability: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

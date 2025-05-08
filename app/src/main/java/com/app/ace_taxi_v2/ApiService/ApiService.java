@@ -2,6 +2,7 @@ package com.app.ace_taxi_v2.ApiService;
 
 
 import com.app.ace_taxi_v2.Components.JobStatusModal;
+import com.app.ace_taxi_v2.Models.AllDriverAvailabilityResponse;
 import com.app.ace_taxi_v2.Models.AvailabilityRequest;
 import com.app.ace_taxi_v2.Models.AvailabilityResponse;
 import com.app.ace_taxi_v2.Models.BookingRequest.BookingCompleteRequest;
@@ -173,6 +174,12 @@ public interface ApiService {
     @GET("/api/Accounts/DownloadStatement")
     Call<ResponseBody> downloadStatement(@Header("Authorization") String token,
                                          @Query("statementId") int statementId);
+
+    @GET("/api/Availability/General")
+    Call<List<AllDriverAvailabilityResponse>> getAllDriverAvailablity(
+            @Header("Authorization") String token,
+            @Query("date") String date
+    );
 
 
 }
