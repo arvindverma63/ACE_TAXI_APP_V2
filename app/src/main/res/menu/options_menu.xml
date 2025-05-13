@@ -10,4 +10,9 @@
         android:icon="@drawable/ic_car_model"
         android:visible="false"
         android:title="Shift"/>
+
+    <item android:id="@+id/rank_pickup"
+          android:icon="@drawable/ic_rank_up"
+          android:iconTint="@color/gray"
+          android:title="Rank Pickup"/>
 </menu>

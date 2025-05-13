@@ -1,35 +1,43 @@
 package com.app.ace_taxi_v2.Fragments;
 
+import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import com.app.ace_taxi_v2.Logic.AutoCompleteApi;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIResponse;
 import com.app.ace_taxi_v2.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -37,7 +45,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -51,12 +58,23 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private Marker pickupMarker, destinationMarker;
     private Polyline routePolyline;
-    private boolean isInputVisible = false;
-    private AutoCompleteTextView pickupLocationInput, destinationLocationInput;
-    private LinearLayout inputSection;
-    private MaterialButton toggleButton, updateMapButton;
-    private ArrayAdapter<String> pickupAdapter, destinationAdapter;
-    private List<String> pickupSuggestions, destinationSuggestions;
+    private AutoCompleteTextView destinationLocationInput;
+    private MaterialButton bookButton;
+    private TextInputEditText passengerNameInput;
+    private TextView priceTextView;
+    private ArrayAdapter<String> destinationAdapter;
+    private List<String> destinationSuggestions;
+    private double routeDistance = 0.0;
+    private FusedLocationProviderClient fusedLocationClient;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+    private LatLng currentPickupLocation;
+    private String currentPickupAddress;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+    }
 
     @Nullable
     @Override
@@ -71,52 +89,231 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
         }
 
         // Initialize UI Elements
-        inputSection = view.findViewById(R.id.inputSection);
-        toggleButton = view.findViewById(R.id.toggleInputSection);
-        updateMapButton = view.findViewById(R.id.updateMapButton);
-        pickupLocationInput = view.findViewById(R.id.autoCompletePickup);
         destinationLocationInput = view.findViewById(R.id.autoCompleteDestination);
+        passengerNameInput = view.findViewById(R.id.passengerName);
+        priceTextView = view.findViewById(R.id.price);
+        bookButton = view.findViewById(R.id.bookButton);
 
-        // Toggle Input Section Visibility
-        toggleButton.setOnClickListener(v -> {
-            if (isInputVisible) {
-                inputSection.setVisibility(View.GONE);
-                toggleButton.setText("Show Pickup & Destination");
-            } else {
-                inputSection.setVisibility(View.VISIBLE);
-                toggleButton.setText("Hide Pickup & Destination");
-            }
-            isInputVisible = !isInputVisible;
+        // Setup AutoComplete for Destination
+        setupAutoCompleteFields();
+
+        // Test Button
+        view.findViewById(R.id.testButton).setOnClickListener(v -> {
+            destinationLocationInput.showDropDown();
+            Log.d("AutoComplete", "Test button: suggestions=" + destinationSuggestions);
         });
 
+        // Check permissions and get current location
+        checkLocationPermissions();
 
-        setupAutoCompleteFields();
-        // Update Map with New Locations and Draw Route
-        updateMapButton.setOnClickListener(v -> updateMap());
+        // Handle Booking
+        bookButton.setOnClickListener(v -> bookRide());
+
+        // Handle Back Button
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive(destinationLocationInput)) {
+                    imm.hideSoftInputFromWindow(destinationLocationInput.getWindowToken(), 0);
+                    if (!destinationSuggestions.isEmpty()) {
+                        destinationLocationInput.showDropDown();
+                    }
+                    return true;
+                }
+            }
+            return false;
+        });
 
         return view;
     }
 
+    private void checkLocationPermissions() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            getCurrentLocation();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            } else {
+                Toast.makeText(getContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
+                // Fallback to default location
+                LatLng defaultLocation = new LatLng(51.5074, -0.1278);
+                currentPickupLocation = defaultLocation;
+                currentPickupAddress = "London, UK";
+                if (mMap != null) {
+                    if (pickupMarker != null) pickupMarker.remove();
+                    pickupMarker = mMap.addMarker(new MarkerOptions().position(defaultLocation).title("Pickup Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
+                }
+            }
+        }
+    }
+
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(location -> {
+                    if (location != null) {
+                        currentPickupLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                        // Reverse geocode to get address
+                        new ReverseGeocodeTask(currentPickupLocation).execute(currentPickupLocation);
+                        // Update map with current location as pickup
+                        if (mMap != null) {
+                            if (pickupMarker != null) pickupMarker.remove();
+                            pickupMarker = mMap.addMarker(new MarkerOptions().position(currentPickupLocation).title("Pickup Location"));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPickupLocation, 15));
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Unable to get current location", Toast.LENGTH_SHORT).show();
+                        // Fallback to default location
+                        LatLng defaultLocation = new LatLng(51.5074, -0.1278);
+                        currentPickupLocation = defaultLocation;
+                        currentPickupAddress = "London, UK";
+                        if (mMap != null) {
+                            if (pickupMarker != null) pickupMarker.remove();
+                            pickupMarker = mMap.addMarker(new MarkerOptions().position(defaultLocation).title("Pickup Location"));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Error getting location: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // Fallback to default location
+                    LatLng defaultLocation = new LatLng(51.5074, -0.1278);
+                    currentPickupLocation = defaultLocation;
+                    currentPickupAddress = "London, UK";
+                    if (mMap != null) {
+                        if (pickupMarker != null) pickupMarker.remove();
+                        pickupMarker = mMap.addMarker(new MarkerOptions().position(defaultLocation).title("Pickup Location"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
+                    }
+                });
+    }
+
+    private class ReverseGeocodeTask extends AsyncTask<LatLng, Void, String> {
+        private LatLng location;
+
+        public ReverseGeocodeTask(LatLng location) {
+            this.location = location;
+        }
+
+        @Override
+        protected String doInBackground(LatLng... params) {
+            String apiKey = getGoogleMapsApiKey();
+            String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+                    location.latitude + "," + location.longitude + "&key=" + apiKey;
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.setRequestMethod("GET");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                JSONObject jsonObject = new JSONObject(response.toString());
+                JSONArray results = jsonObject.getJSONArray("results");
+                if (results.length() > 0) {
+                    return results.getJSONObject(0).getString("formatted_address");
+                }
+            } catch (Exception e) {
+                Log.e("ReverseGeocoding", "Error fetching address", e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String address) {
+            if (address != null) {
+                currentPickupAddress = address;
+            } else {
+                currentPickupAddress = "Current Location";
+                Toast.makeText(getContext(), "Could not fetch address", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private void setupAutoCompleteFields() {
-        pickupSuggestions = new ArrayList<>();
         destinationSuggestions = new ArrayList<>();
+        destinationAdapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, destinationSuggestions) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view;
+                textView.setTextColor(Color.BLACK);
+                textView.setPadding(16, 16, 16, 16);
+                return view;
+            }
 
-        pickupAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, pickupSuggestions);
-        destinationAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, destinationSuggestions);
-
-        pickupLocationInput.setAdapter(pickupAdapter);
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView textView = (TextView) view;
+                textView.setTextColor(Color.BLACK);
+                textView.setPadding(16, 16, 16, 16);
+                return view;
+            }
+        };
         destinationLocationInput.setAdapter(destinationAdapter);
-
-        pickupLocationInput.setThreshold(1);
         destinationLocationInput.setThreshold(1);
-
-        // Add text listeners
-        pickupLocationInput.addTextChangedListener(new AutoCompleteTextWatcher(true));
+        destinationLocationInput.setDropDownHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        destinationLocationInput.setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        destinationLocationInput.setDropDownBackgroundResource(android.R.color.white);
+        destinationLocationInput.setDropDownAnchor(R.id.passengerCard);
+        destinationLocationInput.setDropDownVerticalOffset(-destinationLocationInput.getHeight());
         destinationLocationInput.addTextChangedListener(new AutoCompleteTextWatcher(false));
+        destinationLocationInput.setOnClickListener(v -> {
+            if (!destinationSuggestions.isEmpty()) {
+                destinationLocationInput.showDropDown();
+                Log.d("AutoComplete", "Dropdown triggered on click, suggestions: " + destinationSuggestions.size());
+            }
+        });
+        destinationLocationInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && !destinationSuggestions.isEmpty()) {
+                destinationLocationInput.showDropDown();
+                Log.d("AutoComplete", "Dropdown triggered on focus, suggestions: " + destinationSuggestions.size());
+            }
+        });
+        destinationLocationInput.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN && !destinationSuggestions.isEmpty()) {
+                destinationLocationInput.showDropDown();
+            }
+            return false;
+        });
+        destinationLocationInput.setOnItemClickListener((parent, view, position, id) -> {
+            String selected = destinationAdapter.getItem(position);
+            destinationLocationInput.setText(selected);
+            destinationLocationInput.setSelection(selected.length());
+            Log.d("AutoComplete", "Selected: " + selected);
+        });
+        // Test with static data
+        destinationSuggestions.add("Test - 123 Main St");
+        destinationAdapter.notifyDataSetChanged();
+        Log.d("AutoComplete", "Static suggestions added, count: " + destinationAdapter.getCount());
     }
 
     private class AutoCompleteTextWatcher implements TextWatcher {
-        private boolean isPickup;
+        private final boolean isPickup;
+        private final Handler handler = new Handler(Looper.getMainLooper());
+        private Runnable searchRunnable;
 
         public AutoCompleteTextWatcher(boolean isPickup) {
             this.isPickup = isPickup;
@@ -127,8 +324,18 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s.length() >= 2) {  // Start searching after 2 characters
-                fetchAutoCompleteSuggestions(s.toString(), isPickup);
+            if (searchRunnable != null) {
+                handler.removeCallbacks(searchRunnable);
+            }
+            if (s.length() >= 1) {
+                searchRunnable = () -> fetchAutoCompleteSuggestions(s.toString(), isPickup);
+                handler.postDelayed(searchRunnable, 300);
+            } else {
+                requireActivity().runOnUiThread(() -> {
+                    destinationSuggestions.clear();
+                    destinationAdapter.notifyDataSetChanged();
+                    Log.d("AutoComplete", "Cleared suggestions, count: " + destinationAdapter.getCount());
+                });
             }
         }
 
@@ -137,54 +344,62 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void fetchAutoCompleteSuggestions(String query, boolean isPickup) {
+        Log.d("AutoComplete", "Fetching suggestions for query: " + query);
         AutoCompleteApi autoCompleteApi = new AutoCompleteApi(requireContext());
         autoCompleteApi.autoCompleteSearch(query, new AutoCompleteApi.AutoCompleteCallback() {
             @Override
             public void onSuccess(List<LocalPOIResponse> response) {
+                Log.d("AutoCompleteRaw", "Raw response size: " + response.size());
+                for (LocalPOIResponse poi : response) {
+                    Log.d("AutoCompleteRaw", "POI: name=" + poi.getName() + ", address=" + poi.getAddress());
+                }
                 List<String> newSuggestions = new ArrayList<>();
                 for (LocalPOIResponse poi : response) {
-                    newSuggestions.add(poi.getName() + " - " + poi.getAddress());
+                    String address = poi.getAddress() != null && !poi.getAddress().isEmpty() ? poi.getAddress() : "Unknown";
+                    String postcode = poi.getPostcode() != null && !poi.getPostcode().isEmpty() ? poi.getPostcode() : "No address";
+                    if (!address.equals("No address")) {
+                        newSuggestions.add(address + " - " + postcode);
+                    }
                 }
-
-                if (isPickup) {
-                    pickupSuggestions.clear();
-                    pickupSuggestions.addAll(newSuggestions);
-                    pickupAdapter.notifyDataSetChanged();
-                } else {
-                    destinationSuggestions.clear();
-                    destinationSuggestions.addAll(newSuggestions);
-                    destinationAdapter.notifyDataSetChanged();
+                Log.d("AutoComplete", "Fetched " + newSuggestions.size() + " suggestions: " + newSuggestions);
+                if (!isPickup) {
+                    requireActivity().runOnUiThread(() -> {
+                        destinationSuggestions.clear();
+                        destinationSuggestions.addAll(newSuggestions);
+                        destinationAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, destinationSuggestions);
+                        destinationLocationInput.setAdapter(destinationAdapter);
+                        destinationAdapter.notifyDataSetChanged();
+                        Log.d("AutoComplete", "Adapter updated, count: " + destinationAdapter.getCount());
+                        if (!newSuggestions.isEmpty()) {
+                            destinationLocationInput.showDropDown();
+                        }
+                    });
                 }
             }
 
             @Override
             public void onFail(String error) {
                 Log.e("AutoComplete", "Failed to fetch suggestions: " + error);
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "Failed to load suggestions: " + error, Toast.LENGTH_SHORT).show();
+                });
             }
         });
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Default location (London)
+        // Default location (London) as fallback
         LatLng defaultLocation = new LatLng(51.5074, -0.1278);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
-
-        // Default Pickup & Destination
-        LatLng pickup = new LatLng(51.5074, -0.1278);
-        LatLng destination = new LatLng(51.5155, -0.1410);
-
-        pickupMarker = mMap.addMarker(new MarkerOptions().position(pickup).title("Pickup Location"));
-        destinationMarker = mMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
-
-        // Draw route for default locations
-        drawRoute(pickup, destination);
+        // Set pickup marker if current location is already fetched
+        if (currentPickupLocation != null) {
+            if (pickupMarker != null) pickupMarker.remove();
+            pickupMarker = mMap.addMarker(new MarkerOptions().position(currentPickupLocation).title("Pickup Location"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPickupLocation, 15));
+        }
     }
-
-
 
     private void getLocationFromAddress(String address, boolean isPickup) {
         String apiKey = getGoogleMapsApiKey();
@@ -235,6 +450,7 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                 if (isPickup) {
                     if (pickupMarker != null) pickupMarker.remove();
                     pickupMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Pickup Location"));
+                    currentPickupLocation = latLng;
                 } else {
                     if (destinationMarker != null) destinationMarker.remove();
                     destinationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title("Destination"));
@@ -242,6 +458,13 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
 
                 if (pickupMarker != null && destinationMarker != null) {
                     drawRoute(pickupMarker.getPosition(), destinationMarker.getPosition());
+
+                    // Adjust camera to show both markers
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    builder.include(pickupMarker.getPosition());
+                    builder.include(destinationMarker.getPosition());
+                    LatLngBounds bounds = builder.build();
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
                 }
             } else {
                 Toast.makeText(getContext(), "Could not fetch location", Toast.LENGTH_SHORT).show();
@@ -249,35 +472,62 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
     private void updateMap() {
-        String pickupText = pickupLocationInput.getText().toString().trim();
+        if (currentPickupLocation == null) {
+            Toast.makeText(getContext(), "Pickup location not set", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String destinationText = destinationLocationInput.getText().toString().trim();
 
-        if (pickupText.isEmpty() || destinationText.isEmpty()) {
-            Toast.makeText(getContext(), "Please enter both locations", Toast.LENGTH_SHORT).show();
+        if (destinationText.isEmpty()) {
+            Toast.makeText(getContext(), "Please enter destination", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Convert location names to a Google Maps URL format
-        String uri = "https://www.google.com/maps/dir/?api=1&origin="
-                + Uri.encode(pickupText)
-                + "&destination="
-                + Uri.encode(destinationText)
-                + "&travelmode=driving";
-
-        // Open Google Maps App
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        intent.setPackage("com.google.android.apps.maps");  // Ensure it opens in Google Maps
-        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            // If Google Maps app is not available, open in browser
-            intent.setPackage(null);
-            startActivity(intent);
-        }
+        getLocationFromAddress(destinationText, false);
     }
 
+    private void bookRide() {
+        String destinationText = destinationLocationInput.getText().toString().trim();
+        String passengerName = passengerNameInput.getText().toString().trim();
+
+        if (currentPickupLocation == null) {
+            Toast.makeText(getContext(), "Pickup location not set", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (destinationText.isEmpty()) {
+            Toast.makeText(getContext(), "Please enter destination location", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (passengerName.isEmpty()) {
+            Toast.makeText(getContext(), "Please enter passenger name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Update map with route before booking
+        updateMap();
+
+        // Simulate booking confirmation
+        Toast.makeText(getContext(), "Ride booked successfully!\nFrom: " + currentPickupAddress + "\nTo: " + destinationText, Toast.LENGTH_LONG).show();
+
+        // Clear inputs after booking
+        destinationLocationInput.setText("");
+        passengerNameInput.setText("");
+        priceTextView.setText("£0.00");
+        routeDistance = 0.0;
+
+        // Reset map
+        if (destinationMarker != null) destinationMarker.remove();
+        if (routePolyline != null) routePolyline.remove();
+        if (pickupMarker != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPickupLocation, 15));
+        } else {
+            LatLng defaultLocation = new LatLng(51.5074, -0.1278);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12));
+        }
+    }
 
     private void drawRoute(LatLng origin, LatLng destination) {
         String apiKey = getGoogleMapsApiKey();
@@ -290,6 +540,8 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private class FetchRoute extends AsyncTask<String, Void, List<LatLng>> {
+        private double distanceInMeters = 0.0;
+
         @Override
         protected List<LatLng> doInBackground(String... urls) {
             List<LatLng> routePoints = new ArrayList<>();
@@ -303,8 +555,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                     response.append(line);
                 }
                 reader.close();
-
-                Log.d("DirectionsResponse", response.toString());  // Log API Response
 
                 JSONObject jsonObject = new JSONObject(response.toString());
                 String status = jsonObject.getString("status");
@@ -320,6 +570,14 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                     JSONObject route = routes.getJSONObject(0);
                     JSONObject overviewPolyline = route.getJSONObject("overview_polyline");
                     String encodedPolyline = overviewPolyline.getString("points");
+
+                    // Calculate distance
+                    JSONArray legs = route.getJSONArray("legs");
+                    if (legs.length() > 0) {
+                        JSONObject leg = legs.getJSONObject(0);
+                        JSONObject distance = leg.getJSONObject("distance");
+                        distanceInMeters = distance.getDouble("value"); // Distance in meters
+                    }
 
                     routePoints = decodePolyline(encodedPolyline);
                 }
@@ -345,9 +603,20 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
                     .width(8)
                     .color(Color.BLUE)
                     .geodesic(true));
+
+            // Calculate and display price based on distance
+            routeDistance = distanceInMeters / 1000; // Convert to kilometers
+            double price = calculatePrice(routeDistance);
+            priceTextView.setText(String.format("£%.2f", price));
         }
     }
 
+    private double calculatePrice(double distanceInKm) {
+        // Simple pricing model: £2 base fare + £1.5 per kilometer
+        double baseFare = 2.0;
+        double perKmRate = 1.5;
+        return baseFare + (distanceInKm * perKmRate);
+    }
 
     private List<LatLng> decodePolyline(String encoded) {
         List<LatLng> poly = new ArrayList<>();
@@ -379,7 +648,6 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback {
         }
         return poly;
     }
-
 
     private String getGoogleMapsApiKey() {
         try {

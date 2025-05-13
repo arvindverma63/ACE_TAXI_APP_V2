@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.ImageUploadResponse;
+import com.google.android.gms.maps.model.LatLng;
 
 import io.sentry.Sentry;
 import io.sentry.protocol.User;

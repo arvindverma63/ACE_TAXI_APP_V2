@@ -598,36 +598,62 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:padding="8dp"
+                            android:weightSum="1">
 
+                            <!-- Driver ID -->
                             <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/driver_id"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="0.25"
                                 android:text="#Driver"
-                                style="@style/TextBG"
-                                android:layout_marginRight="10dp"
-                                android:padding="10dp"/>
+                                android:textSize="12sp"
+                                android:padding="8dp"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                style="@style/TextBG" />
+
+                            <!-- Full Name -->
                             <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/full_name"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="0.25"
                                 android:text="Full Name"
-                                style="@style/TextBG"
-                                android:layout_marginRight="20dp"
-                                android:padding="10dp"/>
+                                android:textSize="12sp"
+                                android:padding="8dp"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                style="@style/TextBG" />
 
+                            <!-- Vehicle Type -->
                             <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/vehicle_type"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                style="@style/TextBG"
-                                android:padding="10dp"
-                                android:text="Vehicle Type" />
+                                android:layout_weight="0.25"
+                                android:text="Vehicle Type"
+                                android:textSize="12sp"
+                                android:padding="8dp"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                style="@style/TextBG" />
 
+                            <!-- Available -->
                             <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/available"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                style="@style/TextBG"
-                                android:padding="10dp"
-                                android:text="Available" />
+                                android:layout_weight="0.25"
+                                android:text="Available"
+                                android:textSize="12sp"
+                                android:padding="8dp"
+                                android:ellipsize="end"
+                                android:singleLine="true"
+                                style="@style/TextBG" />
+
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 

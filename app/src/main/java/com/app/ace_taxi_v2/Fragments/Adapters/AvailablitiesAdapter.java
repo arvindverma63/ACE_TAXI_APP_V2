@@ -81,7 +81,7 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
         AvailabilityResponse.Driver response = list.get(position);
 
         HHMMFormater hhmmFormater = new HHMMFormater();
-        holder.datetime.setText(hhmmFormater.formateTimeStampToDateTime(response.getDate()));
+        holder.datetime.setText(hhmmFormater.formateToEEDD(response.getDate()));
         holder.availText.setText(response.getDescription());
 
         AvailabilityType type = AvailabilityType.fromId(response.getAvailabilityType());

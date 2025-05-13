@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.app.ace_taxi_v2.Fragments.BookingFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
 import com.app.ace_taxi_v2.R;
 
@@ -43,6 +44,9 @@ public class HamMenu {
             } else if (item.getItemId() == R.id.action_shift) {
                 ShiftChangeModal shiftChangeModal = new ShiftChangeModal(context, activity.getSupportFragmentManager());
                 shiftChangeModal.openModal();
+                return true;
+            }else if(item.getItemId() == R.id.rank_pickup){
+                replaceFragment(new BookingFragment());
                 return true;
             }
             else {
