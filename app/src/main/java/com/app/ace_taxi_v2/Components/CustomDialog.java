@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 
 import com.app.ace_taxi_v2.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import androidx.appcompat.app.AlertDialog;
 
 public class CustomDialog {
 
-    private Dialog progressDialog;
+    private AlertDialog progressDialog;
 
     public void showProgressDialog(Context context) {
         // Ensure context is an Activity and is valid
@@ -26,15 +30,21 @@ public class CustomDialog {
             return;
         }
 
-        progressDialog = new Dialog(context);
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        progressDialog.setCancelable(false); // Prevent dialog dismissal
-        progressDialog.setContentView(R.layout.custom_progress_dialog);
+        // Inflate the custom layout
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.custom_progress_dialog, null);
 
+        // Build the dialog
+        progressDialog = new MaterialAlertDialogBuilder(context)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        // Set transparent background
         if (progressDialog.getWindow() != null) {
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         }
 
+        // Show the dialog
         progressDialog.show();
     }
 

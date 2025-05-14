@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.app.ace_taxi_v2.Activity.HomeActivityHelper.BaseActivity;
 import com.app.ace_taxi_v2.Activity.HomeActivityHelper.NavigationHandler;
 import com.app.ace_taxi_v2.Activity.HomeActivityHelper.NotificationHandler;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Components.ShiftChangeModal;
 import com.app.ace_taxi_v2.Fragments.HomeFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
@@ -309,7 +310,7 @@ public class HomeActivity extends BaseActivity {
                     @Override
                     public void onError(String errorMessage) {
                         Log.e("HomeActivity", "Job offer notification error: " + errorMessage);
-                        Toast.makeText(HomeActivity.this, "Failed to fetch job details", Toast.LENGTH_SHORT).show();
+                        new CustomToast(getApplicationContext()).showCustomErrorToast("No Internet Connection");
                     }
                 });
             }

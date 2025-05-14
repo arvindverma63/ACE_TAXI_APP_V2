@@ -23,9 +23,10 @@ import retrofit2.Response;
 public class AvailabilityAddApi {
     private static final String TAG = "AvailabilityAddApi";
     public Context context;
-
+    public CustomToast customToast;
     public AvailabilityAddApi(Context context) {
         this.context = context;
+        customToast = new CustomToast(context);
     }
 
     public void addAvailability(int userId, String date, String from, String to, boolean giveOrTake, int type, String note) {
@@ -46,15 +47,13 @@ public class AvailabilityAddApi {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-                    CustomToast customToast = new CustomToast(context);
                     customToast.showCustomToast("Availability Updated");
                     customDialog.dismissProgressDialog();
                 } else {
                     String errorMessage = "Availability API Error: HTTP " + response.code() + " - " + response.message();
                     Log.e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
-                    BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
-                    bottomSheetDialogs.alreadyAdd();
+                    customToast.showCustomErrorToast("Availability Already Added");
                     customDialog.dismissProgressDialog();
                 }
             }

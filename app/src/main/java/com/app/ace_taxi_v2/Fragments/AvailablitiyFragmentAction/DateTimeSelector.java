@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.Adapters.AllDriverAvailAdapter;
 import com.app.ace_taxi_v2.Fragments.Adapters.AvailablitiesAdapter;
 import com.app.ace_taxi_v2.Logic.Worker.AvailabiltiesApiResponse;
@@ -37,7 +38,7 @@ public class DateTimeSelector {
     public LinearLayout buttonContainer;
     public Calendar selectedDate;
     public SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-    public SimpleDateFormat displayDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    public SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     public String selectedDateStringForAPI;
     public MaterialButton selectedButton;
     public Calendar selectedButtonDate;
@@ -167,6 +168,7 @@ public class DateTimeSelector {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE dd/MM", Locale.getDefault());
         String displayDate = displayDateFormat.format(selectedButtonDate.getTime());
         all_driver_selectDate.setText(displayDate);
+        loadMyAvailablity(displayDate);
         loadAvailablities(displayDate);
         selectedDateAvail.setText(displayDateFormat.format(selectedButtonDate.getTime()));
         for (int i = 0; i < 7; i++) {
@@ -176,6 +178,7 @@ public class DateTimeSelector {
             MaterialButton button = new MaterialButton(buttonContainer.getContext());
             button.setText(sdf.format(tempCalendar.getTime()));
             button.setCornerRadius(8);
+            button.setTextSize(12);
             button.setStrokeColor(ContextCompat.getColorStateList(buttonContainer.getContext(), R.color.red));
             button.setStrokeWidth(2);
 
@@ -230,6 +233,22 @@ public class DateTimeSelector {
     }
 
     public void loadAvailablities(String displayDate) {
+
+        AllDriverAvailApi allDriverAvailApi = new AllDriverAvailApi(context);
+        allDriverAvailApi.getResponse(displayDate, new AllDriverAvailApi.AllDriverAvailCallback() {
+            @Override
+            public void onResponse(List<AllDriverAvailabilityResponse> response) {
+                allDriverAvailAdapter.updateData(response);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, "Failed to load all driver availability: " + t.getMessage(), t);
+                new CustomToast(context).showCustomErrorToast("No Internet Connection");
+            }
+        });
+    }
+    public void loadMyAvailablity(String displayDate){
         AvailabiltiesApiResponse availabiltiesApiResponse = new AvailabiltiesApiResponse(context);
         availabiltiesApiResponse.getAvailabilities(new AvailabiltiesApiResponse.AvailabilityCallback() {
             @Override
@@ -244,23 +263,9 @@ public class DateTimeSelector {
             @Override
             public void onError(String errorMessage) {
                 Log.e("FilterDebug", "API error: " + errorMessage);
-                Toast.makeText(context, "Failed to load availabilities: " + errorMessage, Toast.LENGTH_SHORT).show();
+                new CustomToast(context).showCustomErrorToast("No Internet Connection");
             }
         });
 
-        AllDriverAvailApi allDriverAvailApi = new AllDriverAvailApi(context);
-        allDriverAvailApi.getResponse(displayDate, new AllDriverAvailApi.AllDriverAvailCallback() {
-            @Override
-            public void onResponse(List<AllDriverAvailabilityResponse> response) {
-                Log.d(TAG, "AllDriverAvailApi returned " + response.size() + " records for date: " + displayDate);
-                allDriverAvailAdapter.updateData(response);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.e(TAG, "Failed to load all driver availability: " + t.getMessage(), t);
-                Toast.makeText(context, "Failed to load all driver availability: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.Adapters.AvailablitiesAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.AvailabilityResponse;
@@ -40,11 +41,11 @@ public class AvailabilitiesApi {
     private final Context context;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private List<AvailabilityResponse.Driver> fullList; // Store full list for filtering
-    private static final SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-    private static final SimpleDateFormat displayDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    public CustomToast customToast;
 
     public AvailabilitiesApi(Context context) {
         this.context = context;
+        this.customToast = new CustomToast(context);
     }
 
     public void getAvailabilities(RecyclerView recyclerView) {
@@ -107,5 +108,6 @@ public class AvailabilitiesApi {
 
     // Ensure Toast runs on the main UI thread
     private void showToast(String message) {
+        customToast.showCustomErrorToast(message);
     }
 }

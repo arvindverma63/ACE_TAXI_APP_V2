@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.HistoryAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.JobModals.JobModal;
@@ -30,11 +31,13 @@ public class HistoryBookingManager {
     private final Context context;
     public SwipeRefreshLayout swipeRefreshLayout;
     public TextView noBookingTextView;
+    public CustomToast customToast;
 
     public HistoryBookingManager(Context context,SwipeRefreshLayout swipeRefreshLayout,TextView noBookingTextView) { // Fixed constructor visibility
         this.context = context;
         this.swipeRefreshLayout = swipeRefreshLayout;
         this.noBookingTextView = noBookingTextView;
+        this.customToast = new CustomToast(context);
     }
 
     public void getHistoryBookings(View view, RecyclerView recyclerView) {
@@ -86,13 +89,13 @@ public class HistoryBookingManager {
                         }
                     }));
                 } else {
-                    Toast.makeText(context, "Error fetching history: " + response.code(), Toast.LENGTH_SHORT).show();
+                    customToast.showCustomErrorToast("No Internet Connection");
                 }
             }
 
             @Override
             public void onFailure(Call<List<HistoryBooking>> call, Throwable t) {
-                Log.e(TAG, "Error: " + t);
+                customToast.showCustomErrorToast("No Internet Connection");
             }
         });
     }

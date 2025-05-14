@@ -35,7 +35,7 @@ public class AvailabilityActionHandler {
         this.dateTimeSelector = dateTimeSelector;
     }
 
-    public void renderList(View view) {
+    public void renderList(RecyclerView view) {
         Log.e("render method call","render "+dateTimeSelector.getSelectedButtonDateForAPI());
         AvailabiltiesApiResponse availabilitiesApi = new AvailabiltiesApiResponse(context);
         availabilitiesApi.getAvailabilities(new AvailabiltiesApiResponse.AvailabilityCallback() {
@@ -69,7 +69,6 @@ public class AvailabilityActionHandler {
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(context);
             availabilityAddApi.addAvailability(userId, selectedDateString, "07:30", "09:15", true, 1, "Am only");
 
-            Thread.sleep(2000);
             renderList(recyclerView);
         } catch (Exception e) {
             Toast.makeText(context, "Error adding AM availability: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -89,7 +88,6 @@ public class AvailabilityActionHandler {
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(context);
             availabilityAddApi.addAvailability(userId, selectedDateString, "14:30", "16:15", true, 1, "PM only");
 
-            Thread.sleep(2000);
             renderList(recyclerView);
         } catch (Exception e) {
             Toast.makeText(context, "Error adding PM availability: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -110,7 +108,6 @@ public class AvailabilityActionHandler {
             availabilityAddApi.addAvailability(userId, selectedDateString, "14:30", "16:15", true, 1, "PM only");
             availabilityAddApi.addAvailability(userId, selectedDateString, "07:30", "09:15", true, 1, "Am only");
 
-            Thread.sleep(2000);
             renderList(recyclerView);
         } catch (Exception e) {
             Toast.makeText(context, "Error adding AM/PM availability: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -130,11 +127,8 @@ public class AvailabilityActionHandler {
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(context);
             availabilityAddApi.addAvailability(userId, selectedDateString, "00:00", "23:59", true, 2, "Unavailable All Day");
 
-            Toast.makeText(context, "Added successfully!", Toast.LENGTH_SHORT).show();
-            Thread.sleep(2000);
             renderList(recyclerView);
         } catch (Exception e) {
-            Toast.makeText(context, "Error setting unavailable: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

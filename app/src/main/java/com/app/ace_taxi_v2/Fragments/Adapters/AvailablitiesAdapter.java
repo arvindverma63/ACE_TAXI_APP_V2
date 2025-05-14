@@ -22,6 +22,7 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -110,7 +111,7 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
         Log.d("FilterDebug", "Updating list for date: " + selectedDate);
         Log.d("FilterDebug", "Original list size: " + originalList.size());
 
-        SimpleDateFormat apiFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat apiFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         SimpleDateFormat[] formatters = {
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()),
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()),
@@ -120,84 +121,96 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
             formatter.setLenient(false);
         }
 
-        List<AvailabilityResponse.Driver> newList = new ArrayList<>();
-        for (AvailabilityResponse.Driver item : originalList) {
-            Date fullDate = null;
-            String itemDate = item.getDate();
-            for (SimpleDateFormat formatter : formatters) {
-                try {
-                    fullDate = formatter.parse(itemDate);
-                    break;
-                } catch (Exception e) {
-                    // Try next format
+        try {
+            // Parse the selected date
+            Date startDate = apiFormat.parse(selectedDate);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startDate);
+            calendar.add(Calendar.DAY_OF_MONTH, 6);
+            Date endDate = calendar.getTime();
+
+            Log.d("FilterDebug", "Filtering for range: " + apiFormat.format(startDate) + " to " + apiFormat.format(endDate));
+
+            List<AvailabilityResponse.Driver> newList = new ArrayList<>();
+            for (AvailabilityResponse.Driver item : originalList) {
+                Date fullDate = null;
+                String itemDate = item.getDate();
+                for (SimpleDateFormat formatter : formatters) {
+                    try {
+                        fullDate = formatter.parse(itemDate);
+                        break;
+                    } catch (Exception e) {
+                        // Try next format
+                    }
+                }
+                if (fullDate == null) {
+                    Log.e("FilterDebug", "Failed to parse date: " + itemDate);
+                    continue;
+                }
+
+                if (!fullDate.before(startDate) && !fullDate.after(endDate)) {
+                    newList.add(item);
                 }
             }
-            if (fullDate == null) {
-                Log.e("FilterDebug", "Failed to parse date: " + itemDate);
-                continue;
-            }
 
-            String onlyDate = apiFormat.format(fullDate);
-            Log.d("FilterDebug", "Item date: " + itemDate + " -> Parsed: " + onlyDate);
-            if (onlyDate.equals(selectedDate)) {
-                newList.add(item);
-            }
-        }
-
-        Collections.sort(newList, (a, b) -> {
-            Date date1 = null, date2 = null;
-            for (SimpleDateFormat formatter : formatters) {
-                try {
-                    date1 = formatter.parse(a.getDate());
-                    date2 = formatter.parse(b.getDate());
-                    break;
-                } catch (Exception e) {
-                    // Try next format
+            newList.sort((a, b) -> {
+                Date date1 = null, date2 = null;
+                for (SimpleDateFormat formatter : formatters) {
+                    try {
+                        date1 = formatter.parse(a.getDate());
+                        date2 = formatter.parse(b.getDate());
+                        break;
+                    } catch (Exception e) {
+                        // Try next format
+                    }
                 }
-            }
-            if (date1 != null && date2 != null) {
-                return date1.compareTo(date2);
-            }
-            Log.e("FilterDebug", "Error sorting dates: " + a.getDate() + ", " + b.getDate());
-            return 0;
-        });
+                if (date1 != null && date2 != null) {
+                    return date1.compareTo(date2);
+                }
+                Log.e("FilterDebug", "Error sorting dates: " + a.getDate() + ", " + b.getDate());
+                return 0;
+            });
 
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-            @Override
-            public int getOldListSize() {
-                return list.size();
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return list.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return newList.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    String oldId = String.valueOf(list.get(oldItemPosition).getId());
+                    String newId = String.valueOf(newList.get(newItemPosition).getId());
+                    return oldId.equals(newId);
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    AvailabilityResponse.Driver oldItem = list.get(oldItemPosition);
+                    AvailabilityResponse.Driver newItem = newList.get(newItemPosition);
+                    return Objects.equals(oldItem.getId(), newItem.getId()) &&
+                            Objects.equals(oldItem.getDate(), newItem.getDate()) &&
+                            oldItem.getAvailabilityType() == newItem.getAvailabilityType() &&
+                            Objects.equals(oldItem.getDescription(), newItem.getDescription());
+                }
+            });
+
+            list = newList;
+            diffResult.dispatchUpdatesTo(this);
+            Log.d("FilterDebug", "Filtered list size: " + list.size());
+
+            updateEmptyState();
+            if (list.isEmpty()) {
+                Log.w("FilterDebug", "No availabilities found for " + selectedDate);
             }
 
-            @Override
-            public int getNewListSize() {
-                return newList.size();
-            }
-
-            @Override
-            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                String oldId = String.valueOf(list.get(oldItemPosition).getId());
-                String newId = String.valueOf(newList.get(newItemPosition).getId());
-                return oldId != null && newId != null && oldId.equals(newId);
-            }
-
-            @Override
-            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                AvailabilityResponse.Driver oldItem = list.get(oldItemPosition);
-                AvailabilityResponse.Driver newItem = newList.get(newItemPosition);
-                return Objects.equals(oldItem.getId(), newItem.getId()) &&
-                        Objects.equals(oldItem.getDate(), newItem.getDate()) &&
-                        oldItem.getAvailabilityType() == newItem.getAvailabilityType() &&
-                        Objects.equals(oldItem.getDescription(), newItem.getDescription());
-            }
-        });
-
-        list = newList;
-        diffResult.dispatchUpdatesTo(this);
-        Log.d("FilterDebug", "Filtered list size: " + list.size());
-
-        updateEmptyState();
-        if (list.isEmpty()) {
-            Log.w("FilterDebug", "No availabilities found for " + selectedDate);
+        } catch (Exception e) {
+            Log.e("FilterDebug", "Error parsing selected date: " + e.getMessage(), e);
         }
 
         return this;

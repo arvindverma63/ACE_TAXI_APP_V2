@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.FutureJobAdapter;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.JobModals.JobModal;
@@ -33,12 +34,14 @@ public class FutureJobManager {
     private final SessionManager sessionManager;
     private FutureJobAdapter adapter;
     private TextView noBookingTextView;
+    public CustomToast customToast;
 
     public FutureJobManager(Context context, SwipeRefreshLayout swipeRefreshLayout,TextView noBookingTextView) {
         this.context = context;
         this.swipeRefreshLayout = swipeRefreshLayout;
         this.sessionManager = new SessionManager(context);
         this.noBookingTextView = noBookingTextView;
+        this.customToast = new CustomToast(context);
     }
 
     public void fetchJob(View view, RecyclerView recyclerView) {
@@ -95,7 +98,7 @@ public class FutureJobManager {
             @Override
             public void onFailure(Call<FutureJobResponse> call, Throwable t) {
                 stopRefreshing();
-                showToast("Network error: Please check your internet connection.");
+                customToast.showCustomErrorToast("No Internet Connection");
                 Log.e(TAG, "API Call Failed", t);
             }
         });
