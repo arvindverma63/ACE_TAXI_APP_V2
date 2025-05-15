@@ -34,6 +34,7 @@
         <item name="background">@color/white</item>
         <item name="titleTextColor">@color/white</item>
         <item name="navigationIconTint">@color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="android:backgroundTint">@color/primaryDark</item>

@@ -5,8 +5,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
+
+import org.checkerframework.checker.units.qual.C;
 
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
@@ -16,9 +19,11 @@ import retrofit2.Response;
 
 public class UpdateDriverShiftApi {
     private final Context context;
+    public CustomToast customToast;
 
     public UpdateDriverShiftApi(Context context) {
         this.context = context;
+        this.customToast = new CustomToast(context);
     }
 
     public void updateStatus(int status) {
@@ -29,7 +34,7 @@ public class UpdateDriverShiftApi {
         if (token == null || token.isEmpty()) {
             Log.e("DriverShiftAPI", "Token is null or empty!");
             Sentry.captureMessage("DriverShiftAPI Error: Token is null or empty for user ID: " + userId);
-            Toast.makeText(context, "Authentication failed. Please log in again.", Toast.LENGTH_LONG).show();
+            customToast.showCustomErrorToast("Authentication failed. Please log in again.");
             return;
         }
 
@@ -46,13 +51,13 @@ public class UpdateDriverShiftApi {
 
                 if (response.code() == 204) { // No content
                     Log.d("DriverShiftAPI", "No content received but request succeeded");
-                    Toast.makeText(context, "Status updated successfully", Toast.LENGTH_LONG).show();
+                    customToast.showCustomErrorToast("No content received but request succeeded");
                     updateCurrentStatus(status);
                     return;
                 }
 
                 if (response.isSuccessful()) {
-                    Toast.makeText(context, "Status updated successfully", Toast.LENGTH_LONG).show();
+                    customToast.showCustomToast("Status updated successfully");
                     updateCurrentStatus(status);
                 } else {
                     try {
@@ -63,7 +68,7 @@ public class UpdateDriverShiftApi {
                         Log.e("DriverShiftAPI", "Error reading errorBody", e);
                         Sentry.captureException(e);
                     }
-                    Toast.makeText(context, "Error: " + response.code(), Toast.LENGTH_LONG).show();
+                    customToast.showCustomErrorToast("Network error. Please try again.");
                 }
             }
 
@@ -71,7 +76,7 @@ public class UpdateDriverShiftApi {
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.e("DriverShiftAPI", "API Call Failed: " + t.getMessage());
                 Sentry.captureException(t);
-                Toast.makeText(context, "Network error. Please try again.", Toast.LENGTH_LONG).show();
+                customToast.showCustomErrorToast("Network error. Please try again.");
             }
         });
     }

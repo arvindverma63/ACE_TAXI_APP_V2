@@ -67,7 +67,7 @@ public class AvailabilityActionHandler {
             }
 
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(context);
-            availabilityAddApi.addAvailability(userId, selectedDateString, "07:30", "09:15", true, 1, "Am only");
+            availabilityAddApi.addAvailability(userId, selectedDateString, "07:30", "09:15", true, 1, "AM only");
 
             renderList(recyclerView);
         } catch (Exception e) {
@@ -106,7 +106,7 @@ public class AvailabilityActionHandler {
 
             AvailabilityAddApi availabilityAddApi = new AvailabilityAddApi(context);
             availabilityAddApi.addAvailability(userId, selectedDateString, "14:30", "16:15", true, 1, "PM only");
-            availabilityAddApi.addAvailability(userId, selectedDateString, "07:30", "09:15", true, 1, "Am only");
+            availabilityAddApi.addAvailability(userId, selectedDateString, "07:30", "09:15", true, 1, "AM only");
 
             renderList(recyclerView);
         } catch (Exception e) {

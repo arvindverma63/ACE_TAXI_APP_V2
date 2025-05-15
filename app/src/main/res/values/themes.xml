@@ -55,6 +55,7 @@
 
     <style name="Toolbar" parent="Widget.Material3.Toolbar">
         <item name="background">@color/white</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Appbar" parent="Widget.Material3.AppBarLayout">

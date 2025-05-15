@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private static final String PREFS_NAME = "AppPrefs";
     private static final String SWITCH_STATE_KEY = "switch_state";
+    public CustomToast customToast;
 
     private MaterialButton viewBtn;
     public ImageView sideMenu;
@@ -116,6 +117,7 @@ public class HomeFragment extends Fragment {
             destination_time = view.findViewById(R.id.destination_time);
             payment_card = view.findViewById(R.id.payment_card);
             status_card = view.findViewById(R.id.scope_card);
+            customToast = new CustomToast(getContext());
             // Initialize ScreenOnOffManager
             screenOnOffManager = new ScreenOnOffManager(requireContext(), requireActivity().getWindow());
 
@@ -498,7 +500,7 @@ public class HomeFragment extends Fragment {
         Context context = getContext();
         if (context == null) return;
         if (address == null || address.trim().isEmpty()) {
-            Toast.makeText(context, "Invalid address", Toast.LENGTH_SHORT).show();
+            customToast.showCustomErrorToast("Invalid Address");
             return;
         }
 

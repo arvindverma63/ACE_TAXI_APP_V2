@@ -35,7 +35,7 @@ public class CustomToast {
 
         // Positioning the toast
         int xOffset = (int) (context.getResources().getDisplayMetrics().density * 16);
-        int yOffset = (int) (context.getResources().getDisplayMetrics().density * 50);
+        int yOffset = (int) (context.getResources().getDisplayMetrics().density * 30);
         toast.setGravity(Gravity.TOP | Gravity.END, xOffset, yOffset);
 
         toast.show();
@@ -60,7 +60,7 @@ public class CustomToast {
 
         // Positioning the toast
         int xOffset = (int) (context.getResources().getDisplayMetrics().density * 16);
-        int yOffset = (int) (context.getResources().getDisplayMetrics().density * 50);
+        int yOffset = (int) (context.getResources().getDisplayMetrics().density * 30);
         toast.setGravity(Gravity.TOP | Gravity.END, xOffset, yOffset);
 
         toast.show();

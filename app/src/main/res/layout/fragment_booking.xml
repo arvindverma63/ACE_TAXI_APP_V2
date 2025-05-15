@@ -1,36 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:fitsSystemWindows="true">
+    style="@style/MainBG"
+    android:orientation="vertical">
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_header"
+        style="@style/ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_margin="10dp"
+        app:navigationContentDescription="Back"
+        app:navigationIcon="@drawable/ic_back_arrow"
+        app:title="Create Booking"
+        app:titleCentered="true" />
 
-    <!-- Map Fragment -->
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+    <!-- Journey Price TextView -->
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Journey Price"
+        android:textStyle="bold"
+        android:textColor="@color/red"
+        android:textSize="25sp" />
 
-    <!-- Passenger Details -->
+    <!-- Price Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/green"
+        app:strokeColor="@color/trans"
+        app:strokeWidth="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="£ 0.00"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Passenger Details Card -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/passengerCard"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        style="@style/CardBG"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/actionBar"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="0dp"
+        app:strokeWidth="0dp"
+        app:cardElevation="0dp"
+        android:backgroundTint="@color/trans">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,40 +76,113 @@
             android:orientation="vertical"
             android:padding="16dp"
             android:descendantFocusability="beforeDescendants">
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="24dp"
+                android:text="Pickup Address"
+                style="@style/TextBG"/>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/ExpenseField"
                 app:hintTextColor="@color/gray_dark"
-                android:hint="Passenger Name"
-                app:endIconMode="clear_text">
+                android:hint=""
+                app:endIconMode="custom"
+                app:boxStrokeWidth="0dp"
+                app:boxBackgroundMode="outline">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/autoCompletePickupAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextBG"
+                    android:textColorHint="@color/light_gray"
+                    android:padding="12dp"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:text="Destination Address"
+                style="@style/TextBG"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ExpenseField"
+                app:hintTextColor="@color/gray_dark"
+                android:hint=""
+                app:endIconMode="custom"
+                app:boxStrokeWidth="0dp"
+                app:boxBackgroundMode="outline">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/autoCompleteDestination"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextBG"
+                    android:textColorHint="@color/light_gray"
+                    android:padding="12dp"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:text="Passenger Name"
+                style="@style/TextBG"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ExpenseField"
+                app:hintTextColor="@color/gray_dark"
+                android:hint=""
+                app:endIconMode="custom"
+                app:boxStrokeWidth="0dp"
+                app:boxBackgroundMode="outline">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passengerName"
+                    style="@style/TextBG"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:paddingVertical="12dp"/>
+                    android:padding="12dp"
+                    android:textColorHint="@color/light_gray" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:text="Passenger Count"
+                style="@style/TextBG"/>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 style="@style/ExpenseField"
                 app:hintTextColor="@color/gray_dark"
-                android:hint="Destination Address"
-                app:endIconMode="clear_text">
+                android:hint=""
+                app:endIconMode="custom"
+                app:boxStrokeWidth="0dp"
+                app:boxBackgroundMode="outline">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passengerCount"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:id="@+id/autoCompleteDestination"
-                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    style="@style/TextBG"
+                    android:textColorHint="@color/light_gray"
                     android:padding="12dp"
-                    android:popupTheme="@style/CardBG"
-                    android:textSize="16sp"/>
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -81,68 +192,70 @@
         android:id="@+id/testButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="Show Suggestions"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/passengerCard"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="16dp"/>
+        android:visibility="gone" />
 
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
     <!-- Price & Book Action Bar -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/actionBar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        style="@style/CardBG"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp">
+        app:cardElevation="0dp"
+        android:layout_marginHorizontal="10dp"
+        app:strokeWidth="0dp"
+        android:backgroundTint="@color/trans">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="12dp"
             android:gravity="center">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                app:strokeWidth="0dp"
-                android:layout_marginRight="3dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="3dp"
+                app:cardCornerRadius="1000dp"
                 android:backgroundTint="@color/green"
-                android:layout_gravity="center"
-                android:layout_weight="1">
+                app:strokeWidth="0dp"
+                android:layout_gravity="center">
+
                 <TextView
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:text="£0.00"
                     android:textSize="16sp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
                     android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_marginEnd="8dp" />
             </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/bookButton"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
+                android:layout_marginStart="3dp"
                 android:text="Book"
                 android:textStyle="bold"
-                android:layout_marginLeft="3dp"
                 android:textSize="16sp"
-                app:cornerRadius="12dp"
+                app:cornerRadius="120dp"
                 app:backgroundTint="@color/red"
                 android:textColor="@color/white"
                 app:rippleColor="@color/primary_orange_dark"
-                style="@style/Widget.Material3.Button"/>
+                style="@style/Widget.Material3.Button" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

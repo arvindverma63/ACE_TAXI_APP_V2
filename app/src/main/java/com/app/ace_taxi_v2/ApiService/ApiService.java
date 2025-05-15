@@ -36,6 +36,8 @@ import com.app.ace_taxi_v2.Models.LoginRequest;
 import com.app.ace_taxi_v2.Models.LoginResponse;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIRequest;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIResponse;
+import com.app.ace_taxi_v2.Models.QuotesRequest;
+import com.app.ace_taxi_v2.Models.QuotesResponse;
 import com.app.ace_taxi_v2.Models.Reports.StatementItem;
 import com.app.ace_taxi_v2.Models.UserProfileResponse;
 
@@ -181,5 +183,15 @@ public interface ApiService {
             @Query("date") String date
     );
 
+    @POST("/api/Bookings/RankCreate")
+    Call<Void> rankCreate(@Header("Authorization") String token,
+                          @Query("destination") String destination,
+                          @Query("destinationPostcode") String destinationPostCode,
+                          @Query("name") String name,
+                          @Query("userid") int userid);
+
+    @POST("/api/Bookings/Quote")
+    Call<QuotesResponse> getQuotes(@Header("Authorization") String token,
+                                   @Body QuotesRequest quotesRequest);
 
 }
