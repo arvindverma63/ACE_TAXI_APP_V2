@@ -16,6 +16,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.app.ace_taxi_v2.Helper.DeviceMode;
 import com.app.ace_taxi_v2.Logic.FCMTokenManager;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.R;
@@ -32,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(activity_login);
-
+        DeviceMode.init(this);
 
         edit_username = (EditText) findViewById(R.id.edit_username);
         edit_password = (EditText) findViewById(R.id.edit_password);

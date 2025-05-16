@@ -49,4 +49,9 @@ public class SessionManager {
         editor.clear();
         editor.apply();
     }
+
+    public void clearToken() {
+        editor.remove(KEY_TOKEN);
+        editor.apply();
+    }
 }

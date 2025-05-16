@@ -188,7 +188,8 @@ public interface ApiService {
                           @Query("destination") String destination,
                           @Query("destinationPostcode") String destinationPostCode,
                           @Query("name") String name,
-                          @Query("userid") int userid);
+                          @Query("userid") int userid,
+                          @Query("price") double price);
 
     @POST("/api/Bookings/Quote")
     Call<QuotesResponse> getQuotes(@Header("Authorization") String token,

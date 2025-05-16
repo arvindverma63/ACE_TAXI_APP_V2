@@ -5,19 +5,18 @@ import java.util.List;
 
 public class QuotesRequest {
     private String pickupPostcode;
-    private List<String> viaPostcodes;
+    private List<String> viaPostcodes[];
     private String destinationPostcode;
-    private LocalDateTime pickupDateTime;
+    private String pickupDateTime;
     private int passengers;
     private boolean priceFromBase;
 
     // Constructors
     public QuotesRequest() {}
 
-    public QuotesRequest(String pickupPostcode, List<String> viaPostcodes, String destinationPostcode,
-                         LocalDateTime pickupDateTime, int passengers, boolean priceFromBase) {
+    public QuotesRequest(String pickupPostcode, String destinationPostcode,
+                         String pickupDateTime, int passengers, boolean priceFromBase) {
         this.pickupPostcode = pickupPostcode;
-        this.viaPostcodes = viaPostcodes;
         this.destinationPostcode = destinationPostcode;
         this.pickupDateTime = pickupDateTime;
         this.passengers = passengers;
@@ -28,14 +27,11 @@ public class QuotesRequest {
     public String getPickupPostcode() { return pickupPostcode; }
     public void setPickupPostcode(String pickupPostcode) { this.pickupPostcode = pickupPostcode; }
 
-    public List<String> getViaPostcodes() { return viaPostcodes; }
-    public void setViaPostcodes(List<String> viaPostcodes) { this.viaPostcodes = viaPostcodes; }
-
     public String getDestinationPostcode() { return destinationPostcode; }
     public void setDestinationPostcode(String destinationPostcode) { this.destinationPostcode = destinationPostcode; }
 
-    public LocalDateTime getPickupDateTime() { return pickupDateTime; }
-    public void setPickupDateTime(LocalDateTime pickupDateTime) { this.pickupDateTime = pickupDateTime; }
+    public String getPickupDateTime() { return pickupDateTime; }
+    public void setPickupDateTime(String pickupDateTime) { this.pickupDateTime = pickupDateTime; }
 
     public int getPassengers() { return passengers; }
     public void setPassengers(int passengers) { this.passengers = passengers; }

@@ -29,7 +29,7 @@ public class BookingFragment extends Fragment {
     private AutoCompleteTextView destinationLocationInput,pickupLocationInput;
     private MaterialButton bookButton;
     private TextInputEditText passengerNameInput;
-    private TextView priceTextView;
+    private TextView priceTextView,head_price;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class BookingFragment extends Fragment {
         passengerNameInput = view.findViewById(R.id.passengerName);
         priceTextView = view.findViewById(R.id.price);
         bookButton = view.findViewById(R.id.bookButton);
+        head_price = view.findViewById(R.id.head_price);
 
         // Check for null before setting up autocomplete fields
         if (destinationLocationInput == null) {
@@ -132,4 +133,6 @@ public class BookingFragment extends Fragment {
     public AutoCompleteTextView getPickupLocationInput() {
         return pickupLocationInput;
     }
+
+    public TextView getHead_price() {return head_price;}
 }

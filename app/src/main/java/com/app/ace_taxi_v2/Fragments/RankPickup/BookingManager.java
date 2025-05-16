@@ -1,5 +1,6 @@
 package com.app.ace_taxi_v2.Fragments.RankPickup;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,18 +13,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.BookingFragment;
 import com.app.ace_taxi_v2.Logic.AutoCompleteApi;
+import com.app.ace_taxi_v2.Logic.GetBookingPrice;
 import com.app.ace_taxi_v2.Logic.JobApi.CreateBookingApi;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIResponse;
+import com.app.ace_taxi_v2.Models.QuotesResponse;
 import com.app.ace_taxi_v2.R;
-import com.google.android.gms.maps.model.LatLng;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +37,11 @@ public class BookingManager {
     private List<String> destinationSuggestions;
     private ArrayAdapter<String> destinationAdapter;
     private CreateBookingApi createBookingApi;
-    private double routeDistance = 0.0;
+    public String postcode, address;
+    public double totalPrice;
     public CustomToast customToast;
+    private static final String PICKUP_ADDRESS = "Rank Pickup";
+    private static final String PICKUP_POSTCODE = "SP8 4PZ";
 
     public BookingManager(BookingFragment fragment, MapAndLocationManager mapAndLocationManager) {
         this.fragment = fragment;
@@ -50,7 +57,6 @@ public class BookingManager {
 
         destinationSuggestions.add("Test - 123 Main St");
         destinationAdapter.notifyDataSetChanged();
-        Log.d("AutoComplete", "Static suggestions added, count: " + destinationAdapter.getCount());
     }
 
     private ArrayAdapter<String> createArrayAdapter() {
@@ -58,8 +64,7 @@ public class BookingManager {
                 android.R.layout.simple_spinner_dropdown_item, destinationSuggestions) {
             @NonNull
             @Override
-            public View getView(int position, @Nullable View convertView,
-                                @NonNull ViewGroup parent) {
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView textView = (TextView) view;
                 textView.setTextColor(Color.BLACK);
@@ -68,8 +73,7 @@ public class BookingManager {
             }
 
             @Override
-            public View getDropDownView(int position, @Nullable View convertView,
-                                        @NonNull ViewGroup parent) {
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView textView = (TextView) view;
                 textView.setTextColor(Color.BLACK);
@@ -86,7 +90,7 @@ public class BookingManager {
         destinationLocationInput.setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         destinationLocationInput.setDropDownBackgroundResource(android.R.color.white);
         destinationLocationInput.setDropDownAnchor(R.id.passengerCard);
-        destinationLocationInput.setDropDownVerticalOffset(-destinationLocationInput.getHeight() - 350); // Adjust offset to position above
+        destinationLocationInput.setDropDownVerticalOffset(-destinationLocationInput.getHeight() - 350);
         destinationLocationInput.addTextChangedListener(new AutoCompleteTextWatcher());
         destinationLocationInput.setOnClickListener(v -> showDestinationDropdown());
         destinationLocationInput.setOnFocusChangeListener((v, hasFocus) -> {
@@ -100,14 +104,47 @@ public class BookingManager {
             String selected = destinationAdapter.getItem(position);
             destinationLocationInput.setText(selected);
             destinationLocationInput.setSelection(selected.length());
-            Log.d("AutoComplete", "Selected: " + selected);
+
+            // Extract postcode from selected suggestion
+            String[] selectedParts = selected.split(" - ");
+            if (selectedParts.length != 2 || selectedParts[1].trim().isEmpty()) {
+                customToast.showCustomErrorToast("Invalid destination selected");
+                fragment.getPriceTextView().setText("£0.00");
+                fragment.getHead_price().setText("£0.00");
+                return;
+            }
+            postcode = selectedParts[1].trim();
+            address = selectedParts[0].trim();
+
+            @SuppressLint({"NewApi", "LocalSuppress"}) String currentDateTime = Instant.now()
+                    .atZone(ZoneId.systemDefault())
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+
+            GetBookingPrice getBookingPrice = new GetBookingPrice(fragment.getContext());
+            Log.d("GetPriceApi", "Input: pickup=" + PICKUP_POSTCODE + ", destination=" + postcode + ", time=" + currentDateTime);
+            getBookingPrice.getBookingPrince(PICKUP_POSTCODE, postcode, currentDateTime, 0, new GetBookingPrice.BookingPriceCallback() {
+                @Override
+                public void onSuccess(QuotesResponse response) {
+                    Log.d("GetPriceApi", "Success: price=£" + response.getTotalPrice());
+                    fragment.getPriceTextView().setText(String.format("£%.2f", response.getTotalPrice()));
+                    fragment.getHead_price().setText(String.format("£%.2f", response.getTotalPrice()));
+                    totalPrice = response.getTotalPrice();
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e("GetPriceApi", "Error: " + error);
+                    customToast.showCustomErrorToast("Failed to fetch price: " + error);
+                    fragment.getPriceTextView().setText("£0.00");
+                    fragment.getHead_price().setText("£0.00");
+                }
+            });
         });
     }
 
     public void showDestinationDropdown() {
         if (!destinationSuggestions.isEmpty()) {
             fragment.getDestinationLocationInput().showDropDown();
-            Log.d("AutoComplete", "Dropdown triggered, suggestions: " + destinationSuggestions.size());
         }
     }
 
@@ -130,7 +167,8 @@ public class BookingManager {
                 fragment.requireActivity().runOnUiThread(() -> {
                     destinationSuggestions.clear();
                     destinationAdapter.notifyDataSetChanged();
-                    Log.d("AutoComplete", "Cleared suggestions, count: " + destinationAdapter.getCount());
+                    fragment.getPriceTextView().setText("£0.00");
+                    fragment.getHead_price().setText("£0.00");
                 });
             }
         }
@@ -140,24 +178,27 @@ public class BookingManager {
     }
 
     private void fetchAutoCompleteSuggestions(String query) {
-        Log.d("AutoComplete", "Fetching suggestions for query: " + query);
         AutoCompleteApi autoCompleteApi = new AutoCompleteApi(fragment.requireContext());
         autoCompleteApi.autoCompleteSearch(query, new AutoCompleteApi.AutoCompleteCallback() {
             @Override
             public void onSuccess(List<LocalPOIResponse> response) {
-                Log.d("AutoCompleteRaw", "Raw response size: " + response.size());
-                for (LocalPOIResponse poi : response) {
-                    Log.d("AutoCompleteRaw", "POI: name=" + poi.getName() + ", address=" + poi.getAddress());
-                }
                 List<String> newSuggestions = new ArrayList<>();
+                // Reset address and postcode
+                address = null;
+                postcode = null;
+
+                // Take only the first valid suggestion
                 if (!response.isEmpty()) {
-                    LocalPOIResponse poi = response.get(0); // Get the top result
-                    String address = poi.getAddress() != null && !poi.getAddress().isEmpty() ? poi.getAddress() : "Unknown";
-                    String postcode = poi.getPostcode() != null && !poi.getPostcode().isEmpty() ? poi.getPostcode() : "No address";
-                    if (!address.equals("No address")) {
-                        newSuggestions.add(address + " - " + postcode);
+                    LocalPOIResponse poi = response.get(0); // Top result
+                    String poiAddress = poi.getAddress() != null && !poi.getAddress().isEmpty() ? poi.getAddress() : null;
+                    String poiPostcode = poi.getPostcode() != null && !poi.getPostcode().isEmpty() ? poi.getPostcode() : null;
+                    if (poiAddress != null && poiPostcode != null) {
+                        newSuggestions.add(poiAddress + " - " + poiPostcode);
+                        address = poiAddress;
+                        postcode = poiPostcode;
                     }
                 }
+
                 fragment.requireActivity().runOnUiThread(() -> {
                     destinationSuggestions.clear();
                     destinationSuggestions.addAll(newSuggestions);
@@ -172,100 +213,62 @@ public class BookingManager {
 
             @Override
             public void onFail(String error) {
-                Log.e("AutoComplete", "Failed to fetch suggestions: " + error);
                 fragment.requireActivity().runOnUiThread(() -> {
-                    customToast.showCustomErrorToast("Failed to load suggestions");
+                    customToast.showCustomErrorToast("Failed to load suggestions: " + error);
+                    destinationSuggestions.clear();
+                    destinationAdapter.notifyDataSetChanged();
                 });
             }
         });
     }
 
     public void bookRide(String destinationText, String passengerName) {
-        if (mapAndLocationManager.getCurrentPickupLocation() == null) {
-//            customToast.showCustomErrorToast("Pickup location not set");
-            return;
-        }
+        Log.d("BookRide", "Attempting to book ride: destination=" + destinationText + ", passenger=" + passengerName);
 
         if (destinationText.isEmpty()) {
             customToast.showCustomErrorToast("Please enter destination location");
+            Log.e("BookRide", "Destination text is empty");
             return;
         }
 
         if (passengerName.isEmpty()) {
             customToast.showCustomErrorToast("Please enter passenger name");
+            Log.e("BookRide", "Passenger name is empty");
             return;
         }
 
-        // Parse destinationText into address and postcode
         String[] destinationParts = destinationText.split(" - ");
-        if (destinationParts.length != 2) {
+        if (destinationParts.length != 2 || destinationParts[0].trim().isEmpty() || destinationParts[1].trim().isEmpty()) {
             customToast.showCustomErrorToast("Invalid destination format. Please select a valid destination.");
+            Log.e("BookRide", "Invalid destination format: " + destinationText);
             return;
         }
         String destinationAddress = destinationParts[0].trim();
         String destinationPostCode = destinationParts[1].trim();
 
-        // Update map with route before booking
-        mapAndLocationManager.getLocationFromAddress(destinationText, false, new MapAndLocationManager.OnLocationFetchedListener() {
-            @Override
-            public void onLocationFetched(LatLng latLng, boolean isPickup) {
-                if (!isPickup && mapAndLocationManager.getPickupMarker() != null && mapAndLocationManager.getDestinationMarker() != null) {
-                    mapAndLocationManager.drawRoute(
-                            mapAndLocationManager.getPickupMarker().getPosition(),
-                            mapAndLocationManager.getDestinationMarker().getPosition(),
-                            new MapAndLocationManager.OnRouteDrawnListener() {
-                                @Override
-                                public void onRouteDrawn(double distance) {
-                                    routeDistance = distance;
-                                    double price = calculatePrice(routeDistance);
-                                    fragment.getPriceTextView().setText(String.format("£%.2f", price));
-                                    proceedWithBooking(destinationAddress, destinationPostCode, passengerName);
-                                }
-
-                                @Override
-                                public void onRouteDrawFailed() {
-                                    // Proceed with booking even if route drawing fails
-                                    proceedWithBooking(destinationAddress, destinationPostCode, passengerName);
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onLocationFetchFailed() {
-                // Proceed with booking even if geocoding fails
-                proceedWithBooking(destinationAddress, destinationPostCode, passengerName);
-            }
-        });
+        // Proceed directly to booking without map logic
+        proceedWithBooking(destinationAddress, destinationPostCode, passengerName);
     }
 
     private void proceedWithBooking(String destinationAddress, String destinationPostCode, String passengerName) {
-        createBookingApi.createNewBooking(destinationAddress, destinationPostCode, passengerName,
+        Log.d("BookRide", "Creating booking: destinationAddress=" + destinationAddress + ", destinationPostCode=" + destinationPostCode + ", passengerName=" + passengerName);
+        createBookingApi.createNewBooking(destinationAddress, destinationPostCode, passengerName,totalPrice,
                 new CreateBookingApi.CreateBookingCallback() {
                     @Override
                     public void onSuccess() {
+                        Log.d("BookRide", "Booking successful");
                         customToast.showCustomToast("Ride booked successfully");
-
-                        // Clear inputs after booking
                         fragment.getDestinationLocationInput().setText("");
                         fragment.getPassengerNameInput().setText("");
                         fragment.getPriceTextView().setText("£0.00");
-                        routeDistance = 0.0;
-
-                        // Reset map
-                        mapAndLocationManager.resetMap();
+                        fragment.getHead_price().setText("£0.00");
                     }
 
                     @Override
                     public void onFailure(String errorMessage) {
+                        Log.e("BookRide", "Booking failed: " + errorMessage);
                         customToast.showCustomErrorToast("Failed to book ride: " + errorMessage);
                     }
                 });
-    }
-
-    private double calculatePrice(double distanceInKm) {
-        double baseFare = 2.0;
-        double perKmRate = 1.5;
-        return baseFare + (distanceInKm * perKmRate);
     }
 }

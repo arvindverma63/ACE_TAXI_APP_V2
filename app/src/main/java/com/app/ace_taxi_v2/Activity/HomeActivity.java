@@ -28,6 +28,8 @@ import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Components.ShiftChangeModal;
 import com.app.ace_taxi_v2.Fragments.HomeFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
+import com.app.ace_taxi_v2.Helper.DeviceMode;
+import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
 import com.app.ace_taxi_v2.JobModals.JobModal;
 import com.app.ace_taxi_v2.Logic.JobApi.GetBookingById;
@@ -59,6 +61,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         try {
             setContentView(R.layout.activity_home);
+            DeviceMode.init(this);
         } catch (Exception e) {
             Log.e("HomeActivity", "Error setting content view", e);
             return;
@@ -101,6 +104,7 @@ public class HomeActivity extends BaseActivity {
     private void setupSession() {
         try {
             SessionManager sessionManager = new SessionManager(this);
+            Log.e("token jwt : ", " jwt_token: "+sessionManager.getToken()+" \n "+ RetrofitClient.getInstance().baseUrl());
             if (!sessionManager.isLoggedIn()) {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();

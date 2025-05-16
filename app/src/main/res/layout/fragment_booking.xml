@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:id="@+id/head_price"
                 android:text="£ 0.00"
                 android:textColor="@color/white"
                 android:textSize="20sp"
@@ -80,6 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:textSize="16sp"
                 android:layout_marginTop="24dp"
                 android:text="Pickup Address"
@@ -88,6 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/ExpenseField"
+                android:visibility="gone"
                 app:hintTextColor="@color/gray_dark"
                 android:hint=""
                 app:endIconMode="custom"
@@ -164,6 +167,7 @@
                 android:textSize="16sp"
                 android:layout_marginTop="20dp"
                 android:text="Passenger Count"
+                android:visibility="gone"
                 style="@style/TextBG"/>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -180,6 +184,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/TextBG"
+                    android:visibility="gone"
                     android:textColorHint="@color/light_gray"
                     android:padding="12dp"
                     android:inputType="number" />

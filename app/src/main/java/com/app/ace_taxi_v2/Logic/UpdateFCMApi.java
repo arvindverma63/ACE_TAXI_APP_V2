@@ -1,10 +1,13 @@
 package com.app.ace_taxi_v2.Logic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.FcmRequest;
 import com.app.ace_taxi_v2.Models.FcmResponse;
@@ -56,8 +59,17 @@ public class UpdateFCMApi {
             public void onResponse(Call<FcmResponse> call, Response<FcmResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d(TAG, "FCM updated successfully: " + response.body());
-                    Toast.makeText(context, "FCM token updated successfully.", Toast.LENGTH_SHORT).show();
-                } else {
+                    new CustomToast(context).showCustomToast("FCM updated successfully:");
+                }
+                else if(response.code() == 423){
+                    new CustomToast(context).showCustomErrorToast("User Locked Out");
+                    new SessionManager(context).clearSession();
+                    Sentry.setUser(null);  // Clear user info from Sentry
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(intent);
+                }
+                else {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error details";
                         Log.e(TAG, "Failed to update FCM: " + response.code() + " - " + errorBody);

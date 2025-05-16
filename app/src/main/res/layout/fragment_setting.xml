@@ -133,7 +133,6 @@
                     android:layout_height="wrap_content"
                     android:textOff="Light"
                     android:id="@+id/switch_dark_mode"
-                    android:textOn="Dark"
                     android:checked="false"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
@@ -289,13 +288,15 @@
                     style="@style/SettingText"
                      />
 
-                <Button
+                <Switch
+                    android:id="@+id/app_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DEV | LIVE"
-                    android:textAllCaps="false"
-                    android:backgroundTint="@color/primaryColor"
-                    android:textColor="#FFFFFF" />
+                    android:textOff="Off"
+                    android:textOn="Enabled"
+                    app:thumbTint="@color/primaryColor"
+                    app:trackTint="@color/primaryColor"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -334,8 +335,6 @@
                     android:textOff="Off"
                     android:textOn="On"
                     android:id="@+id/keep_alive_switch"
-                    app:thumbTint="@color/gray"
-                    app:trackTint="@color/gray"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

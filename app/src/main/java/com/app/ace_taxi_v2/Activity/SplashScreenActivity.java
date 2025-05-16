@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.app.ace_taxi_v2.Helper.DeviceMode;
 import com.app.ace_taxi_v2.R;
 
 
@@ -21,6 +22,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash_screen);
+        DeviceMode.init(this);
         int navId = -1;
         int jobId = -1;
         String message = "";

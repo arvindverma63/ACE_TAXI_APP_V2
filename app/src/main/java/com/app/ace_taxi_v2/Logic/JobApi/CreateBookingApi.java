@@ -28,7 +28,7 @@ public class CreateBookingApi {
         this.customToast = new CustomToast(context);
     }
 
-    public void createNewBooking(String destination, String destinationPostCode, String name,
+    public void createNewBooking(String destination, String destinationPostCode, String name,double price,
                                  CreateBookingCallback callback) {
         // Input validation
         if (destination == null || destination.trim().isEmpty()) {
@@ -67,13 +67,14 @@ public class CreateBookingApi {
                 callback.onFailure("Invalid user ID");
                 return;
             }
-
+            Log.e("request data for create booking"," "+token+"/n "+destination+" "+destinationPostCode+" "+name+" "+userId+" "+price);
             ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-            Call<Void> call = apiService.rankCreate(token, destination, destinationPostCode, name, userId);
+            Call<Void> call = apiService.rankCreate(token, destination, destinationPostCode, name, userId, price);
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful() && response.code() == 200) {
+                    Log.e("create booking respone: ",response.body()+"");
+                    if (response.code()== 200) {
                         Log.i(TAG, "Booking created successfully");
                         customToast.showCustomToast("Booking created successfully");
                         callback.onSuccess();

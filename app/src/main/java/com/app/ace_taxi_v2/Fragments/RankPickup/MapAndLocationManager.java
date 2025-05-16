@@ -122,7 +122,8 @@ public class MapAndLocationManager implements OnMapReadyCallback {
         String defaultPostcode = "SW1A 1AA";
         AutoCompleteTextView pickupInput = fragment.getPickupLocationInput();
         if (pickupInput != null) {
-            pickupInput.setText(currentPickupAddress + " - " + defaultPostcode);
+            pickupInput.setText("SP8 4PZ");
+
         } else {
             Log.e("MapAndLocationManager", "pickupLocationInput is null in setDefaultLocation");
         }
