@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.LoginRequest;
 import com.app.ace_taxi_v2.Models.LoginResponse;
@@ -21,9 +22,11 @@ import retrofit2.Response;
 
 public class LoginManager {
     private Context context;
+    public CustomToast customToast;
 
     public LoginManager(Context context) {
         this.context = context;
+        this.customToast = new CustomToast(context);
     }
 
     public void login(String username, String password) {
@@ -49,7 +52,7 @@ public class LoginManager {
                     SessionManager sessionManager = new SessionManager(context);
                     sessionManager.saveSession(token, userId, username);
 
-                    Toast.makeText(context, "Login Successful!", Toast.LENGTH_SHORT).show();
+                    customToast.showCustomToast("Login Successfull");
                     progressDialog.dismissProgressDialog();
 
                     UpdateFCMApi updateFCMApi = new UpdateFCMApi(context);
@@ -62,7 +65,7 @@ public class LoginManager {
                     String errorMessage = "Login Failed: HTTP " + response.code() + " - " + response.message();
                     Log.e("LoginManager", errorMessage);
                     Sentry.captureMessage(errorMessage);
-                    Toast.makeText(context, "Incorrect Username Or Password: " + response.message(), Toast.LENGTH_SHORT).show();
+                    customToast.showCustomErrorToast("Incorrect Username Or Password");
                     progressDialog.dismissProgressDialog();
                 }
             }

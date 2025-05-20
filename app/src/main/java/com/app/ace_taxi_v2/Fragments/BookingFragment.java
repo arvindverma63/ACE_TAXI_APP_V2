@@ -14,11 +14,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Fragments.RankPickup.BookingManager;
 import com.app.ace_taxi_v2.Fragments.RankPickup.MapAndLocationManager;
 import com.app.ace_taxi_v2.R;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -48,6 +51,11 @@ public class BookingFragment extends Fragment {
         setupMapFragment();
         setupListeners(view);
         mapAndLocationManager.checkLocationPermissions();
+
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
+        if (toolbar != null) {
+            toolbar.setNavigationOnClickListener(view1 -> replaceFragment(new HomeFragment()));
+        }
 
         return view;
     }
@@ -135,4 +143,11 @@ public class BookingFragment extends Fragment {
     }
 
     public TextView getHead_price() {return head_price;}
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }

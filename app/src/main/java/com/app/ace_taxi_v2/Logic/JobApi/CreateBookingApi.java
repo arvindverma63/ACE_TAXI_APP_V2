@@ -3,6 +3,7 @@ package com.app.ace_taxi_v2.Logic.JobApi;
 import android.content.Context;
 import android.util.Log;
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Logic.SessionManager;
@@ -14,6 +15,7 @@ public class CreateBookingApi {
     private static final String TAG = "CreateBookingApi";
     private final Context context;
     public CustomToast customToast;
+    public CustomDialog customDialog;
 
     public interface CreateBookingCallback {
         void onSuccess();
@@ -26,10 +28,13 @@ public class CreateBookingApi {
         }
         this.context = context;
         this.customToast = new CustomToast(context);
+        this.customDialog = new CustomDialog();
     }
 
     public void createNewBooking(String destination, String destinationPostCode, String name,double price,
                                  CreateBookingCallback callback) {
+
+        customDialog.showProgressDialog(context);
         // Input validation
         if (destination == null || destination.trim().isEmpty()) {
             Log.e(TAG, "Invalid destination: null or empty");
@@ -73,6 +78,7 @@ public class CreateBookingApi {
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
+                    customDialog.dismissProgressDialog();
                     Log.e("create booking respone: ",response.body()+"");
                     if (response.code()== 200) {
                         Log.i(TAG, "Booking created successfully");
@@ -92,6 +98,7 @@ public class CreateBookingApi {
                     String errorMessage = "Network error: " + t.getMessage();
                     Log.e(TAG, "Booking creation failed: " + errorMessage, t);
                     callback.onFailure(errorMessage);
+                    customDialog.dismissProgressDialog();
                 }
             });
         } catch (SecurityException e) {
@@ -100,6 +107,7 @@ public class CreateBookingApi {
         } catch (Exception e) {
             Log.e(TAG, "Unexpected error during booking creation", e);
             callback.onFailure("Unexpected error: " + e.getMessage());
+            new CustomDialog().dismissProgressDialog();
         }
     }
 
