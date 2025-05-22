@@ -58,7 +58,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="dd/mm/yyyy - HH:mm"
                 style="@style/TextBG"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <!-- Message -->
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Message received from office"
-                android:textSize="12sp"
+                android:textSize="20sp"
                 style="@style/TextBG"
                 android:maxLines="1"
                 android:gravity="center"

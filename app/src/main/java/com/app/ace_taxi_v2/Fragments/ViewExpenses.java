@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.Adapters.ExpenseAdapter;
 import com.app.ace_taxi_v2.Logic.ExpensesResponseApi;
 import com.app.ace_taxi_v2.Models.Expense;
@@ -123,7 +124,7 @@ public class ViewExpenses extends Fragment implements ExpenseAdapter.OnExpenseCh
 
                 // Show toast only if filtered list is empty
                 if (expenseList.isEmpty() && !category.equalsIgnoreCase("All")) {
-                    Toast.makeText(getContext(), "No expenses found for " + category, Toast.LENGTH_SHORT).show();
+                    new CustomToast(getContext()).showCustomToast("No expenses found for " + category);
                 }
             });
 

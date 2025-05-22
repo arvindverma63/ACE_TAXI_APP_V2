@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.ExpensesRequest;
 import com.app.ace_taxi_v2.Models.ExpensesResponse;
@@ -49,10 +50,10 @@ public class AddExpenses {
                 Log.d(TAG, "Response code: " + response.code());
 
                 if (response.code() == 200) {
-                    Toast.makeText(context, "Added Successfully", Toast.LENGTH_SHORT).show();
+                    new CustomToast(context).showCustomToast("Added Successfully");
                     expensesCallback.onSuccess(true);
                 } else {
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    new CustomToast(context).showCustomErrorToast("Failed to add expense");
 
                     // Log non-successful API responses to Sentry
                     Sentry.captureMessage("API Error: " + response.code() + " - " + response.message());
@@ -62,6 +63,7 @@ public class AddExpenses {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, "Failed to add expense", Toast.LENGTH_LONG).show();
+                new CustomToast(context).showCustomErrorToast("Failed to add expense");
 
                 // Capture exception in Sentry
                 Sentry.captureException(t);

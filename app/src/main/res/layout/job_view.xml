@@ -571,7 +571,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Journey Price"
-                        android:textSize="14sp"
+                        android:textSize="20sp"
                         android:fontFamily="@font/font_urban" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -580,7 +580,7 @@
                         android:layout_height="wrap_content"
                         android:text="£20.00"
                         style="@style/TextBG"
-                        android:textSize="14sp"
+                        android:textSize="20sp"
                         android:fontFamily="@font/font_urban" />
                 </LinearLayout>
             </LinearLayout>

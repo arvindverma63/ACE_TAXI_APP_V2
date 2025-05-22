@@ -1,6 +1,7 @@
 package com.app.ace_taxi_v2.Fragments.Adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,27 +10,32 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.app.ace_taxi_v2.Logic.DownloadStatement;
+import com.app.ace_taxi_v2.Logic.OpenStatement; // Updated interface
 import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Models.Reports.StatementItem;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.StatementViewHolder> {
 
     private final List<StatementItem> statementList;
     private final Context context;
-    private final DownloadStatement downloadStatement;
+    private final OpenStatement openStatement; // Updated interface
 
-    public StatementAdapter(Context context, List<StatementItem> statementList, DownloadStatement downloadStatement) {
+    public StatementAdapter(Context context, List<StatementItem> statementList, OpenStatement openStatement) {
         this.context = context;
         this.statementList = new ArrayList<>();
-        this.downloadStatement = downloadStatement;
+        this.openStatement = openStatement;
         if (statementList != null) {
-            this.statementList.addAll(statementList);
+            // Sort the list in descending order by statementId
+            List<StatementItem> sortedList = new ArrayList<>(statementList);
+            Collections.sort(sortedList, (item1, item2) -> Integer.compare(item2.getStatementId(), item1.getStatementId()));
+            this.statementList.addAll(sortedList);
         }
     }
 
@@ -47,16 +53,24 @@ public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.Stat
         HHMMFormater hhmmFormater = new HHMMFormater();
         // Bind data
         holder.statementNumber.setText(String.valueOf(item.getStatementId()));
-        holder.date.setText(hhmmFormater.formateTimeStampToDateTime(item.getStatementDate()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            holder.date.setText(hhmmFormater.formateTimeStampToDateTime(item.getStatementDate()));
+        } else {
+            holder.date.setText(item.getStatementDate()); // Fallback for older APIs
+        }
         holder.amount.setText(String.format("£%.2f", item.getSubTotal()));
         holder.jobCount.setText(String.valueOf(item.getTotalJobCount()));
-        holder.period.setText(hhmmFormater.formateTimeStampToDateTime(item.getStartDate()) + " - " +
-                hhmmFormater.formateTimeStampToDateTime(item.getEndDate()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            holder.period.setText(hhmmFormater.formateTimeStampToDateTime(item.getStartDate()) + " - " +
+                    hhmmFormater.formateTimeStampToDateTime(item.getEndDate()));
+        } else {
+            holder.period.setText(item.getStartDate() + " - " + item.getEndDate()); // Fallback for older APIs
+        }
 
-        // Handle button click
+        // Handle button click to open PDF
         holder.viewButton.setOnClickListener(v -> {
             String fileName = "Statement_" + item.getStatementId() + ".pdf";
-            downloadStatement.downloadStatement(item.getStatementId(), fileName);
+            openStatement.openStatement(item.getStatementId(), fileName);
         });
     }
 
@@ -68,7 +82,10 @@ public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.Stat
     public void updateData(List<StatementItem> newStatements) {
         statementList.clear();
         if (newStatements != null) {
-            statementList.addAll(newStatements);
+            // Sort the new list in descending order by statementId
+            List<StatementItem> sortedList = new ArrayList<>(newStatements);
+            Collections.sort(sortedList, (item1, item2) -> Integer.compare(item2.getStatementId(), item1.getStatementId()));
+            statementList.addAll(sortedList);
         }
         notifyDataSetChanged();
     }

@@ -234,15 +234,15 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/viewButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Booking Details"
                 android:textAllCaps="true"
-                app:backgroundTint="@color/white"
+                app:backgroundTint="@color/green"
                 android:padding="15dp"
-                android:textColor="@color/gray"
+                android:textColor="@color/white"
                 app:strokeWidth="1dp"
-                app:strokeColor="@color/gray"
+                app:strokeColor="@color/white"
                 app:cornerRadius="1000dp"
                 app:elevation="3dp"
                 android:layout_marginEnd="6dp"/>
