@@ -18,10 +18,11 @@ import androidx.annotation.Nullable;
 
 import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.BookingFragment;
-import com.app.ace_taxi_v2.Logic.AutoCompleteApi;
+import com.app.ace_taxi_v2.Logic.AddressIO.GetAddressIOAddress;
 import com.app.ace_taxi_v2.Logic.GetBookingPrice;
 import com.app.ace_taxi_v2.Logic.JobApi.CreateBookingApi;
-import com.app.ace_taxi_v2.Models.POI.LocalPOIResponse;
+import com.app.ace_taxi_v2.Models.AddressIO.Suggestion;
+import com.app.ace_taxi_v2.Models.AddressIO.PostcodeResponse;
 import com.app.ace_taxi_v2.Models.QuotesResponse;
 import com.app.ace_taxi_v2.R;
 
@@ -178,43 +179,56 @@ public class BookingManager {
     }
 
     private void fetchAutoCompleteSuggestions(String query) {
-        AutoCompleteApi autoCompleteApi = new AutoCompleteApi(fragment.requireContext());
-        autoCompleteApi.autoCompleteSearch(query, new AutoCompleteApi.AutoCompleteCallback() {
+        GetAddressIOAddress addressIO = new GetAddressIOAddress();
+        addressIO.getAddressId(query, new GetAddressIOAddress.AddressCallback() {
             @Override
-            public void onSuccess(List<LocalPOIResponse> response) {
-                List<String> newSuggestions = new ArrayList<>();
-                // Reset address and postcode
-                address = null;
-                postcode = null;
+            public void onSuccess(Suggestion suggestion) {
+                // Fetch postcode for the suggestion
+                addressIO.getPostcode(suggestion.getId(), new GetAddressIOAddress.PostcodeCallback() {
+                    @Override
+                    public void onSuccess(PostcodeResponse postcodeResponse) {
+                        List<String> newSuggestions = new ArrayList<>();
+                        // Reset address and postcode
+                        address = null;
+                        postcode = null;
 
-                // Take only the first valid suggestion
-                if (!response.isEmpty()) {
-                    LocalPOIResponse poi = response.get(0); // Top result
-                    String poiAddress = poi.getAddress() != null && !poi.getAddress().isEmpty() ? poi.getAddress() : null;
-                    String poiPostcode = poi.getPostcode() != null && !poi.getPostcode().isEmpty() ? poi.getPostcode() : null;
-                    if (poiAddress != null && poiPostcode != null) {
-                        newSuggestions.add(poiAddress + " - " + poiPostcode);
-                        address = poiAddress;
-                        postcode = poiPostcode;
+                        // Format suggestion as "address - postcode"
+                        String suggestionAddress = suggestion.getAddress();
+                        String suggestionPostcode = postcodeResponse.getPostcode();
+                        if (suggestionAddress != null && !suggestionAddress.isEmpty() &&
+                                suggestionPostcode != null && !suggestionPostcode.isEmpty()) {
+                            newSuggestions.add(suggestionAddress + " - " + suggestionPostcode);
+                            address = suggestionAddress;
+                            postcode = suggestionPostcode;
+                        }
+
+                        fragment.requireActivity().runOnUiThread(() -> {
+                            destinationSuggestions.clear();
+                            destinationSuggestions.addAll(newSuggestions);
+                            destinationAdapter = createArrayAdapter();
+                            fragment.getDestinationLocationInput().setAdapter(destinationAdapter);
+                            destinationAdapter.notifyDataSetChanged();
+                            if (!newSuggestions.isEmpty()) {
+                                fragment.getDestinationLocationInput().showDropDown();
+                            }
+                        });
                     }
-                }
 
-                fragment.requireActivity().runOnUiThread(() -> {
-                    destinationSuggestions.clear();
-                    destinationSuggestions.addAll(newSuggestions);
-                    destinationAdapter = createArrayAdapter();
-                    fragment.getDestinationLocationInput().setAdapter(destinationAdapter);
-                    destinationAdapter.notifyDataSetChanged();
-                    if (!newSuggestions.isEmpty()) {
-                        fragment.getDestinationLocationInput().showDropDown();
+                    @Override
+                    public void onError(String error) {
+                        fragment.requireActivity().runOnUiThread(() -> {
+                            customToast.showCustomErrorToast("Failed to load postcode: " + error);
+                            destinationSuggestions.clear();
+                            destinationAdapter.notifyDataSetChanged();
+                        });
                     }
                 });
             }
 
             @Override
-            public void onFail(String error) {
+            public void onError(String error) {
                 fragment.requireActivity().runOnUiThread(() -> {
-                    customToast.showCustomErrorToast("Failed to load suggestions: " + error);
+//                    customToast.showCustomErrorToast("Failed to load suggestions: " + error);
                     destinationSuggestions.clear();
                     destinationAdapter.notifyDataSetChanged();
                 });
@@ -252,7 +266,7 @@ public class BookingManager {
 
     private void proceedWithBooking(String destinationAddress, String destinationPostCode, String passengerName) {
         Log.d("BookRide", "Creating booking: destinationAddress=" + destinationAddress + ", destinationPostCode=" + destinationPostCode + ", passengerName=" + passengerName);
-        createBookingApi.createNewBooking(destinationAddress, destinationPostCode, passengerName,totalPrice,
+        createBookingApi.createNewBooking(destinationAddress, destinationPostCode, passengerName, totalPrice,
                 new CreateBookingApi.CreateBookingCallback() {
                     @Override
                     public void onSuccess() {

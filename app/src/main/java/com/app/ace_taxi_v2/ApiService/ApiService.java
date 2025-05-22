@@ -2,6 +2,8 @@ package com.app.ace_taxi_v2.ApiService;
 
 
 import com.app.ace_taxi_v2.Components.JobStatusModal;
+import com.app.ace_taxi_v2.Models.AddressIO.AutocompleteResponse;
+import com.app.ace_taxi_v2.Models.AddressIO.PostcodeResponse;
 import com.app.ace_taxi_v2.Models.AllDriverAvailabilityResponse;
 import com.app.ace_taxi_v2.Models.AvailabilityRequest;
 import com.app.ace_taxi_v2.Models.AvailabilityResponse;
@@ -53,6 +55,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface ApiService {
     @POST("/api/Auth/Authenticate")
@@ -194,5 +197,20 @@ public interface ApiService {
     @POST("/api/Bookings/Quote")
     Call<QuotesResponse> getQuotes(@Header("Authorization") String token,
                                    @Body QuotesRequest quotesRequest);
+
+    @GET("autocomplete/{searchText}")
+    Call<AutocompleteResponse> getAutocompleteResults(
+            @retrofit2.http.Path("searchText") String searchText,
+            @Query("api-key") String apiKey
+    );
+
+    @GET("get/{id}")
+    Call<PostcodeResponse> getPostcodeOnly(
+            @retrofit2.http.Path("id") String id,
+            @Query("api-key") String apiKey
+    );
+
+
+
 
 }
