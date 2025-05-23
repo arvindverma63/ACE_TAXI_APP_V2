@@ -14,6 +14,10 @@ public class DeviceMode {
 
     private DeviceMode(Context context) {
         this.sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        // Optionally set live URL as default during initialization
+        if (!sharedPreferences.contains(KEY_API_BASE_URL)) {
+            setBaseURL(true); // Sets LIVE_URL as default
+        }
     }
 
     public static void init(Context context) {
@@ -37,7 +41,8 @@ public class DeviceMode {
     }
 
     public String getBaseURL() {
-        return sharedPreferences.getString(KEY_API_BASE_URL, DEFAULT_URL);
+        // Return LIVE_URL as default if no URL is stored
+        return sharedPreferences.getString(KEY_API_BASE_URL, LIVE_URL);
     }
 
     public void clearBaseURL() {
