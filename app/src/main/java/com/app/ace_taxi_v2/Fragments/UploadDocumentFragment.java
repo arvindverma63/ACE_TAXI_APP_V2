@@ -7,28 +7,34 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Logic.Service.FileUtils;
 import com.app.ace_taxi_v2.Logic.UploadDocumentApi;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -42,13 +48,13 @@ public class UploadDocumentFragment extends Fragment {
     private Uri imageUri;
     private ImageView selectedUploadButton;
     private int selectedType = -1;
+    private File photoFile; // To store camera image
 
     private Map<ImageView, Integer> uploadButtonToTypeMap = new HashMap<>();
     private Map<ImageView, ImageView> uploadButtonToCardMap = new HashMap<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_upload_document, container, false);
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
@@ -60,7 +66,7 @@ public class UploadDocumentFragment extends Fragment {
     }
 
     private void setupImageUploaders(View view) {
-        // Same as your original setup
+        // Initialize upload buttons
         ImageView licenceUploadButton = view.findViewById(R.id.select_lisence_img);
         ImageView insuranceUploadButton = view.findViewById(R.id.insurance_image);
         ImageView dbsCertUploadButton = view.findViewById(R.id.dbs_cert_image);
@@ -69,6 +75,7 @@ public class UploadDocumentFragment extends Fragment {
         ImageView safeguardingCertUploadButton = view.findViewById(R.id.safe_guarding_cert_image);
         ImageView firstAidCertUploadButton = view.findViewById(R.id.first_aid_cert_image);
 
+        // Initialize display ImageViews
         ImageView licenceDisplay = view.findViewById(R.id.licence_card);
         ImageView insuranceDisplay = view.findViewById(R.id.insurance_card);
         ImageView dbsCertDisplay = view.findViewById(R.id.dbs_cert_card);
@@ -77,6 +84,19 @@ public class UploadDocumentFragment extends Fragment {
         ImageView safeguardingCertDisplay = view.findViewById(R.id.safe_guarding_cert_card);
         ImageView firstAidCertDisplay = view.findViewById(R.id.first_aid_cert_card);
 
+        // Check for null views
+        if (licenceUploadButton == null || insuranceUploadButton == null || dbsCertUploadButton == null ||
+                vehicleLicenceUploadButton == null || driversLicenceUploadButton == null ||
+                safeguardingCertUploadButton == null || firstAidCertUploadButton == null ||
+                licenceDisplay == null || insuranceDisplay == null || dbsCertDisplay == null ||
+                vehicleLicenceDisplay == null || driversLicenceDisplay == null ||
+                safeguardingCertDisplay == null || firstAidCertDisplay == null) {
+            Log.e("UploadDocumentFragment", "One or more views not found in layout");
+            new CustomToast(getContext()).showCustomErrorToast("One or more views not found");
+            return;
+        }
+
+        // Map upload buttons to display ImageViews
         uploadButtonToCardMap.put(licenceUploadButton, licenceDisplay);
         uploadButtonToCardMap.put(insuranceUploadButton, insuranceDisplay);
         uploadButtonToCardMap.put(dbsCertUploadButton, dbsCertDisplay);
@@ -85,6 +105,7 @@ public class UploadDocumentFragment extends Fragment {
         uploadButtonToCardMap.put(safeguardingCertUploadButton, safeguardingCertDisplay);
         uploadButtonToCardMap.put(firstAidCertUploadButton, firstAidCertDisplay);
 
+        // Map upload buttons to document types
         uploadButtonToTypeMap.put(licenceUploadButton, 4);
         uploadButtonToTypeMap.put(insuranceUploadButton, 0);
         uploadButtonToTypeMap.put(dbsCertUploadButton, 2);
@@ -93,11 +114,19 @@ public class UploadDocumentFragment extends Fragment {
         uploadButtonToTypeMap.put(safeguardingCertUploadButton, 5);
         uploadButtonToTypeMap.put(firstAidCertUploadButton, 6);
 
+        // Set click listeners
         for (ImageView uploadButton : uploadButtonToCardMap.keySet()) {
+            uploadButton.setClickable(true);
             uploadButton.setOnClickListener(v -> {
                 selectedUploadButton = uploadButton;
                 selectedType = uploadButtonToTypeMap.get(uploadButton);
-                openImageOptions(); // Updated to offer both camera and gallery
+                Log.d("UploadDocumentFragment", "Clicked button with type: " + selectedType);
+                try {
+                    openImageOptions();
+                } catch (Exception e) {
+                    Log.e("UploadDocumentFragment", "Error opening image options: " + e.getMessage(), e);
+                    new CustomToast(getContext()).showCustomErrorToast("Failed to open image options: " + e.getMessage());
+                }
             });
         }
     }
@@ -111,50 +140,122 @@ public class UploadDocumentFragment extends Fragment {
     }
 
     private void openImageOptions() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
-        } else {
-            // Show dialog to choose between camera and gallery
-            String[] options = {"Take Photo", "Choose from Gallery"};
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-            builder.setTitle("Select Image Source");
-            builder.setItems(options, (dialog, which) -> {
-                if (which == 0) {
-                    openCamera();
-                } else if (which == 1) {
-                    openImageChooser();
+        Log.d("UploadDocumentFragment", "Entering openImageOptions");
+        try {
+            // Check for camera permission
+            String[] permissions = {Manifest.permission.CAMERA};
+            boolean allPermissionsGranted = true;
+            for (String permission : permissions) {
+                if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    Log.d("UploadDocumentFragment", "Permission missing: " + permission);
+                    ActivityCompat.requestPermissions(requireActivity(), permissions, CAMERA_PERMISSION_REQUEST);
+                    break;
                 }
-            });
-            builder.setNegativeButton("Cancel", null);
-            builder.show();
+            }
+
+            if (allPermissionsGranted) {
+                Log.d("UploadDocumentFragment", "All permissions granted, showing dialog");
+                String[] options = {"Take Photo", "Choose from Gallery"};
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+                builder.setTitle("Select Image Source");
+                builder.setItems(options, (dialog, which) -> {
+                    Log.d("UploadDocumentFragment", "Dialog option selected: " + which);
+                    if (which == 0) {
+                        openCamera();
+                    } else if (which == 1) {
+                        openImageChooser();
+                    }
+                });
+                builder.setNegativeButton("Cancel", (dialog, which) -> {
+                    Log.d("UploadDocumentFragment", "Dialog cancelled");
+                });
+                builder.create().show();
+                Log.d("UploadDocumentFragment", "Dialog shown");
+            } else {
+                Log.d("UploadDocumentFragment", "Permissions not granted, waiting for request result");
+            }
+        } catch (Exception e) {
+            Log.e("UploadDocumentFragment", "Error in openImageOptions: " + e.getMessage(), e);
+            new CustomToast(getContext()).showCustomErrorToast("Error showing image options: " + e.getMessage());
         }
     }
 
     private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            startActivityForResult(intent, CAMERA_REQUEST);
-        } else {
-            Toast.makeText(getContext(), "No camera app found", Toast.LENGTH_SHORT).show();
+        Log.d("UploadDocumentFragment", "Opening camera");
+        try {
+            // Check if device has a camera
+            if (!requireContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                Log.w("UploadDocumentFragment", "Device has no camera hardware");
+                new CustomToast(getContext()).showCustomToast("No camera available on this device. Please select an image from gallery.");
+                openImageChooser();
+                return;
+            }
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Try alternative intent if standard one fails
+            if (intent.resolveActivity(requireActivity().getPackageManager()) == null) {
+                Log.w("UploadDocumentFragment", "No app found for ACTION_IMAGE_CAPTURE, trying ACTION_IMAGE_CAPTURE_SECURE");
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+            }
+
+            if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                try {
+                    photoFile = createImageFile();
+                    imageUri = FileProvider.getUriForFile(requireContext(), "com.app.ace_taxi_v2.fileprovider", photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, CAMERA_REQUEST);
+                    Log.d("UploadDocumentFragment", "Camera intent started with URI: " + imageUri);
+                } catch (IOException ex) {
+                    Log.e("UploadDocumentFragment", "Error creating image file: " + ex.getMessage(), ex);
+                    new CustomToast(getContext()).showCustomErrorToast("Error preparing camera capture");
+                }
+            } else {
+                Log.w("UploadDocumentFragment", "No camera app found for any capture intent");
+                new CustomToast(getContext()).showCustomToast("No camera app found. Please select an image from gallery.");
+                openImageChooser();
+            }
+        } catch (Exception e) {
+            Log.e("UploadDocumentFragment", "Error in openCamera: " + e.getMessage(), e);
+            new CustomToast(getContext()).showCustomErrorToast("Failed to open camera: " + e.getMessage());
+            openImageChooser();
         }
     }
 
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
+    }
+
     private void openImageChooser() {
+        Log.d("UploadDocumentFragment", "Opening gallery");
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("UploadDocumentFragment", "onRequestPermissionsResult called with requestCode: " + requestCode);
         if (requestCode == CAMERA_PERMISSION_REQUEST) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openImageOptions(); // Re-show options after permission is granted
+            boolean allGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+            if (allGranted) {
+                Log.d("UploadDocumentFragment", "Permissions granted, opening image options");
+                openImageOptions();
             } else {
-                Toast.makeText(getContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
-                openImageChooser(); // Fallback to gallery
+                Log.d("UploadDocumentFragment", "Camera permission denied, falling back to gallery");
+                new CustomToast(getContext()).showCustomToast("Camera permission denied. Please select an image from gallery.");
+                openImageChooser();
             }
         }
     }
@@ -162,6 +263,7 @@ public class UploadDocumentFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("UploadDocumentFragment", "onActivityResult called with requestCode: " + requestCode + ", resultCode: " + resultCode);
         if (resultCode == Activity.RESULT_OK && selectedUploadButton != null) {
             ImageView displayImageView = uploadButtonToCardMap.get(selectedUploadButton);
             if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
@@ -169,32 +271,37 @@ public class UploadDocumentFragment extends Fragment {
                 if (displayImageView != null) {
                     displayImageView.setImageURI(imageUri);
                     uploadImage(imageUri, selectedType);
+                    Log.d("UploadDocumentFragment", "Gallery image selected: " + imageUri);
                 }
-            } else if (requestCode == CAMERA_REQUEST && data != null) {
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    Bitmap bitmap = (Bitmap) extras.get("data");
-                    if (bitmap != null) {
-                        imageUri = FileUtils.saveBitmapToFile(requireContext(), bitmap);
-                        if (displayImageView != null && imageUri != null) {
-                            displayImageView.setImageURI(imageUri);
-                            uploadImage(imageUri, selectedType);
-                        }
+            } else if (requestCode == CAMERA_REQUEST) {
+                if (imageUri != null && photoFile != null && photoFile.exists()) {
+                    if (displayImageView != null) {
+                        displayImageView.setImageURI(imageUri);
+                        uploadImage(imageUri, selectedType);
+                        Log.d("UploadDocumentFragment", "Camera image captured: " + imageUri);
                     }
+                } else {
+                    Log.w("UploadDocumentFragment", "Failed to capture camera image");
+                    new CustomToast(getContext()).showCustomErrorToast("Failed to capture image");
                 }
             }
+        } else {
+            Log.d("UploadDocumentFragment", "onActivityResult: Invalid result or no button selected");
         }
     }
 
     public void uploadImage(Uri imageUri, int type) {
+        Log.d("UploadDocumentFragment", "Uploading image with type: " + type);
         if (imageUri == null || type == -1) {
-            Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
+            Log.w("UploadDocumentFragment", "No image selected or invalid type");
+            new CustomToast(getContext()).showCustomToast("No image selected");
             return;
         }
 
         File file = FileUtils.getFileFromUri(getContext(), imageUri);
         if (file == null || !file.exists()) {
-            Toast.makeText(getContext(), "File not found!", Toast.LENGTH_SHORT).show();
+            Log.e("UploadDocumentFragment", "File not found for URI: " + imageUri);
+            new CustomToast(getContext()).showCustomErrorToast("File not found");
             return;
         }
 
@@ -204,6 +311,5 @@ public class UploadDocumentFragment extends Fragment {
         UploadDocumentApi uploadDocumentApi = new UploadDocumentApi(getContext());
         uploadDocumentApi.uploadDoc(body, type);
 
-        Toast.makeText(getContext(), "Uploading image...", Toast.LENGTH_SHORT).show();
     }
 }

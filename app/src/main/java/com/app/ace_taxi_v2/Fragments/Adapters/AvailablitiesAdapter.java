@@ -83,7 +83,7 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
 
         HHMMFormater hhmmFormater = new HHMMFormater();
         holder.datetime.setText(hhmmFormater.formateToEEDD(response.getDate()));
-        holder.availText.setText(response.getDescription());
+        holder.availText.setText(response.getAvailableHours());
 
         AvailabilityType type = AvailabilityType.fromId(response.getAvailabilityType());
         if (type != null) {
@@ -228,7 +228,7 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView datetime, pinText, availText;
+        TextView datetime, pinText, availText,availTime;
         ImageView deleteIcon;
         MaterialCardView pinCard;
 
@@ -239,6 +239,7 @@ public class AvailablitiesAdapter extends RecyclerView.Adapter<AvailablitiesAdap
             availText = itemView.findViewById(R.id.availText);
             pinText = itemView.findViewById(R.id.pinText);
             pinCard = itemView.findViewById(R.id.pinCard);
+            availTime = itemView.findViewById(R.id.time);
         }
     }
 }

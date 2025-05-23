@@ -59,7 +59,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="License"
+                        android:text="Taxi License"
                         style="@style/TextBG"
                         android:textStyle="bold"
                         android:textSize="14sp"

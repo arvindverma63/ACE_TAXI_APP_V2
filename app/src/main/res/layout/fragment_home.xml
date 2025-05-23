@@ -31,7 +31,7 @@
             android:text="Home"
             style="@style/TextBG"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:layout_gravity="center"
             android:gravity="center"/>
 
@@ -123,7 +123,7 @@
                         android:id="@+id/driver_name"
                         style="@style/TextBG"
                         android:textStyle="bold"
-                        android:textSize="15sp"/>
+                        android:textSize="15dp"/>
 
                     <Space
                         android:layout_width="wrap_content"
@@ -178,7 +178,7 @@
                         android:layout_gravity="center"
                         style="@style/TextBG"
                         android:textStyle="bold"
-                        android:textSize="15sp"/>
+                        android:textSize="15dp"/>
 
                     <Space
                         android:layout_width="wrap_content"
@@ -211,8 +211,8 @@
                 style="@style/CardBG"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:visibility="gone"
+                android:layout_marginTop="2dp"
                 app:cardCornerRadius="12dp"
                 app:strokeColor="@color/green"
                 app:strokeWidth="1dp">
@@ -244,10 +244,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
                                 android:layout_gravity="center"
-                                android:text="Card"
+                                android:text=""
                                 android:layout_marginHorizontal="20dp"
                                 android:textAllCaps="true"
                                 android:gravity="center"
+                                android:textSize="14dp"
                                 android:id="@+id/scope_text"
                                 android:textColor="@color/white" />
                         </com.google.android.material.card.MaterialCardView>
@@ -266,9 +267,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
                                 android:layout_gravity="center"
-                                android:text="Paid"
+                                android:text=""
                                 android:layout_marginHorizontal="20dp"
                                 android:textAllCaps="true"
+                                android:textSize="14dp"
                                 android:gravity="center"
                                 android:id="@+id/payment_status"
                                 android:textColor="@color/white" />
@@ -320,7 +322,7 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:text="No Current Active Jobs"
-                                    android:textSize="16sp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold" />
 
                             </LinearLayout>
@@ -335,7 +337,7 @@
                                 android:maxLines="2"
                                 android:text="askjf kdf s kdfjs sldkf"
                                 style="@style/LightTextBg"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
                         </LinearLayout>
 
 
@@ -346,6 +348,7 @@
                             android:gravity="end"
                             android:id="@+id/pickup_time"
                             android:layout_marginRight="10dp"
+                            android:textSize="16dp"
                             android:textStyle="bold"
                             android:text="16:20" />
                     </LinearLayout>
@@ -408,7 +411,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:textSize="16sp"
+                                android:textSize="16dp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -418,7 +421,7 @@
                                 android:ellipsize="end"
                                 android:maxLines="2"
                                 android:textColor="@android:color/darker_gray"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
                         </LinearLayout>
 
@@ -461,7 +464,7 @@
                                 android:ellipsize="end"
                                 android:maxLines="1"
                                 android:text="Arjk d  fjd kasfkj"
-                                android:textSize="16sp"
+                                android:textSize="16dp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -472,7 +475,7 @@
                                 android:maxLines="2"
                                 android:text="jkfksd  fkjsdf jf"
                                 style="@style/LightTextBg"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -500,6 +503,7 @@
                                 android:gravity="end"
                                 android:layout_gravity="end"
                                 android:layout_marginRight="10dp"
+                                android:textSize="16dp"
                                 android:id="@+id/destination_time"
                                 android:text="16:20" />
                         </LinearLayout>
@@ -535,6 +539,7 @@
                                 android:id="@+id/passenger_name"
                                 style="@style/TextBG"
                                 android:textStyle="bold"
+                                android:textSize="16dp"
                                 android:textColor="@color/red"/>
                             <TextView
                                 android:id="@+id/current_date"
@@ -542,7 +547,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="90/u78/32"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
                         </LinearLayout>
                         <Space
                             android:layout_width="wrap_content"
@@ -560,6 +565,7 @@
                                 android:text="20"
                                 android:id="@+id/current_price"
                                 style="@style/TextBG"
+                                android:textSize="16dp"
                                 android:textStyle="bold"
                                 android:textColor="@color/green"/>
                             <TextView
@@ -568,7 +574,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="20 passengers"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
                         </LinearLayout>
 
 
@@ -584,6 +590,7 @@
                 android:backgroundTint="@color/red"
                 android:layout_marginTop="10dp"
                 android:visibility="gone"
+                android:textSize="16dp"
                 android:textColor="@color/white"
                 android:padding="15dp"
                 android:text="VIEW BOOKING"/>
@@ -645,7 +652,7 @@
                                 android:layout_width="143dp"
                                 android:layout_height="wrap_content"
                                 android:text="Send Location OFF"
-                                android:textSize="16sp"
+                                android:textSize="16dp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -692,7 +699,7 @@
                                android:layout_height="wrap_content"
                                android:text="Notifications"
                                style="@style/TextBG"
-                               android:textSize="17sp"
+                               android:textSize="17dp"
                                android:textStyle="bold"
                                android:drawableStart="@drawable/ic_notification_settings"
                                android:drawablePadding="10dp"/>
@@ -720,7 +727,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Reports"
-                                android:textSize="17sp"
+                                android:textSize="17dp"
                                 android:textStyle="bold"
                                 android:drawableStart="@drawable/ic_calender"
                                 android:drawablePadding="10dp"
@@ -748,7 +755,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Logout"
                                 style="@style/TextBG"
-                                android:textSize="17sp"
+                                android:textSize="17dp"
                                 android:textStyle="bold"
                                 android:drawableTint="@color/red"
                                 android:drawableStart="@drawable/ic_logout"

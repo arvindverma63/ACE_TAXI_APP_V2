@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -178,7 +179,7 @@ public class DateTimeSelector {
             MaterialButton button = new MaterialButton(buttonContainer.getContext());
             button.setText(sdf.format(tempCalendar.getTime()));
             button.setCornerRadius(8);
-            button.setTextSize(12);
+            button.setTextSize(TypedValue.COMPLEX_UNIT_DIP,12);
             button.setStrokeColor(ContextCompat.getColorStateList(buttonContainer.getContext(), R.color.red));
             button.setStrokeWidth(2);
 

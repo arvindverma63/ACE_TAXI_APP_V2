@@ -28,7 +28,7 @@
         android:text="Journey Price"
         android:textStyle="bold"
         android:textColor="@color/red"
-        android:textSize="25sp" />
+        android:textSize="25dp" />
 
     <!-- Price Card -->
     <com.google.android.material.card.MaterialCardView
@@ -54,7 +54,7 @@
                 android:id="@+id/head_price"
                 android:text="£ 0.00"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="20dp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:visibility="gone"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:layout_marginTop="24dp"
                 android:text="Pickup Address"
                 style="@style/TextBG"/>
@@ -104,13 +104,13 @@
                     style="@style/TextBG"
                     android:textColorHint="@color/light_gray"
                     android:padding="12dp"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:layout_marginTop="20dp"
                 android:text="Destination Address"
                 style="@style/TextBG"/>
@@ -131,13 +131,13 @@
                     style="@style/TextBG"
                     android:textColorHint="@color/light_gray"
                     android:padding="12dp"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:layout_marginTop="20dp"
                 android:text="Passenger Name"
                 style="@style/TextBG"/>
@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:layout_marginTop="20dp"
                 android:text="Passenger Count"
                 android:visibility="gone"
@@ -240,7 +240,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="£0.00"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:layout_marginEnd="8dp" />
@@ -254,7 +254,7 @@
                 android:layout_marginStart="3dp"
                 android:text="Book"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 app:cornerRadius="120dp"
                 app:backgroundTint="@color/red"
                 android:textColor="@color/white"

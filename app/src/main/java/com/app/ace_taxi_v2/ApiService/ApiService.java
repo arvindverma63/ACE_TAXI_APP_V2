@@ -3,6 +3,7 @@ package com.app.ace_taxi_v2.ApiService;
 
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Models.AddressIO.AutocompleteResponse;
+import com.app.ace_taxi_v2.Models.AddressIO.GetAddressLocationRequest;
 import com.app.ace_taxi_v2.Models.AddressIO.PostcodeResponse;
 import com.app.ace_taxi_v2.Models.AllDriverAvailabilityResponse;
 import com.app.ace_taxi_v2.Models.AvailabilityRequest;
@@ -198,10 +199,11 @@ public interface ApiService {
     Call<QuotesResponse> getQuotes(@Header("Authorization") String token,
                                    @Body QuotesRequest quotesRequest);
 
-    @GET("autocomplete/{searchText}")
+    @POST("autocomplete/{searchText}")
     Call<AutocompleteResponse> getAutocompleteResults(
             @retrofit2.http.Path("searchText") String searchText,
-            @Query("api-key") String apiKey
+            @Query("api-key") String apiKey,
+            @Body GetAddressLocationRequest getAddressLocationRequest
     );
 
     @GET("get/{id}")

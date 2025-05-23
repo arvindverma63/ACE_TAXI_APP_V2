@@ -231,6 +231,7 @@ public class JobViewDialog {
                         bookingprice.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
                     }
 
+                    bookingprice.setText(NumberFormat.getCurrencyInstance(Locale.UK).format(bookingInfo.getPrice()));
                     distance_duration.setText(formatDuration(bookingInfo.getDurationMinutes()));
 
                     HHMMFormater formater = new HHMMFormater();

@@ -5,6 +5,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.ImageUploadResponse;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,16 +20,18 @@ import retrofit2.Response;
 
 public class UploadDocumentApi {
     public Context context;
+    public CustomDialog customDialog;
 
     public UploadDocumentApi(Context context) {
         this.context = context;
+        this.customDialog = new CustomDialog();
     }
 
     public void uploadDoc(MultipartBody.Part body, int type) {
         SessionManager sessionManager = new SessionManager(context);
         String token = sessionManager.getToken();
         int userId = sessionManager.getUserId(); // Get user ID for tracking
-
+        customDialog.showProgressDialog(context);
         // Attach user details to Sentry
         User sentryUser = new User();
         sentryUser.setId(String.valueOf(userId));
@@ -43,9 +47,11 @@ public class UploadDocumentApi {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-                    Toast.makeText(context, "Upload Successful!", Toast.LENGTH_SHORT).show();
+                    customDialog.dismissProgressDialog();
+                    new CustomToast(context).showCustomToast("uploaded Successfull");
                     Log.d("UploadDocumentApi", "Upload successful: " + response.body());
                 } else {
+                    customDialog.dismissProgressDialog();
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error details";
                         Log.e("UploadDocumentApi", "Upload failed: " + response.message() + " - " + errorBody);
@@ -62,6 +68,7 @@ public class UploadDocumentApi {
             public void onFailure(Call<Void> call, Throwable t) {
                 Log.e("UploadDocumentApi", "Error uploading file", t);
                 Sentry.captureException(t);
+                customDialog.dismissProgressDialog();
                 Toast.makeText(context, "Upload failed. Please check your connection.", Toast.LENGTH_SHORT).show();
             }
         });

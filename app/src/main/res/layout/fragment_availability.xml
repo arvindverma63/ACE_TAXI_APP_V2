@@ -30,7 +30,7 @@
             android:text="Availability"
             style="@style/TextBG"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:layout_gravity="center"
             android:gravity="center"/>
 
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:text="Date Range"
                     style="@style/TextBG"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:layout_marginBottom="8dp" />
 
                 <LinearLayout
@@ -113,7 +113,7 @@
                                 android:layout_weight="1"
                                 android:id="@+id/dateText"
                                 android:text="Dec 22, 2024"
-                                android:textSize="13sp"
+                                android:textSize="13dp"
                                 android:textStyle="bold"
                                 android:gravity="center" />
 
@@ -184,7 +184,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Unavailable All Day"
-                            android:textSize="14sp"
+                            android:textSize="14dp"
                             app:strokeColor="@color/red"
                             android:backgroundTint="@color/red"
                             android:textColor="@color/white"
@@ -213,6 +213,7 @@
                             android:text="AM School Only"
                             style="@style/ButtonAvail"
                             app:strokeColor="@color/green"
+                            android:textSize="14dp"
                             android:backgroundTint="@color/green"
                             android:textColor="@color/white"
                             app:iconTint="@color/white"
@@ -231,6 +232,7 @@
                             android:layout_marginLeft="5dp"
                             android:text="PM School Only"
                             style="@style/ButtonAvail"
+                            android:textSize="14dp"
                             app:strokeColor="@color/green"
                             app:cornerRadius="4dp"
                             android:backgroundTint="@color/green"
@@ -263,16 +265,17 @@
                             style="@style/ButtonAvail"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="center"
-                            app:strokeColor="@color/green"
                             android:backgroundTint="@color/green"
-                            android:textColor="@color/white"
-                            app:iconTint="@color/white"
+                            android:gravity="center"
                             android:text="AM-PM School Only"
-                            app:icon="@drawable/ic_am"
+                            android:textColor="@color/white"
                             app:cornerRadius="4dp"
+                            android:textSize="14dp"
+                            app:icon="@drawable/ic_am"
                             app:iconGravity="textStart"
-                            app:iconPadding="8dp" />
+                            app:iconPadding="8dp"
+                            app:iconTint="@color/white"
+                            app:strokeColor="@color/green" />
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
@@ -300,6 +303,7 @@
                             android:textColor="@color/white"
                             app:iconTint="@color/white"
                             style="@style/ButtonAvail"
+                            android:textSize="14dp"
                             app:icon="@drawable/ic_custom"
                             app:iconGravity="textStart"
                             app:iconPadding="8dp"
@@ -332,6 +336,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     style="@style/TextBG"
+                                    android:textSize="14dp"
                                     android:textStyle="bold"
                                     android:text="FROM: "/>
 
@@ -342,6 +347,7 @@
                                     android:gravity="center_vertical"
                                     android:layout_gravity="start"
                                     android:backgroundTint="@color/white"
+                                    android:textSize="14dp"
                                     android:textColor="@color/black"
                                     app:strokeWidth="1dp"
                                     app:cornerRadius="4dp"
@@ -356,6 +362,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     style="@style/TextBG"
+                                    android:textSize="14dp"
                                     android:textStyle="bold"
                                     android:text="TO: "/>
                                 <com.google.android.material.button.MaterialButton
@@ -364,6 +371,7 @@
                                     android:text="08:00 AM"
                                     android:gravity="center_vertical"
                                     android:layout_gravity="start"
+                                    android:textSize="14dp"
                                     android:backgroundTint="@color/white"
                                     android:textColor="@color/black"
                                     app:strokeColor="@color/gray"
@@ -384,6 +392,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="Add a note"
+                                    android:textSize="14dp"
                                     android:inputType="text"
                                     android:text=""
                                     style="@style/TextBG"
@@ -395,6 +404,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Give or Take (+/-)"
+                                android:textSize="14dp"
                                 android:id="@+id/give_or_take"/>
 
                             <LinearLayout
@@ -410,6 +420,7 @@
                                     android:textColor="@color/white"
                                     android:text="Add Available"
                                     app:cornerRadius="4dp"
+                                    android:textSize="14dp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="3dp"
                                     android:backgroundTint="@color/green"
@@ -423,6 +434,7 @@
                                     app:cornerRadius="4dp"
                                     android:layout_weight="1"
                                     android:layout_marginLeft="3dp"
+                                    android:textSize="14dp"
                                     android:backgroundTint="@color/red"
                                     android:id="@+id/add_un"/>
                             </LinearLayout>
@@ -431,6 +443,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
                                 android:text="Cancel"
+                                android:textSize="14dp"
                                 app:cornerRadius="4dp"
                                 android:backgroundTint="@color/gray"
                                 android:id="@+id/cancel_button"/>
@@ -459,7 +472,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="My Availability"
-                            android:textSize="15sp"
+                            android:textSize="15dp"
                             style="@style/TextBG"
                             android:id="@+id/my_avail_text"
                             android:gravity="center"
@@ -479,7 +492,7 @@
                             android:layout_gravity="center"
                             android:text="All Drivers"
                             android:id="@+id/all_driver_text"
-                            android:textSize="15sp"
+                            android:textSize="15dp"
                             android:gravity="center"
                             style="@style/TextBG"
                             android:textStyle="bold"
@@ -506,7 +519,7 @@
                         android:layout_marginVertical="15dp"
                         style="@style/TextBG"
                         android:textStyle="bold"
-                        android:textSize="17sp"/>
+                        android:textSize="17dp"/>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
@@ -514,6 +527,7 @@
                         android:text="(dd-mm-yyy)"
                         android:layout_gravity="center"
                         style="@style/TextBG"
+                        android:textSize="14dp"
                         android:id="@+id/selectDate"
                         android:layout_marginRight="30dp"
                         android:padding="10dp"/>
@@ -534,12 +548,14 @@
                             android:layout_height="wrap_content"
                             android:text="Day"
                             style="@style/TextBG"
+                            android:textSize="14dp"
                             android:layout_marginRight="50dp"
                             android:padding="10dp"/>
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Status"
+                            android:textSize="14dp"
                             style="@style/TextBG"
                             android:layout_marginRight="40dp"
                             android:padding="10dp"/>
@@ -548,6 +564,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             style="@style/TextBG"
+                            android:textSize="14dp"
                             android:padding="10dp"
                             android:text="Details" />
                     </LinearLayout>
@@ -579,13 +596,14 @@
                             android:layout_marginTop="15dp"
                             style="@style/TextBG"
                             android:textStyle="bold"
-                            android:textSize="17sp"/>
+                            android:textSize="17dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="(dd-mm-yyy)"
                             style="@style/TextBG"
+                            android:textSize="14dp"
                             android:layout_marginBottom="10dp"
                             android:id="@+id/all_driver_selectDate"/>
                     </LinearLayout>
@@ -609,7 +627,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.25"
                                 android:text="#Driver"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:padding="8dp"
                                 android:ellipsize="end"
                                 android:singleLine="true"
@@ -622,7 +640,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.45"
                                 android:text="Full Name"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:gravity="left"
                                 android:padding="8dp"
                                 android:ellipsize="end"
@@ -636,7 +654,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.35"
                                 android:text="Details"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:padding="8dp"
                                 android:gravity="left"
                                 android:ellipsize="end"
@@ -650,7 +668,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.25"
                                 android:text="Available"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:visibility="gone"
                                 android:padding="8dp"
                                 android:ellipsize="end"

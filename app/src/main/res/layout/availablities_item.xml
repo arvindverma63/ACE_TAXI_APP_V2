@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
             android:text="10:00 AM"
-            android:textSize="14sp"
+            android:textSize="14dp"
             android:padding="8dp" />
 
         <!-- Pin Card -->
@@ -30,7 +30,7 @@
             android:id="@+id/pinCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
+            android:layout_weight="0.20"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/green"
@@ -45,7 +45,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="12dp" />
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Details -->
@@ -53,11 +53,23 @@
             android:id="@+id/availText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
+            android:layout_weight="0.45"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:text="Details"
-            android:textSize="14sp"
+            android:textSize="14dp"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.20"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone"
+            android:text="time"
+            android:textSize="14dp"
             android:padding="8dp" />
 
         <!-- Delete Icon -->
@@ -65,7 +77,7 @@
             android:id="@+id/delete_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
+            android:layout_weight="0.10"
             android:src="@drawable/ic_delete"
             android:padding="8dp"
             app:tint="@color/red"

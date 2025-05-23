@@ -33,7 +33,7 @@
                 android:text="User Profile"
                 style="@style/TextBG"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="20dp"
                 android:layout_gravity="center"
                 android:gravity="center"/>
 
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Full Name"
-            android:textSize="14sp"
+            android:textSize="14dp"
             style="@style/TextBG"
             android:layout_marginBottom="4dp" />
 
@@ -86,6 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
+                android:textSize="16dp"
                 android:text="Full Name"
                 android:background="@null" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -95,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Telephone"
-            android:textSize="14sp"
+            android:textSize="14dp"
             style="@style/TextBG"
             android:layout_marginBottom="4dp" />
 
@@ -111,6 +112,7 @@
                 android:id="@+id/telephone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="16dp"
                 android:text="Telephone"
                 android:enabled="false"
                 android:background="@null" />
@@ -121,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Email"
-            android:textSize="14sp"
+            android:textSize="14dp"
             style="@style/TextBG"
             android:layout_marginBottom="4dp" />
 
@@ -138,6 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
+                android:textSize="16dp"
                 android:text="Email"
                 android:background="@null" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -147,7 +150,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Vehicle Model"
-            android:textSize="14sp"
+            android:textSize="14dp"
             style="@style/TextBG"
             android:layout_marginBottom="4dp" />
 
@@ -165,6 +168,7 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:paddingStart="40dp"
+                android:textSize="16dp"
                 android:text="Vehicle Model"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -185,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Vehicle Registration No."
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     style="@style/TextBG"
                     android:layout_marginBottom="4dp" />
                 <com.google.android.material.textfield.TextInputLayout
@@ -199,6 +203,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/vehicle_reg"
+                        android:textSize="16dp"
                         android:enabled="false"
                         android:text="V21 PTR" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -214,7 +219,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Vehicle Color"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     style="@style/TextBG"
                     android:layout_marginBottom="4dp" />
                 <com.google.android.material.textfield.TextInputLayout
@@ -228,6 +233,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
+                        android:textSize="16dp"
                         android:id="@+id/vehicle_color"
                         android:text="V21 PTR" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -252,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:text="Upload Document"
                     android:id="@+id/upload_document"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:layout_gravity="center"
                     android:padding="15dp"
                     android:textColor="@color/white"
@@ -264,7 +270,7 @@
                     android:layout_height="wrap_content"
                     android:text="View Expenses"
                     android:id="@+id/view_expenses"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:layout_gravity="center"
                     android:padding="15dp"
                     android:textColor="@color/white"

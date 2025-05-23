@@ -3,6 +3,7 @@ package com.app.ace_taxi_v2.Logic.AddressIO;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Instance.RetrofitAddressIO;
 import com.app.ace_taxi_v2.Models.AddressIO.AutocompleteResponse;
+import com.app.ace_taxi_v2.Models.AddressIO.GetAddressLocationRequest;
 import com.app.ace_taxi_v2.Models.AddressIO.PostcodeResponse;
 import com.app.ace_taxi_v2.Models.AddressIO.Suggestion;
 
@@ -19,7 +20,8 @@ public class GetAddressIOAddress {
 
     public void getAddressId(String text, AddressCallback callback) {
         ApiService apiService = RetrofitAddressIO.getInstance().create(ApiService.class);
-        apiService.getAutocompleteResults(text, API_KEY).enqueue(new Callback<AutocompleteResponse>() {
+        GetAddressLocationRequest getAddressLocationRequest = new GetAddressLocationRequest(51.0388, -2.2799);
+        apiService.getAutocompleteResults(text, API_KEY,getAddressLocationRequest).enqueue(new Callback<AutocompleteResponse>() {
             @Override
             public void onResponse(Call<AutocompleteResponse> call, Response<AutocompleteResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {

@@ -58,14 +58,14 @@
                         android:text="Pickup Location"
                         style="@style/TextBG"
                         android:textStyle="bold"
-                        android:textSize="16sp"/>
+                        android:textSize="16dp"/>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="datetime"
                         android:id="@+id/pickup_datetime"
-                        android:textSize="12sp"
+                        android:textSize="12dp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -83,6 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
+                        android:textSize="16dp"
                         android:text="price"
                         style="@style/TextBG"/>
                     <com.google.android.material.textview.MaterialTextView
@@ -91,7 +92,7 @@
                         android:id="@+id/distance_duration"
                         android:text="120 mins"
                         android:textStyle="bold"
-                        android:textSize="12sp"/>
+                        android:textSize="12dp"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -140,14 +141,14 @@
                             android:layout_height="wrap_content"
                             android:text="Bobst Library"
                             android:textStyle="bold"
-                            android:textSize="14sp"/>
+                            android:textSize="14dp"/>
 
                         <TextView
                             android:id="@+id/pickupAddress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="70 Washington Square S, New York, NY 10012, USA"
-                            android:textSize="12sp"/>
+                            android:textSize="12dp"/>
                     </LinearLayout>
 
                     <TextView
@@ -155,6 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="00: 00 AM"
+                        android:textSize="16dp"
                         android:textStyle="bold"
                         style="@style/TextBG"/>
                 </LinearLayout>
@@ -194,14 +196,14 @@
                             android:layout_height="wrap_content"
                             android:text="Larchmont Hotel"
                             android:textStyle="bold"
-                            android:textSize="14sp"/>
+                            android:textSize="14dp"/>
 
                         <TextView
                             android:id="@+id/destinationAddress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="27 W Main St, Larchmont, NY 10538, USA"
-                            android:textSize="12sp"/>
+                            android:textSize="12dp"/>
                     </LinearLayout>
 
                     <TextView
@@ -209,6 +211,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="00: 00 AM"
+                        android:textSize="16dp"
                         style="@style/TextBG"/>
                 </LinearLayout>
             </LinearLayout>
@@ -242,6 +245,7 @@
                 android:padding="15dp"
                 android:textColor="@color/white"
                 app:strokeWidth="1dp"
+                android:textSize="16dp"
                 app:strokeColor="@color/white"
                 app:cornerRadius="1000dp"
                 app:elevation="3dp"

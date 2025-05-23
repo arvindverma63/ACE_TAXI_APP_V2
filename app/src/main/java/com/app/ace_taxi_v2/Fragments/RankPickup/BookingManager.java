@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,7 @@ public class BookingManager {
                 View view = super.getView(position, convertView, parent);
                 TextView textView = (TextView) view;
                 textView.setTextColor(Color.BLACK);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
                 textView.setPadding(2, 2, 2, 2);
                 return view;
             }
@@ -78,6 +80,7 @@ public class BookingManager {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView textView = (TextView) view;
                 textView.setTextColor(Color.BLACK);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
                 textView.setPadding(2, 2, 2, 2);
                 return view;
             }

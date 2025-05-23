@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Message"
-                android:textSize="20sp"
+                android:textSize="20dp"
                 android:fontFamily="@font/font_urban"
                 android:textStyle="bold"
                 style="@style/TextBG"
@@ -58,7 +58,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="dd/mm/yyyy - HH:mm"
                 style="@style/TextBG"
-                android:textSize="15sp"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <!-- Message -->
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Message received from office"
-                android:textSize="20sp"
+                android:textSize="20dp"
                 style="@style/TextBG"
                 android:maxLines="1"
                 android:gravity="center"
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Read"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textAllCaps="false"
                 app:backgroundTint="@color/red"
                 android:paddingVertical="12dp"

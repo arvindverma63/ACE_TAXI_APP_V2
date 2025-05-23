@@ -42,7 +42,7 @@
                     style="@style/TextBG"
                     android:layout_width="106dp"
                     android:layout_height="wrap_content"
-                    android:text="version 9.4"
+                    android:text="version 9.5"
                     android:textSize="12dp" />
 
             </LinearLayout>
@@ -88,14 +88,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/driver_name"
-                        android:textSize="16sp"
+                        android:textSize="16dp"
                         android:layout_gravity="start"
                         android:text="----------"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:textSize="12sp"
+                        android:textSize="12dp"
                         android:id="@+id/driver_email"
                         android:text="----------------"/>
                 </LinearLayout>
@@ -125,7 +125,7 @@
                     android:id="@+id/theme_switch_text"
                     android:text="Light Mode"
                     style="@style/TextBG"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                      />
 
                 <Switch
@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Push Notifications"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:drawableLeft="@drawable/ic_notification_settings"
                     android:drawablePadding="10dp"
                     android:id="@+id/notification_switch_text"
@@ -203,7 +203,7 @@
                     android:drawableLeft="@drawable/ic_gps"
                     android:drawablePadding="10dp"
                     style="@style/SettingText"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                      />
 
                 <Switch
@@ -240,7 +240,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="SMS"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:drawableLeft="@drawable/ic_sms"
                     android:drawablePadding="10dp"
                     android:id="@+id/sms_switch_text"
@@ -281,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="URL"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:drawableLeft="@drawable/ic_url"
                     android:drawablePadding="10dp"
                     android:id="@+id/url_text"
@@ -326,7 +326,7 @@
                     style="@style/SettingText"
                     android:drawableLeft="@drawable/ic_keep_alive"
                     android:drawablePadding="10dp"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                      />
 
                 <Switch
@@ -364,7 +364,7 @@
                     style="@style/SettingText"
                     android:drawableLeft="@drawable/ic_mobile"
                     android:drawablePadding="10dp"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     />
 
                 <Button
