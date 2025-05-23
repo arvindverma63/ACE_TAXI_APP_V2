@@ -30,6 +30,7 @@ import com.app.ace_taxi_v2.Components.HamMenu;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.GoogleMap.JobMapsFragment;
 import com.app.ace_taxi_v2.GoogleMap.LocationCordinates;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.JobModals.JobViewDialog;
 import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Logic.LoginManager;
@@ -175,7 +176,7 @@ public class HomeFragment extends Fragment {
                 handleSwitchToggle(isChecked);
             });
         } catch (Exception e) {
-            Log.e(TAG, "Error in onCreateView", e);
+            LogHelperLaravel.getInstance().e(TAG, "Error in onCreateView"+e);
         }
 
         return view;
@@ -188,7 +189,7 @@ public class HomeFragment extends Fragment {
             editor.putBoolean(SWITCH_STATE_KEY, state);
             editor.apply();
         } catch (Exception e) {
-            Log.e(TAG, "Error saving switch state", e);
+            LogHelperLaravel.getInstance().e(TAG, "Error saving switch state"+e);
         }
     }
 
@@ -206,7 +207,7 @@ public class HomeFragment extends Fragment {
                         locationPermissions.setSwitchState(false);
                     }
                 } else {
-                    Log.e(TAG, "Location services (GPS) are disabled.");
+                    LogHelperLaravel.getInstance().e(TAG, "Location services (GPS) are disabled.");
                     locationPermissions.promptEnableGPS();
                     locationPermissions.setSwitchState(false);
                 }
@@ -217,7 +218,7 @@ public class HomeFragment extends Fragment {
                 updateDriverShiftApi.updateStatus(1001);
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error in handleSwitchToggle", e);
+            LogHelperLaravel.getInstance().e(TAG, "Error in handleSwitchToggle"+e);
         }
     }
 
@@ -234,7 +235,7 @@ public class HomeFragment extends Fragment {
             locationSwitch.setTrackTintList(ColorStateList.valueOf(trackColor));
             locationSwitch.setThumbTintList(ColorStateList.valueOf(thumbColor));
         } catch (Exception e) {
-            Log.e(TAG, "Error in updateStatusLabel", e);
+            LogHelperLaravel.getInstance().e(TAG, "Error in updateStatusLabel"+e);
         }
     }
 
@@ -249,7 +250,7 @@ public class HomeFragment extends Fragment {
                     bookingId = Integer.parseInt(bookingIdStr);
                 }
             } catch (NumberFormatException e) {
-                Log.e("getCurrentBooking", "Invalid booking ID", e);
+                LogHelperLaravel.getInstance().e("getCurrentBooking", "Invalid booking ID"+e);
             }
             final int[] jobId = new int[1];
             GetActiveJobApi getActiveJobApi = new GetActiveJobApi(getContext());
@@ -257,7 +258,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onSuccess(int response) {
                     jobId[0] = response;
-                    Log.e("job id for get Active booking : ",jobId[0]+"response "+response);
+                    LogHelperLaravel.getInstance().e("job id for get Active booking : ",jobId[0]+"response "+response);
                 }
 
                 @Override
@@ -275,7 +276,6 @@ public class HomeFragment extends Fragment {
                         for (TodayBooking booking : list) {
                             String status = booking.getStatus();
 
-                            Log.e("bookingId HomeFragment","bookingId : "+booking.getBookingId()+" jobid "+jobId[0]);
                             if ("1".equals(status) && booking.getBookingId() == finalBookingId || booking.getBookingId() == jobId[0]) {
                                 // Pickup address handling
                                 String pickup = booking.getPickupAddress();
@@ -381,7 +381,7 @@ public class HomeFragment extends Fragment {
                                     JobViewDialog jobModal = new JobViewDialog(getContext());
                                     jobModal.JobViewForTodayJob(finalBookingId1);
                                 });
-                                Log.e("current Job card vissble ", "visiable");
+                                LogHelperLaravel.getInstance().d("current Job card vissble ", "visiable");
                                 current_job_card.setVisibility(View.VISIBLE);
                                 set_job_status.setText("Active Booking");
                                 viewBtn.setVisibility(View.VISIBLE);
@@ -389,17 +389,17 @@ public class HomeFragment extends Fragment {
                             }
                         }
                     } catch (Exception e) {
-                        Log.e("CurrentBooking", "Error processing booking list", e);
+                        LogHelperLaravel.getInstance().e("CurrentBooking", "Error processing booking list"+e);
                     }
                 }
 
                 @Override
                 public void onError(String error) {
-                    Log.e("CurrentBooking", "Error: " + error);
+                    LogHelperLaravel.getInstance().e("CurrentBooking", "Error: " + error);
                 }
             });
         } catch (Exception e) {
-            Log.e(TAG, "Error in getCurrentBooking", e);
+            LogHelperLaravel.getInstance().e(TAG, "Error in getCurrentBooking"+e);
         }
     }
 
@@ -411,7 +411,7 @@ public class HomeFragment extends Fragment {
                 getCurrentBooking();
                 handler.postDelayed(this, 3000); // Repeat every 3 seconds
             } catch (Exception e) {
-                Log.e(TAG, "Error in repeating task", e);
+                LogHelperLaravel.getInstance().e(TAG, "Error in repeating task"+e);
             }
         }
     };
@@ -420,13 +420,13 @@ public class HomeFragment extends Fragment {
     public boolean isLocationEnabled() {
         try {
             if (getContext() == null) {
-                Log.e(TAG, "Context is null in isLocationEnabled");
+                LogHelperLaravel.getInstance().e(TAG, "Context is null in isLocationEnabled");
                 return false;
             }
 
             android.location.LocationManager locationManager = (android.location.LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
             if (locationManager == null) {
-                Log.e(TAG, "LocationManager is null");
+                LogHelperLaravel.getInstance().e(TAG, "LocationManager is null");
                 return false;
             }
 
@@ -434,7 +434,7 @@ public class HomeFragment extends Fragment {
             boolean networkEnabled = locationManager.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER);
             return gpsEnabled || networkEnabled;
         } catch (Exception e) {
-            Log.e(TAG, "Error checking location status", e);
+            LogHelperLaravel.getInstance().e(TAG, "Error checking location status"+e);
             return false;
         }
     }
@@ -448,13 +448,13 @@ public class HomeFragment extends Fragment {
                     try {
                         driver_name.setText(userProfileResponse.getFullname());
                     } catch (Exception e) {
-                        Log.e(TAG, "Error setting driver name", e);
+                        LogHelperLaravel.getInstance().e(TAG, "Error setting driver name"+e);
                     }
                 }
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    Log.e(TAG, "Profile fetch failed: " + errorMessage);
+                    LogHelperLaravel.getInstance().e(TAG, "Profile fetch failed: " + errorMessage);
                 }
             });
 
@@ -477,11 +477,11 @@ public class HomeFragment extends Fragment {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     startActivity(intent);
                 } catch (Exception e) {
-                    Log.e(TAG, "Error during logout", e);
+                    LogHelperLaravel.getInstance().e(TAG, "Error during logout"+e);
                 }
             });
         } catch (Exception e) {
-            Log.e(TAG, "Error in updateDash", e);
+            LogHelperLaravel.getInstance().e(TAG, "Error in updateDash"+e);
         }
     }
 
@@ -493,7 +493,7 @@ public class HomeFragment extends Fragment {
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         } catch (Exception e) {
-            Log.e(TAG, "Error replacing fragment", e);
+            LogHelperLaravel.getInstance().e(TAG, "Error replacing fragment"+e);
         }
     }
     private void openGoogleMaps(String address) {

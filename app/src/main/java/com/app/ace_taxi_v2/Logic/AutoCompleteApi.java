@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIRequest;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIResponse;
@@ -36,7 +37,7 @@ public class AutoCompleteApi {
         Sentry.setUser(sentryUser);
 
         if (token == null || token.isEmpty()) {
-            Log.e(TAG, "Token is missing");
+            LogHelperLaravel.getInstance().e(TAG, "Token is missing");
             Sentry.captureMessage("AutoCompleteApi Error: Authentication token missing for user ID: " + userId);
             callback.onFail("Authentication token missing");
             return;
@@ -52,7 +53,7 @@ public class AutoCompleteApi {
                     callback.onSuccess(response.body());
                 } else {
                     String errorMessage = "Failed to retrieve suggestions: HTTP " + response.code() + " - " + response.message();
-                    Log.e(TAG, errorMessage);
+                    LogHelperLaravel.getInstance().e(TAG, errorMessage);
                     Sentry.captureMessage("AutoCompleteApi Error: " + errorMessage);
                     callback.onFail(errorMessage);
                 }
@@ -61,7 +62,7 @@ public class AutoCompleteApi {
             @Override
             public void onFailure(Call<List<LocalPOIResponse>> call, Throwable t) {
                 String failureMessage = "AutoComplete API Call Failed: " + t.getMessage();
-                Log.e(TAG, failureMessage, t);
+                LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                 Sentry.captureException(t);
                 callback.onFail(failureMessage);
             }

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Logic.Service.CurrentShiftStatus;
 
@@ -32,7 +33,7 @@ public class UpdateDriverShiftApi {
         int userId = sessionManager.getUserId();
 
         if (token == null || token.isEmpty()) {
-            Log.e("DriverShiftAPI", "Token is null or empty!");
+            LogHelperLaravel.getInstance().e("DriverShiftAPI", "Token is null or empty!");
             Sentry.captureMessage("DriverShiftAPI Error: Token is null or empty for user ID: " + userId);
             customToast.showCustomErrorToast("Authentication failed. Please log in again.");
             return;
@@ -47,10 +48,10 @@ public class UpdateDriverShiftApi {
         apiService.driverShift(token, userId, status).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("DriverShiftAPI", "Response Code: " + response.code());
+                LogHelperLaravel.getInstance().d("DriverShiftAPI", "Response Code: " + response.code());
 
                 if (response.code() == 204) { // No content
-                    Log.d("DriverShiftAPI", "No content received but request succeeded");
+                    LogHelperLaravel.getInstance().d("DriverShiftAPI", "No content received but request succeeded");
                     customToast.showCustomErrorToast("No content received but request succeeded");
                     updateCurrentStatus(status);
                     return;
@@ -62,10 +63,10 @@ public class UpdateDriverShiftApi {
                 } else {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error body";
-                        Log.e("DriverShiftAPI", "API Error Response: " + errorBody);
+                        LogHelperLaravel.getInstance().e("DriverShiftAPI", "API Error Response: " + errorBody);
                         Sentry.captureMessage("DriverShiftAPI Error: HTTP " + response.code() + " - " + errorBody);
                     } catch (Exception e) {
-                        Log.e("DriverShiftAPI", "Error reading errorBody", e);
+                        LogHelperLaravel.getInstance().e("DriverShiftAPI", "Error reading errorBody"+ e);
                         Sentry.captureException(e);
                     }
                     customToast.showCustomErrorToast("Network error. Please try again.");
@@ -74,7 +75,7 @@ public class UpdateDriverShiftApi {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("DriverShiftAPI", "API Call Failed: " + t.getMessage());
+                LogHelperLaravel.getInstance().e("DriverShiftAPI", "API Call Failed: " + t.getMessage());
                 Sentry.captureException(t);
                 customToast.showCustomErrorToast("Network error. Please try again.");
             }

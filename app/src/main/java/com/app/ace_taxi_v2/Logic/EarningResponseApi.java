@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Fragments.Adapters.EarningsAdapter;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.EarningResponse;
 
@@ -52,7 +53,7 @@ public class EarningResponseApi {
         Sentry.setUser(sentryUser);
 
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        Log.d(TAG, "Request from: " + from + " to: " + to);
+        LogHelperLaravel.getInstance().d(TAG, "Request from: " + from + " to: " + to);
 
         apiService.getEarningResponse(token, from, to).enqueue(new Callback<List<EarningResponse>>() {
             @Override
@@ -75,7 +76,7 @@ public class EarningResponseApi {
 
                     if (earningsList.isEmpty()) {
 //                        Toast.makeText(context, "No earnings data available for the selected period.", Toast.LENGTH_SHORT).show();
-                        Sentry.captureMessage("EarningResponseApi: No earnings data available for user ID: " + userId);
+                        LogHelperLaravel.getInstance().d("EarningResponseApi: No earnings data available for user ID: " , userId+"");
                     } else {
                         // Calculate totals for pie chart
                         double cashTotal = 0.0, epaymentsTotal = 0.0, accountTotal = 0.0;
@@ -89,7 +90,7 @@ public class EarningResponseApi {
                 } else {
                     int statusCode = response.code();
                     String errorMessage = "Earnings API Error: HTTP " + statusCode + " - " + response.message();
-                    Log.e(TAG, errorMessage);
+                    LogHelperLaravel.getInstance().e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
                     Toast.makeText(context, "Error fetching data. Status Code: " + statusCode, Toast.LENGTH_SHORT).show();
                     earningCallback.onError(errorMessage);
@@ -99,7 +100,7 @@ public class EarningResponseApi {
             @Override
             public void onFailure(Call<List<EarningResponse>> call, Throwable t) {
                 String failureMessage = "EarningResponse API Call Failed: " + t.getMessage();
-                Log.e(TAG, failureMessage, t);
+                LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                 Sentry.captureException(t);
                 Toast.makeText(context, "Failed to fetch data. Please check your internet connection.", Toast.LENGTH_LONG).show();
                 earningCallback.onError(failureMessage);
@@ -117,11 +118,11 @@ public class EarningResponseApi {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    Log.d(TAG, "Google Pie Chart loaded successfully.");
+                    LogHelperLaravel.getInstance().d(TAG, "Google Pie Chart loaded successfully.");
                 }
             });
         } else {
-            Log.e(TAG, "WebView is null. Cannot load chart.");
+            LogHelperLaravel.getInstance().e(TAG, "WebView is null. Cannot load chart.");
             Sentry.captureMessage("WebView is null. Cannot load chart.");
         }
     }
@@ -134,14 +135,14 @@ public class EarningResponseApi {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    Log.d(TAG, "Google Pie Chart loaded successfully.");
+                    LogHelperLaravel.getInstance().d(TAG, "Google Pie Chart loaded successfully.");
 
                     String jsonData = "[['Category', 'Value'], ['Cash', " + cash + "], ['E-Payments', " + epayments + "], ['Account', " + account + "]]";
                     updateChart(jsonData);
                 }
             });
         } else {
-            Log.e(TAG, "WebView is null. Cannot update chart.");
+            LogHelperLaravel.getInstance().e(TAG, "WebView is null. Cannot update chart.");
             Sentry.captureMessage("WebView is null. Cannot update chart.");
         }
     }
@@ -149,10 +150,10 @@ public class EarningResponseApi {
     private void updateChart(String jsonData) {
         if (webView != null) {
             webView.evaluateJavascript("javascript:updateChart(" + jsonData + ")", value ->
-                    Log.d(TAG, "Chart updated: " + value)
+                    LogHelperLaravel.getInstance().d(TAG, "Chart updated: " + value)
             );
         } else {
-            Log.e(TAG, "WebView is null. Cannot execute JavaScript.");
+            LogHelperLaravel.getInstance().e(TAG, "WebView is null. Cannot execute JavaScript.");
             Sentry.captureMessage("WebView is null. Cannot execute JavaScript.");
         }
     }

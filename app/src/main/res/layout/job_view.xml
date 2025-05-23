@@ -113,7 +113,7 @@
                             android:ellipsize="end"
                             android:maxLines="2"
                             android:text=""
-                            android:textColor="@android:color/darker_gray"
+                            style="@style/TextBG"
                             android:textSize="14dp" />
                     </LinearLayout>
                     <com.google.android.material.card.MaterialCardView
@@ -269,7 +269,7 @@
                             android:ellipsize="end"
                             android:maxLines="2"
                             android:text=""
-                            android:textColor="@android:color/darker_gray"
+                            style="@style/TextBG"
                             android:textSize="14dp" />
                     </LinearLayout>
 
@@ -344,6 +344,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:visibility="gone"
+                        android:id="@+id/notes"
+                        style="@style/TextBG"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

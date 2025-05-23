@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Fragments.Adapters.EarningsAdapter;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Logic.EarningResponseApi;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Models.EarningResponse;
@@ -102,7 +103,7 @@ public class ReportFragment extends Fragment {
 
         date_range_button.setText(displayStartDate + " - " + displayEndDate);
 
-        Log.e("start and end date: ", startDate + " end date: " + endDate);
+        LogHelperLaravel.getInstance().e("start and end date: ", startDate + " end date: " + endDate);
         updateData(startDate, endDate);
     }
 
@@ -129,13 +130,13 @@ public class ReportFragment extends Fragment {
                 date_range_button.setText(displayStartDate + " - " + displayEndDate);
                 updateData(startDate, endDate);
             } catch (Exception e) {
-                Log.e("DatePicker", "Error formatting dates", e);
+                LogHelperLaravel.getInstance().e("DatePicker", "Error formatting dates"+ e);
             }
         });
     }
 
     public void updateData(String from, String to) {
-        Log.e("start and end date: ", "" + from + " end date: " + to);
+        LogHelperLaravel.getInstance().e("start and end date: ", "" + from + " end date: " + to);
         EarningResponseApi earningResponseApi = new EarningResponseApi(getContext(), null); // WebView not needed here
         earningResponseApi.getResponse(from, to, recyclerView, new EarningResponseApi.EarningCallback() {
             @Override

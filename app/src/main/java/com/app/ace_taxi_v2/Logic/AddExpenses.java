@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.ExpensesRequest;
 import com.app.ace_taxi_v2.Models.ExpensesResponse;
@@ -47,7 +48,7 @@ public class AddExpenses {
         apiService.expenses(token, expensesRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d(TAG, "Response code: " + response.code());
+                LogHelperLaravel.getInstance().d(TAG, "Response code: " + response.code());
 
                 if (response.code() == 200) {
                     new CustomToast(context).showCustomToast("Added Successfully");
@@ -56,7 +57,7 @@ public class AddExpenses {
                     new CustomToast(context).showCustomErrorToast("Failed to add expense");
 
                     // Log non-successful API responses to Sentry
-                    Sentry.captureMessage("API Error: " + response.code() + " - " + response.message());
+                    LogHelperLaravel.getInstance().e("API Error: ",+ response.code() + " - " + response.message());
                 }
             }
 

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.Guid;
 
@@ -55,7 +56,7 @@ public class JobResponseApi {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.d("Job response api: ",response.body()+" & rseponse code : "+response.code()+" guid"+guidGenerator.getGuid());
+                LogHelperLaravel.getInstance().d("Job response api: ",response.body()+" & rseponse code : "+response.code()+" guid"+guidGenerator.getGuid());
                 if (response.code() == 200) {
                     new CustomToast(context).showCustomToast(successMessage);
                 } else {

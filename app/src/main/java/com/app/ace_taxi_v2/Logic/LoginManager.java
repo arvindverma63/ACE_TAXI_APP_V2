@@ -9,6 +9,7 @@ import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.LoginRequest;
 import com.app.ace_taxi_v2.Models.LoginResponse;
@@ -42,7 +43,7 @@ public class LoginManager {
                     String token = response.body().getToken();
                     int userId = response.body().getUserId();
                     String username = response.body().getUsername();
-
+                    LogHelperLaravel.getInstance().i("User Login", "Login Successfull "+userId+" "+username);
                     // Attach user details to Sentry
                     User sentryUser = new User();
                     sentryUser.setId(String.valueOf(userId));
@@ -63,7 +64,7 @@ public class LoginManager {
                     context.startActivity(intent);
                 } else {
                     String errorMessage = "Login Failed: HTTP " + response.code() + " - " + response.message();
-                    Log.e("LoginManager", errorMessage);
+                    LogHelperLaravel.getInstance().e("LoginManager", errorMessage);
                     Sentry.captureMessage(errorMessage);
                     customToast.showCustomErrorToast("Incorrect Username Or Password");
                     progressDialog.dismissProgressDialog();
@@ -96,7 +97,7 @@ public class LoginManager {
                                 callback.onSuccess(response.body());
                             } else {
                                 String errorMessage = "Profile Fetch Failed: HTTP " + response.code() + " - " + response.message();
-                                Log.e("LoginManager", errorMessage);
+                                LogHelperLaravel.getInstance().e("LoginManager", errorMessage);
                                 Sentry.captureMessage(errorMessage);
                                 callback.onFailure("Invalid response from server");
                             }
@@ -105,7 +106,7 @@ public class LoginManager {
                         @Override
                         public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                             String failureMessage = "Profile Fetch API Call Failed: " + t.getMessage();
-                            Log.e("LoginManager", failureMessage, t);
+                            LogHelperLaravel.getInstance().e("LoginManager", failureMessage+"  "+ t);
                             Sentry.captureException(t);
                             callback.onFailure(t.getMessage());
                         }

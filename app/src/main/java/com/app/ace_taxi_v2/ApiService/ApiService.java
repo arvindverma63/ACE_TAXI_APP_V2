@@ -35,6 +35,7 @@ import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.app.ace_taxi_v2.Models.Jobs.HistoryBooking;
 import com.app.ace_taxi_v2.Models.Jobs.HistoryJobResponse;
 import com.app.ace_taxi_v2.Models.Jobs.TodayJobResponse;
+import com.app.ace_taxi_v2.Models.Log.LogRequest;
 import com.app.ace_taxi_v2.Models.LoginRequest;
 import com.app.ace_taxi_v2.Models.LoginResponse;
 import com.app.ace_taxi_v2.Models.POI.LocalPOIRequest;
@@ -211,6 +212,9 @@ public interface ApiService {
             @retrofit2.http.Path("id") String id,
             @Query("api-key") String apiKey
     );
+
+    @POST("api/logs")
+    Call<Void> log(@Body LogRequest logRequest);
 
 
 

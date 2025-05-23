@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.FcmRequest;
 import com.app.ace_taxi_v2.Models.FcmResponse;
@@ -39,7 +40,7 @@ public class UpdateFCMApi {
         Log.e(TAG, "FCM Token : " + fcm);
 
         if (jwtToken == null || jwtToken.isEmpty() || fcm == null || fcm.isEmpty()) {
-            Log.e(TAG, "JWT token or FCM token is null/empty");
+            LogHelperLaravel.getInstance().e(TAG, "JWT token or FCM token is null/empty");
             Sentry.captureMessage("UpdateFCMApi Error: JWT token or FCM token is null/empty for user ID: " + userId);
             Toast.makeText(context, "Token error. Please try again.", Toast.LENGTH_SHORT).show();
             return;
@@ -58,7 +59,7 @@ public class UpdateFCMApi {
             @Override
             public void onResponse(Call<FcmResponse> call, Response<FcmResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, "FCM updated successfully: " + response.body());
+                    LogHelperLaravel.getInstance().d(TAG, "FCM updated successfully: " + response.body());
                     new CustomToast(context).showCustomToast("FCM updated successfully:");
                 }
                 else if(response.code() == 423){
@@ -72,10 +73,10 @@ public class UpdateFCMApi {
                 else {
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error details";
-                        Log.e(TAG, "Failed to update FCM: " + response.code() + " - " + errorBody);
+                        LogHelperLaravel.getInstance().e(TAG, "Failed to update FCM: " + response.code() + " - " + errorBody);
                         Sentry.captureMessage("UpdateFCMApi Error: HTTP " + response.code() + " - " + errorBody);
                     } catch (IOException e) {
-                        Log.e(TAG, "Error reading error body", e);
+                        LogHelperLaravel.getInstance().e(TAG, "Error reading error body"+ e);
                         Sentry.captureException(e);
                     }
                     Toast.makeText(context, "Failed to update FCM. Please try again.", Toast.LENGTH_SHORT).show();
@@ -84,7 +85,7 @@ public class UpdateFCMApi {
 
             @Override
             public void onFailure(Call<FcmResponse> call, Throwable t) {
-                Log.e(TAG, "Error updating FCM: " + t.getMessage());
+                LogHelperLaravel.getInstance().e(TAG, "Error updating FCM: " + t.getMessage());
                 Sentry.captureException(t);
                 Toast.makeText(context, "Network error. Please check your connection.", Toast.LENGTH_SHORT).show();
             }

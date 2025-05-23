@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.ImageUploadResponse;
 import com.google.android.gms.maps.model.LatLng;
@@ -49,15 +50,15 @@ public class UploadDocumentApi {
                 if (response.code() == 200) {
                     customDialog.dismissProgressDialog();
                     new CustomToast(context).showCustomToast("uploaded Successfull");
-                    Log.d("UploadDocumentApi", "Upload successful: " + response.body());
+                    LogHelperLaravel.getInstance().d("UploadDocumentApi", "Upload successful: " + response.body());
                 } else {
                     customDialog.dismissProgressDialog();
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "No error details";
-                        Log.e("UploadDocumentApi", "Upload failed: " + response.message() + " - " + errorBody);
+                        LogHelperLaravel.getInstance().e("UploadDocumentApi", "Upload failed: " + response.message() + " - " + errorBody);
                         Sentry.captureMessage("UploadDocumentApi Error: HTTP " + response.code() + " - " + errorBody);
                     } catch (Exception e) {
-                        Log.e("UploadDocumentApi", "Error reading error body", e);
+                        LogHelperLaravel.getInstance().e("UploadDocumentApi", "Error reading error body"+ e);
                         Sentry.captureException(e);
                     }
                     Toast.makeText(context, "Upload Failed: " + response.message(), Toast.LENGTH_SHORT).show();
@@ -66,7 +67,7 @@ public class UploadDocumentApi {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("UploadDocumentApi", "Error uploading file", t);
+                LogHelperLaravel.getInstance().e("UploadDocumentApi", "Error uploading file"+ t);
                 Sentry.captureException(t);
                 customDialog.dismissProgressDialog();
                 Toast.makeText(context, "Upload failed. Please check your connection.", Toast.LENGTH_SHORT).show();

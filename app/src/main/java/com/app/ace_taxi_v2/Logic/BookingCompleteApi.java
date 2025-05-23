@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.BookingRequest.BookingCompleteRequest;
 
@@ -46,7 +47,7 @@ public class BookingCompleteApi {
 
                 } else {
                     String errorMessage = "BookingCompleteApi Error: HTTP " + response.code() + " - " + response.message();
-                    Log.e(TAG, errorMessage);
+                    LogHelperLaravel.getInstance().e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
                     Toast.makeText(context, "Booking completion failed", Toast.LENGTH_LONG).show();
                 }
@@ -55,7 +56,7 @@ public class BookingCompleteApi {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 String failureMessage = "BookingComplete API Call Failed: " + t.getMessage();
-                Log.e(TAG, failureMessage, t);
+                LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                 Sentry.captureException(t);
                 Toast.makeText(context, "Something went wrong while completing the booking", Toast.LENGTH_LONG).show();
             }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.GPSRequest;
 import com.app.ace_taxi_v2.Models.GPSResponse;
@@ -38,7 +39,7 @@ public class SendLocation {
         double longtitude = longitude;
 
         if (token == null || userId == -1) {
-            Log.e("SendLocation", "User is not logged in or token is invalid");
+            LogHelperLaravel.getInstance().e("SendLocation", "User is not logged in or token is invalid");
             Sentry.captureMessage("SendLocation Error: User is not logged in or token is invalid.");
             return;
         }
@@ -58,10 +59,8 @@ public class SendLocation {
             @Override
             public void onResponse(Call<GPSResponse> call, Response<GPSResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("SendLocation", "GPS updated successfully: " + response.body());
                 } else {
                     Log.e("SendLocation", "Failed to update GPS");
-                    Log.e("SendLocation", "HTTP Response Code: " + response.code());
                     try {
                         if (response.errorBody() != null) {
                             String errorBody = response.errorBody().string();
@@ -77,7 +76,7 @@ public class SendLocation {
 
             @Override
             public void onFailure(Call<GPSResponse> call, Throwable t) {
-                Log.e("SendLocation", "Error updating GPS: " + t.getMessage());
+
                 Sentry.captureException(t);
             }
         });

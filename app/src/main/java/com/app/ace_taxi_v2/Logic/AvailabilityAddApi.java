@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
 import com.app.ace_taxi_v2.Models.AvailabilityRequest;
@@ -51,7 +52,7 @@ public class AvailabilityAddApi {
                     customDialog.dismissProgressDialog();
                 } else {
                     String errorMessage = "Availability API Error: HTTP " + response.code() + " - " + response.message();
-                    Log.e(TAG, errorMessage);
+                    LogHelperLaravel.getInstance().e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
                     customToast.showCustomErrorToast("Availability Already Added");
                     customDialog.dismissProgressDialog();
@@ -61,7 +62,7 @@ public class AvailabilityAddApi {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 String failureMessage = "Availability API Call Failed: " + t.getMessage();
-                Log.e(TAG, failureMessage, t);
+                LogHelperLaravel.getInstance().e(TAG, failureMessage+t);
                 Sentry.captureException(t);
                 customDialog.dismissProgressDialog();
             }

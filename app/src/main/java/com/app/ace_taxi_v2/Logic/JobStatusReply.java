@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 
@@ -39,7 +40,7 @@ public class JobStatusReply {
         apiService.jobStatus(token, jobno, status).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.e("job stauts modal status ", "response : " + response);
+                LogHelperLaravel.getInstance().e("job stauts modal status ", "response : " + response);
 
                 if (response.code() == 200) {
                     Toast.makeText(context, "Job Updated Successfully", Toast.LENGTH_SHORT).show();
@@ -49,7 +50,7 @@ public class JobStatusReply {
                 } else {
                     String errorMessage = "JobStatusReply API Error: HTTP " + response.code() + " - " + response.message();
                     Sentry.captureMessage(errorMessage);
-                    Log.e("JobStatusReply", errorMessage);
+                    LogHelperLaravel.getInstance().e("JobStatusReply", errorMessage);
                     Toast.makeText(context, "Failed to update job status", Toast.LENGTH_SHORT).show();
                 }
 
@@ -60,7 +61,7 @@ public class JobStatusReply {
             public void onFailure(Call<Void> call, Throwable t) {
                 customDialog.dismissProgressDialog();
                 String failureMessage = "JobStatusReply API Call Failed: " + t.getMessage();
-                Log.e("exception from server", "error" + t);
+                LogHelperLaravel.getInstance().e("exception from server", "error" + t);
                 Sentry.captureException(t);
                 Toast.makeText(context, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }

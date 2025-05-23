@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.Reports.StatementItem;
 
@@ -56,11 +57,11 @@ public class GetStatementsApi {
                 customDialog.dismissProgressDialog();
 
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d(TAG, "Statement Response: " + response.body());
+                    LogHelperLaravel.getInstance().d(TAG, "Statement Response: " + response.body());
                     listener.onSuccess(response.body());
                 } else {
                     String errorMessage = "GetStatementsApi Error: HTTP " + response.code() + " - " + response.message();
-                    Log.e(TAG, errorMessage);
+                    LogHelperLaravel.getInstance().e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
                     Toast.makeText(context, "Error: " + response.message(), Toast.LENGTH_LONG).show();
                     listener.onFail(errorMessage);
@@ -72,7 +73,7 @@ public class GetStatementsApi {
                 customDialog.dismissProgressDialog();
 
                 String failureMessage = "GetStatementsApi API Call Failed: " + t.getMessage();
-                Log.e(TAG, failureMessage, t);
+                LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                 Sentry.captureException(t);
                 Toast.makeText(context, "Failed to load statements. Check your internet connection.", Toast.LENGTH_LONG).show();
                 listener.onFail(failureMessage);

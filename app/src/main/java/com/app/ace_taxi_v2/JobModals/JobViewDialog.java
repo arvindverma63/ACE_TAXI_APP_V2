@@ -1,8 +1,12 @@
 package com.app.ace_taxi_v2.JobModals;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -15,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -121,6 +126,7 @@ public class JobViewDialog {
             TextView distance = dialogView.findViewById(R.id.distance);
             MaterialButton callBtn = dialogView.findViewById(R.id.callBtn);
             MaterialButton arrivedBtn = dialogView.findViewById(R.id.arrived_btn);
+            TextView notes = dialogView.findViewById(R.id.notes);
 
 
             jobId.setText("#"+bookingId);
@@ -130,15 +136,7 @@ public class JobViewDialog {
             closeBtn.setContentDescription("Close dialog");
             closeBtn.setOnClickListener(v ->{
                 dialog.dismiss();
-//                if (context instanceof FragmentActivity) {
-//                    FragmentActivity activity = (FragmentActivity) context;
-//                    FragmentManager fragmentManager = activity.getSupportFragmentManager();
-//
-//                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                    transaction.replace(R.id.fragment_container, new JobFragment());
-//                    transaction.addToBackStack(null);
-//                    transaction.commit();
-//                }
+
 
             });
 
@@ -213,9 +211,13 @@ public class JobViewDialog {
                         payment_status.setText(bookingInfo.getAccountNumber()+"");
                     }else if(bookingInfo.getScopeText().equals("Card")){
                         if(bookingInfo.getPaymentStatusText().equals("Unpaid")){
+                            scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.purple));
+                            scopeText.setText("CARD");
                             paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.red));
                             payment_status.setText("UNPAID");
                         }else if(bookingInfo.getPaymentStatusText().equals("Paid")){
+                            scopeCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.purple));
+                            scopeText.setText("CARD");
                             paymentCard.setBackgroundTintList(ContextCompat.getColorStateList(context,R.color.green));
                             payment_status.setText("PAID");
                         }
@@ -299,6 +301,12 @@ public class JobViewDialog {
                             new JobStatusModal(context).openModal(bookingId);
                         }
                     });
+
+                    callBtn.setOnClickListener(v -> {
+                        openDial(bookingInfo.getPhoneNumber());
+                    });
+                    notes.setVisibility(View.VISIBLE);
+                    notes.setText(""+bookingInfo.getDetails());
                 }
 
                 @Override
@@ -326,15 +334,9 @@ public class JobViewDialog {
             }
 
 
-//            if (activeBookingId != -1 && activeBookingId != job.getBookingId()) {
-//                Toast.makeText(context, "Please complete the current booking first", Toast.LENGTH_LONG).show();
-//                return;
-//            }
-
-//            if (currentBookingId == null && "1".equals(job.getStatus())) {
                 bookingStatus.setBookingId(String.valueOf(job.getBookingId()));
                 bookingSession.saveBookingId(job.getBookingId());
-//            }
+
 
         } catch (Exception e) {
             Log.e(TAG, "Error starting booking", e);
@@ -391,5 +393,13 @@ public class JobViewDialog {
             context.startActivity(browserIntent);
         }
     }
+    public void openDial(String phoneNumber) {
+        Context context = contextRef.get();
+        String phone = "tel:"+phoneNumber;
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse(phone));
+        context.startActivity(intent);
+    }
+
 
 }

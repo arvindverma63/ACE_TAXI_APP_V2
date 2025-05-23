@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.Jobs.DateRangeList;
 import com.app.ace_taxi_v2.Models.Jobs.DateRangeRequest;
@@ -47,7 +48,7 @@ public class DateRangeApi {
 
                     if (list != null && !list.isEmpty()) {
                         callback.onSuccess(list);
-                        Log.d(TAG, "Date range response received: " + list);
+                        LogHelperLaravel.getInstance().d(TAG, "Date range response received: " + list);
                     } else {
                         String noBookingsMessage = "No bookings found for the selected date range.";
                         callback.onFail(noBookingsMessage);
@@ -56,7 +57,7 @@ public class DateRangeApi {
                 } else {
                     String errorMessage = "Server error: HTTP " + response.code() + " - " + response.message();
                     callback.onFail(errorMessage);
-                    Log.e(TAG, "API response error: " + response.message());
+                    LogHelperLaravel.getInstance().e(TAG, "API response error: " + response.message());
                     Sentry.captureMessage("DateRangeApi Error: " + errorMessage);
                 }
             }
@@ -64,7 +65,7 @@ public class DateRangeApi {
             @Override
             public void onFailure(Call<DateRangeList> call, Throwable t) {
                 String failureMessage = "DateRange API Call Failed: " + t.getMessage();
-                Log.e(TAG, failureMessage, t);
+                LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                 Sentry.captureException(t);
                 callback.onFail("Network error: " + t.getMessage());
                 Toast.makeText(context, "Failed to fetch data. Please check your connection.", Toast.LENGTH_SHORT).show();

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 
 import io.sentry.Sentry;
@@ -39,10 +40,10 @@ public class DeleteAvailbility {
                 if (response.code() == 200) {
                     CustomToast customToast = new CustomToast(context);
                     customToast.showCustomToast("Availability Deleted");
-                    Log.d(TAG, "Availability deleted successfully. ID: " + id);
+                    LogHelperLaravel.getInstance().d(TAG, "Availability deleted successfully. ID: " + id);
                 } else {
                     String errorMessage = "DeleteAvailbility API Error: HTTP " + response.code() + " - " + response.message();
-                    Log.e(TAG, errorMessage);
+                    LogHelperLaravel.getInstance().e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
                     Toast.makeText(context, "Failed to delete availability", Toast.LENGTH_LONG).show();
                 }
@@ -51,7 +52,7 @@ public class DeleteAvailbility {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 String failureMessage = "DeleteAvailbility API Call Failed: " + t.getMessage();
-                Log.e(TAG, failureMessage, t);
+                LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                 Sentry.captureException(t);
                 Toast.makeText(context, "Something went wrong while deleting", Toast.LENGTH_LONG).show();
             }

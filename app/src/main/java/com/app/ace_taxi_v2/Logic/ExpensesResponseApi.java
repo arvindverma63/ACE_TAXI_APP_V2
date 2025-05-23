@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.Expense;
 
@@ -40,11 +41,11 @@ public class ExpensesResponseApi {
             public void onResponse(Call<List<Expense>> call, Response<List<Expense>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Expense> expenses = response.body();
-                    Log.d(TAG, "Expenses fetched: " + expenses.size());
+                    LogHelperLaravel.getInstance().d(TAG, "Expenses fetched: " + expenses.size());
                     listener.onExpensesFetched(expenses);
                 } else {
                     String errorMessage = "Expenses API Error: HTTP " + response.code() + " - " + response.message();
-                    Log.e(TAG, errorMessage);
+                    LogHelperLaravel.getInstance().e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
                     listener.onExpensesFetched(null);
                 }
@@ -53,7 +54,7 @@ public class ExpensesResponseApi {
             @Override
             public void onFailure(Call<List<Expense>> call, Throwable t) {
                 String failureMessage = "ExpensesResponse API Call Failed: " + t.getMessage();
-                Log.e(TAG, failureMessage, t);
+                LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                 Sentry.captureException(t);
                 listener.onExpensesFetched(null);
             }

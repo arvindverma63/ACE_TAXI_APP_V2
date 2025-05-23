@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.QuotesRequest;
 import com.app.ace_taxi_v2.Models.QuotesResponse;
@@ -37,7 +38,7 @@ public class GetBookingPrice {
             apiService.getQuotes(token, quotesRequest).enqueue(new Callback<QuotesResponse>() {
                 @Override
                 public void onResponse(Call<QuotesResponse> call, Response<QuotesResponse> response) {
-                    Log.e("get booking price",response.body()+" /n"+response.code());
+                    LogHelperLaravel.getInstance().e("get booking price",response.body()+" /n"+response.code());
                     try {
                         if (response.isSuccessful() && response.body() != null) {
                             callback.onSuccess(response.body());
@@ -45,14 +46,14 @@ public class GetBookingPrice {
                             callback.onError("Failed to fetch booking price. Error code: " + response.code());
                         }
                     } catch (Exception e) {
-                        Log.e("GetBookingPrice", "Error parsing response", e);
+                        LogHelperLaravel.getInstance().e("GetBookingPrice", "Error parsing response"+ e);
                         callback.onError("Error processing server response.");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<QuotesResponse> call, Throwable t) {
-                    Log.e("GetBookingPrice", "Network request failed", t);
+                    LogHelperLaravel.getInstance().e("GetBookingPrice", "Network request failed"+ t);
                     callback.onError("Network error occurred. Please check your connection.");
                 }
             });

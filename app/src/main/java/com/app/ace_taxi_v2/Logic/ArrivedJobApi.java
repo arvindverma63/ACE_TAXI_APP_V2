@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.Jobs.ArrivedResponse;
 
@@ -37,7 +38,7 @@ public class ArrivedJobApi {
                     Toast.makeText(context, "Failed to update status", Toast.LENGTH_LONG).show();
 
                     // Log non-successful API response to Sentry
-                    Sentry.captureMessage("ArrivedJobApi Error: HTTP " + response.code() + " - " + response.message());
+                    LogHelperLaravel.getInstance().e("ArrivedJobApi Error: HTTP " , response.code() + " - " + response.message());
                 }
             }
 
@@ -46,7 +47,7 @@ public class ArrivedJobApi {
                 Toast.makeText(context, "Server Response Error", Toast.LENGTH_LONG).show();
 
                 // Capture the network failure or exception in Sentry
-                Sentry.captureException(t);
+                LogHelperLaravel.getInstance().e("ArrivedJobApi Error: ", t.getMessage());
             }
         });
     }

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.Adapters.AvailablitiesAdapter;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.AvailabilityResponse;
 import com.app.ace_taxi_v2.R;
@@ -70,12 +71,12 @@ public class AvailabilitiesApi {
 
                     } else {
                         String errorMessage = "Failed to fetch drivers: HTTP " + response.code() + " - " + response.message();
-                        Log.e(TAG, errorMessage);
+                        LogHelperLaravel.getInstance().e(TAG, errorMessage);
                         Sentry.captureMessage("AvailabilitiesApi Error: " + errorMessage);
                         showToast("Failed to load data. Please try again.");
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Unexpected error in API response handling", e);
+                    LogHelperLaravel.getInstance().e(TAG, "Unexpected error in API response handling"+ e);
                     Sentry.captureException(e);
                     showToast("Something went wrong. Please try again.");
                 }
@@ -93,11 +94,11 @@ public class AvailabilitiesApi {
                         failureMessage = "Unexpected error: " + t.getMessage();
                     }
 
-                    Log.e(TAG, failureMessage, t);
+                    LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                     Sentry.captureException(t);
                     showToast(failureMessage);
                 } catch (Exception e) {
-                    Log.e(TAG, "Error handling API failure", e);
+                    LogHelperLaravel.getInstance().e(TAG, "Error handling API failure"+ e);
                     Sentry.captureException(e);
                     showToast("Something went wrong with the server.");
                 }

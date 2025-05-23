@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 
@@ -39,7 +40,7 @@ public class GetBookingInfoApi {
                     if (response.isSuccessful() && response.body() != null) {
                         callback.onSuccess(response.body());
                     } else {
-                        Log.e("GetBookingInfoApi", "API Response Error: " + response.code() + " - " + response.message());
+                        LogHelperLaravel.getInstance().e("GetBookingInfoApi", "API Response Error: " + response.code() + " - " + response.message());
                         Sentry.captureMessage("GetBookingInfoApi Error: HTTP " + response.code() + " - " + response.message());
                         callback.onfailer("Failed to fetch booking info. Server error.");
                     }
@@ -47,7 +48,7 @@ public class GetBookingInfoApi {
 
                 @Override
                 public void onFailure(Call<GetBookingInfo> call, Throwable t) {
-                    Log.e("GetBookingInfoApi", "API Call Failed", t);
+                    LogHelperLaravel.getInstance().e("GetBookingInfoApi", "API Call Failed"+ t);
                     Sentry.captureException(t);
                     callback.onfailer("Server not responding");
                 }
