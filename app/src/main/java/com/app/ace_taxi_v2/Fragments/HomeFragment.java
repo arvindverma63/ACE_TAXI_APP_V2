@@ -309,7 +309,7 @@ public class HomeFragment extends Fragment {
 
                                         viaAddress.setText(firstVia);
                                         viaCode.setText(lastVia + (viaPostCode.isEmpty() ? "" : " " + viaPostCode));
-                                        viaView.setOnClickListener(v -> openGoogleMaps(via.getAddress()));
+                                        viaView.setOnClickListener(v -> openGoogleMaps(viaPostCode));
 
                                         vias_container.addView(viaView);
                                     }
@@ -318,8 +318,8 @@ public class HomeFragment extends Fragment {
                                 }
 
                                 // Set UI elements
-                                pickup_address.setOnClickListener(v -> openGoogleMaps(booking.getPickupAddress()));
-                                destination_address.setOnClickListener(v -> openGoogleMaps(booking.getDestinationAddress()));
+                                pickup_address.setOnClickListener(v -> openGoogleMaps(lastPickup));
+                                destination_address.setOnClickListener(v -> openGoogleMaps(lastDestination));
                                 pickup_address.setText(firstPickup);
                                 pickup_subaddress.setText(lastPickup);
                                 destination_address.setText(firstDestination);
@@ -497,6 +497,7 @@ public class HomeFragment extends Fragment {
         }
     }
     private void openGoogleMaps(String address) {
+        LogHelperLaravel.getInstance().i("Dashboard Fragment openGoogle Maps method ","address postcode clicked: "+address);
         Context context = getContext();
         if (context == null) return;
         if (address == null || address.trim().isEmpty()) {

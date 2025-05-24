@@ -32,6 +32,8 @@ import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.app.ace_taxi_v2.Fragments.JobFragment;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
+import com.app.ace_taxi_v2.Logic.ArrivedJobApi;
 import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
 import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.JobApi.TodayJobManager;
@@ -128,6 +130,11 @@ public class JobViewDialog {
             MaterialButton arrivedBtn = dialogView.findViewById(R.id.arrived_btn);
             TextView notes = dialogView.findViewById(R.id.notes);
 
+            arrivedBtn.setOnClickListener(view -> {
+                arrivedClick(bookingId);
+                dialog.dismiss();
+            });
+
 
             jobId.setText("#"+bookingId);
 
@@ -153,11 +160,7 @@ public class JobViewDialog {
 
             if (!showCompleteButton) complete_button.setVisibility(View.GONE);
 
-            complete_button.setOnClickListener(v -> {
-                dialog.dismiss();
-                JobModal jobModal = new JobModal(context);
-                jobModal.jobCompleteBooking(bookingId);
-            });
+
 
 
             View todayjobView = LayoutInflater.from(context).inflate(R.layout.fragment_today,null);
@@ -195,8 +198,8 @@ public class JobViewDialog {
             getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
                 @Override
                 public void onSuccess(GetBookingInfo bookingInfo) {
-                    pickupAddress.setOnClickListener(v -> openGoogleMaps(bookingInfo.getPickupAddress()));
-                    destinationAddress.setOnClickListener(v -> openGoogleMaps(bookingInfo.getDestinationAddress()));
+                    pickupAddress.setOnClickListener(v -> openGoogleMaps(bookingInfo.getPickupPostCode()));
+                    destinationAddress.setOnClickListener(v -> openGoogleMaps(bookingInfo.getDestinationPostCode()));
                     distance.setText(bookingInfo.getMileage()+" Miles");
                     if(bookingInfo.isASAP()){
                         asap_card.setVisibility(View.VISIBLE);
@@ -263,7 +266,7 @@ public class JobViewDialog {
                             String lastVia = viaParts.length > 1 ? viaParts[viaParts.length - 1].trim() : "";
 
                             viaAddress.setText(firstVia);
-                            viaAddress.setOnClickListener(v -> openGoogleMaps(viaAddressText));
+                            viaAddress.setOnClickListener(v -> openGoogleMaps(viaPostCode));
                             viaCode.setText(lastVia + (viaPostCode.isEmpty() ? "" : " " + viaPostCode));
 
                             vias_container.addView(viaView);
@@ -307,6 +310,13 @@ public class JobViewDialog {
                     });
                     notes.setVisibility(View.VISIBLE);
                     notes.setText(""+bookingInfo.getDetails());
+
+                    complete_button.setOnClickListener(v -> {
+                        dialog.dismiss();
+                        JobModal jobModal = new JobModal(context);
+
+                        jobModal.jobCompleteBooking(bookingId,bookingInfo.getPrice());
+                    });
                 }
 
                 @Override
@@ -366,6 +376,7 @@ public class JobViewDialog {
     }
 
     private void openGoogleMaps(String address) {
+        LogHelperLaravel.getInstance().i("Job Details Dailog Map postcode: ",""+address);
         Context context = contextRef.get();
         if (context == null) return;
         if (address == null || address.trim().isEmpty()) {
@@ -399,6 +410,11 @@ public class JobViewDialog {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse(phone));
         context.startActivity(intent);
+    }
+
+    public void arrivedClick(int bookingId){
+        ArrivedJobApi arrivedJobApi = new ArrivedJobApi(contextRef.get());
+        arrivedJobApi.updateStatus(bookingId);
     }
 
 

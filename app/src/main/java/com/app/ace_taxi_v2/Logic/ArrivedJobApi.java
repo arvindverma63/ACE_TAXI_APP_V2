@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.Jobs.ArrivedResponse;
@@ -32,21 +33,14 @@ public class ArrivedJobApi {
         apiService.arrivedStatusUpdate(token, bookingId).enqueue(new Callback<ArrivedResponse>() {
             @Override
             public void onResponse(Call<ArrivedResponse> call, Response<ArrivedResponse> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(context, "Status Updated Successfully", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "Failed to update status", Toast.LENGTH_LONG).show();
-
-                    // Log non-successful API response to Sentry
-                    LogHelperLaravel.getInstance().e("ArrivedJobApi Error: HTTP " , response.code() + " - " + response.message());
+                if (response.code() == 200) {
+                    new CustomToast(context).showCustomToast("Arrived call Successfully ");
+                    LogHelperLaravel.getInstance().i("ArrivedJobApi Success: ", bookingId +":bookingId userId "+userId);
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrivedResponse> call, Throwable t) {
-                Toast.makeText(context, "Server Response Error", Toast.LENGTH_LONG).show();
-
-                // Capture the network failure or exception in Sentry
+            public void onFailure(Call<ArrivedResponse> call, Throwable t) {            // Capture the network failure or exception in Sentry
                 LogHelperLaravel.getInstance().e("ArrivedJobApi Error: ", t.getMessage());
             }
         });

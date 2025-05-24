@@ -351,7 +351,7 @@ public class JobModal {
         alertDialog.show();
     }
 
-    public void jobCompleteBooking(int bookingId) {
+    public void jobCompleteBooking(int bookingId,double iprice) {
         Dialog fullScreenDialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         View dialogView = LayoutInflater.from(context).inflate(R.layout.job_complete_dialog, null);
         fullScreenDialog.setContentView(dialogView);
@@ -365,6 +365,8 @@ public class JobModal {
         TextView tip = dialogView.findViewById(R.id.etTip);
         Button btnSubmit = dialogView.findViewById(R.id.btnSubmit);
         setupCloseButton(dialogView, fullScreenDialog, R.id.btnClose);
+
+        etPrice.setText(iprice+"0");
 
         btnSubmit.setOnClickListener(v -> {
             double waitingTime = parseDouble(etWaitingTime.getText().toString());

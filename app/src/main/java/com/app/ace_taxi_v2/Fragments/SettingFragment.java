@@ -28,6 +28,7 @@ import com.app.ace_taxi_v2.Activity.LoginActivity;
 import com.app.ace_taxi_v2.Components.ConfigModal;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Helper.DeviceMode;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Logic.LoginManager;
 import com.app.ace_taxi_v2.Logic.Service.ScreenOnOffManager;
@@ -328,6 +329,8 @@ public class SettingFragment extends Fragment {
     }
 
     public void changeMode() {
+        SessionManager sessionManager = new SessionManager(getContext());
+        LogHelperLaravel.getInstance().i("Settings","device Mode switch clicked"+sessionManager.getUserId()+" username: "+sessionManager.getUsername());
         // Set initial state based on saved URL mode
         boolean isLiveMode = DeviceMode.getInstance().isLiveMode();
         device_mode.setChecked(isLiveMode);
@@ -339,7 +342,6 @@ public class SettingFragment extends Fragment {
             DeviceMode.getInstance().setBaseURL(isChecked);
 
             // Clear token/session as before
-            SessionManager sessionManager = new SessionManager(getContext());
             sessionManager.clearToken();
 
             // Reset Retrofit so next calls use the new URL

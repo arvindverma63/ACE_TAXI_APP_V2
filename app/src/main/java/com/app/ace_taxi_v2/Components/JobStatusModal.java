@@ -10,8 +10,10 @@ import androidx.core.content.ContextCompat;
 
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.app.ace_taxi_v2.JobModals.JobModal;
+import com.app.ace_taxi_v2.Logic.GetBookingInfoApi;
 import com.app.ace_taxi_v2.Logic.JobStatusReply;
 import com.app.ace_taxi_v2.Logic.Service.CurrentBookingSession;
+import com.app.ace_taxi_v2.Models.Jobs.GetBookingInfo;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -57,13 +59,25 @@ public class JobStatusModal {
         btnClear = dialogView.findViewById(R.id.btn_clear);
         btnReset = dialogView.findViewById(R.id.btn_reset);
 
-        // Null-check before setting listeners
-        if (btnOnRoute != null) btnOnRoute.setOnClickListener(v -> updateJobStatus(3003));
-        if (btnPickUp != null) btnPickUp.setOnClickListener(v -> updateJobStatus(3004));
-        if (btnPob != null) btnPob.setOnClickListener(v -> updateJobStatus(3005));
-        if (btnStc != null) btnStc.setOnClickListener(v -> updateJobStatus(3006));
-        if (btnClear != null) btnClear.setOnClickListener(v -> jobClear());
-        if (btnReset != null) btnReset.setOnClickListener(v -> updateJobStatus(3008));
+        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+        getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
+            @Override
+            public void onSuccess(GetBookingInfo bookingInfo) {
+                // Null-check before setting listeners
+                if (btnOnRoute != null) btnOnRoute.setOnClickListener(v -> updateJobStatus(3003));
+                if (btnPickUp != null) btnPickUp.setOnClickListener(v -> updateJobStatus(3004));
+                if (btnPob != null) btnPob.setOnClickListener(v -> updateJobStatus(3005));
+                if (btnStc != null) btnStc.setOnClickListener(v -> updateJobStatus(3006));
+                if (btnClear != null) btnClear.setOnClickListener(v -> jobClear(bookingInfo.getPrice()));
+                if (btnReset != null) btnReset.setOnClickListener(v -> updateJobStatus(3008));
+
+            }
+
+            @Override
+            public void onfailer(String error) {
+
+            }
+        });
 
         // Update UI based on current status
         updateStatus();
@@ -78,9 +92,9 @@ public class JobStatusModal {
     }
 
     // Method to complete job
-    private void jobClear() {
+    private void jobClear(double price) {
         JobModal jobModal = new JobModal(context);
-        jobModal.jobCompleteBooking(bookingId);
+        jobModal.jobCompleteBooking(bookingId,price);
     }
 
     // Dismiss modal safely

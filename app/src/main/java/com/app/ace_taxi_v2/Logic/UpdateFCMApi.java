@@ -63,6 +63,7 @@ public class UpdateFCMApi {
                     new CustomToast(context).showCustomToast("FCM updated successfully:");
                 }
                 else if(response.code() == 423){
+                    LogHelperLaravel.getInstance().e("update fcm","user locked"+userId);
                     new CustomToast(context).showCustomErrorToast("User Locked Out");
                     new SessionManager(context).clearSession();
                     Sentry.setUser(null);  // Clear user info from Sentry
