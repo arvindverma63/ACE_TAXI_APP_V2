@@ -6,11 +6,13 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 import java.util.Locale;
 
@@ -67,33 +69,25 @@ public class HHMMFormater {
     public String formateTimeStampToDateTime(String dateTimeStr) {
         if (dateTimeStr == null || dateTimeStr.isEmpty()) return "";
 
-        // Fix invalid month (e.g., 2025-0-06 to 2025-01-06)
-        String correctedDateTimeStr = dateTimeStr;
-        if (correctedDateTimeStr.contains("-0-")) {
-            correctedDateTimeStr = correctedDateTimeStr.replace("-0-", "-01-");
-        } else if (correctedDateTimeStr.matches(".*-0\\d-.*")) {
-            correctedDateTimeStr = correctedDateTimeStr.replaceAll("-0(\\d)-", "-01-");
-        }
-
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // Define output formatter
                 DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault());
 
-                if (correctedDateTimeStr.contains("T")) {
-                    // Handle ISO 8601 format: yyyy-MM-dd'T'HH:mm:ss[.SSSSSSSSS]
-                    String[] parts = correctedDateTimeStr.split("\\.");
+                if (dateTimeStr.contains("T")) {
+                    // Handle ISO 8601 formats: yyyy-MM-dd'T'HH:mm:ss[.SSSSSS]
+                    String[] parts = dateTimeStr.split("\\.");
                     String mainPart = parts[0]; // yyyy-MM-dd'T'HH:mm:ss
-                    String nanoPart = parts.length > 1 ? parts[1].replaceAll("[^0-9]", "") : "";
-                    // Limit to 9 digits for nanoseconds
-                    nanoPart = nanoPart.length() > 9 ? nanoPart.substring(0, 9) : nanoPart;
-                    String normalizedDateTime = nanoPart.isEmpty() ? mainPart : mainPart + "." + nanoPart;
+                    String nanoPart = parts.length > 1 ? parts[1].replaceAll("[^0-9]", "") : "0";
+                    // Pad or trim to 6 digits for microseconds if present
+                    nanoPart = nanoPart.length() > 6 ? nanoPart.substring(0, 6) : String.format("%-6s", nanoPart).replace(' ', '0');
+                    String normalizedDateTime = nanoPart.equals("0") ? mainPart : mainPart + "." + nanoPart;
 
-                    // Create a flexible formatter for variable nanosecond precision
+                    // Create a formatter for variable precision (0 or 6 digits)
                     DateTimeFormatter inputFormatter = new DateTimeFormatterBuilder()
                             .appendPattern("yyyy-MM-dd'T'HH:mm:ss")
                             .optionalStart()
-                            .appendFraction(java.time.temporal.ChronoField.NANO_OF_SECOND, 0, 9, true)
+                            .appendFraction(ChronoField.MICRO_OF_SECOND, 0, 6, true)
                             .optionalEnd()
                             .toFormatter(Locale.getDefault());
 
@@ -104,28 +98,28 @@ public class HHMMFormater {
                 // Legacy handling for older Android versions
                 SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-                if (correctedDateTimeStr.contains("T")) {
+                if (dateTimeStr.contains("T")) {
                     // Handle: yyyy-MM-dd'T'HH:mm:ss[.SSS]
-                    String[] parts = correctedDateTimeStr.split("\\.");
+                    String[] parts = dateTimeStr.split("\\.");
                     String mainPart = parts[0]; // yyyy-MM-dd'T'HH:mm:ss
                     String milliPart = parts.length > 1 ? parts[1].replaceAll("[^0-9]", "") : "";
-                    // Limit to 3 digits for milliseconds
-                    milliPart = milliPart.length() > 3 ? milliPart.substring(0, 3) : milliPart;
-                    String normalizedDateTime = milliPart.isEmpty() ? mainPart : mainPart + "." + milliPart;
+                    // Limit to 3 digits for milliseconds if present
+                    milliPart = milliPart.length() > 3 ? milliPart.substring(0, 3) : String.format("%-3s", milliPart).replace(' ', '0');
+                    String normalizedDateTime = milliPart.isEmpty() || milliPart.equals("0") ? mainPart : mainPart + "." + milliPart;
 
                     SimpleDateFormat inputFormat = new SimpleDateFormat(
-                            milliPart.isEmpty() ? "yyyy-MM-dd'T'HH:mm:ss" : "yyyy-MM-dd'T'HH:mm:ss.SSS",
+                            milliPart.isEmpty() || milliPart.equals("0") ? "yyyy-MM-dd'T'HH:mm:ss" : "yyyy-MM-dd'T'HH:mm:ss.SSS",
                             Locale.getDefault()
                     );
                     Date date = inputFormat.parse(normalizedDateTime);
                     return outputFormat.format(date);
                 }
             }
-        } catch (DateTimeParseException | java.text.ParseException e) {
+        } catch (DateTimeException | java.text.ParseException e) {
             e.printStackTrace();
         }
 
-        return correctedDateTimeStr; // Return corrected input on error
+        return dateTimeStr; // Return original input on error
     }
 
     public String formateToEEDD(String dateTimeStr) {

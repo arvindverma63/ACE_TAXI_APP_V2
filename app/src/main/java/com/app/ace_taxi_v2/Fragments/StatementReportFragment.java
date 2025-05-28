@@ -26,6 +26,7 @@ import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.Adapters.StatementAdapter;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Logic.GetStatementsApi;
 import com.app.ace_taxi_v2.Logic.OpenStatement;
@@ -62,8 +63,8 @@ public class StatementReportFragment extends Fragment implements OpenStatement {
     private MaterialTextView noDataText;
     private List<StatementItem> statementList = new ArrayList<>();
     private StatementAdapter statementAdapter;
-    private SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
-    private SimpleDateFormat displayFormat = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
+    private SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS", Locale.getDefault());
+    private SimpleDateFormat displayFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
     private String startDate, endDate;
     private MaterialButton dateRangeButton;
     private int userId;
@@ -220,7 +221,7 @@ public class StatementReportFragment extends Fragment implements OpenStatement {
                         errorMessage = "Access denied for this PDF";
                     }
                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show();
-                    new CustomToast(getContext()).showCustomErrorToast(errorMessage+"");
+                    new CustomToast(getContext()).showCustomErrorToast(errorMessage);
                 }
             }
 
@@ -263,6 +264,7 @@ public class StatementReportFragment extends Fragment implements OpenStatement {
                 statementAdapter.updateData(items);
                 calculateTotalEarnings(items);
                 updateEmptyView();
+                LogHelperLaravel.getInstance().i("Statement Logs: ",items.get(1).getStatementDate()+"");
                 if (items == null || items.isEmpty()) {
                     Toast.makeText(requireContext(), "No statements found", Toast.LENGTH_SHORT).show();
                 }
@@ -334,8 +336,23 @@ public class StatementReportFragment extends Fragment implements OpenStatement {
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
             try {
-                startDate = isoDateFormat.format(selection.first);
-                endDate = isoDateFormat.format(selection.second);
+                // Set time to 00:00:00.0000000 for start date and 23:59:59.9999999 for end date
+                Calendar startCal = Calendar.getInstance();
+                startCal.setTimeInMillis(selection.first);
+                startCal.set(Calendar.HOUR_OF_DAY, 0);
+                startCal.set(Calendar.MINUTE, 0);
+                startCal.set(Calendar.SECOND, 0);
+                startCal.set(Calendar.MILLISECOND, 0);
+
+                Calendar endCal = Calendar.getInstance();
+                endCal.setTimeInMillis(selection.second);
+                endCal.set(Calendar.HOUR_OF_DAY, 23);
+                endCal.set(Calendar.MINUTE, 59);
+                endCal.set(Calendar.SECOND, 59);
+                endCal.set(Calendar.MILLISECOND, 999);
+
+                startDate = isoDateFormat.format(startCal.getTime());
+                endDate = isoDateFormat.format(endCal.getTime());
 
                 updateDateRangeButtonText();
                 fetchStatements();

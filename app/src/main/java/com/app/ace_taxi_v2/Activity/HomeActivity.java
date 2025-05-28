@@ -2,6 +2,7 @@ package com.app.ace_taxi_v2.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -59,6 +60,28 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int nightModeFlags =
+                    getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+            if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+                // Night mode: dark background, white status bar icons
+                getWindow().setStatusBarColor(getResources().getColor(R.color.primaryDark));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    View decor = getWindow().getDecorView();
+                    // Clear the LIGHT_STATUS_BAR flag to get white icons
+                    decor.setSystemUiVisibility(0);
+                }
+            } else {
+                // Day mode: light background, dark status bar icons
+                getWindow().setStatusBarColor(getResources().getColor(R.color.light_gray));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    View decor = getWindow().getDecorView();
+                    decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                }
+            }
+        }
         try {
             setContentView(R.layout.activity_home);
             DeviceMode.init(this);
