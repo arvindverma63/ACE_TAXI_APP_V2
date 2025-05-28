@@ -264,9 +264,13 @@ public class StatementReportFragment extends Fragment implements OpenStatement {
                 statementAdapter.updateData(items);
                 calculateTotalEarnings(items);
                 updateEmptyView();
-                LogHelperLaravel.getInstance().i("Statement Logs: ",items.get(1).getStatementDate()+"");
+                try{
+                    LogHelperLaravel.getInstance().i("Statement Logs: ",items.get(0).getStatementDate()+"");
+                }catch (Exception e){
+                    LogHelperLaravel.getInstance().e("statement error",e+"");
+                }
                 if (items == null || items.isEmpty()) {
-                    Toast.makeText(requireContext(), "No statements found", Toast.LENGTH_SHORT).show();
+                    new CustomToast(getContext()).showCustomErrorToast("No statement found");
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
