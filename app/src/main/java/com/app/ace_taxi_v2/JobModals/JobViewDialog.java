@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.app.ace_taxi_v2.Fragments.JobFragment;
@@ -81,6 +82,8 @@ public class JobViewDialog {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.job_view, null);
+
+
 
         Dialog dialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.setContentView(dialogView);
@@ -194,6 +197,8 @@ public class JobViewDialog {
 
             });
 
+            CustomDialog customDialog = new CustomDialog();
+            customDialog.showProgressDialog(context);
             GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
             getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
                 @Override
@@ -317,8 +322,8 @@ public class JobViewDialog {
 
                         jobModal.jobCompleteBooking(bookingId,bookingInfo.getPrice());
                     });
+                    customDialog.dismissProgressDialog();
                 }
-
                 @Override
                 public void onfailer(String error) {
 
@@ -327,9 +332,8 @@ public class JobViewDialog {
 
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelperLaravel.getInstance().e(TAG,e+" bookingId "+bookingId);
         }
-
     }
 
     public void startBooking(Context context, GetBookingInfo job) {  // Change List to single object

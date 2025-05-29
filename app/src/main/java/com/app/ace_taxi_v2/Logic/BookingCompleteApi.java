@@ -6,6 +6,8 @@ import android.widget.Toast;
 
 import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.Models.BookingRequest.BookingCompleteRequest;
@@ -41,7 +43,7 @@ public class BookingCompleteApi {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.code() == 200) {
-                    Toast.makeText(context, "Booking Completed", Toast.LENGTH_LONG).show();
+                    new CustomToast(context).showCustomToast("completed successfully");
                     BookingStartStatus bookingStartStatus = new BookingStartStatus(context);
                     bookingStartStatus.clearBookingId();
 

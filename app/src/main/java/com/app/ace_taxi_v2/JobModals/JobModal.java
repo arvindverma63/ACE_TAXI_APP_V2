@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +24,9 @@ import androidx.core.content.ContextCompat;
 
 import com.app.ace_taxi_v2.Activity.HomeActivity;
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Logic.ArrivedJobApi;
 import com.app.ace_taxi_v2.Logic.BookingCompleteApi;
 import com.app.ace_taxi_v2.Logic.Formater.HHMMFormater;
@@ -351,54 +354,94 @@ public class JobModal {
         alertDialog.show();
     }
 
-    public void jobCompleteBooking(int bookingId,double iprice) {
+    public void jobCompleteBooking(int bookingId, double iprice) {
         Dialog fullScreenDialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         View dialogView = LayoutInflater.from(context).inflate(R.layout.job_complete_dialog, null);
         fullScreenDialog.setContentView(dialogView);
         fullScreenDialog.setCancelable(true);
 
-
-
-        TextView etWaitingTime = dialogView.findViewById(R.id.etWaitingTime);
-        TextView etParking = dialogView.findViewById(R.id.etParking);
-        TextView etPrice = dialogView.findViewById(R.id.etPrice);
-        TextView tip = dialogView.findViewById(R.id.etTip);
+        // Initialize views (assuming EditText for input fields)
+        EditText etWaitingTime = dialogView.findViewById(R.id.etWaitingTime);
+        EditText etParking = dialogView.findViewById(R.id.etParking);
+        EditText etPrice = dialogView.findViewById(R.id.etPrice);
+        EditText etTip = dialogView.findViewById(R.id.etTip);
         Button btnSubmit = dialogView.findViewById(R.id.btnSubmit);
         setupCloseButton(dialogView, fullScreenDialog, R.id.btnClose);
 
-        etPrice.setText(iprice+"0");
+        // Set price with proper formatting
+        etPrice.setText(String.format("%.2f", iprice));
+
+        // Fetch booking info before showing dialog
+        GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+        getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
+            @Override
+            public void onSuccess(GetBookingInfo bookingInfo) {
+                // Set enabled state based on scopeText
+                if ("Account".equals(bookingInfo.getScopeText()) || "Card".equals(bookingInfo.getScopeText())) {
+                    etParking.setEnabled(false);
+                    etWaitingTime.setEnabled(false);
+                }
+                // Show dialog after setting UI state
+                fullScreenDialog.show();
+            }
+
+            @Override
+            public void onfailer(String error) {
+                Log.e(TAG, "Failed to get booking info: " + error);
+                new CustomToast(context).showCustomToast("Failed to load booking info: " + error);
+                // Optionally show dialog or handle error
+                fullScreenDialog.show();
+            }
+        });
 
         btnSubmit.setOnClickListener(v -> {
-            double waitingTime = parseDouble(etWaitingTime.getText().toString());
-            double parking = parseDouble(etParking.getText().toString());
-            double price = parseDouble(etPrice.getText().toString());
-            double etTip = parseDouble(tip.getText().toString());
+            // Validate and parse inputs
+            double waitingTime, parking, price, tipAmount;
+            try {
+                waitingTime = parseDoubleOrZero(etWaitingTime.getText().toString());
+                parking = parseDoubleOrZero(etParking.getText().toString());
+                price = parseDoubleOrZero(etPrice.getText().toString());
+                tipAmount = parseDoubleOrZero(etTip.getText().toString());
+            } catch (NumberFormatException e) {
+                new CustomToast(context).showCustomToast("Invalid input values");
+                return;
+            }
 
+            LogHelperLaravel.getInstance().i(TAG, "bookingId " + bookingId + " click on complete button");
             BookingCompleteApi bookingCompleteApi = new BookingCompleteApi(context);
-            bookingCompleteApi.complete(bookingId, (int) waitingTime, (int) parking, price, 0, etTip);
+            bookingCompleteApi.complete(bookingId, (int) waitingTime, (int) parking, price, 0, tipAmount);
 
-            GetBookingInfoApi getBookingInfoApi = new GetBookingInfoApi(context);
+            // Fetch booking info again for bottom sheet
             getBookingInfoApi.getInfo(bookingId, new GetBookingInfoApi.BookingCallback() {
                 @Override
                 public void onSuccess(GetBookingInfo bookingInfo) {
-                    BottomSheetDialogs bottomSheetDialogs = new BottomSheetDialogs(context);
-                    bottomSheetDialogs.openJobCompleted(bookingInfo.getPassengerName(), bookingInfo.getPickupAddress());
-                    if("Account".equals(bookingInfo.getScopeText())){
-                        etPrice.setEnabled(false);
-                    }
+                    LogHelperLaravel.getInstance().i(TAG, bookingInfo + " success");
+                    // Navigate to HomeActivity and dismiss dialog
+                    Intent intent = new Intent(context, HomeActivity.class);
+                    context.startActivity(intent);
+                    fullScreenDialog.dismiss();
                 }
+
                 @Override
                 public void onfailer(String error) {
                     Log.e(TAG, "Failed to get booking info: " + error);
+                    new CustomToast(context).showCustomToast("Failed to load booking info: " + error);
+                    // Still navigate and dismiss
+                    Intent intent = new Intent(context, HomeActivity.class);
+                    context.startActivity(intent);
+                    fullScreenDialog.dismiss();
                 }
             });
-
-            Intent intent = new Intent(context,HomeActivity.class);
-            context.startActivity(intent);
-            fullScreenDialog.dismiss();
         });
+    }
 
-        fullScreenDialog.show();
+    // Helper method to parse double with fallback
+    private double parseDoubleOrZero(String input) {
+        try {
+            return input.isEmpty() ? 0.0 : Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
     }
 
     private double parseDouble(String value) {

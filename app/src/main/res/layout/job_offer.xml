@@ -130,6 +130,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="2"
+                        style="@style/TextBG"
                         android:text=""
                         android:textSize="14dp" />
                 </LinearLayout>
@@ -209,6 +210,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="2"
+                        style="@style/TextBG"
                         android:text=""
                         android:textSize="14dp" />
                 </LinearLayout>
@@ -254,6 +256,7 @@
                         android:textSize="14dp"
                         android:layout_height="wrap_content"
                         android:text="---"
+                        style="@style/TextBG"
                         android:id="@+id/distance"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/distance_duration"
@@ -319,6 +322,7 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/passenger_count"
                         android:layout_width="wrap_content"
+                        style="@style/TextBG"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/font_urban"
                         android:text="2 Passengers"
@@ -467,7 +471,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_urban"
-                    android:text="£161.00"
+                    android:text="-- --"
                     style="@style/TextBG"
                     android:textSize="20dp"
                     android:textStyle="bold" />
