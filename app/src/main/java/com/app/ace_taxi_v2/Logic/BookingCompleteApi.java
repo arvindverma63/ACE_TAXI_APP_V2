@@ -51,7 +51,7 @@ public class BookingCompleteApi {
                     String errorMessage = "BookingCompleteApi Error: HTTP " + response.code() + " - " + response.message();
                     LogHelperLaravel.getInstance().e(TAG, errorMessage);
                     Sentry.captureMessage(errorMessage);
-                    Toast.makeText(context, "Booking completion failed", Toast.LENGTH_LONG).show();
+                    new CustomToast(context).showCustomErrorToast("Booking completion failed");
                 }
             }
 
@@ -60,7 +60,7 @@ public class BookingCompleteApi {
                 String failureMessage = "BookingComplete API Call Failed: " + t.getMessage();
                 LogHelperLaravel.getInstance().e(TAG, failureMessage+ t);
                 Sentry.captureException(t);
-                Toast.makeText(context, "Something went wrong while completing the booking", Toast.LENGTH_LONG).show();
+                new CustomToast(context).showCustomErrorToast("Something went wrong while completing the booking");
             }
         });
     }

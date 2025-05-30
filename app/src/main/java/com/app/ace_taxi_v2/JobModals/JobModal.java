@@ -388,7 +388,7 @@ public class JobModal {
             @Override
             public void onfailer(String error) {
                 Log.e(TAG, "Failed to get booking info: " + error);
-                new CustomToast(context).showCustomToast("Failed to load booking info: " + error);
+                new CustomToast(context).showCustomErrorToast("Failed to load booking info: " + error);
                 // Optionally show dialog or handle error
                 fullScreenDialog.show();
             }
@@ -403,7 +403,7 @@ public class JobModal {
                 price = parseDoubleOrZero(etPrice.getText().toString());
                 tipAmount = parseDoubleOrZero(etTip.getText().toString());
             } catch (NumberFormatException e) {
-                new CustomToast(context).showCustomToast("Invalid input values");
+                new CustomToast(context).showCustomErrorToast("Invalid input values");
                 return;
             }
 
@@ -425,7 +425,7 @@ public class JobModal {
                 @Override
                 public void onfailer(String error) {
                     Log.e(TAG, "Failed to get booking info: " + error);
-                    new CustomToast(context).showCustomToast("Failed to load booking info: " + error);
+                    new CustomToast(context).showCustomErrorToast("Failed to load booking info: " + error);
                     // Still navigate and dismiss
                     Intent intent = new Intent(context, HomeActivity.class);
                     context.startActivity(intent);

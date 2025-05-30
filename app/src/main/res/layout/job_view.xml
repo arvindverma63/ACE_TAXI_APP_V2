@@ -413,17 +413,15 @@
                     android:layout_marginTop="16dp">
 
                     <com.google.android.material.button.MaterialButton
-                        android:layout_width="0dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Arrived"
+                        android:textStyle="bold"
                         android:textSize="14dp"
                         android:id="@+id/arrived_btn"
                         android:textColor="@color/blue"
-                        android:layout_marginEnd="8dp"
                         app:icon="@drawable/ic_message"
                         app:iconGravity="textStart"
-                        app:iconPadding="8dp"
                         app:iconTint="@color/blue"
                         app:strokeWidth="1dp"
                         app:strokeColor="@color/blue"
@@ -432,18 +430,31 @@
 
 
                     <com.google.android.material.button.MaterialButton
-                        android:layout_width="0dp"
+                        android:layout_width="65dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Call"
                         android:id="@+id/callBtn"
                         android:textSize="14dp"
+                        android:layout_marginLeft="10dp"
                         android:textColor="@color/green"
-                        android:layout_marginEnd="8dp"
                         app:icon="@drawable/ic_phone"
+                        android:gravity="center"
+                        android:layout_gravity="center"
                         app:iconTint="@color/green"
-                        app:iconGravity="textStart"
-                        app:iconPadding="8dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="@color/green"
+                        app:cornerRadius="8000dp"
+                        app:backgroundTint="@color/light_gray" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="65dp"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/messageBtn"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="10dp"
+                        android:textColor="@color/green"
+                        app:icon="@drawable/ic_message"
+                        app:iconTint="@color/green"
                         app:strokeWidth="1dp"
                         app:strokeColor="@color/green"
                         app:cornerRadius="8000dp"

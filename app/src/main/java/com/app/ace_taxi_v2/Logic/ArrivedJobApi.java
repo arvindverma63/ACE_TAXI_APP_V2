@@ -50,17 +50,17 @@ public class ArrivedJobApi {
                     new CustomToast(context).showCustomToast("Arrival updated successfully");
                     LogHelperLaravel.getInstance().i("ArrivedJobApi Success: ", bookingId + ":bookingId userId " + userId);
                 } else if (response.code() == 401) {
-                    new CustomToast(context).showCustomToast("Unauthorized: Please log in again");
+                    new CustomToast(context).showCustomErrorToast("Unauthorized: Please log in again");
                     LogHelperLaravel.getInstance().e("ArrivedJobApi Error: ", "HTTP 401 Unauthorized");
                 } else {
-                    new CustomToast(context).showCustomToast("Error: " + response.message()+"404 from server");
+                    new CustomToast(context).showCustomErrorToast("Error: " + response.message()+"404 from server");
                     LogHelperLaravel.getInstance().e("ArrivedJobApi Error: ", "HTTP " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<ArrivedResponse> call, Throwable t) {
-                new CustomToast(context).showCustomToast("Network error: " + t.getMessage());
+                new CustomToast(context).showCustomErrorToast("Network error: " + t.getMessage());
                 LogHelperLaravel.getInstance().e("ArrivedJobApi Error: ", t.getMessage());
                 Sentry.captureException(t);
             }

@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -30,6 +31,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.app.ace_taxi_v2.Components.BookingStartStatus;
 import com.app.ace_taxi_v2.Components.CustomDialog;
+import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Components.JobStatusModal;
 import com.app.ace_taxi_v2.Fragments.Adapters.JobAdapters.TodayJobAdapter;
 import com.app.ace_taxi_v2.Fragments.JobFragment;
@@ -132,6 +134,7 @@ public class JobViewDialog {
             MaterialButton callBtn = dialogView.findViewById(R.id.callBtn);
             MaterialButton arrivedBtn = dialogView.findViewById(R.id.arrived_btn);
             TextView notes = dialogView.findViewById(R.id.notes);
+            MaterialButton messageBtn = dialogView.findViewById(R.id.messageBtn);
 
             arrivedBtn.setOnClickListener(view -> {
                 arrivedClick(bookingId);
@@ -310,9 +313,20 @@ public class JobViewDialog {
                         }
                     });
 
-                    callBtn.setOnClickListener(v -> {
-                        openDial(bookingInfo.getPhoneNumber());
-                    });
+                    if(bookingInfo.getPhoneNumber() != null && !bookingInfo.getPhoneNumber().trim().isEmpty()){
+                        callBtn.setOnClickListener(v -> {
+                            openDial(bookingInfo.getPhoneNumber());
+                        });
+                        messageBtn.setOnClickListener(v -> {
+                            messageBtn(bookingInfo.getPhoneNumber());
+                        });
+                    }else{
+                        callBtn.setIconTint(ContextCompat.getColorStateList(context,R.color.gray));
+                        callBtn.setStrokeColor(ContextCompat.getColorStateList(context,R.color.gray));
+                        messageBtn.setStrokeColor(ContextCompat.getColorStateList(context,R.color.gray));
+                        messageBtn.setIconTint(ContextCompat.getColorStateList(context,R.color.gray));
+                    }
+
                     notes.setVisibility(View.VISIBLE);
                     notes.setText(""+bookingInfo.getDetails());
 
@@ -410,16 +424,42 @@ public class JobViewDialog {
     }
     public void openDial(String phoneNumber) {
         Context context = contextRef.get();
-        String phone = "tel:"+phoneNumber;
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse(phone));
-        context.startActivity(intent);
+        if (context != null && phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            String phone = "tel:" + phoneNumber;
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse(phone));
+            context.startActivity(intent);
+        } else {
+            Log.e("openDial", "Invalid context or phone number");
+            // Optional: Toast.makeText(context, "Invalid phone number", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     public void arrivedClick(int bookingId){
         ArrivedJobApi arrivedJobApi = new ArrivedJobApi(contextRef.get());
         arrivedJobApi.updateStatus(bookingId);
     }
+
+    public void messageBtn(String phoneNumber) {
+        Context context = contextRef.get();
+
+        if (context != null && phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("smsto:" + phoneNumber)); // only SMS apps respond to this
+            // intent.putExtra("sms_body", "Your message here"); // Optional message content
+
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(intent);
+            } else {
+                new CustomToast(context).showCustomToast(" No messaging app found");
+            }
+        } else {
+
+            LogHelperLaravel.getInstance().e("MessageBtn", "Context is null or phone number is empty");
+        }
+    }
+
 
 
 }
