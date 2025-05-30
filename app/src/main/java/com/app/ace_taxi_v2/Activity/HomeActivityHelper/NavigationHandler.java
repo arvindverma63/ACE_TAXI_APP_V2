@@ -14,6 +14,7 @@ import com.app.ace_taxi_v2.Fragments.HomeFragment;
 import com.app.ace_taxi_v2.Fragments.JobFragment;
 import com.app.ace_taxi_v2.Fragments.ProfileFragment;
 import com.app.ace_taxi_v2.Fragments.ReportPageFragment;
+import com.app.ace_taxi_v2.Fragments.SchedularFragment;
 import com.app.ace_taxi_v2.Fragments.UserProfileFragment;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.R;
@@ -52,6 +53,8 @@ public class NavigationHandler {
             fragment = new AvailabilityFragment();
         } else if (itemId == R.id.nav_profile) {
             fragment = new UserProfileFragment();
+        }else if(itemId == R.id.nav_shedular){
+            fragment = new SchedularFragment();
         }
 
         if (fragment != null) {
