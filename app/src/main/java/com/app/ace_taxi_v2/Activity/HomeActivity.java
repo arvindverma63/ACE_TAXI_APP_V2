@@ -1,7 +1,10 @@
 package com.app.ace_taxi_v2.Activity;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -30,6 +33,7 @@ import com.app.ace_taxi_v2.Components.ShiftChangeModal;
 import com.app.ace_taxi_v2.Fragments.HomeFragment;
 import com.app.ace_taxi_v2.Fragments.SettingFragment;
 import com.app.ace_taxi_v2.Helper.DeviceMode;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
 import com.app.ace_taxi_v2.JobModals.BottomSheetDialogs;
 import com.app.ace_taxi_v2.JobModals.JobModal;
@@ -41,14 +45,21 @@ import com.app.ace_taxi_v2.Logic.SessionManager;
 import com.app.ace_taxi_v2.Models.Guid;
 import com.app.ace_taxi_v2.Models.JobOfferNoticationResponse;
 import com.app.ace_taxi_v2.R;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 
 import io.sentry.android.core.SentryAndroid;
 
 public class HomeActivity extends BaseActivity {
     private BottomNavigationView bottomNavigationView;
     private ImageView hamMenu;
+    private static final int UPDATE_REQUEST_CODE = 123;
     private NotificationHandler notificationHandler;
     public BackgroundPermissionHelper permissionHelper;
     private NavigationHandler navigationHandler;
@@ -86,7 +97,7 @@ public class HomeActivity extends BaseActivity {
             setContentView(R.layout.activity_home);
             DeviceMode.init(this);
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error setting content view", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error setting content view"+e);
             return;
         }
 
@@ -98,6 +109,7 @@ public class HomeActivity extends BaseActivity {
         setupNavigation();
         setupClickListeners();
         getNotificationData();
+        checkForAppUpdate();
 
         try {
             if (savedInstanceState == null) {
@@ -105,7 +117,7 @@ public class HomeActivity extends BaseActivity {
                 navigationHandler.setSelectedItem(R.id.nav_home);
             }
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error loading initial fragment", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error loading initial fragment"+e);
         }
     }
 
@@ -120,20 +132,20 @@ public class HomeActivity extends BaseActivity {
                     findViewById(R.id.notificationIcon),
                     findViewById(R.id.notificationCount));
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error initializing views", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error initializing views"+e);
         }
     }
 
     private void setupSession() {
         try {
             SessionManager sessionManager = new SessionManager(this);
-            Log.e("token jwt : ", " jwt_token: "+sessionManager.getToken()+" \n "+ RetrofitClient.getInstance().baseUrl());
+            LogHelperLaravel.getInstance().e("token jwt : ", " jwt_token: "+sessionManager.getToken()+" \n "+ RetrofitClient.getInstance().baseUrl());
             if (!sessionManager.isLoggedIn()) {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error setting up session", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error setting up session"+e);
         }
     }
 
@@ -142,7 +154,7 @@ public class HomeActivity extends BaseActivity {
             permissionHelper = new BackgroundPermissionHelper(this);
             permissionHelper.requestLocationPermissions();
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error initializing helpers", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error initializing helpers"+e);
         }
     }
 
@@ -154,7 +166,7 @@ public class HomeActivity extends BaseActivity {
                         event.getLevel() == io.sentry.SentryLevel.DEBUG ? null : event);
             });
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error setting up Sentry", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error setting up Sentry"+e);
         }
     }
 
@@ -166,7 +178,7 @@ public class HomeActivity extends BaseActivity {
                 getSupportActionBar().setTitle(""); // Using custom title from XML
             }
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error setting up toolbar", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error setting up toolbar"+e);
         }
     }
 
@@ -174,7 +186,7 @@ public class HomeActivity extends BaseActivity {
         try {
             navigationHandler = new NavigationHandler(this, bottomNavigationView);
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error setting up navigation", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error setting up navigation"+e);
         }
     }
 
@@ -184,7 +196,7 @@ public class HomeActivity extends BaseActivity {
 //            setupPhoneButton();
 //            setupMessageButton();
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error setting up click listeners", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error setting up click listeners"+e);
         }
     }
 
@@ -194,7 +206,7 @@ public class HomeActivity extends BaseActivity {
             getMenuInflater().inflate(R.menu.options_menu, menu);
             return true;
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error creating options menu", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error creating options menu"+e);
             return false;
         }
     }
@@ -212,7 +224,7 @@ public class HomeActivity extends BaseActivity {
 //            }
 //            return super.onOptionsItemSelected(item);
 //        } catch (Exception e) {
-//            Log.e("HomeActivity", "Error handling options item selected", e);
+//            LogHelperLaravel.getInstance().e("HomeActivity", "Error handling options item selected"+e);
 //            return false;
 //        }
 //    }
@@ -225,7 +237,7 @@ public class HomeActivity extends BaseActivity {
                     .addToBackStack(null)
                     .commit();
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error loading fragment", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error loading fragment"+e);
         }
     }
 
@@ -254,7 +266,7 @@ public class HomeActivity extends BaseActivity {
                 handlerBack.postDelayed(() -> tapCount = 0, TIMEOUT);
             }
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error handling back press", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error handling back press"+e);
         }
     }
 
@@ -264,7 +276,7 @@ public class HomeActivity extends BaseActivity {
             super.onResume();
             notificationHandler.startNotificationUpdates();
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error in onResume", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error in onResume"+e);
         }
     }
 
@@ -274,7 +286,7 @@ public class HomeActivity extends BaseActivity {
             super.onPause();
             notificationHandler.stopNotificationUpdates();
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error in onPause", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error in onPause"+e);
         }
     }
 
@@ -309,7 +321,7 @@ public class HomeActivity extends BaseActivity {
                     passenger = extras.getString("passenger", "");
                     message = extras.getString("message", message);
                 } catch (NumberFormatException e) {
-                    Log.e("HomeActivity", "Invalid number format in intent extras", e);
+                    LogHelperLaravel.getInstance().e("HomeActivity", "Invalid number format in intent extras"+e);
                 }
             }
 
@@ -329,14 +341,14 @@ public class HomeActivity extends BaseActivity {
                                 getBookingById.getBookingDetails(bookingId);
                             }
                         } catch (NumberFormatException e) {
-                            Log.e("HomeActivity", "Invalid bookingId format", e);
+                            LogHelperLaravel.getInstance().e("HomeActivity", "Invalid bookingId format"+e);
                             Toast.makeText(HomeActivity.this, "Error processing booking ID", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onError(String errorMessage) {
-                        Log.e("HomeActivity", "Job offer notification error: " + errorMessage);
+                        LogHelperLaravel.getInstance().e("HomeActivity", "Job offer notification error: " + errorMessage);
                         new CustomToast(getApplicationContext()).showCustomErrorToast("No Internet Connection");
                     }
                 });
@@ -361,7 +373,7 @@ public class HomeActivity extends BaseActivity {
                 new BottomSheetDialogs(this).openJobRejected();
             }
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error processing notification data", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error processing notification data"+e);
             Toast.makeText(this, "Error processing notification", Toast.LENGTH_SHORT).show();
         }
     }
@@ -372,7 +384,7 @@ public class HomeActivity extends BaseActivity {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             permissionHelper.handlePermissionsResult(requestCode, permissions, grantResults);
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error handling permission result", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error handling permission result"+e);
         }
     }
 
@@ -380,7 +392,28 @@ public class HomeActivity extends BaseActivity {
         try {
             // Add implementation if needed
         } catch (Exception e) {
-            Log.e("HomeActivity", "Error updating shift icon", e);
+            LogHelperLaravel.getInstance().e("HomeActivity", "Error updating shift icon"+e);
         }
+    }
+    private void checkForAppUpdate() {
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(this);
+
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.IMMEDIATE,
+                            this,
+                            UPDATE_REQUEST_CODE);
+                } catch (IntentSender.SendIntentException e) {
+                    LogHelperLaravel.getInstance().e(TAG,e+"  message"+e.getMessage());
+                }
+            }
+        });
     }
 }

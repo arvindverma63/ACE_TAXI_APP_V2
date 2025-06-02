@@ -1,5 +1,7 @@
 package com.app.ace_taxi_v2.Helper;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -29,7 +31,7 @@ public class DeviceMode {
 
     public static DeviceMode getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("DeviceMode is not initialized. Call DeviceMode.init(context) in your Application class.");
+            LogHelperLaravel.getInstance().e(TAG,"DeviceMode is not initialized. Call DeviceMode.init(context) in your Application class.");
         }
         return instance;
     }

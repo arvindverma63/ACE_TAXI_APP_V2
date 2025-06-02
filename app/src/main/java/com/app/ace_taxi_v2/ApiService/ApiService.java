@@ -113,7 +113,7 @@ public interface ApiService {
                                    @Query("status") int status);
 
     @GET("/api/DriverApp/Arrived")
-    Call<ArrivedResponse> arrivedStatusUpdate(@Header("Authorization") String token,
+    Call<Void> arrivedStatusUpdate(@Header("Authorization") String token,
                                               @Query("bookingId") int bookingId);
 
     @GET("/api/Bookings/FindById")

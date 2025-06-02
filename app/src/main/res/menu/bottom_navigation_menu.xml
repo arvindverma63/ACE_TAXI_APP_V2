@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_home" android:icon="@drawable/ic_home" android:title="Home"/>
     <item android:id="@+id/nav_job" android:icon="@drawable/ic_car_nav" android:title="Bookings" />
-    <item android:id="@+id/nav_shedular" android:icon="@drawable/ic_shift" android:title="Schedular" />
+    <item android:id="@+id/nav_shedular" android:icon="@drawable/ic_schedular_icon" android:title="Schedular" />
     <item android:id="@+id/nav_availability" android:icon="@drawable/ic_availablity_nav" android:title="Availability" />
     <item android:id="@+id/nav_profile" android:icon="@drawable/ic_profile" android:title="Profile" />
 </menu>

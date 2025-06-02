@@ -11,8 +11,8 @@ android {
         applicationId = "com.app.ace_taxi_v2"
         minSdk = 24
         targetSdk = 34
-        versionCode = 94
-        versionName = "10.4"
+        versionCode = 95
+        versionName = "10.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -63,6 +63,7 @@ dependencies {
     implementation("io.sentry:sentry-android:8.2.0")
     implementation ("androidx.palette:palette:1.0.0")
     implementation(libs.engage.core)
+    implementation(libs.app.update)
 
     // Testing
     testImplementation(libs.junit)

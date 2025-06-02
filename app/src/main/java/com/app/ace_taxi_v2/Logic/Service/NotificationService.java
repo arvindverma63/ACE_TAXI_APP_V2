@@ -19,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.app.ace_taxi_v2.Activity.HomeActivity;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Logic.JobApi.NotificationJobDialogResponse;
 import com.app.ace_taxi_v2.Models.Guid;
 import com.app.ace_taxi_v2.Models.NotificationModel;
@@ -56,7 +57,7 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d(TAG, "Message received: " + remoteMessage.getMessageId());
+        LogHelperLaravel.getInstance().d(TAG, "Message received: " + remoteMessage.getMessageId());
 
         SharedPreferences sharedPreferences = getSharedPreferences("check_notification", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -85,7 +86,7 @@ public class NotificationService extends FirebaseMessagingService {
         editor.putString("notification_navId", navId);
         editor.apply();
 
-        Log.e("Notification Service datetime",datetime);
+        LogHelperLaravel.getInstance().i("Notification Service datetime",datetime);
 
         if("5".equals(navId) || "6".equals(navId)){
             NotificationModel notificationModel = new NotificationModel(jobId, navId, title, message, passenger, datetime);
@@ -134,7 +135,7 @@ public class NotificationService extends FirebaseMessagingService {
     }
 
     private void sendTokenToServer(String token) {
-        Log.d(TAG, "FCM Token sent to server: " + token);
+        LogHelperLaravel.getInstance().d(TAG, "FCM Token sent to server: " + token);
     }
 
     private void showNotification(String title, String message, String jobId, String navId, String passenger, String datetime) {
