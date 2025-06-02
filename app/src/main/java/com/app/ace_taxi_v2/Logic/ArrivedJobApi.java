@@ -46,7 +46,7 @@ public class ArrivedJobApi {
         apiService.arrivedStatusUpdate(token, bookingId).enqueue(new Callback<ArrivedResponse>() {
             @Override
             public void onResponse(Call<ArrivedResponse> call, Response<ArrivedResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.code() == 200) {
                     new CustomToast(context).showCustomToast("Arrival updated successfully");
                     LogHelperLaravel.getInstance().i("ArrivedJobApi Success: ", bookingId + ":bookingId userId " + userId);
                 } else if (response.code() == 401) {
