@@ -1,5 +1,7 @@
 package com.app.ace_taxi_v2.Fragments.RankPickup;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Handler;
@@ -19,6 +21,7 @@ import androidx.annotation.Nullable;
 
 import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.BookingFragment;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Logic.AddressIO.GetAddressIOAddress;
 import com.app.ace_taxi_v2.Logic.GetBookingPrice;
 import com.app.ace_taxi_v2.Logic.JobApi.CreateBookingApi;
@@ -54,11 +57,15 @@ public class BookingManager {
     }
 
     public void setupAutoCompleteFields(AutoCompleteTextView destinationLocationInput) {
-        destinationAdapter = createArrayAdapter();
-        configureAutoCompleteTextView(destinationLocationInput);
+        try {
+            destinationAdapter = createArrayAdapter();
+            configureAutoCompleteTextView(destinationLocationInput);
 
-        destinationSuggestions.add("Test - 123 Main St");
-        destinationAdapter.notifyDataSetChanged();
+            destinationSuggestions.add("Test - 123 Main St");
+            destinationAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            LogHelperLaravel.getInstance().e(TAG,"Exception: "+e);
+        }
     }
 
     private ArrayAdapter<String> createArrayAdapter() {
@@ -88,62 +95,72 @@ public class BookingManager {
     }
 
     private void configureAutoCompleteTextView(AutoCompleteTextView destinationLocationInput) {
-        destinationLocationInput.setAdapter(destinationAdapter);
-        destinationLocationInput.setThreshold(1);
-        destinationLocationInput.setDropDownHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        destinationLocationInput.setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        destinationLocationInput.setDropDownBackgroundResource(android.R.color.white);
-        destinationLocationInput.setDropDownAnchor(R.id.passengerCard);
-        destinationLocationInput.setDropDownVerticalOffset(-destinationLocationInput.getHeight() - 350);
-        destinationLocationInput.addTextChangedListener(new AutoCompleteTextWatcher());
-        destinationLocationInput.setOnClickListener(v -> showDestinationDropdown());
-        destinationLocationInput.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) showDestinationDropdown();
-        });
-        destinationLocationInput.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) showDestinationDropdown();
-            return false;
-        });
-        destinationLocationInput.setOnItemClickListener((parent, view, position, id) -> {
-            String selected = destinationAdapter.getItem(position);
-            destinationLocationInput.setText(selected);
-            destinationLocationInput.setSelection(selected.length());
+        try {
 
-            // Extract postcode from selected suggestion
-            String[] selectedParts = selected.split(" - ");
-            if (selectedParts.length != 2 || selectedParts[1].trim().isEmpty()) {
-                customToast.showCustomErrorToast("Invalid destination selected");
-                fragment.getPriceTextView().setText("£0.00");
-                fragment.getHead_price().setText("£0.00");
-                return;
-            }
-            postcode = selectedParts[1].trim();
-            address = selectedParts[0].trim();
-
-            @SuppressLint({"NewApi", "LocalSuppress"}) String currentDateTime = Instant.now()
-                    .atZone(ZoneId.systemDefault())
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
-
-            GetBookingPrice getBookingPrice = new GetBookingPrice(fragment.getContext());
-            Log.d("GetPriceApi", "Input: pickup=" + PICKUP_POSTCODE + ", destination=" + postcode + ", time=" + currentDateTime);
-            getBookingPrice.getBookingPrince(PICKUP_POSTCODE, postcode, currentDateTime, 0, new GetBookingPrice.BookingPriceCallback() {
-                @Override
-                public void onSuccess(QuotesResponse response) {
-                    Log.d("GetPriceApi", "Success: price=£" + response.getTotalPrice());
-                    fragment.getPriceTextView().setText(String.format("£%.2f", response.getTotalPrice()));
-                    fragment.getHead_price().setText(String.format("£%.2f", response.getTotalPrice()));
-                    totalPrice = response.getTotalPrice();
-                }
-
-                @Override
-                public void onError(String error) {
-                    Log.e("GetPriceApi", "Error: " + error);
-                    customToast.showCustomErrorToast("Failed to fetch price: " + error);
-                    fragment.getPriceTextView().setText("£0.00");
-                    fragment.getHead_price().setText("£0.00");
-                }
+            destinationLocationInput.setAdapter(destinationAdapter);
+            destinationLocationInput.setThreshold(1);
+            destinationLocationInput.setDropDownHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            destinationLocationInput.setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+            destinationLocationInput.setDropDownBackgroundResource(android.R.color.white);
+            destinationLocationInput.setDropDownAnchor(R.id.passengerCard);
+            destinationLocationInput.setDropDownVerticalOffset(-destinationLocationInput.getHeight() - 350);
+            destinationLocationInput.addTextChangedListener(new AutoCompleteTextWatcher());
+            destinationLocationInput.setOnClickListener(v -> showDestinationDropdown());
+            destinationLocationInput.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) showDestinationDropdown();
             });
-        });
+            destinationLocationInput.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) showDestinationDropdown();
+                return false;
+            });
+            destinationLocationInput.setOnItemClickListener((parent, view, position, id) -> {
+
+                try {
+                    String selected = destinationAdapter.getItem(position);
+                    destinationLocationInput.setText(selected);
+                    destinationLocationInput.setSelection(selected.length());
+
+                    // Extract postcode from selected suggestion
+                    String[] selectedParts = selected.split(" - ");
+                    if (selectedParts.length != 2 || selectedParts[1].trim().isEmpty()) {
+                        customToast.showCustomErrorToast("Invalid destination selected");
+                        fragment.getPriceTextView().setText("£0.00");
+                        fragment.getHead_price().setText("£0.00");
+                        return;
+                    }
+                    postcode = selectedParts[1].trim();
+                    address = selectedParts[0].trim();
+                } catch (Exception e) {
+                    LogHelperLaravel.getInstance().e(TAG,"Exception: "+e);
+                }
+
+                @SuppressLint({"NewApi", "LocalSuppress"}) String currentDateTime = Instant.now()
+                        .atZone(ZoneId.systemDefault())
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+
+                GetBookingPrice getBookingPrice = new GetBookingPrice(fragment.getContext());
+                Log.d("GetPriceApi", "Input: pickup=" + PICKUP_POSTCODE + ", destination=" + postcode + ", time=" + currentDateTime);
+                getBookingPrice.getBookingPrince(PICKUP_POSTCODE, postcode, currentDateTime, 0, new GetBookingPrice.BookingPriceCallback() {
+                    @Override
+                    public void onSuccess(QuotesResponse response) {
+                        Log.d("GetPriceApi", "Success: price=£" + response.getTotalPrice());
+                        fragment.getPriceTextView().setText(String.format("£%.2f", response.getTotalPrice()));
+                        fragment.getHead_price().setText(String.format("£%.2f", response.getTotalPrice()));
+                        totalPrice = response.getTotalPrice();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e("GetPriceApi", "Error: " + error);
+                        customToast.showCustomErrorToast("Failed to fetch price: " + error);
+                        fragment.getPriceTextView().setText("£0.00");
+                        fragment.getHead_price().setText("£0.00");
+                    }
+                });
+            });
+        }catch(Exception e){
+            LogHelperLaravel.getInstance().e(TAG,"exception : "+e);
+        }
     }
 
     public void showDestinationDropdown() {

@@ -1,5 +1,7 @@
 package com.app.ace_taxi_v2.Helper;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -30,10 +32,15 @@ public class LogHelperLaravel {
     }
 
     public static LogHelperLaravel getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("LogHelperLaravel is not initialized, call init(context) first.");
+        try {
+            if (instance == null) {
+                Log.e(TAG,"Error");
+            }
+            return instance;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return instance;
+        return null;
     }
 
     private void sendLogToBackend(LogRequest logRequest, String tag, int retryCount) {

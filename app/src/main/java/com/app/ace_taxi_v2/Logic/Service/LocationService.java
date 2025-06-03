@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Logic.SendLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -43,23 +44,27 @@ public class LocationService extends Service {
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
-                if (locationResult != null && locationResult.getLocations() != null) {
-                    Log.d(TAG, "LocationCallback triggered with " + locationResult.getLocations().size() + " location(s).");
-                    for (android.location.Location location : locationResult.getLocations()) {
-                        float speed = location.hasSpeed() ? location.getSpeed() : 0.0f; // Speed in meters/second
-                        float heading = location.hasBearing() ? location.getBearing() : 0.0f; // Heading in degrees
-                        Log.d(TAG, "Location received: " + location.getLatitude() + ", " + location.getLongitude() + ", speed: " + speed + " Heading: " + heading);
-                        // Process location data
-                        SendLocation sendLocation = new SendLocation(
-                                getApplicationContext(),
-                                location.getLatitude(),
-                                location.getLongitude(),
-                                speed, heading  // speed and heading
-                        );
-                        sendLocation.sendLocation();
+                try {
+                    if (locationResult != null && locationResult.getLocations() != null) {
+                        Log.d(TAG, "LocationCallback triggered with " + locationResult.getLocations().size() + " location(s).");
+                        for (android.location.Location location : locationResult.getLocations()) {
+                            float speed = location.hasSpeed() ? location.getSpeed() : 0.0f; // Speed in meters/second
+                            float heading = location.hasBearing() ? location.getBearing() : 0.0f; // Heading in degrees
+                            Log.d(TAG, "Location received: " + location.getLatitude() + ", " + location.getLongitude() + ", speed: " + speed + " Heading: " + heading);
+                            // Process location data
+                            SendLocation sendLocation = new SendLocation(
+                                    getApplicationContext(),
+                                    location.getLatitude(),
+                                    location.getLongitude(),
+                                    speed, heading  // speed and heading
+                            );
+                            sendLocation.sendLocation();
+                        }
+                    } else {
+                        Log.e(TAG, "LocationCallback triggered, but no location received.");
                     }
-                } else {
-                    Log.e(TAG, "LocationCallback triggered, but no location received.");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         };

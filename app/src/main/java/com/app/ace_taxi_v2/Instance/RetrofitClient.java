@@ -18,12 +18,16 @@ public class RetrofitClient {
 
     // Create a new Retrofit instance with the latest base URL
     private static void createRetrofitInstance() {
-        String baseUrl = DeviceMode.getBaseURLStatic();
-        Log.e("Retrofit Base URL", baseUrl);
-        retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        try {
+            String baseUrl = DeviceMode.getBaseURLStatic();
+            Log.e("Retrofit Base URL", baseUrl);
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Clear the current Retrofit instance (use on mode change)

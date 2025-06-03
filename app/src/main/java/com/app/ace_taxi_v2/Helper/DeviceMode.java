@@ -31,7 +31,7 @@ public class DeviceMode {
 
     public static DeviceMode getInstance() {
         if (instance == null) {
-            LogHelperLaravel.getInstance().e(TAG,"DeviceMode is not initialized. Call DeviceMode.init(context) in your Application class.");
+            return null;
         }
         return instance;
     }
