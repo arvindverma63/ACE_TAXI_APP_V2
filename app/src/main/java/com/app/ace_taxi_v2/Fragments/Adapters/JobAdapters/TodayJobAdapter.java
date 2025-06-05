@@ -114,10 +114,10 @@ public class TodayJobAdapter extends RecyclerView.Adapter<TodayJobAdapter.ViewHo
                         : (job.getDestinationPostCode() != null ? job.getDestinationPostCode() : "");
 
                 mainAddressTextView.setOnClickListener(v -> {
-                    openmap.openGoogleMaps(job.getPickupAddress());
+                    openmap.openGoogleMaps(job.getPickupPostCode());
                 });
                 subAddressTextView.setOnClickListener(v -> {
-                    openmap.openGoogleMaps(job.getDestinationAddress());
+                    openmap.openGoogleMaps(job.getDestinationPostCode());
                 });
                 HHMMFormater formater = new HHMMFormater();
                 mainAddressTextView.setText(firstPickup);

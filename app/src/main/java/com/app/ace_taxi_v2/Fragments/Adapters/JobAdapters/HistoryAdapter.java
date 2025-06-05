@@ -113,10 +113,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 }
 
                 mainAddressTextView.setOnClickListener(v -> {
-                    openmap.openGoogleMaps(job.getPickupAddress());
+                    openmap.openGoogleMaps(job.getPickupPostCode());
                 });
                 subAddressTextView.setOnClickListener(v -> {
-                    openmap.openGoogleMaps(job.getDestinationAddress());
+                    openmap.openGoogleMaps(job.getDestinationPostCode());
                 });
                 distance_duration.setText(job.getMileage() + " Miles");
                 HHMMFormater formater = new HHMMFormater();

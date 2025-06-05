@@ -318,8 +318,8 @@ public class HomeFragment extends Fragment {
                                 }
 
                                 // Set UI elements
-                                pickup_address.setOnClickListener(v -> openGoogleMaps(lastPickup));
-                                destination_address.setOnClickListener(v -> openGoogleMaps(lastDestination));
+                                pickup_address.setOnClickListener(v -> openGoogleMaps(booking.getPickupPostCode()));
+                                destination_address.setOnClickListener(v -> openGoogleMaps(booking.getDestinationPostCode()));
                                 pickup_address.setText(firstPickup);
                                 pickup_subaddress.setText(lastPickup);
                                 destination_address.setText(firstDestination);
