@@ -1,6 +1,10 @@
 package com.app.ace_taxi_v2.Fragments;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,33 +31,24 @@ public class SchedularFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedular, container, false);
 
-        // Initialize WebView
         webView = view.findViewById(R.id.webview);
 
-        // Configure WebView settings
         WebSettings webSettings = webView.getSettings();
 
         sideMenu = view.findViewById(R.id.sideMenu);
         sideMenu.setOnClickListener(v -> {
-            HamMenu hamMenu = new HamMenu(getContext(),getActivity());
+            HamMenu hamMenu = new HamMenu(getContext(), getActivity());
             hamMenu.openMenu(sideMenu);
         });
-        // Enable JavaScript
-        webSettings.setJavaScriptEnabled(true);
 
-        // Enable localStorage and DOM storage
+        webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true);
-
-        // Disable zoom
         webSettings.setSupportZoom(false);
         webSettings.setBuiltInZoomControls(false);
         webSettings.setDisplayZoomControls(false);
-
-        // Additional WebView settings
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
@@ -61,35 +56,41 @@ public class SchedularFragment extends Fragment {
         webSettings.setMediaPlaybackRequiresUserGesture(false);
         webSettings.setUseWideViewPort(true);
         webSettings.setLoadWithOverviewMode(true);
-
-        // Enable mixed content (for handling both HTTP and HTTPS)
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        // Set WebViewClient to handle page navigation within WebView
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d("WebView", "Navigating to: " + url);
+                if (url.startsWith("https://www.google.com/maps") || url.startsWith("geo:")) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.setPackage("com.google.android.apps.maps");
+                    try {
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        intent.setPackage(null);
+                        startActivity(intent);
+                    }
+                    return true;
+                }
                 view.loadUrl(url);
                 return true;
             }
         });
 
-        // Set WebChromeClient for JavaScript dialogs, favicons, titles, and progress
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                // Handle progress changes if needed
+                // Handle progress if needed
             }
         });
+
         SessionManager sessionManager = new SessionManager(getContext());
-        String weburl = "";
-        if(DeviceMode.getInstance().isLiveMode()){
-            weburl = "https://ace-scheduler-driver.vercel.app?token=";
-        }else{
-            weburl = "https://dev-ace-scheduler-driver.vercel.app?token=";
-        }
-        // Load the specified URL
-        webView.loadUrl(weburl+sessionManager.getToken());
+        String weburl = DeviceMode.getInstance().isLiveMode()
+                ? "https://ace-scheduler-driver.vercel.app?token="
+                : "https://dev-ace-scheduler-driver.vercel.app?token=";
+
+        webView.loadUrl(weburl + sessionManager.getToken());
 
         return view;
     }
