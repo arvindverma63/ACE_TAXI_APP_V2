@@ -47,6 +47,7 @@ public class BookingManager {
     public CustomToast customToast;
     private static final String PICKUP_ADDRESS = "Rank Pickup";
     private static final String PICKUP_POSTCODE = "SP8 4PZ";
+    private boolean isProgrammaticChange = false; // Flag to track programmatic text changes
 
     public BookingManager(BookingFragment fragment, MapAndLocationManager mapAndLocationManager) {
         this.fragment = fragment;
@@ -64,7 +65,7 @@ public class BookingManager {
             destinationSuggestions.add("Test - 123 Main St");
             destinationAdapter.notifyDataSetChanged();
         } catch (Exception e) {
-            LogHelperLaravel.getInstance().e(TAG,"Exception: "+e);
+            LogHelperLaravel.getInstance().e(TAG, "Exception: " + e);
         }
     }
 
@@ -77,7 +78,7 @@ public class BookingManager {
                 View view = super.getView(position, convertView, parent);
                 TextView textView = (TextView) view;
                 textView.setTextColor(Color.BLACK);
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setPadding(2, 2, 2, 2);
                 return view;
             }
@@ -87,7 +88,7 @@ public class BookingManager {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView textView = (TextView) view;
                 textView.setTextColor(Color.BLACK);
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setPadding(2, 2, 2, 2);
                 return view;
             }
@@ -96,7 +97,6 @@ public class BookingManager {
 
     private void configureAutoCompleteTextView(AutoCompleteTextView destinationLocationInput) {
         try {
-
             destinationLocationInput.setAdapter(destinationAdapter);
             destinationLocationInput.setThreshold(1);
             destinationLocationInput.setDropDownHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -105,22 +105,21 @@ public class BookingManager {
             destinationLocationInput.setDropDownAnchor(R.id.passengerCard);
             destinationLocationInput.setDropDownVerticalOffset(-destinationLocationInput.getHeight() - 350);
             destinationLocationInput.addTextChangedListener(new AutoCompleteTextWatcher());
-            destinationLocationInput.setOnClickListener(v -> showDestinationDropdown());
-            destinationLocationInput.setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus) showDestinationDropdown();
-            });
             destinationLocationInput.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) showDestinationDropdown();
+                if (event.getAction() == MotionEvent.ACTION_DOWN && !destinationSuggestions.isEmpty()) {
+                    destinationLocationInput.showDropDown();
+                }
                 return false;
             });
             destinationLocationInput.setOnItemClickListener((parent, view, position, id) -> {
-
                 try {
+                    isProgrammaticChange = true; // Set flag before changing text
                     String selected = destinationAdapter.getItem(position);
                     destinationLocationInput.setText(selected);
                     destinationLocationInput.setSelection(selected.length());
+                    destinationLocationInput.dismissDropDown(); // Dismiss dropdown
+                    isProgrammaticChange = false; // Reset flag after changing text
 
-                    // Extract postcode from selected suggestion
                     String[] selectedParts = selected.split(" - ");
                     if (selectedParts.length != 2 || selectedParts[1].trim().isEmpty()) {
                         customToast.showCustomErrorToast("Invalid destination selected");
@@ -130,36 +129,37 @@ public class BookingManager {
                     }
                     postcode = selectedParts[1].trim();
                     address = selectedParts[0].trim();
+
+                    @SuppressLint({"NewApi", "LocalSuppress"}) String currentDateTime = Instant.now()
+                            .atZone(ZoneId.systemDefault())
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+
+                    GetBookingPrice getBookingPrice = new GetBookingPrice(fragment.getContext());
+                    Log.d("GetPriceApi", "Input: pickup=" + PICKUP_POSTCODE + ", destination=" + postcode + ", time=" + currentDateTime);
+                    getBookingPrice.getBookingPrince(PICKUP_POSTCODE, postcode, currentDateTime, 0, new GetBookingPrice.BookingPriceCallback() {
+                        @Override
+                        public void onSuccess(QuotesResponse response) {
+                            Log.d("GetPriceApi", "Success: price=£" + response.getTotalPrice());
+                            fragment.getPriceTextView().setText(String.format("£%.2f", response.getTotalPrice()));
+                            fragment.getHead_price().setText(String.format("£%.2f", response.getTotalPrice()));
+                            totalPrice = response.getTotalPrice();
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.e("GetPriceApi", "Error: " + error);
+                            customToast.showCustomErrorToast("Failed to fetch price: " + error);
+                            fragment.getPriceTextView().setText("£0.00");
+                            fragment.getHead_price().setText("£0.00");
+                        }
+                    });
                 } catch (Exception e) {
-                    LogHelperLaravel.getInstance().e(TAG,"Exception: "+e);
+                    LogHelperLaravel.getInstance().e(TAG, "Exception: " + e);
+                    isProgrammaticChange = false; // Ensure flag is reset in case of exception
                 }
-
-                @SuppressLint({"NewApi", "LocalSuppress"}) String currentDateTime = Instant.now()
-                        .atZone(ZoneId.systemDefault())
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
-
-                GetBookingPrice getBookingPrice = new GetBookingPrice(fragment.getContext());
-                Log.d("GetPriceApi", "Input: pickup=" + PICKUP_POSTCODE + ", destination=" + postcode + ", time=" + currentDateTime);
-                getBookingPrice.getBookingPrince(PICKUP_POSTCODE, postcode, currentDateTime, 0, new GetBookingPrice.BookingPriceCallback() {
-                    @Override
-                    public void onSuccess(QuotesResponse response) {
-                        Log.d("GetPriceApi", "Success: price=£" + response.getTotalPrice());
-                        fragment.getPriceTextView().setText(String.format("£%.2f", response.getTotalPrice()));
-                        fragment.getHead_price().setText(String.format("£%.2f", response.getTotalPrice()));
-                        totalPrice = response.getTotalPrice();
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        Log.e("GetPriceApi", "Error: " + error);
-                        customToast.showCustomErrorToast("Failed to fetch price: " + error);
-                        fragment.getPriceTextView().setText("£0.00");
-                        fragment.getHead_price().setText("£0.00");
-                    }
-                });
             });
-        }catch(Exception e){
-            LogHelperLaravel.getInstance().e(TAG,"exception : "+e);
+        } catch (Exception e) {
+            LogHelperLaravel.getInstance().e(TAG, "exception: " + e);
         }
     }
 
@@ -178,10 +178,15 @@ public class BookingManager {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (isProgrammaticChange) {
+                return; // Skip if text change is programmatic
+            }
+
             if (searchRunnable != null) {
                 handler.removeCallbacks(searchRunnable);
             }
-            if (s.length() >= 1) {
+
+            if (s.length() >= 3) { // Only fetch suggestions after 3 characters
                 searchRunnable = () -> fetchAutoCompleteSuggestions(s.toString());
                 handler.postDelayed(searchRunnable, 300);
             } else {
@@ -202,47 +207,66 @@ public class BookingManager {
         GetAddressIOAddress addressIO = new GetAddressIOAddress();
         addressIO.getAddressId(query, new GetAddressIOAddress.AddressCallback() {
             @Override
-            public void onSuccess(Suggestion suggestion) {
-                // Fetch postcode for the suggestion
-                addressIO.getPostcode(suggestion.getId(), new GetAddressIOAddress.PostcodeCallback() {
-                    @Override
-                    public void onSuccess(PostcodeResponse postcodeResponse) {
-                        List<String> newSuggestions = new ArrayList<>();
-                        // Reset address and postcode
-                        address = null;
-                        postcode = null;
+            public void onSuccess(List<Suggestion> suggestions) {
+                List<String> newSuggestions = new ArrayList<>();
+                address = null;
+                postcode = null;
 
-                        // Format suggestion as "address - postcode"
-                        String suggestionAddress = suggestion.getAddress();
-                        String suggestionPostcode = postcodeResponse.getPostcode();
-                        if (suggestionAddress != null && !suggestionAddress.isEmpty() &&
-                                suggestionPostcode != null && !suggestionPostcode.isEmpty()) {
-                            newSuggestions.add(suggestionAddress + " - " + suggestionPostcode);
-                            address = suggestionAddress;
-                            postcode = suggestionPostcode;
+                final int[] completedRequests = {0};
+                final int totalRequests = suggestions.size();
+
+                if (totalRequests == 0) {
+                    fragment.requireActivity().runOnUiThread(() -> {
+                        destinationSuggestions.clear();
+                        destinationAdapter.notifyDataSetChanged();
+                    });
+                    return;
+                }
+
+                for (Suggestion suggestion : suggestions) {
+                    addressIO.getPostcode(suggestion.getId(), new GetAddressIOAddress.PostcodeCallback() {
+                        @Override
+                        public void onSuccess(PostcodeResponse postcodeResponse) {
+                            String suggestionAddress = suggestion.getAddress();
+                            String suggestionPostcode = postcodeResponse.getPostcode();
+                            if (suggestionAddress != null && !suggestionAddress.isEmpty() &&
+                                    suggestionPostcode != null && !suggestionPostcode.isEmpty()) {
+                                newSuggestions.add(suggestionAddress + " - " + suggestionPostcode);
+                            }
+
+                            completedRequests[0]++;
+                            if (completedRequests[0] == totalRequests) {
+                                fragment.requireActivity().runOnUiThread(() -> {
+                                    destinationSuggestions.clear();
+                                    destinationSuggestions.addAll(newSuggestions);
+                                    destinationAdapter = createArrayAdapter();
+                                    fragment.getDestinationLocationInput().setAdapter(destinationAdapter);
+                                    destinationAdapter.notifyDataSetChanged();
+                                    if (!newSuggestions.isEmpty()) {
+                                        fragment.getDestinationLocationInput().showDropDown();
+                                    }
+                                });
+                            }
                         }
 
-                        fragment.requireActivity().runOnUiThread(() -> {
-                            destinationSuggestions.clear();
-                            destinationSuggestions.addAll(newSuggestions);
-                            destinationAdapter = createArrayAdapter();
-                            fragment.getDestinationLocationInput().setAdapter(destinationAdapter);
-                            destinationAdapter.notifyDataSetChanged();
-                            if (!newSuggestions.isEmpty()) {
-                                fragment.getDestinationLocationInput().showDropDown();
+                        @Override
+                        public void onError(String error) {
+                            completedRequests[0]++;
+                            if (completedRequests[0] == totalRequests) {
+                                fragment.requireActivity().runOnUiThread(() -> {
+                                    destinationSuggestions.clear();
+                                    destinationSuggestions.addAll(newSuggestions);
+                                    destinationAdapter = createArrayAdapter();
+                                    fragment.getDestinationLocationInput().setAdapter(destinationAdapter);
+                                    destinationAdapter.notifyDataSetChanged();
+                                    if (!newSuggestions.isEmpty()) {
+                                        fragment.getDestinationLocationInput().showDropDown();
+                                    }
+                                });
                             }
-                        });
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        fragment.requireActivity().runOnUiThread(() -> {
-                            customToast.showCustomErrorToast("Failed to load postcode: " + error);
-                            destinationSuggestions.clear();
-                            destinationAdapter.notifyDataSetChanged();
-                        });
-                    }
-                });
+                        }
+                    });
+                }
             }
 
             @Override
@@ -280,7 +304,6 @@ public class BookingManager {
         String destinationAddress = destinationParts[0].trim();
         String destinationPostCode = destinationParts[1].trim();
 
-        // Proceed directly to booking without map logic
         proceedWithBooking(destinationAddress, destinationPostCode, passengerName);
     }
 

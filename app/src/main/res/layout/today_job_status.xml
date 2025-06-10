@@ -37,6 +37,7 @@
                     app:cardCornerRadius="40dp"
                     app:cardElevation="4dp"
                     app:strokeWidth="2dp"
+                    android:visibility="gone"
                     android:layout_marginBottom="10dp"
                     app:strokeColor="@color/black"
                     android:backgroundTint="@android:color/white">
@@ -52,7 +53,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ride Status"
+                    android:textStyle="bold"
                     style="@style/TextBG"
+                    android:textSize="22dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="20dp"/>
 
@@ -68,6 +71,7 @@
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="8dp"
                         android:id="@+id/btn_on_route"
+                        android:visibility="gone"
                         android:layout_marginBottom="10dp"
                         app:strokeWidth="1dp"
                         style="@style/CardBG">
@@ -177,6 +181,7 @@
                         app:cardCornerRadius="8dp"
                         android:id="@+id/btn_pob"
                         android:layout_marginBottom="10dp"
+                        android:visibility="gone"
                         app:strokeWidth="1dp"
                         style="@style/CardBG">
 
@@ -229,6 +234,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="8dp"
+                        android:visibility="gone"
                         android:id="@+id/btn_stc"
                         android:layout_marginBottom="10dp"
                         app:strokeWidth="1dp"
