@@ -4,11 +4,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +27,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Components.CustomToast;
+import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
 import com.app.ace_taxi_v2.Logic.Service.FileUtils;
 import com.app.ace_taxi_v2.Logic.UploadDocumentApi;
 import com.app.ace_taxi_v2.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -42,13 +47,13 @@ import okhttp3.RequestBody;
 
 public class UploadDocumentFragment extends Fragment {
 
-    private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int PICK_FILE_REQUEST = 1; // Renamed for clarity
     private static final int CAMERA_REQUEST = 2;
     private static final int CAMERA_PERMISSION_REQUEST = 100;
-    private Uri imageUri;
+    private Uri fileUri; // Renamed from imageUri
     private ImageView selectedUploadButton;
     private int selectedType = -1;
-    private File photoFile; // To store camera image
+    private File photoFile; // For camera images
 
     private Map<ImageView, Integer> uploadButtonToTypeMap = new HashMap<>();
     private Map<ImageView, ImageView> uploadButtonToCardMap = new HashMap<>();
@@ -91,7 +96,7 @@ public class UploadDocumentFragment extends Fragment {
                 licenceDisplay == null || insuranceDisplay == null || dbsCertDisplay == null ||
                 vehicleLicenceDisplay == null || driversLicenceDisplay == null ||
                 safeguardingCertDisplay == null || firstAidCertDisplay == null) {
-            Log.e("UploadDocumentFragment", "One or more views not found in layout");
+            LogHelperLaravel.getInstance().e("UploadDocumentFragment", "One or more views not found in layout");
             new CustomToast(getContext()).showCustomErrorToast("One or more views not found");
             return;
         }
@@ -120,11 +125,11 @@ public class UploadDocumentFragment extends Fragment {
             uploadButton.setOnClickListener(v -> {
                 selectedUploadButton = uploadButton;
                 selectedType = uploadButtonToTypeMap.get(uploadButton);
-                Log.d("UploadDocumentFragment", "Clicked button with type: " + selectedType);
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Clicked button with type: " + selectedType);
                 try {
                     openImageOptions();
                 } catch (Exception e) {
-                    Log.e("UploadDocumentFragment", "Error opening image options: " + e.getMessage(), e);
+                    LogHelperLaravel.getInstance().e("UploadDocumentFragment", "Error opening image options: " + e.getMessage());
                     new CustomToast(getContext()).showCustomErrorToast("Failed to open image options: " + e.getMessage());
                 }
             });
@@ -140,7 +145,7 @@ public class UploadDocumentFragment extends Fragment {
     }
 
     private void openImageOptions() {
-        Log.d("UploadDocumentFragment", "Entering openImageOptions");
+        LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Entering openImageOptions");
         try {
             // Check for camera permission
             String[] permissions = {Manifest.permission.CAMERA};
@@ -148,77 +153,96 @@ public class UploadDocumentFragment extends Fragment {
             for (String permission : permissions) {
                 if (ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
                     allPermissionsGranted = false;
-                    Log.d("UploadDocumentFragment", "Permission missing: " + permission);
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Permission missing: " + permission);
                     ActivityCompat.requestPermissions(requireActivity(), permissions, CAMERA_PERMISSION_REQUEST);
                     break;
                 }
             }
 
             if (allPermissionsGranted) {
-                Log.d("UploadDocumentFragment", "All permissions granted, showing dialog");
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "All permissions granted, showing dialog");
                 String[] options = {"Take Photo", "Choose from Gallery"};
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-                builder.setTitle("Select Image Source");
+                builder.setTitle("Select File Source");
                 builder.setItems(options, (dialog, which) -> {
-                    Log.d("UploadDocumentFragment", "Dialog option selected: " + which);
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Dialog option selected: " + which);
                     if (which == 0) {
                         openCamera();
                     } else if (which == 1) {
-                        openImageChooser();
+                        openFileChooser();
                     }
                 });
                 builder.setNegativeButton("Cancel", (dialog, which) -> {
-                    Log.d("UploadDocumentFragment", "Dialog cancelled");
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Dialog cancelled");
                 });
                 builder.create().show();
-                Log.d("UploadDocumentFragment", "Dialog shown");
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Dialog shown");
             } else {
-                Log.d("UploadDocumentFragment", "Permissions not granted, waiting for request result");
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Permissions not granted, waiting for request result");
             }
         } catch (Exception e) {
-            Log.e("UploadDocumentFragment", "Error in openImageOptions: " + e.getMessage(), e);
-            new CustomToast(getContext()).showCustomErrorToast("Error showing image options: " + e.getMessage());
+            LogHelperLaravel.getInstance().e("UploadDocumentFragment", "Error in openImageOptions: " + e.getMessage());
+            new CustomToast(getContext()).showCustomErrorToast("Error showing file options: " + e.getMessage());
         }
     }
 
     private void openCamera() {
-        Log.d("UploadDocumentFragment", "Opening camera");
+        LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Attempting to open camera");
         try {
             // Check if device has a camera
             if (!requireContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                Log.w("UploadDocumentFragment", "Device has no camera hardware");
-                new CustomToast(getContext()).showCustomToast("No camera available on this device. Please select an image from gallery.");
-                openImageChooser();
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Device has no camera hardware");
+                new CustomToast(getContext()).showCustomToast("No camera available on this device. Please select a file from gallery.");
+                openFileChooser();
                 return;
             }
 
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            // Try alternative intent if standard one fails
-            if (intent.resolveActivity(requireActivity().getPackageManager()) == null) {
-                Log.w("UploadDocumentFragment", "No app found for ACTION_IMAGE_CAPTURE, trying ACTION_IMAGE_CAPTURE_SECURE");
-                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+            // Log device info for debugging
+            LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Device: " + Build.MANUFACTURER + ", Model: " + Build.MODEL + ", Android Version: " + Build.VERSION.RELEASE);
+
+            // Try camera intents in order of preference
+            Intent[] cameraIntents = new Intent[] {
+                    new Intent(MediaStore.ACTION_IMAGE_CAPTURE),
+                    new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE),
+                    new Intent("android.media.action.IMAGE_CAPTURE") // Generic fallback
+            };
+
+            boolean intentAvailable = false;
+            Intent selectedIntent = null;
+
+            // Check which intent has an available activity
+            for (Intent intent : cameraIntents) {
+                if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                    selectedIntent = intent;
+                    intentAvailable = true;
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Found app for intent: " + intent.getAction());
+                    break;
+                } else {
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "No app found for intent: " + intent.getAction());
+                }
             }
 
-            if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            if (intentAvailable && selectedIntent != null) {
                 try {
                     photoFile = createImageFile();
-                    imageUri = FileProvider.getUriForFile(requireContext(), "com.app.ace_taxi_v2.fileprovider", photoFile);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                    startActivityForResult(intent, CAMERA_REQUEST);
-                    Log.d("UploadDocumentFragment", "Camera intent started with URI: " + imageUri);
+                    fileUri = FileProvider.getUriForFile(requireContext(), "com.app.ace_taxi_v2.fileprovider", photoFile);
+                    selectedIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                    startActivityForResult(selectedIntent, CAMERA_REQUEST);
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Camera intent started with URI: " + fileUri + ", Action: " + selectedIntent.getAction());
                 } catch (IOException ex) {
-                    Log.e("UploadDocumentFragment", "Error creating image file: " + ex.getMessage(), ex);
+                    LogHelperLaravel.getInstance().e("UploadDocumentFragment", "Error creating image file: " + ex.getMessage());
                     new CustomToast(getContext()).showCustomErrorToast("Error preparing camera capture");
+                    openFileChooser();
                 }
             } else {
-                Log.w("UploadDocumentFragment", "No camera app found for any capture intent");
-                new CustomToast(getContext()).showCustomToast("No camera app found. Please select an image from gallery.");
-                openImageChooser();
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "No camera app found for any capture intent");
+                new CustomToast(getContext()).showCustomToast("No camera app available. Please select an image or PDF from gallery.");
+                openFileChooser();
             }
         } catch (Exception e) {
-            Log.e("UploadDocumentFragment", "Error in openCamera: " + e.getMessage(), e);
+            LogHelperLaravel.getInstance().e("UploadDocumentFragment", "Error in openCamera: " + e.getMessage());
             new CustomToast(getContext()).showCustomErrorToast("Failed to open camera: " + e.getMessage());
-            openImageChooser();
+            openFileChooser();
         }
     }
 
@@ -229,18 +253,20 @@ public class UploadDocumentFragment extends Fragment {
         return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 
-    private void openImageChooser() {
-        Log.d("UploadDocumentFragment", "Opening gallery");
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    private void openFileChooser() {
+        LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Opening file chooser");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        // Allow both images and PDFs
+        intent.setType("*/*");
+        String[] mimeTypes = {"image/*", "application/pdf"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FILE_REQUEST);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d("UploadDocumentFragment", "onRequestPermissionsResult called with requestCode: " + requestCode);
+        LogHelperLaravel.getInstance().d("UploadDocumentFragment", "onRequestPermissionsResult called with requestCode: " + requestCode);
         if (requestCode == CAMERA_PERMISSION_REQUEST) {
             boolean allGranted = true;
             for (int result : grantResults) {
@@ -250,12 +276,12 @@ public class UploadDocumentFragment extends Fragment {
                 }
             }
             if (allGranted) {
-                Log.d("UploadDocumentFragment", "Permissions granted, opening image options");
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Permissions granted, opening file options");
                 openImageOptions();
             } else {
-                Log.d("UploadDocumentFragment", "Camera permission denied, falling back to gallery");
-                new CustomToast(getContext()).showCustomToast("Camera permission denied. Please select an image from gallery.");
-                openImageChooser();
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Camera permission denied, falling back to gallery");
+                new CustomToast(getContext()).showCustomToast("Camera permission denied. Please select a file from gallery.");
+                openFileChooser();
             }
         }
     }
@@ -263,53 +289,133 @@ public class UploadDocumentFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("UploadDocumentFragment", "onActivityResult called with requestCode: " + requestCode + ", resultCode: " + resultCode);
+        LogHelperLaravel.getInstance().d("UploadDocumentFragment", "onActivityResult called with requestCode: " + requestCode + ", resultCode: " + resultCode);
         if (resultCode == Activity.RESULT_OK && selectedUploadButton != null) {
             ImageView displayImageView = uploadButtonToCardMap.get(selectedUploadButton);
-            if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-                imageUri = data.getData();
-                if (displayImageView != null) {
-                    displayImageView.setImageURI(imageUri);
-                    uploadImage(imageUri, selectedType);
-                    Log.d("UploadDocumentFragment", "Gallery image selected: " + imageUri);
+            if (requestCode == PICK_FILE_REQUEST && data != null && data.getData() != null) {
+                fileUri = data.getData();
+                String mimeType = requireContext().getContentResolver().getType(fileUri);
+                LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Selected file MIME type: " + mimeType);
+
+                if (mimeType != null && mimeType.startsWith("image/") && displayImageView != null) {
+                    // Handle image
+                    displayImageView.setImageURI(fileUri);
+                    uploadFile(fileUri, selectedType);
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Gallery image selected: " + fileUri);
+                } else if (mimeType != null && mimeType.equals("application/pdf")) {
+                    // Handle PDF
+                    // Optionally, update UI to indicate PDF selection (e.g., change icon or show toast)
+                    if (displayImageView != null) {
+                        // Set a placeholder or PDF icon since we can't display the PDF
+                        displayImageView.setImageResource(R.drawable.ic_pdf); // Ensure you have a PDF icon in drawable
+                    }
+                    new CustomToast(getContext()).showCustomToast("PDF selected successfully");
+                    uploadFile(fileUri, selectedType);
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "PDF selected: " + fileUri);
+                } else {
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Unsupported file type: " + mimeType);
+                    new CustomToast(getContext()).showCustomErrorToast("Please select an image or PDF file");
                 }
             } else if (requestCode == CAMERA_REQUEST) {
-                if (imageUri != null && photoFile != null && photoFile.exists()) {
+                if (fileUri != null && photoFile != null && photoFile.exists()) {
                     if (displayImageView != null) {
-                        displayImageView.setImageURI(imageUri);
-                        uploadImage(imageUri, selectedType);
-                        Log.d("UploadDocumentFragment", "Camera image captured: " + imageUri);
+                        displayImageView.setImageURI(fileUri);
+                        uploadFile(fileUri, selectedType);
+                        LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Camera image captured: " + fileUri);
                     }
                 } else {
-                    Log.w("UploadDocumentFragment", "Failed to capture camera image");
+                    LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Failed to capture camera image");
                     new CustomToast(getContext()).showCustomErrorToast("Failed to capture image");
                 }
             }
         } else {
-            Log.d("UploadDocumentFragment", "onActivityResult: Invalid result or no button selected");
+            LogHelperLaravel.getInstance().d("UploadDocumentFragment", "onActivityResult: Invalid result or no button selected");
         }
     }
 
-    public void uploadImage(Uri imageUri, int type) {
-        Log.d("UploadDocumentFragment", "Uploading image with type: " + type);
-        if (imageUri == null || type == -1) {
-            Log.w("UploadDocumentFragment", "No image selected or invalid type");
-            new CustomToast(getContext()).showCustomToast("No image selected");
+    public void uploadFile(Uri fileUri, int type) {
+        LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Uploading file with type: " + type);
+        if (fileUri == null || type == -1) {
+            LogHelperLaravel.getInstance().d("UploadDocumentFragment", "No file selected or invalid type");
+            new CustomToast(getContext()).showCustomToast("No file selected");
             return;
         }
 
-        File file = FileUtils.getFileFromUri(getContext(), imageUri);
+        File file = FileUtils.getFileFromUri(getContext(), fileUri);
         if (file == null || !file.exists()) {
-            Log.e("UploadDocumentFragment", "File not found for URI: " + imageUri);
+            LogHelperLaravel.getInstance().e("UploadDocumentFragment", "File not found for URI: " + fileUri);
             new CustomToast(getContext()).showCustomErrorToast("File not found");
             return;
         }
 
-        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+        // Validate file size (e.g., max 10MB)
+        long maxFileSize = 10 * 1024 * 1024; // 10MB in bytes
+        if (file.length() > maxFileSize) {
+            LogHelperLaravel.getInstance().e("UploadDocumentFragment", "File size too large: " + file.length() + " bytes");
+            new CustomToast(getContext()).showCustomErrorToast("File size exceeds 10MB limit");
+            return;
+        }
+
+        // Determine MediaType based on file
+        String mimeType = getMimeType(fileUri);
+        if (mimeType == null) {
+            LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Unknown MIME type for URI: " + fileUri);
+            mimeType = "application/octet-stream"; // Fallback
+        }
+
+        // Validate supported MIME types
+        if (!mimeType.startsWith("image/") && !mimeType.equals("application/pdf")) {
+            LogHelperLaravel.getInstance().e("UploadDocumentFragment", "Unsupported file type: " + mimeType);
+            new CustomToast(getContext()).showCustomErrorToast("Please select an image or PDF file");
+            return;
+        }
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse(mimeType), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-        UploadDocumentApi uploadDocumentApi = new UploadDocumentApi(getContext());
-        uploadDocumentApi.uploadDoc(body, type);
+        try {
+            UploadDocumentApi uploadDocumentApi = new UploadDocumentApi(getContext());
+            uploadDocumentApi.uploadDoc(body, type);
+            LogHelperLaravel.getInstance().d("UploadDocumentFragment", "Upload initiated for file: " + file.getName() + ", MIME: " + mimeType);
+        } catch (Exception e) {
+            LogHelperLaravel.getInstance().e("UploadDocumentFragment", "Error initiating upload: " + e.getMessage());
+            new CustomToast(getContext()).showCustomErrorToast("Failed to upload file: " + e.getMessage());
+        }
+    }
 
+    private String getMimeType(Uri uri) {
+        String mimeType = getContext().getContentResolver().getType(uri);
+        if (mimeType == null) {
+            // Fallback: Infer from file extension
+            String fileName = null;
+            Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                try {
+                    if (cursor.moveToFirst()) {
+                        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                        if (nameIndex >= 0) {
+                            fileName = cursor.getString(nameIndex);
+                        }
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+            if (fileName != null && fileName.contains(".")) {
+                String extension = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+                switch (extension) {
+                    case ".jpg":
+                    case ".jpeg":
+                        return "image/jpeg";
+                    case ".png":
+                        return "image/png";
+                    case ".pdf":
+                        return "application/pdf";
+                    default:
+                        return null;
+                }
+            }
+        }
+        return mimeType;
     }
 }

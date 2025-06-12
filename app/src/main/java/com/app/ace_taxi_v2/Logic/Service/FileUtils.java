@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 
 import java.io.File;
@@ -35,44 +35,94 @@ public class FileUtils {
             }
         }
 
-        // Handle content:// URIs (e.g., from gallery)
-        String filePath = null;
+        // Handle content:// URIs (e.g., from gallery or file picker)
+        String fileName = null;
+        String mimeType = context.getContentResolver().getType(uri);
+        String extension = getExtensionFromMimeType(mimeType, uri, context);
+
+        // Get file name from URI
         Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
         if (cursor != null) {
-            int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            if (columnIndex != -1) {
-                cursor.moveToFirst();
-                filePath = cursor.getString(columnIndex);
-            }
-            cursor.close();
-        }
-
-        if (filePath != null && new File(filePath).exists()) {
-            return new File(filePath);
-        } else {
-            // Fallback: Copy the content to a temp file if direct path isn’t available
             try {
-                File tempFile = new File(context.getCacheDir(), "temp_image_" + System.currentTimeMillis() + ".jpg");
-                InputStream inputStream = context.getContentResolver().openInputStream(uri);
-                if (inputStream != null) {
-                    OutputStream outputStream = new FileOutputStream(tempFile);
-                    byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
-                    inputStream.close();
-                    outputStream.close();
-                    if (tempFile.exists()) {
-                        return tempFile;
+                if (cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex >= 0) {
+                        fileName = cursor.getString(nameIndex);
                     }
                 }
-            } catch (IOException e) {
-                Log.e("FileUtils", "Error copying URI to file: " + e.getMessage());
+            } finally {
+                cursor.close();
             }
-            Log.e("FileUtils", "File path not found or inaccessible for URI: " + uri.toString());
-            return null;
         }
+
+        // Fallback file name if not found
+        if (fileName == null) {
+            fileName = "temp_file_" + System.currentTimeMillis() + (extension != null ? extension : "");
+        } else if (!fileName.contains(".")) {
+            fileName += extension != null ? extension : "";
+        }
+
+        // Copy content to a temp file
+        try {
+            File tempFile = new File(context.getCacheDir(), fileName);
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            if (inputStream != null) {
+                OutputStream outputStream = new FileOutputStream(tempFile);
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                inputStream.close();
+                outputStream.close();
+                if (tempFile.exists()) {
+                    Log.d("FileUtils", "Successfully created temp file: " + tempFile.getAbsolutePath());
+                    return tempFile;
+                }
+            }
+        } catch (IOException e) {
+            Log.e("FileUtils", "Error copying URI to file: " + e.getMessage(), e);
+        }
+
+        Log.e("FileUtils", "Failed to create file for URI: " + uri.toString());
+        return null;
+    }
+
+    private static String getExtensionFromMimeType(String mimeType, Uri uri, Context context) {
+        if (mimeType != null) {
+            switch (mimeType) {
+                case "image/jpeg":
+                    return ".jpg";
+                case "image/png":
+                    return ".png";
+                case "application/pdf":
+                    return ".pdf";
+                default:
+                    Log.w("FileUtils", "Unknown MIME type: " + mimeType);
+            }
+        }
+
+        // Fallback: Infer extension from file name in URI
+        String fileName = null;
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex >= 0) {
+                        fileName = cursor.getString(nameIndex);
+                    }
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+
+        if (fileName != null && fileName.contains(".")) {
+            return fileName.substring(fileName.lastIndexOf("."));
+        }
+
+        return "";
     }
 
     public static Uri saveBitmapToFile(Context context, Bitmap bitmap) {
@@ -81,18 +131,19 @@ public class FileUtils {
         try {
             file = new File(context.getCacheDir(), "camera_image_" + System.currentTimeMillis() + ".jpg");
             fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos); // Reduced quality to 90 to save space
             fos.flush();
+            Log.d("FileUtils", "Bitmap saved to: " + file.getAbsolutePath());
             return Uri.fromFile(file);
         } catch (IOException e) {
-            Log.e("FileUtils", "Error saving bitmap to file: " + e.getMessage());
+            Log.e("FileUtils", "Error saving bitmap to file: " + e.getMessage(), e);
             return null;
         } finally {
             if (fos != null) {
                 try {
                     fos.close();
                 } catch (IOException e) {
-                    Log.e("FileUtils", "Error closing FileOutputStream: " + e.getMessage());
+                    Log.e("FileUtils", "Error closing FileOutputStream: " + e.getMessage(), e);
                 }
             }
         }
