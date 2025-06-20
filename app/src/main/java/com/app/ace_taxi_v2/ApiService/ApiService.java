@@ -2,6 +2,8 @@ package com.app.ace_taxi_v2.ApiService;
 
 
 import com.app.ace_taxi_v2.Components.JobStatusModal;
+import com.app.ace_taxi_v2.JobModals.BookingRequest;
+import com.app.ace_taxi_v2.Models.AddressIO.AddressIOLocationResponse;
 import com.app.ace_taxi_v2.Models.AddressIO.AutocompleteResponse;
 import com.app.ace_taxi_v2.Models.AddressIO.GetAddressLocationRequest;
 import com.app.ace_taxi_v2.Models.AddressIO.PostcodeResponse;
@@ -56,6 +58,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -190,11 +193,7 @@ public interface ApiService {
 
     @POST("/api/Bookings/RankCreate")
     Call<Void> rankCreate(@Header("Authorization") String token,
-                          @Query("destination") String destination,
-                          @Query("destinationPostcode") String destinationPostCode,
-                          @Query("name") String name,
-                          @Query("userid") int userid,
-                          @Query("price") double price);
+                          @Body BookingRequest bookingRequest);
 
     @POST("/api/Bookings/Quote")
     Call<QuotesResponse> getQuotes(@Header("Authorization") String token,
@@ -210,6 +209,13 @@ public interface ApiService {
     @GET("get/{id}")
     Call<PostcodeResponse> getPostcodeOnly(
             @retrofit2.http.Path("id") String id,
+            @Query("api-key") String apiKey
+    );
+
+    @GET("nearest-location/{latitude}/{longitude}")
+    Call<AddressIOLocationResponse> getAddressResponse(
+            @Path("latitude") double latitude,
+            @Path("longitude") double longitude,
             @Query("api-key") String apiKey
     );
 

@@ -6,6 +6,7 @@ import com.app.ace_taxi_v2.ApiService.ApiService;
 import com.app.ace_taxi_v2.Components.CustomDialog;
 import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Instance.RetrofitClient;
+import com.app.ace_taxi_v2.JobModals.BookingRequest;
 import com.app.ace_taxi_v2.Logic.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,26 +32,11 @@ public class CreateBookingApi {
         this.customDialog = new CustomDialog();
     }
 
-    public void createNewBooking(String destination, String destinationPostCode, String name,double price,
+    public void createNewBooking(BookingRequest request,
                                  CreateBookingCallback callback) {
 
         customDialog.showProgressDialog(context);
-        // Input validation
-        if (destination == null || destination.trim().isEmpty()) {
-            Log.e(TAG, "Invalid destination: null or empty");
-            callback.onFailure("Destination cannot be empty");
-            return;
-        }
-        if (destinationPostCode == null || destinationPostCode.trim().isEmpty()) {
-            Log.e(TAG, "Invalid postcode: null or empty");
-            callback.onFailure("Postcode cannot be empty");
-            return;
-        }
-        if (name == null || name.trim().isEmpty()) {
-            Log.e(TAG, "Invalid name: null or empty");
-            callback.onFailure("Name cannot be empty");
-            return;
-        }
+
         if (callback == null) {
             Log.e(TAG, "Callback is null");
             throw new IllegalArgumentException("Callback cannot be null");
@@ -72,9 +58,8 @@ public class CreateBookingApi {
                 callback.onFailure("Invalid user ID");
                 return;
             }
-            Log.e("request data for create booking"," "+token+"/n "+destination+" "+destinationPostCode+" "+name+" "+userId+" "+price);
             ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-            Call<Void> call = apiService.rankCreate(token, destination, destinationPostCode, name, userId, price);
+            Call<Void> call = apiService.rankCreate(token, request);
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {

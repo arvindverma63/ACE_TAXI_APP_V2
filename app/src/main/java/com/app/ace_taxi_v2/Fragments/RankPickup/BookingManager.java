@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -22,9 +23,14 @@ import androidx.annotation.Nullable;
 import com.app.ace_taxi_v2.Components.CustomToast;
 import com.app.ace_taxi_v2.Fragments.BookingFragment;
 import com.app.ace_taxi_v2.Helper.LogHelperLaravel;
+import com.app.ace_taxi_v2.JobModals.BookingRequest;
+import com.app.ace_taxi_v2.Logic.AddressIO.AddressIOGeocodeToLocation;
 import com.app.ace_taxi_v2.Logic.AddressIO.GetAddressIOAddress;
 import com.app.ace_taxi_v2.Logic.GetBookingPrice;
 import com.app.ace_taxi_v2.Logic.JobApi.CreateBookingApi;
+import com.app.ace_taxi_v2.Logic.Service.LocationSessionManager;
+import com.app.ace_taxi_v2.Logic.SessionManager;
+import com.app.ace_taxi_v2.Models.AddressIO.AddressIOLocationResponse;
 import com.app.ace_taxi_v2.Models.AddressIO.Suggestion;
 import com.app.ace_taxi_v2.Models.AddressIO.PostcodeResponse;
 import com.app.ace_taxi_v2.Models.QuotesResponse;
@@ -38,7 +44,6 @@ import java.util.List;
 
 public class BookingManager {
     private final BookingFragment fragment;
-    private final MapAndLocationManager mapAndLocationManager;
     private List<String> destinationSuggestions;
     private ArrayAdapter<String> destinationAdapter;
     private CreateBookingApi createBookingApi;
@@ -49,9 +54,8 @@ public class BookingManager {
     private static final String PICKUP_POSTCODE = "SP8 4PZ";
     private boolean isProgrammaticChange = false; // Flag to track programmatic text changes
 
-    public BookingManager(BookingFragment fragment, MapAndLocationManager mapAndLocationManager) {
+    public BookingManager(BookingFragment fragment) {
         this.fragment = fragment;
-        this.mapAndLocationManager = mapAndLocationManager;
         this.destinationSuggestions = new ArrayList<>();
         this.createBookingApi = new CreateBookingApi(fragment.requireContext());
         this.customToast = new CustomToast(fragment.getContext());
@@ -309,23 +313,102 @@ public class BookingManager {
 
     private void proceedWithBooking(String destinationAddress, String destinationPostCode, String passengerName) {
         Log.d("BookRide", "Creating booking: destinationAddress=" + destinationAddress + ", destinationPostCode=" + destinationPostCode + ", passengerName=" + passengerName);
-        createBookingApi.createNewBooking(destinationAddress, destinationPostCode, passengerName, totalPrice,
-                new CreateBookingApi.CreateBookingCallback() {
+
+        SessionManager sessionManager = new SessionManager(fragment.getContext());
+        LocationSessionManager locationSessionManager = new LocationSessionManager(fragment.getContext());
+        AddressIOGeocodeToLocation addressIOGeocodeToLocation = new AddressIOGeocodeToLocation(fragment.getContext());
+        LogHelperLaravel.getInstance().d(TAG,"Current Location "+locationSessionManager.getLatitude()+" \n"+locationSessionManager.getLongitude()
+        +" \n username "+sessionManager.getUsername()+" userId "+sessionManager.getUserId()
+        );
+
+        addressIOGeocodeToLocation.getLocation(
+                locationSessionManager.getLatitude(),
+                locationSessionManager.getLongitude(),
+                new AddressIOGeocodeToLocation.PickupAddressPostcode() {
                     @Override
-                    public void onSuccess() {
-                        Log.d("BookRide", "Booking successful");
-                        customToast.showCustomToast("Ride booked successfully");
-                        fragment.getDestinationLocationInput().setText("");
-                        fragment.getPassengerNameInput().setText("");
-                        fragment.getPriceTextView().setText("£0.00");
-                        fragment.getHead_price().setText("£0.00");
+                    public void onSuccess(String pickupAddress, String pickupPostCode) {
+                        // ✅ Got pickup info
+
+                        LogHelperLaravel.getInstance().i(TAG,"pickup address : "+pickupAddress+" postcode "+pickupPostCode);
+
+                        String timestamp = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            timestamp = Instant.now().toString();
+                        }
+
+                        // ✅ Now get price with pickupPostCode and destinationPostCode
+                        GetBookingPrice getBookingPrice = new GetBookingPrice(fragment.getContext());
+                        getBookingPrice.getBookingPrince(
+                                pickupPostCode,
+                                destinationPostCode,
+                                timestamp,
+                                1,
+                                new GetBookingPrice.BookingPriceCallback() {
+                                    @Override
+                                    public void onSuccess(QuotesResponse response) {
+                                        // ✅ Got full quote info: use it in your booking request
+
+                                        SessionManager sessionManager = new SessionManager(fragment.getContext());
+                                        int userId = sessionManager.getUserId();
+
+                                        BookingRequest request = new BookingRequest();
+                                        request.setPickup(pickupAddress);
+                                        request.setPickupPostcode(pickupPostCode);
+                                        request.setDestination(destinationAddress);
+                                        request.setDestinationPostcode(destinationPostCode);
+                                        request.setName(passengerName);
+                                        request.setUserid(userId);
+
+                                        // 🚀 Add all pricing info from the quote response
+                                        request.setDurationMinutes(response.getTotalMinutes());
+                                        request.setMileage(response.getTotalMileage());
+                                        request.setMileageText(response.getMileageText());
+                                        request.setDurationText(response.getDurationText());
+                                        request.setPrice(response.getTotalPrice());
+
+                                        // If needed, you can add extra fields:
+                                        // e.g. response.getDeadMileage(), etc.
+                                        // If your BookingRequest class supports them!
+
+                                        createBookingApi.createNewBooking(
+                                                request,
+                                                new CreateBookingApi.CreateBookingCallback() {
+                                                    @Override
+                                                    public void onSuccess() {
+                                                        Log.d("BookRide", "Booking successful");
+                                                        customToast.showCustomToast("Ride booked successfully");
+                                                        fragment.getDestinationLocationInput().setText("");
+                                                        fragment.getPassengerNameInput().setText("");
+                                                        fragment.getPriceTextView().setText("£0.00");
+                                                        fragment.getHead_price().setText("£0.00");
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(String errorMessage) {
+                                                        Log.e("BookRide", "Booking failed: " + errorMessage);
+                                                        customToast.showCustomErrorToast("Failed to book ride: " + errorMessage);
+                                                    }
+                                                }
+                                        );
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+                                        Log.e("BookRide", "Get price failed: " + error);
+                                        customToast.showCustomErrorToast("Could not get price: " + error);
+                                    }
+                                }
+                        );
                     }
 
                     @Override
-                    public void onFailure(String errorMessage) {
-                        Log.e("BookRide", "Booking failed: " + errorMessage);
-                        customToast.showCustomErrorToast("Failed to book ride: " + errorMessage);
+                    public void onError(String error) {
+                        Log.e("BookRide", "Failed to get pickup location: " + error);
+                        customToast.showCustomErrorToast("Could not get pickup location");
                     }
-                });
+                }
+        );
     }
+
+
 }

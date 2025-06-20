@@ -18,16 +18,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.app.ace_taxi_v2.Fragments.RankPickup.BookingManager;
-import com.app.ace_taxi_v2.Fragments.RankPickup.MapAndLocationManager;
 import com.app.ace_taxi_v2.R;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class BookingFragment extends Fragment {
 
-    private MapAndLocationManager mapAndLocationManager;
     private BookingManager bookingManager;
     private AutoCompleteTextView destinationLocationInput,pickupLocationInput;
     private MaterialButton bookButton;
@@ -37,8 +34,7 @@ public class BookingFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mapAndLocationManager = new MapAndLocationManager(this);
-        bookingManager = new BookingManager(this, mapAndLocationManager);
+        bookingManager = new BookingManager(this);
     }
 
     @Nullable
@@ -50,7 +46,6 @@ public class BookingFragment extends Fragment {
         initializeUI(view);
         setupMapFragment();
         setupListeners(view);
-        mapAndLocationManager.checkLocationPermissions();
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar_header);
         if (toolbar != null) {
@@ -135,9 +130,6 @@ public class BookingFragment extends Fragment {
         return priceTextView;
     }
 
-    public MapAndLocationManager getMapAndLocationManager() {
-        return mapAndLocationManager;
-    }
     public AutoCompleteTextView getPickupLocationInput() {
         return pickupLocationInput;
     }

@@ -38,7 +38,7 @@ public class GetBookingPrice {
             apiService.getQuotes(token, quotesRequest).enqueue(new Callback<QuotesResponse>() {
                 @Override
                 public void onResponse(Call<QuotesResponse> call, Response<QuotesResponse> response) {
-                    LogHelperLaravel.getInstance().e("get booking price",response.body()+" /n"+response.code());
+                    LogHelperLaravel.getInstance().d("get booking price",response.body()+" /n"+response.code());
                     try {
                         if (response.isSuccessful() && response.body() != null) {
                             callback.onSuccess(response.body());

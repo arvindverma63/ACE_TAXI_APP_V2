@@ -52,6 +52,9 @@ public class LocationService extends Service {
                             float heading = location.hasBearing() ? location.getBearing() : 0.0f; // Heading in degrees
                             Log.d(TAG, "Location received: " + location.getLatitude() + ", " + location.getLongitude() + ", speed: " + speed + " Heading: " + heading);
                             // Process location data
+                            LocationSessionManager sessionManager = new LocationSessionManager(getApplicationContext());
+                            sessionManager.saveLocation(location.getLatitude(), location.getLongitude(), speed, heading);
+
                             SendLocation sendLocation = new SendLocation(
                                     getApplicationContext(),
                                     location.getLatitude(),
