@@ -31,7 +31,6 @@ public class AddressIOGeocodeToLocation {
         apiService.getAddressResponse(lat, lng, API_KEY).enqueue(new Callback<AddressIOLocationResponse>() {
             @Override
             public void onResponse(Call<AddressIOLocationResponse> call, Response<AddressIOLocationResponse> response) {
-                LogHelperLaravel.getInstance().i(TAG,response.body().getSuggestions().get(0).getLocation());
                 if (response.isSuccessful() && response.body() != null) {
                     AddressIOLocationResponse locationResponse = response.body();
                     if (locationResponse.getSuggestions() != null && !locationResponse.getSuggestions().isEmpty()) {
