@@ -42,7 +42,7 @@
                     style="@style/TextBG"
                     android:layout_width="106dp"
                     android:layout_height="wrap_content"
-                    android:text="version 10.9"
+                    android:text="version 11.1"
                     android:textSize="12dp" />
 
             </LinearLayout>
@@ -264,7 +264,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-
+            android:visibility="gone"
             style="@style/CardBG"
             android:layout_marginTop="16dp"
             android:foreground="?attr/selectableItemBackground"

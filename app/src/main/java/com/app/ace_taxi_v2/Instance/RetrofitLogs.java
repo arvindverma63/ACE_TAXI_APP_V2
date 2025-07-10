@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitLogs {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://logger.avblog.io";
+    private static final String BASE_URL = "https://acetaxislogger.backendcodersindia.com/";
 
     public static Retrofit getInstance() {
         if (retrofit == null) {

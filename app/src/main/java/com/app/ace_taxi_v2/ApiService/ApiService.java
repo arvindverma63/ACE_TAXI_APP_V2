@@ -222,7 +222,4 @@ public interface ApiService {
     @POST("api/logs")
     Call<Void> log(@Body LogRequest logRequest);
 
-
-
-
 }

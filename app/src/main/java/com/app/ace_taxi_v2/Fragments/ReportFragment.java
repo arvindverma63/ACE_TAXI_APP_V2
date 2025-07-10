@@ -163,8 +163,9 @@ public class ReportFragment extends Fragment {
                 epay += earningResponse.getAccTotal();
             }
         }
-        total_cash.setText("Total Cash: £" + totalCash);
-        total_epay.setText("Total ACC: £" + epay);
+        total_cash.setText("Total Cash: £" + String.format("%.2f", totalCash));
+        total_epay.setText("Total ACC: £" + String.format("%.2f", epay));
+
     }
 
     private void updateEmptyView() {
