@@ -332,9 +332,14 @@ public class JobViewDialog {
 
                     complete_button.setOnClickListener(v -> {
                         dialog.dismiss();
-                        JobModal jobModal = new JobModal(context);
+                        if(bookingInfo.getPrice() == 0){
+                            new PriceZeroDialog(context).openDialog();
+                        }else{
+                            JobModal jobModal = new JobModal(context);
 
-                        jobModal.jobCompleteBooking(bookingId,bookingInfo.getPrice());
+                            jobModal.jobCompleteBooking(bookingId,bookingInfo.getPrice());
+                        }
+
                     });
                     customDialog.dismissProgressDialog();
                 }
