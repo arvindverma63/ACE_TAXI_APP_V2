@@ -73,6 +73,15 @@ public class SchedularFragment extends Fragment {
                     }
                     return true;
                 }
+                if (url.startsWith("tel:")) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
+                    try {
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        Log.e("WebView", "Dialer not found: " + e.getMessage());
+                    }
+                    return true;
+                }
                 view.loadUrl(url);
                 return true;
             }
