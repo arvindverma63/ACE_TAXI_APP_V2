@@ -10,9 +10,10 @@ android {
     defaultConfig {
         applicationId = "com.app.ace_taxi_v2"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 104
-        versionName = "11.4"
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 35
+        versionCode = 105
+        versionName = "11.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

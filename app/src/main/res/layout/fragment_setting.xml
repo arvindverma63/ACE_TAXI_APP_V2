@@ -264,9 +264,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
+            android:visibility="gone"
             style="@style/CardBG"
             android:layout_marginTop="16dp"
-            android:visibility="gone"
             android:foreground="?attr/selectableItemBackground"
             android:clickable="true">
 
