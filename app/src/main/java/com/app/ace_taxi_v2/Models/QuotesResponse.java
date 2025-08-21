@@ -9,7 +9,7 @@ public class QuotesResponse {
     private int journeyMinutes;
     private double totalMileage;
     private int totalMinutes;
-    private double totalPrice;
+    private double priceDriver;
     private String mileageText;
     private String durationText;
     private int legs;
@@ -81,11 +81,11 @@ public class QuotesResponse {
     }
 
     public double getTotalPrice() {
-        return totalPrice;
+        return priceDriver;
     }
 
     public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+        this.priceDriver = totalPrice;
     }
 
     public String getMileageText() {

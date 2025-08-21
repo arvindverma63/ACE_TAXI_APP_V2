@@ -195,7 +195,7 @@ public interface ApiService {
     Call<Void> rankCreate(@Header("Authorization") String token,
                           @Body BookingRequest bookingRequest);
 
-    @POST("/api/Bookings/Quote")
+    @POST("/api/Bookings/GetPrice")
     Call<QuotesResponse> getQuotes(@Header("Authorization") String token,
                                    @Body QuotesRequest quotesRequest);
 

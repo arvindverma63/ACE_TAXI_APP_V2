@@ -34,6 +34,8 @@ public class GetBookingPrice {
             List<String> vias = new ArrayList<>();
             QuotesRequest quotesRequest = new QuotesRequest(pickupPostcode, destinationPostcode, pickupDatetime, passengers, true);
 
+            LogHelperLaravel.getInstance().d("get booking price",pickupPostcode+" /n"+destinationPostcode);
+
             ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
             apiService.getQuotes(token, quotesRequest).enqueue(new Callback<QuotesResponse>() {
                 @Override
